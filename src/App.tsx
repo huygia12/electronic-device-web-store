@@ -1,21 +1,29 @@
-import { useState } from "react";
-import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import AppClientLayout from "./layout/AppClientLayout";
+import { publicRoutes } from "./pages/routes";
 
 function App() {
-  const [number, setNumber] = useState(1);
-
-  function clickHandler() {
-    setNumber(number + 1);
-    console.log(number);
-    setNumber(number + 1);
-    console.log(number);
-    setNumber(number + 1);
-    console.log(number);
-  }
-
-  // console.log(number);
-
-  return <button onClick={clickHandler}> {number} </button>;
+  return (
+    <BrowserRouter>
+      <Routes>
+        {publicRoutes.map((route, index) => {
+          const Layout = route.layout ?? AppClientLayout;
+          const Page = route.element;
+          return (
+            <Route
+              key={index}
+              path={route.path}
+              element={
+                <Layout>
+                  <Page />
+                </Layout>
+              }
+            />
+          );
+        })}
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
