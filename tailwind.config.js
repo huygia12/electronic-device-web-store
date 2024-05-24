@@ -8,6 +8,7 @@ module.exports = {
     "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
+  separator: "_",
   theme: {
     container: {
       center: true,
@@ -25,11 +26,16 @@ module.exports = {
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
+          softer: "hsl(var(--primary-softer))",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+        },
+        third: {
+          DEFAULT: "hsl(var(--third))",
+          foreground: "hsl(var(--third-foreground))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -51,6 +57,10 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        theme: {
+          DEFAULT: "hsl(var(--theme))",
+          softer: "hsl(var(--theme-softer))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -70,6 +80,9 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      width: {
+        myLayout: "75%",
       },
     },
   },

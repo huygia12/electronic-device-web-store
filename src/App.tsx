@@ -1,13 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import AppClientLayout from "./layout/AppClientLayout";
 import { publicRoutes } from "./pages/routes";
+import defaultLayout from "./layout/DefaultLayout";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         {publicRoutes.map((route, index) => {
-          const Layout = route.layout ?? AppClientLayout;
+          const Layout = route.layout ?? defaultLayout;
           const Page = route.element;
           return (
             <Route

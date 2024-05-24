@@ -1,0 +1,434 @@
+{
+  "items": [
+    {
+      "id": "1",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 128989,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "1"
+    },
+    {
+      "id": "2",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "2"
+    },
+    {
+      "id": "3",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "3"
+    },
+    {
+      "id": "4",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "4"
+    },
+    {
+      "id": "5",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "5"
+    },
+    {
+      "id": "6",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "6"
+    },
+    {
+      "id": "7",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "7"
+    },
+    {
+      "id": "8",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "8"
+    },
+    {
+      "id": "9",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "9"
+    },
+    {
+      "id": "10",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "10"
+    },
+    {
+      "id": "11",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "11"
+    },
+    {
+      "id": "12",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "12"
+    },
+    {
+      "id": "13",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "13"
+    },
+    {
+      "id": "14",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "14"
+    },
+    {
+      "id": "15",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "15"
+    },
+    {
+      "id": "16",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "16"
+    },
+    {
+      "id": "17",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "17"
+    },
+    {
+      "id": "18",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "18"
+    },
+    {
+      "id": "19",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "19"
+    },
+    {
+      "id": "20",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "20"
+    },
+    {
+      "id": "21",
+      "name": "Asus Vivobook 15 X1504ZA i3 1215U (NJ102W)",
+      "cate": "laptop",
+      "tag": [
+        "ram:32GB",
+        "capacity:1TB",
+        "vga:Intel Arc",
+        "cpu:Ultra 9 185H",
+        "screen:14 inch 3K OLED",
+        "freq:120Hz"
+      ],
+      "quantity": 13333,
+      "price": 12490000,
+      "discount": "12",
+      "rates": 3.0,
+      "comments": "100",
+      "img": "/asus-vivobook.jpg",
+      "itemDetailID": "21"
+    }
+  ],
+  "cates": [
+    {
+      "title": "Máy tính",
+      "href": "/computer"
+    },
+    {
+      "title": "Camera",
+      "href": "camera"
+    }
+  ]
+}
