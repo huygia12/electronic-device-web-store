@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { FaSearch } from "react-icons/fa";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { FiShoppingBag } from "react-icons/fi";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { NavLink } from "react-router-dom";
 import CounterLabel from "@/components/ui/counterLabel";
 import { TfiHeadphoneAlt } from "react-icons/tfi";
+import CustomAvt from "../ui/customAvt";
 
 const navComponents: { title: string; path: string }[] = [
   { title: "Trang chủ", path: "/" },
@@ -17,7 +17,7 @@ const navComponents: { title: string; path: string }[] = [
 
 const AppClientHeader = () => {
   return (
-    <header className="w-full flex flex-col sticky top-0 z-50 bg-secondary-foreground shadow-xl">
+    <header className="w-full flex flex-col sticky top-0 z-50 shadow-xl">
       <div className="flex justify-around bg-third">
         <div className="flex justify-between w-myLayout text-[0.8rem] py-2">
           <span className="flex items-center ">
@@ -69,13 +69,12 @@ const AppClientHeader = () => {
               </NavLink>
             </div>
           </div>
-          <div className="flex flex-row items-center space-x-[0.5rem] ml-10">
-            <Avatar className="h-[3.5rem] w-[3.5rem]">
-              <AvatarImage src="/avt.jpg" />
-              <AvatarFallback>Avt</AvatarFallback>
-            </Avatar>
-            <div className="text-[1.2rem] truncate ...">Nguyễn Trung Hiếu</div>
-          </div>
+          <CustomAvt
+            avt="/avt.jpg"
+            name="Nguyen Trung Hieu"
+            alt="user"
+            className="ml-10"
+          />
         </div>
       </div>
     </header>

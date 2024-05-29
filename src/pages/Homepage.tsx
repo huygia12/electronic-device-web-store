@@ -7,7 +7,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import SlideShow from "@/components/ui/slideShow";
-import Item from "@/declare";
+import { ProductAttributes } from "@/declare";
 import Autoplay from "embla-carousel-autoplay";
 import React, { useEffect, useState } from "react";
 import CardProduct from "@/components/card4Product";
@@ -30,7 +30,7 @@ const slides: { src: string; alt: string; link: string }[] = [
 ];
 
 const Homepage = () => {
-  const [data, setData] = useState<Item[]>([]);
+  const [data, setData] = useState<ProductAttributes[]>([]);
 
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: true })
@@ -97,8 +97,8 @@ const Homepage = () => {
             ))}
           </CarouselContent>
           <div className="relative">
-            <CarouselPrevious className="absolute top-[-31.8rem] left-[80.6rem] w-10 bg-primary" />
-            <CarouselNext className="absolute top-[-31.8rem] right-[0.3rem] w-10 bg-primary" />
+            <CarouselPrevious className="absolute top-[-31.8rem] left-[80rem] w-10 bg-primary border-none" />
+            <CarouselNext className="absolute top-[-31.8rem] right-[0.6rem] w-10 bg-primary border-none" />
           </div>
         </Carousel>
         <div className="pb-6 w-full flex items-center justify-around">

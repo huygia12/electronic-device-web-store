@@ -5,19 +5,18 @@ import { GoCpu } from "react-icons/go";
 import { PiFrameCornersLight } from "react-icons/pi";
 import { TbFrame } from "react-icons/tb";
 import { useEffect, useState } from "react";
-import Item from "@/declare";
+import { ProductAttributes } from "@/declare";
 import axios from "axios";
 
 const Products = () => {
   // const [loading, setLoading] = useState(true);
 
-  const [data, setData] = useState<Item[]>([]);
+  const [data, setData] = useState<ProductAttributes[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const items = await axios.get("http://localhost:4000/items");
-        console.log(items);
         setData(items.data);
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
@@ -52,8 +51,8 @@ const Products = () => {
           <hr className="border-dashed border-[0.1rem] border-secondary-foreground" />
         </div>
         <div className="col-span-3 grid grid-cols-4 gap-4">
-          {data.map((item) => (
-            <Card4Product item={item}>
+          {data.map((item, index) => (
+            <Card4Product key={index} item={item}>
               <CardTag content="1TB">
                 <BsFillDeviceSsdFill />
               </CardTag>

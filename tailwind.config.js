@@ -83,6 +83,7 @@ module.exports = {
       },
       width: {
         myLayout: "75%",
+        adminLayout: "90%",
       },
     },
   },

@@ -10,20 +10,19 @@ import SaleTag from "./ui/saleTag";
 import RatingPoint from "./ui/ratingPoint";
 import { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
-import Item from "@/declare";
+import { ProductAttributes } from "@/declare";
 import { afterDiscount, toVND } from "@/utils/currency";
 import { FaCartPlus } from "react-icons/fa6";
 import { Button } from "./ui/button";
 import { NavLink } from "react-router-dom";
 
 interface CardProductProps extends HTMLAttributes<HTMLDivElement> {
-  item: Item;
+  item: ProductAttributes;
 }
 
 const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
   return (
     <Card
-      key={props.item.id}
       className={cn(
         "p-2.5 shadow-xl transition ease-out duration-300 hover_scale-105 relative",
         className

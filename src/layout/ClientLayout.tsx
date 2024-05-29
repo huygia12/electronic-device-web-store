@@ -1,5 +1,5 @@
 import MailRegisSection from "@/components/container/ClientMailRegisSection";
-import AppClientFooter from "../components/container/ClientFooter";
+import AppFooter from "../components/container/AppFooter";
 import AppClientHeader from "../components/container/ClientHeader";
 import React from "react";
 
@@ -13,7 +13,7 @@ const ProductsLayout: React.FC<{ children: React.ReactNode }> = ({
         <div className="w-myLayout ">{children}</div>
       </div>
       <MailRegisSection />
-      <AppClientFooter />
+      <AppFooter />
     </>
   );
 };

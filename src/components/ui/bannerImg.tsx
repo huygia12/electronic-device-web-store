@@ -1,6 +1,7 @@
 import { HTMLAttributes } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { NavLink } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 interface BannerImgProps extends HTMLAttributes<HTMLDivElement> {
   src: string;
@@ -12,7 +13,10 @@ const BannerImg: React.FC<BannerImgProps> = ({ className, ...props }) => {
   return (
     <NavLink
       to={props.link}
-      className=" h-[13.1rem] w-[23.2rem] shadow-neutral-500 shadow-md rounded-xl"
+      className={cn(
+        " h-[13.1rem] w-[23.2rem] shadow-neutral-500 shadow-md rounded-xl",
+        className
+      )}
     >
       <AspectRatio ratio={16 / 9}>
         <img
