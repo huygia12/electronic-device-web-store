@@ -70,10 +70,10 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
           </span>
         </div>
         <div className="flex items-center space-x-6 mt-4">
-          <Button>
+          <Button variant="neutral">
             <FaCartPlus />
           </Button>
-          <Button>Mua ngay</Button>
+          <Button variant="negative">Mua ngay</Button>
         </div>
       </CardFooter>
     </Card>

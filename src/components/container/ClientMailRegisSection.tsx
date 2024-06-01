@@ -14,10 +14,11 @@ const ClientSection = () => {
         <Input
           type="email"
           placeholder="Nhập email của bạn"
-          className="w-[30rem] rounded-r-none"
+          className="w-[30rem] rounded-r-none focus_mr-1"
         />
         <Toaster richColors />
         <Button
+          variant="negative"
           onClick={() =>
             toast.success("Đăng ký nhận thông báo email thành công!")
           }

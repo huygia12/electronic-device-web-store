@@ -9,11 +9,16 @@ import Dashboard from "./Dashboard.tsx";
 import AdminLayout from "@/layout/AdminLayout.tsx";
 import UserManagement from "./UserManagement.tsx";
 import CategoryManagement from "./CategoryManagement.tsx";
-import ProductManagement from "./ProductManagement.tsx";
+import { ProductManagement } from "./ProductManagement.tsx";
 import OrderManagement from "./OrderManagement.tsx";
 import ReviewManagement from "./ReviewManagement.tsx";
 import Statis from "./Statis.tsx";
 import StoreManagement from "./StoreManagement.tsx";
+import ProviderManagement from "./ProviderManagement.tsx";
+import Login from "./Login.tsx";
+import signup from "./signup.tsx";
+import AttributeManagement from "./AttributeManagement.tsx";
+import { ProductAddition } from "./ProductAddition.tsx";
 
 const publicRoutes = [
   {
@@ -51,11 +56,7 @@ const publicRoutes = [
     element: CategoryManagement,
     layout: AdminLayout,
   },
-  {
-    path: "/admin/product",
-    element: ProductManagement,
-    layout: AdminLayout,
-  },
+
   {
     path: "/admin/order",
     element: OrderManagement,
@@ -75,6 +76,34 @@ const publicRoutes = [
     path: "/admin/store",
     element: StoreManagement,
     layout: AdminLayout,
+  },
+  {
+    path: "/admin/provider",
+    element: ProviderManagement,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/product/add",
+    element: ProductAddition,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/product",
+    element: ProductManagement,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/product/attribute",
+    element: AttributeManagement,
+    layout: AdminLayout,
+  },
+  {
+    path: "/login",
+    element: Login,
+  },
+  {
+    path: "/signup",
+    element: signup,
   },
   {
     path: "/*",

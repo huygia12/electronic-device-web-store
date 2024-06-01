@@ -1,12 +1,11 @@
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { FaSearch } from "react-icons/fa";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { FiShoppingBag } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import CounterLabel from "@/components/ui/counterLabel";
 import { TfiHeadphoneAlt } from "react-icons/tfi";
 import CustomAvt from "../ui/customAvt";
+import { Search } from "lucide-react";
 
 const navComponents: { title: string; path: string }[] = [
   { title: "Trang chủ", path: "/" },
@@ -47,8 +46,8 @@ const AppClientHeader = () => {
           <NavLink to="/" className="mr-20">
             <img src="/logo.svg.png" alt="logo" className="h-12" />
           </NavLink>
-          <div className="col-span-3 flex items-center">
-            <div className="flex min-h-full items-center space-x-2 w-full">
+          <div className="col-span-3 grid grid-cols-3 items-center">
+            {/* <div className="flex min-h-full items-center space-x-2 w-full">
               <Input
                 type="text"
                 placeholder="Tìm kiếm sản phẩm"
@@ -57,6 +56,14 @@ const AppClientHeader = () => {
               <Button type="submit" className="h-[3rem]">
                 <FaSearch size={24} className="" />
               </Button>
+            </div> */}
+            <div className="w-full col-span-2 relative flex-1 md_grow-0 h-[2.7rem]">
+              <Search className="absolute left-2.5 top-3.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Tìm kiếm..."
+                className="h-full text-xl w-full rounded-2xl bg-background pl-8"
+              />
             </div>
             <div className="flex flex-row space-x-[2rem] ml-20">
               <NavLink to="/" className="relative">

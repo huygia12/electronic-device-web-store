@@ -3,7 +3,7 @@ import { HTMLAttributes } from "react";
 
 interface AppFooterProps extends HTMLAttributes<HTMLElement> {}
 
-const AppFooter: React.FC<AppFooterProps> = ({ className, ...props }) => {
+const AppFooter: React.FC<AppFooterProps> = ({ className }) => {
   return (
     <footer
       className={cn(

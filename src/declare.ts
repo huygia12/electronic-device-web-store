@@ -35,3 +35,67 @@ export interface User {
   email: string;
   passwd: string;
 }
+
+export interface Category {
+  id: string;
+  name: string;
+  products: number;
+}
+
+export interface Provider {
+  id: string;
+  name: string;
+  products: number;
+}
+
+export interface AdminNavItem {
+  name: string;
+  url: string;
+  icon: JSX.Element;
+  hasChild: boolean;
+  children: AdminNavSubItem[];
+}
+
+export interface AdminNavSubItem {
+  name: string;
+  url: string;
+  icon: JSX.Element;
+}
+
+export interface ProductAttributeValue {
+  id: string;
+  name: string;
+}
+
+export interface ProductAttribute {
+  id: string;
+  name: string;
+  values: ProductAttributeValue[];
+}
+
+export interface ProductItem {
+  id: string;
+  thump: string;
+  quantity: number;
+  price: number;
+  prior: boolean;
+  productCode: string;
+  discount: number;
+  color: string;
+  storage: string;
+  productImage: string[];
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  height: number;
+  length: number;
+  width: number;
+  weight: number;
+  gurantee: number;
+  category: string;
+  branch: string;
+  productItem: ProductItem[];
+}

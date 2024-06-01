@@ -9,8 +9,8 @@ const ProductsLayout: React.FC<{ children: React.ReactNode }> = ({
   return (
     <>
       <AppClientHeader />
-      <div className="flex justify-center w-full py-10 min-h-[100vh]">
-        <div className="w-myLayout ">{children}</div>
+      <div className="flex justify-center w-full py-10 min-h-[70vh]">
+        <div className="w-myLayout">{children}</div>
       </div>
       <MailRegisSection />
       <AppFooter />

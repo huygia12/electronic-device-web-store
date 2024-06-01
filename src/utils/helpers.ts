@@ -5,21 +5,21 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground hover_bg-primary/90",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover_bg-destructive/90",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-input bg-background hover_bg-accent hover_text-accent-foreground",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-secondary text-secondary-foreground hover_bg-secondary/80",
+        ghost: "hover_bg-accent hover_text-accent-foreground",
+        link: "text-primary underline-offset-4 hover_underline",
         positive:
-          "font-extrabold bg-green-600 text-white rounded-md px-2 text-xl hover_bg-green-100 hover_text-green-400 hover_ring-2 hover_ring-green-600 transition ease-out duration-100",
+          "bg-green-600 text-white rounded-md px-2 text-md hover_!bg-green-100 hover_!text-green-400 hover_!ring-2 hover_!ring-green-600 transition ease-out duration-100",
         neutral:
-          "font-extrabold bg-blue-600 text-white rounded-md px-2 text-xl hover_bg-blue-100 hover_text-blue-400 hover_ring-2 hover_ring-blue-600 transition ease-out duration-100",
+          "bg-blue-600 text-white rounded-md px-2 text-md hover_!bg-blue-100 hover_!text-blue-400 hover_!ring-2 hover_!ring-blue-600 transition ease-out duration-100",
         negative:
-          "font-extrabold bg-primary text-white rounded-md px-2 text-xl hover_bg-primary-softer hover_text-primary-foreground hover_ring-2 hover_ring-primary transition ease-out duration-100",
+          " bg-primary text-white rounded-md px-2 text-md hover_!bg-primary-softer hover_!text-primary-foreground hover_!ring-2 hover_!ring-primary transition ease-out duration-100",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -35,4 +35,23 @@ const buttonVariants = cva(
   }
 );
 
-export { buttonVariants };
+const badgeVariants = cva(
+  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus_outline-none focus_ring-2 focus_ring-ring focus_ring-offset-2",
+  {
+    variants: {
+      variant: {
+        default:
+          "border-transparent bg-primary text-primary-foreground hover_bg-primary/80",
+        secondary:
+          "border-transparent bg-secondary text-secondary-foreground hover_bg-secondary/80",
+        destructive:
+          "border-transparent bg-destructive text-destructive-foreground hover_bg-destructive/80",
+        outline: "text-foreground",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+export { buttonVariants, badgeVariants };

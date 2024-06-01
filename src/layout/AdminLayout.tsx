@@ -6,10 +6,9 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <>
       <AdminHeader />
-      <div className="flex min-h-screen w-full flex-col bg-muted/40">
-        {/* <AdminNav /> */}
-        <div className="min-h-[100vh]">{children}</div>
-      </div>
+      <main className="flex min-h-[100vh] w-full flex-col">
+        <div className="w-adminLayout mx-auto pb-10">{children}</div>
+      </main>
       <AppFooter className="bg-theme-softer" />
     </>
   );

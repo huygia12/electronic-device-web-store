@@ -15,12 +15,12 @@ import {
 import { buttonVariants } from "@/utils/helpers";
 import { Eye, EyeOff } from "lucide-react";
 
-interface UserFormProps extends HTMLAttributes<HTMLFormElement> {
+interface UserDialogProps extends HTMLAttributes<HTMLFormElement> {
   user?: User;
   formTitle: string;
 }
 
-const UserForm: React.FC<UserFormProps> = ({ className, ...props }) => {
+const UserDialog: React.FC<UserDialogProps> = ({ className, ...props }) => {
   const [hide, setHide] = useState(false);
 
   return (
@@ -113,7 +113,7 @@ const UserForm: React.FC<UserFormProps> = ({ className, ...props }) => {
           <DialogFooter>
             <DialogClose
               type="submit"
-              className={buttonVariants({ variant: "neutral" })}
+              className={buttonVariants({ variant: "positive" })}
             >
               Lưu
             </DialogClose>
@@ -127,4 +127,4 @@ const UserForm: React.FC<UserFormProps> = ({ className, ...props }) => {
   );
 };
 
-export default UserForm;
+export default UserDialog;

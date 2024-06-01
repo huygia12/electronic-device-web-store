@@ -10,6 +10,7 @@ import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
+import { NavLink } from "react-router-dom";
 
 interface CustomAvtProps extends HTMLAttributes<HTMLDivElement> {
   avt: string;
@@ -42,7 +43,9 @@ const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
         <DropdownMenuContent align="center">
           <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Đăng xuất</DropdownMenuItem>
+          <DropdownMenuItem>
+            <NavLink to="/login">Đăng xuất</NavLink>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <div className="font-extrabold max-w-52 text-[1.2rem] truncate ...">

@@ -23,7 +23,10 @@ const CollectionHeader: React.FC<CollectionHeaderProps> = ({
       </span>
       <span className="flex items-center">
         <span className="flex space-x-2">{props.children}</span>
-        <Button className="flex flex-row items-center h-8 ml-[2rem]">
+        <Button
+          variant="negative"
+          className="flex flex-row items-center h-8 ml-[2rem]"
+        >
           Xem tất cả &nbsp; <FaArrowRightLong />
         </Button>
       </span>

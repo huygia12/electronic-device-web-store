@@ -11,57 +11,97 @@ import {
   PackageSearch,
   MessageSquareCode,
   Store,
+  Factory,
+  Boxes,
+  BadgePercent,
+  Tags,
 } from "lucide-react";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "../ui/button";
 import { NavLink } from "react-router-dom";
+import AdminAccordion from "../adminAccordion";
+import { AdminNavItem } from "@/declare";
+import { ScrollArea } from "../ui/scroll-area";
 
-// const navItems: { name: string; url: string; icon: JSX.Element }[] = [
-const navItems = [
+const navItems: AdminNavItem[] = [
   {
-    name: "Dash board",
+    name: "Bảng điều khiển",
     url: "/admin",
     icon: <Home className="h-5 w-5" />,
+    hasChild: false,
+    children: [],
   },
   {
-    name: "Quản lý người dùng",
+    name: "Quản lý khách hàng",
     url: "/admin/user",
     icon: <Users2 className="h-5 w-5" />,
+    hasChild: false,
+    children: [],
   },
   {
     name: "Quản lý danh muc",
     url: "/admin/category",
     icon: <Shapes className="h-5 w-5" />,
+    hasChild: false,
+    children: [],
   },
   {
-    name: "Quản lý sản phẩm",
+    name: "Quản lý nhà phân phối",
+    url: "/admin/provider",
+    icon: <Factory className="h-5 w-5" />,
+    hasChild: false,
+    children: [],
+  },
+  {
+    name: "Sản phẩm",
     url: "/admin/product",
     icon: <Package2 className="h-5 w-5" />,
+    hasChild: true,
+    children: [
+      {
+        name: "Thêm sản phẩm",
+        url: "/admin/product/add",
+        icon: <BadgePercent className="h-5 w-5" />,
+      },
+      {
+        name: "Quản lý sản phẩm",
+        url: "/admin/product",
+        icon: <Boxes className="h-5 w-5" />,
+      },
+      {
+        name: "Thể loại",
+        url: "/admin/product/attribute",
+        icon: <Tags className="h-5 w-5" />,
+      },
+    ],
   },
   {
     name: "Đơn hàng",
     url: "/admin/order",
     icon: <PackageSearch className="h-5 w-5" />,
+    hasChild: false,
+    children: [],
   },
   {
     name: "Đánh giá",
     url: "/admin/review",
     icon: <MessageSquareCode className="h-5 w-5" />,
+    hasChild: false,
+    children: [],
   },
   {
     name: "Thống kê",
     url: "/admin/statis",
     icon: <LineChart className="h-5 w-5" />,
+    hasChild: false,
+    children: [],
   },
   {
     name: "Cửa hàng",
     url: "/admin/store",
     icon: <Store className="h-5 w-5" />,
+    hasChild: false,
+    children: [],
   },
 ];
 
@@ -81,19 +121,26 @@ const AdminHeader = () => {
               <div className="group flex h-16 w-16 items-center justify-center rounded-full bg-theme">
                 <Package2 className="h-10 w-10 transition-all group-hover_scale-110" />
               </div>
-              {navItems.map((item, index) => {
-                return (
-                  <SheetClose asChild key={index}>
-                    <NavLink
-                      to={item.url}
-                      className="flex items-center gap-4 px-2.5 text-muted-foreground hover_text-primary-foreground"
-                    >
-                      {item.icon}
-                      {item.name}
-                    </NavLink>
-                  </SheetClose>
-                );
-              })}
+              <ScrollArea className="h-[100vh] px-3">
+                {navItems.map((item, index) =>
+                  item.hasChild ? (
+                    <AdminAccordion key={index} subItems={item.children}>
+                      <div className="flex items-center gap-4 px-2.5 text-muted-foreground hover_text-primary-foreground">
+                        {item.icon} {item.name}
+                      </div>
+                    </AdminAccordion>
+                  ) : (
+                    <div key={index}>
+                      <NavLink
+                        to={item.url}
+                        className="border-b py-4 flex items-center gap-4 px-2.5 text-muted-foreground hover_text-primary-foreground"
+                      >
+                        {item.icon} {item.name}
+                      </NavLink>
+                    </div>
+                  )
+                )}
+              </ScrollArea>
             </nav>
           </SheetContent>
         </Sheet>

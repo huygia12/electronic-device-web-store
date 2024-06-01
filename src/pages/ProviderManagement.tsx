@@ -1,4 +1,4 @@
-import { CategoryDialog } from "@/components/categoryDialog";
+import { ProviderDialog } from "@/components/providerDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -19,120 +19,96 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Category } from "@/declare";
+import { Provider } from "@/declare";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 const colName: string[] = [
   "STT",
-  "TÊN DANH MỤC",
-  "MÃ DANH MỤC",
+  "TÊN NHÀ PHÂN PHỐI",
+  "MÃ NHÀ PHÂN PHỐI",
   "SỐ SẢN PHẨM",
   "THAO TÁC",
 ];
 
-const categories: Category[] = [
+const providers: Provider[] = [
   {
     id: "00011",
-    name: "May Tinh",
+    name: "MSI",
     products: 51,
   },
   {
     id: "00012",
-    name: "May Tinh",
+    name: "Lenovo",
     products: 23,
   },
   {
     id: "00013",
-    name: "May Tinh",
+    name: "Acer",
     products: 25,
   },
   {
     id: "00014",
-    name: "May Tinh",
+    name: "Sony",
     products: 23,
   },
   {
     id: "00015",
-    name: "May Tinh",
+    name: "Asus",
     products: 22,
   },
   {
     id: "00016",
-    name: "May Tinh",
+    name: "Iphone",
     products: 81,
   },
   {
     id: "00017",
-    name: "May Tinh",
+    name: "ThinkPad",
     products: 11,
   },
   {
     id: "00018",
-    name: "May Tinh",
+    name: "Bphone",
     products: 24,
   },
   {
     id: "00019",
-    name: "May Tinh",
+    name: "Samsung",
     products: 31,
   },
   {
     id: "00020",
-    name: "May Tinh",
+    name: "Vsmart",
     products: 31,
   },
   {
     id: "00022",
-    name: "May Tinh",
+    name: "Dell",
     products: 41,
   },
 ];
 
-const CategoryManagement = () => {
-  const [existingCategories, setExistingCategories] = useState(categories);
-  const [selectedID, setSelectedID] = useState("");
-  const [selectedName, setSelectedName] = useState("");
+const ProviderManagement = () => {
+  const [existingproviders, setExistingProvider] = useState(providers);
 
-  const deleteCategory = (categoryID: string) => {
-    const temp = existingCategories.filter(
-      (category) => category.id !== categoryID
+  const deleteProvider = (providerID: string) => {
+    const temp = existingproviders.filter(
+      (provider) => provider.id !== providerID
     );
-    setExistingCategories(temp);
+    setExistingProvider(temp);
   };
-
-  const handleEditEventCategory = (name: string) => {
-    const temp = existingCategories.map((cate) => cate);
-    for (const cate of temp) {
-      if (cate.id === selectedID) {
-        cate.name = name;
-      }
-    }
-
-    setExistingCategories(temp);
-  };
-
-  const handleDialogTriggerEvent = (id: string, name: string) => {
-    console.log(id, name);
-    setSelectedName(name);
-    setSelectedID(id);
-  };
-
-  const handleAddCategory = () => {};
 
   return (
     <>
       <Card className="rounded-2xl shadow-lg my-8">
         <CardContent className="flex justify-between p-6">
-          <CategoryDialog
-            formTitle="Thêm danh mục mới"
-            acceptHandler={handleAddCategory}
-          >
+          <ProviderDialog formTitle="Thêm nhà phân phối mới">
             <Button variant="positive" className="text-xl">
-              Thêm danh mục mới
+              Thêm nhà phân phối mới
               <Plus />
             </Button>
-          </CategoryDialog>
+          </ProviderDialog>
           <div className="relative flex-1 md_grow-0 h-[2.5rem]">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -145,14 +121,14 @@ const CategoryManagement = () => {
       </Card>
 
       {/** Table */}
-      <Card className="rounded-2xl shadow-lg mb-8">
+      <Card className="rounded-2xl shadow-lg mb-4">
         <CardHeader className="py-6 px-10">
-          <CardTitle className="text-8">Phân loại danh mục</CardTitle>
+          <CardTitle className="text-8">Danh sách các nhà phân phối</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col px-6 pb-4">
           <div className="overflow-auto relative h-[58vh]">
             <Table>
-              <TableHeader className="border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
+              <TableHeader className="border-b-secondary-foreground border-b-2 sticky top-0 bg-white">
                 <tr>
                   {colName.map((item, key) => {
                     return (
@@ -167,39 +143,32 @@ const CategoryManagement = () => {
                 </tr>
               </TableHeader>
               <TableBody>
-                {existingCategories.map((cate, index) => (
+                {existingproviders.map((provider, index) => (
                   <TableRow key={index}>
                     <TableCell className="text-center text-base">
                       {index + 1}
                     </TableCell>
                     <TableCell className="text-center  text-base">
-                      {cate.name}
+                      {provider.name}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {cate.id}
+                      {provider.id}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {cate.products}
+                      {provider.products}
                     </TableCell>
                     <TableCell className="flex items-center justify-center space-x-2">
-                      <CategoryDialog
-                        formTitle="Sửa thông tin danh mục"
-                        category={cate}
-                        selectedCategoryLastValue={selectedName}
-                        acceptHandler={handleEditEventCategory}
+                      <ProviderDialog
+                        formTitle="Sửa thông tin nhà phân phối"
+                        provider={provider}
                       >
-                        <Button
-                          variant="neutral"
-                          onClick={() =>
-                            handleDialogTriggerEvent(cate.id, cate.name)
-                          }
-                        >
+                        <Button variant="neutral">
                           <SquarePen />
                         </Button>
-                      </CategoryDialog>
+                      </ProviderDialog>
                       <Button
                         variant="negative"
-                        onClick={() => deleteCategory(cate.id)}
+                        onClick={() => deleteProvider(provider.id)}
                       >
                         <Trash2 />
                       </Button>
@@ -241,4 +210,4 @@ const CategoryManagement = () => {
   );
 };
 
-export default CategoryManagement;
+export default ProviderManagement;
