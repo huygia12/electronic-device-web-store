@@ -474,25 +474,35 @@ const ProductAddition = () => {
         </ul>
 
         {/** BUTTON */}
-        <div className="space-x-4">
+        <div className="flex justify-between">
+          <span className="space-x-4">
+            <Button
+              variant="positive"
+              className="text-xl"
+              onClick={(e) => handleAddItem(e)}
+            >
+              Thêm
+              <Plus />
+            </Button>
+            {itemCounter > 1 && (
+              <Button
+                variant="negative"
+                className="text-xl"
+                onClick={(e) => handleDelItem(e)}
+              >
+                Xóa
+                <Trash2 />
+              </Button>
+            )}
+          </span>
           <Button
-            variant="positive"
+            variant="neutral"
             className="text-xl"
             onClick={(e) => handleAddItem(e)}
           >
-            Thêm
+            Thêm sản phẩm
             <Plus />
           </Button>
-          {itemCounter > 1 && (
-            <Button
-              variant="negative"
-              className="text-xl"
-              onClick={(e) => handleDelItem(e)}
-            >
-              Xóa
-              <Trash2 />
-            </Button>
-          )}
         </div>
       </form>
     </>
