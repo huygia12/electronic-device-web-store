@@ -56,9 +56,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
                 {invoice.id}
               </TableCell>
               <TableCell className="text-center text-base">
-                {invoice.createdAt.toLocaleTimeString() +
-                  " " +
-                  invoice.createdAt.toLocaleDateString()}
+                {invoice.createdAt}
               </TableCell>
               <TableCell className="text-center text-base">{`${invoice.products} sản phẩm`}</TableCell>
               <TableCell className="text-center text-base">{`${invoice.total.toLocaleString()}đ`}</TableCell>

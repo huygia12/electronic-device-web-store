@@ -23,6 +23,7 @@ import UserDialog from "@/components/userDialog";
 import { User } from "@/declare";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useRouteLoaderData } from "react-router-dom";
 
 const colName: string[] = [
   "STT",
@@ -35,101 +36,9 @@ const colName: string[] = [
   "THAO TÁC",
 ];
 
-const users: User[] = [
-  {
-    id: "CT061",
-    name: "Bui Minh Khanh",
-    avt: "/avt.jpg",
-    passwd: "123456a@",
-    phoneNumber: "0336917223",
-    createdAt: new Date(2024, 5, 15, 12, 11, 5),
-    email: "khanhwf@gmail.com",
-  },
-  {
-    id: "ct061",
-    name: "Bui Minh Khanh",
-    avt: "/avt.jpg",
-    passwd: "123456a@",
-    phoneNumber: "0336917223",
-    createdAt: new Date(2024, 5, 15, 12, 11, 5),
-    email: "khanhwf@gmail.com",
-  },
-  {
-    id: "CT063",
-    name: "Bui Minh Khanh",
-    avt: "/avt.jpg",
-    passwd: "123456a@",
-    phoneNumber: "0336917223",
-    createdAt: new Date(2024, 5, 15, 12, 11, 5),
-    email: "khanhwf@gmail.com",
-  },
-  {
-    id: "CT064",
-    name: "Bui Minh Khanh",
-    avt: "/avt.jpg",
-    passwd: "123456a@",
-    phoneNumber: "0336917223",
-    createdAt: new Date(2024, 5, 15, 12, 11, 5),
-    email: "khanhwf@gmail.com",
-  },
-  {
-    id: "CT065",
-    name: "Bui Minh Khanh",
-    avt: "/avt.jpg",
-    passwd: "123456a@",
-    phoneNumber: "0336917223",
-    createdAt: new Date(2024, 5, 15, 12, 11, 5),
-    email: "khanhwf@gmail.com",
-  },
-  {
-    id: "CT066",
-    name: "Bui Minh Khanh",
-    avt: "/avt.jpg",
-    passwd: "123456a@",
-    phoneNumber: "0336917223",
-    createdAt: new Date(2024, 5, 15, 12, 11, 5),
-    email: "khanhwf@gmail.com",
-  },
-  {
-    id: "CT067",
-    name: "Bui Minh Khanh",
-    avt: "/avt.jpg",
-    passwd: "123456a@",
-    phoneNumber: "0336917223",
-    createdAt: new Date(2024, 5, 15, 12, 11, 5),
-    email: "khanhwf@gmail.com",
-  },
-  {
-    id: "CT068",
-    name: "Bui Minh Khanh",
-    avt: "/avt.jpg",
-    passwd: "123456a@",
-    phoneNumber: "0336917223",
-    createdAt: new Date(2024, 5, 15, 12, 11, 5),
-    email: "khanhwf@gmail.com",
-  },
-  {
-    id: "CT069",
-    name: "Bui Minh Khanh",
-    avt: "/avt.jpg",
-    passwd: "123456a@",
-    phoneNumber: "0336917223",
-    createdAt: new Date(2024, 5, 15, 12, 11, 5),
-    email: "khanhwf@gmail.com",
-  },
-  {
-    id: "CT070",
-    name: "Bui Minh Khanh",
-    avt: "/avt.jpg",
-    passwd: "123456a@",
-    phoneNumber: "0336917223",
-    createdAt: new Date(2024, 5, 15, 12, 11, 5),
-    email: "khanhwf@gmail.com",
-  },
-];
-
 const UserManagement = () => {
-  const [existingUsers, setExistUsers] = useState(users);
+  const usersData = useRouteLoaderData("user_management") as User[];
+  const [existingUsers, setExistUsers] = useState(usersData);
 
   // const modifyUsers = (userID: string) => {
   //   const temp = existingUsers.forEach((user) => {
@@ -205,9 +114,7 @@ const UserManagement = () => {
                       {user.phoneNumber}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {user.createdAt.toLocaleTimeString() +
-                        " " +
-                        user.createdAt.toLocaleDateString()}
+                      {user.createdAt}
                     </TableCell>
                     <TableCell className="text-center text-base">
                       {user.email}

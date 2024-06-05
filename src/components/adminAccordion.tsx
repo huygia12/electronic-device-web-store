@@ -7,6 +7,7 @@ import {
 } from "./ui/accordion";
 import { AdminNavSubItem } from "@/declare";
 import { NavLink } from "react-router-dom";
+import { SheetClose } from "./ui/sheet";
 
 interface AdminAccordionProps extends HTMLAttributes<HTMLDivElement> {
   subItems: AdminNavSubItem[];
@@ -26,10 +27,12 @@ const AdminAccordion: React.FC<AdminAccordionProps> = ({
               <NavLink
                 key={index}
                 to={subItem.url}
-                className="text-[1.1rem] flex pl-8 pb-5 text-secondary-foreground hover_text-primary"
+                className="text-[1.1rem] text-secondary-foreground hover_text-primary"
               >
-                <span className="mr-3"> {subItem.icon} </span>
-                {subItem.name}
+                <SheetClose className="flex items-center pl-10 pb-5 gap-2">
+                  <span> {subItem.icon} </span>
+                  <span> {subItem.name} </span>
+                </SheetClose>
               </NavLink>
             );
           })}

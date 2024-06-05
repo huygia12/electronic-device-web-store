@@ -421,14 +421,937 @@
       "itemDetailID": "21"
     }
   ],
-  "cates": [
+  "categories": [
+    { "id": "00011", "name": "Máy Tính", "products": 51 },
     {
-      "title": "Máy tính",
-      "href": "/computer"
+      "id": "00012",
+      "name": "Laptop",
+      "products": 23
     },
     {
-      "title": "Camera",
-      "href": "camera"
+      "id": "00013",
+      "name": "Điện Thoại",
+      "products": 25
+    },
+    {
+      "id": "00014",
+      "name": "Camera",
+      "products": 23
+    },
+    {
+      "id": "00015",
+      "name": "Màn Hình",
+      "products": 22
+    },
+    {
+      "id": "00016",
+      "name": "Phụ Kiện",
+      "products": 81
+    },
+    {
+      "id": "00017",
+      "name": "Máy Tính Bảng",
+      "products": 11
+    }
+  ],
+  "providers": [
+    {
+      "id": "00011",
+      "name": "MSI",
+      "products": 51
+    },
+    {
+      "id": "00012",
+      "name": "Lenovo",
+      "products": 23
+    },
+    {
+      "id": "00013",
+      "name": "Acer",
+      "products": 25
+    },
+    {
+      "id": "00014",
+      "name": "Sony",
+      "products": 23
+    },
+    {
+      "id": "00015",
+      "name": "Asus",
+      "products": 22
+    },
+    {
+      "id": "00016",
+      "name": "Iphone",
+      "products": 81
+    },
+    {
+      "id": "00017",
+      "name": "ThinkPad",
+      "products": 11
+    },
+    {
+      "id": "00018",
+      "name": "Bphone",
+      "products": 24
+    },
+    {
+      "id": "00019",
+      "name": "Samsung",
+      "products": 31
+    },
+    {
+      "id": "00020",
+      "name": "Vsmart",
+      "products": 31
+    },
+    {
+      "id": "00022",
+      "name": "Dell",
+      "products": 41
+    }
+  ],
+  "products": [
+    {
+      "id": "11",
+      "name": "Samsung Galaxy S23 FE 5G",
+      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
+      "height": 5,
+      "length": 10.2,
+      "width": 5,
+      "weight": 2.3,
+      "gurantee": 12,
+      "category": "Điện thoại",
+      "branch": "Samsung",
+      "productItem": [
+        {
+          "id": "110",
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+
+          "productCode": "1100",
+          "discount": 12,
+          "color": "Đen",
+          "storage": "256GB",
+          "productImage": [
+            "/black-1.jpg",
+            "/black-2.jpg",
+            "/black-3.jpg",
+            "/black-4.jpg",
+            "/black-5.jpg"
+          ]
+        },
+        {
+          "id": "111",
+          "thump": "/purple-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+
+          "productCode": "1101",
+          "discount": 10,
+          "color": "Tím",
+          "storage": "256GB",
+          "productImage": [
+            "/purple-1.jpg",
+            "/purple-2.jpg",
+            "/purple-3.jpg",
+            "/purple-4.jpg",
+            "/purple-5.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "name": "Samsung Galaxy S23 FE 5G",
+      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
+      "height": 5,
+      "length": 10.2,
+      "width": 5,
+      "weight": 2.3,
+      "gurantee": 12,
+      "category": "Điện thoại",
+      "branch": "Samsung",
+      "productItem": [
+        {
+          "id": "110",
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+
+          "productCode": "1100",
+          "discount": 12,
+          "color": "Đen",
+          "storage": "256GB",
+          "productImage": [
+            "/black-1.jpg",
+            "/black-2.jpg",
+            "/black-3.jpg",
+            "/black-4.jpg",
+            "/black-5.jpg"
+          ]
+        },
+        {
+          "id": "111",
+          "thump": "/purple-thump.jpg",
+          "quantity": 10,
+          "price": 12300000,
+
+          "productCode": "1101",
+          "discount": 10,
+          "color": "Tím",
+          "storage": "256GB",
+          "productImage": [
+            "/purple-1.jpg",
+            "/purple-2.jpg",
+            "/purple-3.jpg",
+            "/purple-4.jpg",
+            "/purple-5.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "name": "Samsung Galaxy S23 FE 5G",
+      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
+      "height": 5,
+      "length": 10.2,
+      "width": 5,
+      "weight": 2.3,
+      "gurantee": 12,
+      "category": "Điện thoại",
+      "branch": "Samsung",
+      "productItem": [
+        {
+          "id": "110",
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+
+          "productCode": "1100",
+          "discount": 12,
+          "color": "Đen",
+          "storage": "256GB",
+          "productImage": [
+            "/black-1.jpg",
+            "/black-2.jpg",
+            "/black-3.jpg",
+            "/black-4.jpg",
+            "/black-5.jpg"
+          ]
+        },
+        {
+          "id": "111",
+          "thump": "/purple-thump.jpg",
+          "quantity": 10,
+          "price": 12300000,
+
+          "productCode": "1101",
+          "discount": 10,
+          "color": "Tím",
+          "storage": "256GB",
+          "productImage": [
+            "/purple-1.jpg",
+            "/purple-2.jpg",
+            "/purple-3.jpg",
+            "/purple-4.jpg",
+            "/purple-5.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "14",
+      "name": "Samsung Galaxy S23 FE 5G",
+      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
+      "height": 5,
+      "length": 10.2,
+      "width": 5,
+      "weight": 2.3,
+      "gurantee": 12,
+      "category": "Điện thoại",
+      "branch": "Samsung",
+      "productItem": [
+        {
+          "id": "110",
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+
+          "productCode": "1100",
+          "discount": 12,
+          "color": "Đen",
+          "storage": "256GB",
+          "productImage": [
+            "/black-1.jpg",
+            "/black-2.jpg",
+            "/black-3.jpg",
+            "/black-4.jpg",
+            "/black-5.jpg"
+          ]
+        },
+        {
+          "id": "111",
+          "thump": "/purple-thump.jpg",
+          "quantity": 10,
+          "price": 12300000,
+
+          "productCode": "1101",
+          "discount": 10,
+          "color": "Tím",
+          "storage": "256GB",
+          "productImage": [
+            "/purple-1.jpg",
+            "/purple-2.jpg",
+            "/purple-3.jpg",
+            "/purple-4.jpg",
+            "/purple-5.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "15",
+      "name": "Samsung Galaxy S23 FE 5G",
+      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
+      "height": 5,
+      "length": 10.2,
+      "width": 5,
+      "weight": 2.3,
+      "gurantee": 12,
+      "category": "Điện thoại",
+      "branch": "Samsung",
+      "productItem": [
+        {
+          "id": "110",
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+
+          "productCode": "1100",
+          "discount": 12,
+          "color": "Đen",
+          "storage": "256GB",
+          "productImage": [
+            "/black-1.jpg",
+            "/black-2.jpg",
+            "/black-3.jpg",
+            "/black-4.jpg",
+            "/black-5.jpg"
+          ]
+        },
+        {
+          "id": "111",
+          "thump": "/purple-thump.jpg",
+          "quantity": 10,
+          "price": 12300000,
+
+          "productCode": "1101",
+          "discount": 10,
+          "color": "Tím",
+          "storage": "256GB",
+          "productImage": [
+            "/purple-1.jpg",
+            "/purple-2.jpg",
+            "/purple-3.jpg",
+            "/purple-4.jpg",
+            "/purple-5.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "16",
+      "name": "Samsung Galaxy S23 FE 5G",
+      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
+      "height": 5,
+      "length": 10.2,
+      "width": 5,
+      "weight": 2.3,
+      "gurantee": 12,
+      "category": "Điện thoại",
+      "branch": "Samsung",
+      "productItem": [
+        {
+          "id": "110",
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+
+          "productCode": "1100",
+          "discount": 12,
+          "color": "Đen",
+          "storage": "256GB",
+          "productImage": [
+            "/black-1.jpg",
+            "/black-2.jpg",
+            "/black-3.jpg",
+            "/black-4.jpg",
+            "/black-5.jpg"
+          ]
+        },
+        {
+          "id": "111",
+          "thump": "/purple-thump.jpg",
+          "quantity": 10,
+          "price": 12300000,
+
+          "productCode": "1101",
+          "discount": 10,
+          "color": "Tím",
+          "storage": "256GB",
+          "productImage": [
+            "/purple-1.jpg",
+            "/purple-2.jpg",
+            "/purple-3.jpg",
+            "/purple-4.jpg",
+            "/purple-5.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "16",
+      "name": "Samsung Galaxy S23 FE 5G",
+      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
+      "height": 5,
+      "length": 10.2,
+      "width": 5,
+      "weight": 2.3,
+      "gurantee": 12,
+      "category": "Điện thoại",
+      "branch": "Samsung",
+      "productItem": [
+        {
+          "id": "110",
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+
+          "productCode": "1100",
+          "discount": 12,
+          "color": "Đen",
+          "storage": "256GB",
+          "productImage": [
+            "/black-1.jpg",
+            "/black-2.jpg",
+            "/black-3.jpg",
+            "/black-4.jpg",
+            "/black-5.jpg"
+          ]
+        },
+        {
+          "id": "111",
+          "thump": "/purple-thump.jpg",
+          "quantity": 10,
+          "price": 12300000,
+
+          "productCode": "1101",
+          "discount": 10,
+          "color": "Tím",
+          "storage": "256GB",
+          "productImage": [
+            "/purple-1.jpg",
+            "/purple-2.jpg",
+            "/purple-3.jpg",
+            "/purple-4.jpg",
+            "/purple-5.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "17",
+      "name": "Samsung Galaxy S23 FE 5G",
+      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
+      "height": 5,
+      "length": 10.2,
+      "width": 5,
+      "weight": 2.3,
+      "gurantee": 12,
+      "category": "Điện thoại",
+      "branch": "Samsung",
+      "productItem": [
+        {
+          "id": "110",
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+
+          "productCode": "1100",
+          "discount": 12,
+          "color": "Đen",
+          "storage": "256GB",
+          "productImage": [
+            "/black-1.jpg",
+            "/black-2.jpg",
+            "/black-3.jpg",
+            "/black-4.jpg",
+            "/black-5.jpg"
+          ]
+        },
+        {
+          "id": "111",
+          "thump": "/purple-thump.jpg",
+          "quantity": 10,
+          "price": 12300000,
+
+          "productCode": "1101",
+          "discount": 10,
+          "color": "Tím",
+          "storage": "256GB",
+          "productImage": [
+            "/purple-1.jpg",
+            "/purple-2.jpg",
+            "/purple-3.jpg",
+            "/purple-4.jpg",
+            "/purple-5.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "18",
+      "name": "Samsung Galaxy S23 FE 5G",
+      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
+      "height": 5,
+      "length": 10.2,
+      "width": 5,
+      "weight": 2.3,
+      "gurantee": 12,
+      "category": "Điện thoại",
+      "branch": "Samsung",
+      "productItem": [
+        {
+          "id": "110",
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+
+          "productCode": "1100",
+          "discount": 12,
+          "color": "Đen",
+          "storage": "256GB",
+          "productImage": [
+            "/black-1.jpg",
+            "/black-2.jpg",
+            "/black-3.jpg",
+            "/black-4.jpg",
+            "/black-5.jpg"
+          ]
+        },
+        {
+          "id": "111",
+          "thump": "/purple-thump.jpg",
+          "quantity": 10,
+          "price": 12300000,
+
+          "productCode": "1101",
+          "discount": 10,
+          "color": "Tím",
+          "storage": "256GB",
+          "productImage": [
+            "/purple-1.jpg",
+            "/purple-2.jpg",
+            "/purple-3.jpg",
+            "/purple-4.jpg",
+            "/purple-5.jpg"
+          ]
+        }
+      ]
+    }
+  ],
+  "attributes": [
+    {
+      "id": "11",
+      "name": "RAM",
+      "values": [
+        {
+          "id": "123",
+          "name": "128GB"
+        },
+        {
+          "id": "121",
+          "name": "32GB"
+        },
+        {
+          "id": "122",
+          "name": "256GB"
+        },
+        {
+          "id": "120",
+          "name": "64GB"
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "name": "CARD đồ họa",
+      "values": [
+        {
+          "id": "123",
+          "name": "AMD Radeon Series"
+        },
+        {
+          "id": "124",
+          "name": "Nvidia GeForce Series"
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "name": "Ổ cứng",
+      "values": [
+        {
+          "id": "123",
+          "name": "SSD 1TB"
+        },
+        {
+          "id": "124",
+          "name": "SSD 512GB"
+        },
+        {
+          "id": "125",
+          "name": "SSD 256GB"
+        },
+        {
+          "id": "126",
+          "name": "SSD 128GB"
+        }
+      ]
+    },
+    {
+      "id": "14",
+      "name": "Nhu cầu",
+      "values": [
+        {
+          "id": "123",
+          "name": "Gaming - Đồ họa"
+        },
+        {
+          "id": "124",
+          "name": "Sinh viên - Văn phòng"
+        },
+        {
+          "id": "125",
+          "name": "Mỏng nhẹ"
+        },
+        {
+          "id": "126",
+          "name": "Doanh nhân"
+        },
+        {
+          "id": "127",
+          "name": "AI"
+        }
+      ]
+    },
+    {
+      "id": "15",
+      "name": "Màn Hình",
+      "values": [
+        {
+          "id": "123",
+          "name": "13 inch"
+        },
+        {
+          "id": "124",
+          "name": "14 inch"
+        },
+        {
+          "id": "125",
+          "name": "15inch"
+        }
+      ]
+    },
+    {
+      "id": "16",
+      "name": "CPU",
+      "values": [
+        {
+          "id": "123",
+          "name": "Intel Celeron"
+        },
+        {
+          "id": "124",
+          "name": "Intel Pentium"
+        },
+        {
+          "id": "125",
+          "name": "Intel core i3"
+        },
+        {
+          "id": "126",
+          "name": "Intel core i5"
+        },
+        {
+          "id": "127",
+          "name": "Intel core i7"
+        },
+        {
+          "id": "128",
+          "name": "Intel core Ultra"
+        },
+        {
+          "id": "129",
+          "name": "AMD Ryzen 3"
+        },
+        {
+          "id": "130",
+          "name": "AMD Ryzen 5"
+        },
+        {
+          "id": "131",
+          "name": "AMD Ryzen 7"
+        }
+      ]
+    },
+    {
+      "id": "16",
+      "name": "Camera",
+      "values": [
+        {
+          "id": "123",
+          "name": "Quay phim slow motion"
+        },
+        {
+          "id": "124",
+          "name": "AI camera"
+        },
+        {
+          "id": "125",
+          "name": "Hiệu ứng làm đẹp"
+        },
+        {
+          "id": "126",
+          "name": "Zoom quang học"
+        }
+      ]
+    },
+    {
+      "id": "17",
+      "name": "Màn hình",
+      "values": [
+        {
+          "id": "123",
+          "name": "Dưới 5 inch"
+        },
+        {
+          "id": "124",
+          "name": "Trên 6 inch"
+        },
+        {
+          "id": "125",
+          "name": "Màn hình gập"
+        }
+      ]
+    },
+    {
+      "id": "18",
+      "name": "Tính năng đặc biệt",
+      "values": [
+        {
+          "id": "123",
+          "name": "A.I phone"
+        },
+        {
+          "id": "124",
+          "name": "Bảo mật vân tay"
+        },
+        {
+          "id": "125",
+          "name": "Nhận diện khuôn mặt"
+        },
+        {
+          "id": "126",
+          "name": "Chống nước & bụi"
+        },
+        {
+          "id": "127",
+          "name": "Hỗ trọ 5G"
+        }
+      ]
+    },
+    {
+      "id": "19",
+      "name": "Hiệu năng và pin",
+      "values": []
+    }
+  ],
+  "users": [
+    {
+      "id": "CT061",
+      "name": "Bui Minh Khanh",
+      "avt": "/avt.jpg",
+      "passwd": "123456a@",
+      "phoneNumber": "0336917223",
+      "createdAt": "2024-05-15 12:11:5",
+      "email": "khanhwf@gmail.com"
+    },
+    {
+      "id": "CT062",
+      "name": "Bui Minh Khanh",
+      "avt": "/avt.jpg",
+      "passwd": "123456a@",
+      "phoneNumber": "0336917223",
+      "createdAt": "2024-05-15 12:11:5",
+      "email": "khanhwf@gmail.com"
+    },
+    {
+      "id": "CT063",
+      "name": "Bui Minh Khanh",
+      "avt": "/avt.jpg",
+      "passwd": "123456a@",
+      "phoneNumber": "0336917223",
+      "createdAt": "2024-05-15 12:11:5",
+      "email": "khanhwf@gmail.com"
+    },
+    {
+      "id": "CT064",
+      "name": "Bui Minh Khanh",
+      "avt": "/avt.jpg",
+      "passwd": "123456a@",
+      "phoneNumber": "0336917223",
+      "createdAt": "2024-05-15 12:11:5",
+      "email": "khanhwf@gmail.com"
+    },
+    {
+      "id": "CT065",
+      "name": "Bui Minh Khanh",
+      "avt": "/avt.jpg",
+      "passwd": "123456a@",
+      "phoneNumber": "0336917223",
+      "createdAt": "2024-05-15 12:11:5",
+      "email": "khanhwf@gmail.com"
+    },
+    {
+      "id": "CT066",
+      "name": "Bui Minh Khanh",
+      "avt": "/avt.jpg",
+      "passwd": "123456a@",
+      "phoneNumber": "0336917223",
+      "createdAt": "2024-05-15 12:11:5",
+      "email": "khanhwf@gmail.com"
+    },
+    {
+      "id": "CT067",
+      "name": "Bui Minh Khanh",
+      "avt": "/avt.jpg",
+      "passwd": "123456a@",
+      "phoneNumber": "0336917223",
+      "createdAt": "2024-05-15 12:11:5",
+      "email": "khanhwf@gmail.com"
+    },
+    {
+      "id": "CT068",
+      "name": "Bui Minh Khanh",
+      "avt": "/avt.jpg",
+      "passwd": "123456a@",
+      "phoneNumber": "0336917223",
+      "createdAt": "2024-05-15 12:11:5",
+      "email": "khanhwf@gmail.com"
+    },
+    {
+      "id": "CT069",
+      "name": "Bui Minh Khanh",
+      "avt": "/avt.jpg",
+      "passwd": "123456a@",
+      "phoneNumber": "0336917223",
+      "createdAt": "2024-05-15 12:11:5",
+      "email": "khanhwf@gmail.com"
+    },
+    {
+      "id": "CT070",
+      "name": "Bui Minh Khanh",
+      "avt": "/avt.jpg",
+      "passwd": "123456a@",
+      "phoneNumber": "0336917223",
+      "createdAt": "2024-05-15 12:11:5",
+      "email": "khanhwf@gmail.com"
+    }
+  ],
+  "orders": [
+    {
+      "customer": "Bùi Minh Khánh",
+      "id": "011",
+      "createdAt": "2024-05-15 18:01:5",
+      "products": 3,
+      "total": 4000000,
+      "status": "Chờ xác nhận"
+    },
+    {
+      "customer": "Bùi Minh Khánh",
+      "id": "012",
+      "createdAt": "2024-05-15 18:01:5",
+      "products": 3,
+      "total": 4000000,
+      "status": "Chờ xác nhận"
+    },
+    {
+      "customer": "Bùi Minh Khánh",
+      "id": "013",
+      "createdAt": "2024-05-15 18:01:5",
+      "products": 3,
+      "total": 4000000,
+      "status": "Chờ xác nhận"
+    },
+    {
+      "customer": "Bùi Minh Khánh",
+      "id": "014",
+      "createdAt": "2024-05-15 18:01:5",
+      "products": 3,
+      "total": 4000000,
+      "status": "Chờ xác nhận"
+    },
+    {
+      "customer": "Bùi Minh Khánh",
+      "id": "015",
+      "createdAt": "2024-05-15 18:01:5",
+      "products": 3,
+      "total": 4000000,
+      "status": "Chờ xác nhận"
+    },
+    {
+      "customer": "Bùi Minh Khánh",
+      "id": "016",
+      "createdAt": "2024-05-15 18:01:5",
+      "products": 3,
+      "total": 4000000,
+      "status": "Chờ xác nhận"
+    },
+    {
+      "customer": "Bùi Minh Khánh",
+      "id": "017",
+      "createdAt": "2024-05-15 18:01:5",
+      "products": 3,
+      "total": 4000000,
+      "status": "Chờ xác nhận"
+    },
+    {
+      "customer": "Bùi Minh Khánh",
+      "id": "018",
+      "createdAt": "2024-05-15 18:01:5",
+      "products": 3,
+      "total": 4000000,
+      "status": "Chờ xác nhận"
+    },
+    {
+      "customer": "Bùi Minh Khánh",
+      "id": "019",
+      "createdAt": "2024-05-15 18:01:5",
+      "products": 3,
+      "total": 4000000,
+      "status": "Chờ xác nhận"
+    },
+    {
+      "customer": "Bùi Minh Khánh",
+      "id": "020",
+      "createdAt": "2024-05-15 18:01:5",
+      "products": 3,
+      "total": 4000000,
+      "status": "Chờ xác nhận"
     }
   ]
 }

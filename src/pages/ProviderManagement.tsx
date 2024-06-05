@@ -22,6 +22,7 @@ import {
 import { Provider } from "@/declare";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useRouteLoaderData } from "react-router-dom";
 
 const colName: string[] = [
   "STT",
@@ -31,66 +32,9 @@ const colName: string[] = [
   "THAO TÁC",
 ];
 
-const providers: Provider[] = [
-  {
-    id: "00011",
-    name: "MSI",
-    products: 51,
-  },
-  {
-    id: "00012",
-    name: "Lenovo",
-    products: 23,
-  },
-  {
-    id: "00013",
-    name: "Acer",
-    products: 25,
-  },
-  {
-    id: "00014",
-    name: "Sony",
-    products: 23,
-  },
-  {
-    id: "00015",
-    name: "Asus",
-    products: 22,
-  },
-  {
-    id: "00016",
-    name: "Iphone",
-    products: 81,
-  },
-  {
-    id: "00017",
-    name: "ThinkPad",
-    products: 11,
-  },
-  {
-    id: "00018",
-    name: "Bphone",
-    products: 24,
-  },
-  {
-    id: "00019",
-    name: "Samsung",
-    products: 31,
-  },
-  {
-    id: "00020",
-    name: "Vsmart",
-    products: 31,
-  },
-  {
-    id: "00022",
-    name: "Dell",
-    products: 41,
-  },
-];
-
 const ProviderManagement = () => {
-  const [existingproviders, setExistingProvider] = useState(providers);
+  const providersData = useRouteLoaderData("provider_management") as Provider[];
+  const [existingproviders, setExistingProvider] = useState(providersData);
 
   const deleteProvider = (providerID: string) => {
     const temp = existingproviders.filter(

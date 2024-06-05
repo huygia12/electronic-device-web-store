@@ -10,91 +10,13 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { BriefOrderAttributes } from "@/declare";
-
-const invoices: BriefOrderAttributes[] = [
-  {
-    customer: "Bùi Minh Khánh",
-    id: "011",
-    createdAt: new Date(2024, 5, 15, 18, 0, 5),
-    products: 3,
-    total: 4000000,
-    status: "Chờ xác nhận",
-  },
-  {
-    customer: "Bùi Minh Khánh",
-    id: "012",
-    createdAt: new Date(2024, 5, 15, 18, 0, 5),
-    products: 3,
-    total: 4000000,
-    status: "Chờ xác nhận",
-  },
-  {
-    customer: "Bùi Minh Khánh",
-    id: "013",
-    createdAt: new Date(2024, 5, 15, 18, 0, 5),
-    products: 3,
-    total: 4000000,
-    status: "Chờ xác nhận",
-  },
-  {
-    customer: "Bùi Minh Khánh",
-    id: "014",
-    createdAt: new Date(2024, 5, 15, 18, 0, 5),
-    products: 3,
-    total: 4000000,
-    status: "Chờ xác nhận",
-  },
-  {
-    customer: "Bùi Minh Khánh",
-    id: "015",
-    createdAt: new Date(2024, 5, 15, 18, 0, 5),
-    products: 3,
-    total: 4000000,
-    status: "Chờ xác nhận",
-  },
-  {
-    customer: "Bùi Minh Khánh",
-    id: "016",
-    createdAt: new Date(2024, 5, 15, 18, 0, 5),
-    products: 3,
-    total: 4000000,
-    status: "Chờ xác nhận",
-  },
-  {
-    customer: "Bùi Minh Khánh",
-    id: "017",
-    createdAt: new Date(2024, 5, 15, 18, 0, 5),
-    products: 3,
-    total: 4000000,
-    status: "Chờ xác nhận",
-  },
-  {
-    customer: "Bùi Minh Khánh",
-    id: "018",
-    createdAt: new Date(2024, 5, 15, 18, 0, 5),
-    products: 3,
-    total: 4000000,
-    status: "Chờ xác nhận",
-  },
-  {
-    customer: "Bùi Minh Khánh",
-    id: "019",
-    createdAt: new Date(2024, 5, 15, 18, 0, 5),
-    products: 3,
-    total: 4000000,
-    status: "Chờ xác nhận",
-  },
-  {
-    customer: "Bùi Minh Khánh",
-    id: "020",
-    createdAt: new Date(2024, 5, 15, 18, 0, 5),
-    products: 3,
-    total: 4000000,
-    status: "Chờ xác nhận",
-  },
-];
+import { useRouteLoaderData } from "react-router-dom";
 
 const OrderManagement = () => {
+  const ordersData = useRouteLoaderData(
+    "order_management"
+  ) as BriefOrderAttributes[];
+
   return (
     <>
       {/** Table */}
@@ -103,7 +25,7 @@ const OrderManagement = () => {
           <CardTitle className="text-8">Đơn hàng cần xác nhận</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col px-6 pb-4">
-          <OrderTable orders={invoices} />
+          <OrderTable orders={ordersData} />
         </CardContent>
       </Card>
 

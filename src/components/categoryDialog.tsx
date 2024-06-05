@@ -17,7 +17,7 @@ interface CategoryDialogProps extends HTMLAttributes<HTMLFormElement> {
   category?: Category;
   formTitle: string;
   selectedCategoryLastValue?: string;
-  acceptHandler: (name: string) => void;
+  handleAcceptEvent: (categoryName: string) => void;
 }
 
 const CategoryDialog: React.FC<CategoryDialogProps> = ({
@@ -25,22 +25,18 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
   ...props
 }) => {
   const [newName, setNewName] = useState(props.category?.name || "");
-  const [isDisable, setIsDisable] = useState(true);
-
-  const editEvent = () => {
-    props.acceptHandler && props.acceptHandler(newName);
-  };
+  // const [isDisable, setIsDisable] = useState(true);
 
   const handleInputEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const prevContent = props.selectedCategoryLastValue;
-    console.log(prevContent, newName + "new");
+    // const prevContent = props.selectedCategoryLastValue;
+    // console.log(prevContent, newName + "new");
     setNewName(e.target.value);
-    if (prevContent && prevContent !== e.target.value) {
-      console.log("yes");
-      setIsDisable(false);
-      return;
-    }
-    setIsDisable(true);
+    // if (prevContent && prevContent !== e.target.value) {
+    //   console.log("yes");
+    //   setIsDisable(false);
+    //   return;
+    // }
+    // setIsDisable(true);
   };
 
   return (
@@ -65,11 +61,11 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
           <DialogFooter>
             <DialogClose
               type="submit"
-              disabled={isDisable}
-              className={buttonVariants({
-                variant: isDisable ? "outline" : "positive",
-              })}
-              onClick={() => editEvent()}
+              // disabled={isDisable}
+              // className={buttonVariants({
+              //   variant: isDisable ? "outline" : "positive",
+              // })}
+              onClick={() => props.handleAcceptEvent(newName)}
             >
               Lưu
             </DialogClose>

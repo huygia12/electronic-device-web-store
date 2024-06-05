@@ -14,13 +14,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { BriefOrderAttributes, ChartData } from "@/declare";
+import { ChartData } from "@/declare";
 import OrderTable from "@/components/orderTable";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import CustomLineChart from "@/components/customLineChart";
 import { Button } from "@/components/ui/button";
 
+const orderListLink = "/admin/received-orders";
 const cardItem = [
   {
     name: "Doanh thu",
@@ -51,45 +52,6 @@ const cardItem = [
     content: "4",
     subContent: "",
     icon: <Users />,
-  },
-];
-
-const invoices: BriefOrderAttributes[] = [
-  {
-    customer: "Bùi Minh Khánh",
-    id: "011",
-    createdAt: new Date(2024, 5, 15, 18, 0, 5),
-    products: 3,
-    total: 4000000,
-    status: "Chờ xác nhận",
-  },
-];
-
-const newCustomers = [
-  {
-    customer: "Đặng Thị Ngọc Huyền",
-    avt: "/avt.jpg",
-    createdAt: new Date(2024, 5, 6, 12, 12, 55),
-  },
-  {
-    customer: "Đặng Thị Ngọc Huyền",
-    avt: "/avt.jpg",
-    createdAt: new Date(2024, 5, 6, 12, 12, 55),
-  },
-  {
-    customer: "Đặng Thị Ngọc Huyền",
-    avt: "/avt.jpg",
-    createdAt: new Date(2024, 5, 6, 12, 12, 55),
-  },
-  {
-    customer: "Đặng Thị Ngọc Huyền",
-    avt: "/avt.jpg",
-    createdAt: new Date(2024, 5, 6, 12, 12, 55),
-  },
-  {
-    customer: "Đặng Thị Ngọc Huyền",
-    avt: "/avt.jpg",
-    createdAt: new Date(2024, 5, 6, 12, 12, 55),
   },
 ];
 
@@ -156,11 +118,11 @@ const Dashboard = () => {
             <CardTitle className="text-8">Đơn hàng cần xác nhận</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col px-6 pb-4">
-            <OrderTable orders={invoices} />
+            <OrderTable orders={order} />
           </CardContent>
           <CardFooter className="flex justify-center">
             <NavLink
-              to="/admin/order"
+              to={orderListLink}
               className="flex text-blue-500 hover_underline"
             >
               Xem tất cả &nbsp; <ArrowRight />

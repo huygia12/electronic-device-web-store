@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NavLink } from "react-router-dom";
 
-const signup = () => {
+const Signup = () => {
   return (
     <div className="w-full h-full flex justify-around">
       <Card className="mx-auto min-w-[30rem] my-auto shadow-slate-400 shadow-sm">
@@ -73,4 +73,4 @@ const signup = () => {
   );
 };
 
-export default signup;
+export default Signup;

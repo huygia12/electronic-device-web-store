@@ -7,10 +7,11 @@ import { TbFrame } from "react-icons/tb";
 import { useEffect, useState } from "react";
 import { ProductAttributes } from "@/declare";
 import axios from "axios";
+import log from "loglevel";
+
+log.setLevel("error");
 
 const Products = () => {
-  // const [loading, setLoading] = useState(true);
-
   const [data, setData] = useState<ProductAttributes[]>([]);
 
   useEffect(() => {
@@ -21,24 +22,20 @@ const Products = () => {
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
           // AxiosError-specific handling
-          console.error("Axios error:", error.message);
+          log.error("Axios error:", error.message);
           if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
+            log.error("Response data:", error.response.data);
+            log.error("Response status:", error.response.status);
           }
         } else {
           // General error handling
-          console.error("Unexpected error:", error);
+          log.error("Unexpected error:", error);
         }
       }
     };
 
     fetchData();
   }, []);
-  // if(loading){
-  //   return (
-  //   );
-  // }
 
   return (
     <main className="grid grid-cols-4 gap-8">

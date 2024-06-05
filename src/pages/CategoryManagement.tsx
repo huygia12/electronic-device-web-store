@@ -20,8 +20,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Category } from "@/declare";
+import { arrayInReverse } from "@/utils/helpers";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useRouteLoaderData } from "react-router-dom";
 
 const colName: string[] = [
   "STT",
@@ -31,94 +33,38 @@ const colName: string[] = [
   "THAO TÁC",
 ];
 
-const categories: Category[] = [
-  {
-    id: "00011",
-    name: "May Tinh",
-    products: 51,
-  },
-  {
-    id: "00012",
-    name: "May Tinh",
-    products: 23,
-  },
-  {
-    id: "00013",
-    name: "May Tinh",
-    products: 25,
-  },
-  {
-    id: "00014",
-    name: "May Tinh",
-    products: 23,
-  },
-  {
-    id: "00015",
-    name: "May Tinh",
-    products: 22,
-  },
-  {
-    id: "00016",
-    name: "May Tinh",
-    products: 81,
-  },
-  {
-    id: "00017",
-    name: "May Tinh",
-    products: 11,
-  },
-  {
-    id: "00018",
-    name: "May Tinh",
-    products: 24,
-  },
-  {
-    id: "00019",
-    name: "May Tinh",
-    products: 31,
-  },
-  {
-    id: "00020",
-    name: "May Tinh",
-    products: 31,
-  },
-  {
-    id: "00022",
-    name: "May Tinh",
-    products: 41,
-  },
-];
-
 const CategoryManagement = () => {
-  const [existingCategories, setExistingCategories] = useState(categories);
-  const [selectedID, setSelectedID] = useState("");
-  const [selectedName, setSelectedName] = useState("");
+  const categoriesData = useRouteLoaderData(
+    "category_management"
+  ) as Category[];
+  const [existingCategories, setExistingCategories] = useState(categoriesData);
+  // const [selectedName, setSelectedName] = useState("");
 
-  const deleteCategory = (categoryID: string) => {
+  const handleAddCategory = (newCategoryName: string) => {
+    // Check if the name is already existed or not
+    let checkExisting: boolean = false;
+    existingCategories.forEach((cate) => {
+      newCategoryName.length !== 0 &&
+        cate.name.toLowerCase() === newCategoryName.toLowerCase() &&
+        (checkExisting = true);
+    });
+
+    const tempCategories = existingCategories.map((e) => e);
+    if (checkExisting) {
+      console.log("Already exist!");
+    } else {
+      // Add to current category list
+      tempCategories.push({ id: "", name: newCategoryName, products: 0 });
+      setExistingCategories(tempCategories);
+    }
+  };
+
+  const handleDeleteCategory = (categoryID: string) => {
     const temp = existingCategories.filter(
       (category) => category.id !== categoryID
     );
     setExistingCategories(temp);
   };
-
-  const handleEditEventCategory = (name: string) => {
-    const temp = existingCategories.map((cate) => cate);
-    for (const cate of temp) {
-      if (cate.id === selectedID) {
-        cate.name = name;
-      }
-    }
-
-    setExistingCategories(temp);
-  };
-
-  const handleDialogTriggerEvent = (id: string, name: string) => {
-    console.log(id, name);
-    setSelectedName(name);
-    setSelectedID(id);
-  };
-
-  const handleAddCategory = () => {};
 
   return (
     <>
@@ -126,7 +72,9 @@ const CategoryManagement = () => {
         <CardContent className="flex justify-between p-6">
           <CategoryDialog
             formTitle="Thêm danh mục mới"
-            acceptHandler={handleAddCategory}
+            handleAcceptEvent={(newCategoryName: string) =>
+              handleAddCategory(newCategoryName)
+            }
           >
             <Button variant="positive" className="text-xl">
               Thêm danh mục mới
@@ -167,7 +115,7 @@ const CategoryManagement = () => {
                 </tr>
               </TableHeader>
               <TableBody>
-                {existingCategories.map((cate, index) => (
+                {arrayInReverse(existingCategories).map((cate, index) => (
                   <TableRow key={index}>
                     <TableCell className="text-center text-base">
                       {index + 1}
@@ -185,21 +133,18 @@ const CategoryManagement = () => {
                       <CategoryDialog
                         formTitle="Sửa thông tin danh mục"
                         category={cate}
-                        selectedCategoryLastValue={selectedName}
-                        acceptHandler={handleEditEventCategory}
+                        // selectedCategoryLastValue={selectedName}
+                        handleAcceptEvent={(name: string) =>
+                          handleAddCategory(name)
+                        }
                       >
-                        <Button
-                          variant="neutral"
-                          onClick={() =>
-                            handleDialogTriggerEvent(cate.id, cate.name)
-                          }
-                        >
+                        <Button variant="neutral">
                           <SquarePen />
                         </Button>
                       </CategoryDialog>
                       <Button
                         variant="negative"
-                        onClick={() => deleteCategory(cate.id)}
+                        onClick={() => handleDeleteCategory(cate.id)}
                       >
                         <Trash2 />
                       </Button>

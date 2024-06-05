@@ -16,7 +16,12 @@ import {
   BadgePercent,
   Tags,
 } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Button } from "../ui/button";
 import { NavLink } from "react-router-dom";
 import AdminAccordion from "../adminAccordion";
@@ -33,65 +38,65 @@ const navItems: AdminNavItem[] = [
   },
   {
     name: "Quản lý khách hàng",
-    url: "/admin/user",
+    url: "/admin/managed-users",
     icon: <Users2 className="h-5 w-5" />,
     hasChild: false,
     children: [],
   },
   {
-    name: "Quản lý danh muc",
-    url: "/admin/category",
+    name: "Quản lý danh mục",
+    url: "/admin/managed-categories",
     icon: <Shapes className="h-5 w-5" />,
     hasChild: false,
     children: [],
   },
   {
     name: "Quản lý nhà phân phối",
-    url: "/admin/provider",
+    url: "/admin/managed-providers",
     icon: <Factory className="h-5 w-5" />,
     hasChild: false,
     children: [],
   },
   {
     name: "Sản phẩm",
-    url: "/admin/product",
+    url: "/admin/managed-products",
     icon: <Package2 className="h-5 w-5" />,
     hasChild: true,
     children: [
       {
         name: "Thêm sản phẩm",
-        url: "/admin/product/add",
+        url: "/admin/managed-products/add",
         icon: <BadgePercent className="h-5 w-5" />,
       },
       {
         name: "Quản lý sản phẩm",
-        url: "/admin/product",
+        url: "/admin/managed-products",
         icon: <Boxes className="h-5 w-5" />,
       },
       {
         name: "Thể loại",
-        url: "/admin/product/attribute",
+        url: "/admin/managed-products/attributes",
         icon: <Tags className="h-5 w-5" />,
       },
     ],
   },
   {
     name: "Đơn hàng",
-    url: "/admin/order",
+    url: "/admin/received-orders",
     icon: <PackageSearch className="h-5 w-5" />,
     hasChild: false,
     children: [],
   },
   {
     name: "Đánh giá",
-    url: "/admin/review",
+    url: "/admin/received-reviews",
     icon: <MessageSquareCode className="h-5 w-5" />,
     hasChild: false,
     children: [],
   },
   {
     name: "Thống kê",
-    url: "/admin/statis",
+    url: "/admin/statistic",
     icon: <LineChart className="h-5 w-5" />,
     hasChild: false,
     children: [],
@@ -125,17 +130,21 @@ const AdminHeader = () => {
                 {navItems.map((item, index) =>
                   item.hasChild ? (
                     <AdminAccordion key={index} subItems={item.children}>
-                      <div className="flex items-center gap-4 px-2.5 text-muted-foreground hover_text-primary-foreground">
-                        {item.icon} {item.name}
+                      <div className="flex text-[1.3rem] items-center gap-2 px-2.5 text-muted-foreground hover_text-primary-foreground">
+                        <span>{item.icon}</span>
+                        <span>{item.name}</span>
                       </div>
                     </AdminAccordion>
                   ) : (
                     <div key={index}>
                       <NavLink
                         to={item.url}
-                        className="border-b py-4 flex items-center gap-4 px-2.5 text-muted-foreground hover_text-primary-foreground"
+                        className="flex text-[1.3rem] border-b py-4 px-2.5"
                       >
-                        {item.icon} {item.name}
+                        <SheetClose className="flex items-center gap-2 text-muted-foreground hover_text-primary-foreground">
+                          <span>{item.icon}</span>
+                          <span>{item.name}</span>
+                        </SheetClose>
                       </NavLink>
                     </div>
                   )

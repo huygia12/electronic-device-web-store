@@ -1,9 +1,3 @@
-// import {
-//   CategoryLoaderType,
-//   ProviderLoaderType,
-//   categoriesLoader,
-//   providersLoader,
-// } from "@/api/productPagesLoader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,7 +18,7 @@ import { useEffect, useState } from "react";
 
 log.setLevel("error");
 
-const ProductAddition = () => {
+const ProductEdittion = () => {
   const [thumps, setThumps] = useState<string[]>([""]);
   const [imgsArray, setImgs] = useState<string[][]>([[""]]);
   const [itemCounter, setItemCounter] = useState<number>(1);
@@ -110,6 +104,7 @@ const ProductAddition = () => {
 
     const thumpsLen = thumps.length;
     const imgsArrayLen = imgsArray.length;
+    console.log(thumpsLen, imgsArrayLen);
     const thumpsBucket =
       thumpsLen <= 2 ? [thumps[0]] : thumps.slice(0, thumpsLen - 1);
     const imgsBucket =
@@ -118,9 +113,9 @@ const ProductAddition = () => {
         : imgsArray.slice(0, imgsArrayLen - 1);
     setImgs(imgsBucket);
     setThumps(thumpsBucket);
+    console.log(imgsBucket);
     itemCounter > 1 && setItemCounter(itemCounter - 1);
   };
-
   return (
     <>
       <h1 className="text-4xl font-extrabold mt-8 mb-10">Thêm sản phẩm</h1>
@@ -311,6 +306,7 @@ const ProductAddition = () => {
                       onChange={(e) => handleAddImgs(e, parentIndex)}
                     />
                     <div className="overflow-auto flex flex-row gap-2 ">
+                      <>{console.log(imgsArray, parentIndex)}</>
                       {imgsArray[parentIndex].map((element, index) => {
                         return (
                           <img
@@ -448,4 +444,4 @@ const ProductAddition = () => {
   );
 };
 
-export { ProductAddition };
+export { ProductEdittion };
