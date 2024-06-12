@@ -1,19 +1,22 @@
 import {
-  BriefOrderAttributes,
+  Account,
+  AttributeType,
   Category,
+  Invoice,
   Product,
-  ProductAttribute,
+  ProductParams,
   Provider,
-  User,
 } from "@/declare";
 import axios from "axios";
 import log from "loglevel";
+import { ActionFunctionArgs, ParamParseKey, Params } from "react-router-dom";
 
 log.setLevel("error");
 
 const productsLoader = async (): Promise<Product[] | undefined> => {
   try {
-    const res = await axios.get("http://localhost:4000/products");
+    const res = await axios.get<Product[]>("http://localhost:4000/products");
+
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -51,7 +54,7 @@ const categoriesLoader = async (): Promise<Category[] | undefined> => {
 
 const providersLoader = async (): Promise<Provider[] | undefined> => {
   try {
-    const res = await axios.get("http://localhost:4000/providers");
+    const res = await axios.get<Provider[]>("http://localhost:4000/providers");
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -68,9 +71,11 @@ const providersLoader = async (): Promise<Provider[] | undefined> => {
   }
 };
 
-const attributesLoader = async (): Promise<ProductAttribute[] | undefined> => {
+const attributesLoader = async (): Promise<AttributeType[] | undefined> => {
   try {
-    const res = await axios.get("http://localhost:4000/attributes");
+    const res = await axios.get<AttributeType[]>(
+      "http://localhost:4000/attributes"
+    );
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -87,9 +92,9 @@ const attributesLoader = async (): Promise<ProductAttribute[] | undefined> => {
   }
 };
 
-const usersLoader = async (): Promise<User[] | undefined> => {
+const usersLoader = async (): Promise<Account[] | undefined> => {
   try {
-    const res = await axios.get("http://localhost:4000/users");
+    const res = await axios.get<Account[]>("http://localhost:4000/accounts");
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -106,9 +111,36 @@ const usersLoader = async (): Promise<User[] | undefined> => {
   }
 };
 
-const ordersLoader = async (): Promise<BriefOrderAttributes[] | undefined> => {
+const ordersLoader = async (): Promise<Invoice[] | undefined> => {
   try {
-    const res = await axios.get("http://localhost:4000/orders");
+    const res = await axios.get<Invoice[]>("http://localhost:4000/invoices");
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      // AxiosError-specific handling
+      log.error("Axios error:", error.message);
+      if (error.response) {
+        log.error("Response data:", error.response.data);
+        log.error("Response status:", error.response.status);
+      }
+    } else {
+      // General error handling
+      log.error("Unexpected error:", error);
+    }
+  }
+};
+
+interface Args extends ActionFunctionArgs {
+  params: Params<ParamParseKey<string>> | ProductParams;
+}
+
+const productDetailLoader = async ({
+  params,
+}: Args): Promise<Product | undefined> => {
+  try {
+    const res = await axios.get<Product>(
+      "http://localhost:4000/products/" + params.id
+    );
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -132,4 +164,5 @@ export {
   attributesLoader,
   usersLoader,
   ordersLoader,
+  productDetailLoader,
 };

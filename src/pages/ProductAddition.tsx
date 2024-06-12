@@ -218,10 +218,10 @@ const ProductAddition = () => {
                     return (
                       <SelectItem
                         key={index}
-                        value={cate.id}
+                        value={cate.categoryID}
                         className="max-w-[30rem] truncate"
                       >
-                        {cate.name}
+                        {cate.categoryName}
                       </SelectItem>
                     );
                   })}
@@ -243,10 +243,10 @@ const ProductAddition = () => {
                     return (
                       <SelectItem
                         key={index}
-                        value={provider.id}
+                        value={provider.providerID}
                         className="max-w-[30rem] truncate"
                       >
-                        {provider.name}
+                        {provider.providerName}
                       </SelectItem>
                     );
                   })}
@@ -311,15 +311,17 @@ const ProductAddition = () => {
                       onChange={(e) => handleAddImgs(e, parentIndex)}
                     />
                     <div className="overflow-auto flex flex-row gap-2 ">
-                      {imgsArray[parentIndex].map((element, index) => {
-                        return (
-                          <img
-                            key={index}
-                            src={element}
-                            className="max-w-40 object-cover rounded-md border-stone-300 border-2"
-                          />
-                        );
-                      })}
+                      {imgsArray.length === 0
+                        ? ""
+                        : imgsArray[parentIndex].map((element, index) => {
+                            return (
+                              <img
+                                key={index}
+                                src={element}
+                                className="max-w-40 object-cover rounded-md border-stone-300 border-2"
+                              />
+                            );
+                          })}
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-4">
@@ -416,7 +418,7 @@ const ProductAddition = () => {
             })}
         </ul>
 
-        {/** BUTTON */}
+        {/** BUTTONS */}
         <div className="flex justify-between">
           <span className="space-x-4">
             <Button

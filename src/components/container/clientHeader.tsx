@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import CounterLabel from "@/components/ui/counterLabel";
 import { TfiHeadphoneAlt } from "react-icons/tfi";
 import CustomAvt from "../ui/customAvt";
-import { Search } from "lucide-react";
+import { PackageSearch, Search } from "lucide-react";
 
 const navComponents: { title: string; path: string }[] = [
   { title: "Trang chủ", path: "/" },
@@ -43,20 +43,10 @@ const AppClientHeader = () => {
       </div>
       <div className="bg-theme h-[5rem] shadow-md flex justify-center ">
         <div className="w-myLayout items-center grid grid-cols-5">
-          <NavLink to="/" className="mr-20">
+          <NavLink to="/" className="mr-20" unstable_viewTransition>
             <img src="/logo.svg.png" alt="logo" className="h-12" />
           </NavLink>
           <div className="col-span-3 grid grid-cols-3 items-center">
-            {/* <div className="flex min-h-full items-center space-x-2 w-full">
-              <Input
-                type="text"
-                placeholder="Tìm kiếm sản phẩm"
-                className="w-full text-[1.1rem] h-[3rem]"
-              />
-              <Button type="submit" className="h-[3rem]">
-                <FaSearch size={24} className="" />
-              </Button>
-            </div> */}
             <div className="w-full col-span-2 relative flex-1 md_grow-0 h-[2.7rem]">
               <Search className="absolute left-2.5 top-3.5 h-4 w-4 text-muted-foreground" />
               <Input
@@ -65,14 +55,21 @@ const AppClientHeader = () => {
                 className="h-full text-xl w-full rounded-2xl bg-background pl-8"
               />
             </div>
-            <div className="flex flex-row space-x-[2rem] ml-20">
-              <NavLink to="/" className="relative">
+            <div className="flex flex-row items-center space-x-[2rem] ml-20">
+              <NavLink
+                to="/cart/view"
+                className="relative"
+                unstable_viewTransition
+              >
                 <FiShoppingBag size={40} />
                 <CounterLabel counter={6} />
               </NavLink>
-              <NavLink to="/" className="relative">
+              <NavLink to="/" className="relative" unstable_viewTransition>
                 <LiaShippingFastSolid size={45} />
                 <CounterLabel counter={6} />
+              </NavLink>
+              <NavLink to="/" className="relative" unstable_viewTransition>
+                <PackageSearch size={40} />
               </NavLink>
             </div>
           </div>

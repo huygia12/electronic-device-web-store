@@ -1,128 +1,4 @@
 {
-  "categories": [
-    { "categoryID": "00011", "categoryName": "Máy Tính", "products": 51 },
-    {
-      "categoryID": "00012",
-      "categoryName": "Laptop",
-      "products": 23
-    },
-    {
-      "categoryID": "00013",
-      "categoryName": "Điện Thoại",
-      "products": 25
-    },
-    {
-      "categoryID": "00014",
-      "categoryName": "Camera",
-      "products": 23
-    },
-    {
-      "categoryID": "00015",
-      "categoryName": "Màn Hình",
-      "products": 22
-    },
-    {
-      "categoryID": "00016",
-      "categoryName": "Phụ Kiện",
-      "products": 81
-    },
-    {
-      "categoryID": "00017",
-      "categoryName": "Máy Tính Bảng",
-      "products": 11
-    }
-  ],
-  "providers": [
-    {
-      "providerID": "00011",
-      "providerName": "MSI",
-      "products": 51
-    },
-    {
-      "providerID": "00012",
-      "providerName": "Lenovo",
-      "products": 23
-    },
-    {
-      "providerID": "00013",
-      "providerName": "Acer",
-      "products": 25
-    },
-    {
-      "providerID": "00014",
-      "providerName": "Sony",
-      "products": 23
-    },
-    {
-      "providerID": "00015",
-      "providerName": "Asus",
-      "products": 22
-    },
-    {
-      "providerID": "00016",
-      "providerName": "Iphone",
-      "products": 81
-    },
-    {
-      "providerID": "00017",
-      "providerName": "ThinkPad",
-      "products": 11
-    },
-    {
-      "providerID": "00018",
-      "providerName": "Bphone",
-      "products": 24
-    },
-    {
-      "providerID": "00019",
-      "providerName": "Samsung",
-      "reviews": [
-        {
-          "reviewID": "1",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
-        },
-        {
-          "reviewID": "2",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
-        }
-      ],
-      "attributes": [
-        {
-          "typeName": "RAM",
-          "optionValue": "128GB"
-        },
-        {
-          "typeName": "Camera",
-          "optionValue": "Zoom quang học"
-        },
-        {
-          "typeName": "Màn hình",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "typeName": "Tính năng đặc biệt",
-          "optionValue": "A.I phone"
-        }
-      ],
-      "products": 31
-    },
-    {
-      "providerID": "00020",
-      "providerName": "Vsmart",
-      "products": 31
-    },
-    {
-      "providerID": "00022",
-      "providerName": "Dell",
-      "products": 41
-    }
-  ],
   "products": [
     {
       "id": "11",
@@ -190,7 +66,7 @@
         {
           "itemID": "111",
           "thump": "/purple-thump.jpg",
-          "quantity": 0,
+          "quantity": 10,
           "price": 15000000,
           "productCode": "1101",
           "discount": 10,
@@ -237,96 +113,11 @@
             "/purple-4.jpg",
             "/purple-5.jpg"
           ]
-        },
-        {
-          "itemID": "114",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        },
-        {
-          "itemID": "115",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        },
-        {
-          "itemID": "116",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        },
-        {
-          "itemID": "117",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        },
-        {
-          "itemID": "118",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
         }
       ]
     },
     {
-      "id": "12",
+      "productID": "12",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
@@ -408,7 +199,7 @@
       ]
     },
     {
-      "id": "13",
+      "productID": "13",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
@@ -490,7 +281,7 @@
       ]
     },
     {
-      "id": "14",
+      "productID": "14",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
@@ -572,7 +363,7 @@
       ]
     },
     {
-      "id": "15",
+      "productID": "15",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
@@ -654,7 +445,7 @@
       ]
     },
     {
-      "id": "16",
+      "productID": "16",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
@@ -736,7 +527,7 @@
       ]
     },
     {
-      "id": "17",
+      "productID": "17",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
@@ -818,7 +609,7 @@
       ]
     },
     {
-      "id": "18",
+      "productID": "18",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
@@ -900,7 +691,7 @@
       ]
     },
     {
-      "id": "19",
+      "productID": "19",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
@@ -982,7 +773,7 @@
       ]
     },
     {
-      "id": "20",
+      "productID": "20",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
@@ -1064,7 +855,7 @@
       ]
     },
     {
-      "id": "21",
+      "productID": "21",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
@@ -1146,7 +937,7 @@
       ]
     },
     {
-      "id": "22",
+      "productID": "22",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
@@ -1228,7 +1019,7 @@
       ]
     },
     {
-      "id": "23",
+      "productID": "23",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
@@ -1306,483 +1097,6 @@
             "/purple-4.jpg",
             "/purple-5.jpg"
           ]
-        }
-      ]
-    }
-  ],
-  "attributes": [
-    {
-      "typeID": "11",
-      "typeName": "RAM",
-      "values": [
-        {
-          "optionID": "123",
-          "optionValue": "128GB"
-        },
-        {
-          "optionID": "121",
-          "optionValue": "32GB"
-        },
-        {
-          "optionID": "122",
-          "optionValue": "256GB"
-        },
-        {
-          "optionID": "120",
-          "optionValue": "64GB"
-        }
-      ]
-    },
-    {
-      "typeID": "12",
-      "typeName": "CARD đồ họa",
-      "values": [
-        {
-          "optionID": "123",
-          "optionValue": "AMD Radeon Series"
-        },
-        {
-          "optionID": "124",
-          "optionValue": "Nvidia GeForce Series"
-        }
-      ]
-    },
-    {
-      "typeID": "13",
-      "typeName": "Ổ cứng",
-      "values": [
-        {
-          "optionID": "123",
-          "optionValue": "SSD 1TB"
-        },
-        {
-          "optionID": "124",
-          "optionValue": "SSD 512GB"
-        },
-        {
-          "optionID": "125",
-          "optionValue": "SSD 256GB"
-        },
-        {
-          "optionID": "126",
-          "optionValue": "SSD 128GB"
-        }
-      ]
-    },
-    {
-      "typeID": "14",
-      "typeName": "Nhu cầu",
-      "values": [
-        {
-          "optionID": "123",
-          "optionValue": "Gaming - Đồ họa"
-        },
-        {
-          "optionID": "124",
-          "optionValue": "Sinh viên - Văn phòng"
-        },
-        {
-          "optionID": "125",
-          "optionValue": "Mỏng nhẹ"
-        },
-        {
-          "optionID": "126",
-          "optionValue": "Doanh nhân"
-        },
-        {
-          "optionID": "127",
-          "optionValue": "AI"
-        }
-      ]
-    },
-    {
-      "typeID": "15",
-      "typeName": "Màn Hình",
-      "values": [
-        {
-          "optionID": "123",
-          "optionValue": "13 inch"
-        },
-        {
-          "optionID": "124",
-          "optionValue": "14 inch"
-        },
-        {
-          "optionID": "125",
-          "optionValue": "15inch"
-        }
-      ]
-    },
-    {
-      "typeID": "16",
-      "typeName": "CPU",
-      "values": [
-        {
-          "optionID": "123",
-          "optionValue": "Intel Celeron"
-        },
-        {
-          "optionID": "124",
-          "optionValue": "Intel Pentium"
-        },
-        {
-          "optionID": "125",
-          "optionValue": "Intel core i3"
-        },
-        {
-          "optionID": "126",
-          "optionValue": "Intel core i5"
-        },
-        {
-          "optionID": "127",
-          "optionValue": "Intel core i7"
-        },
-        {
-          "optionID": "128",
-          "optionValue": "Intel core Ultra"
-        },
-        {
-          "optionID": "129",
-          "optionValue": "AMD Ryzen 3"
-        },
-        {
-          "optionID": "130",
-          "optionValue": "AMD Ryzen 5"
-        },
-        {
-          "optionID": "131",
-          "optionValue": "AMD Ryzen 7"
-        }
-      ]
-    },
-    {
-      "typeID": "16",
-      "typeName": "Camera",
-      "values": [
-        {
-          "optionID": "123",
-          "optionValue": "Quay phim slow motion"
-        },
-        {
-          "optionID": "124",
-          "optionValue": "AI camera"
-        },
-        {
-          "optionID": "125",
-          "optionValue": "Hiệu ứng làm đẹp"
-        },
-        {
-          "optionID": "126",
-          "optionValue": "Zoom quang học"
-        }
-      ]
-    },
-    {
-      "typeID": "17",
-      "typeName": "Màn hình",
-      "values": [
-        {
-          "optionID": "123",
-          "optionValue": "Dưới 5 inch"
-        },
-        {
-          "optionID": "124",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "optionID": "125",
-          "optionValue": "Màn hình gập"
-        }
-      ]
-    },
-    {
-      "typeID": "18",
-      "typeName": "Tính năng đặc biệt",
-      "values": [
-        {
-          "optionID": "123",
-          "optionValue": "A.I phone"
-        },
-        {
-          "optionID": "124",
-          "optionValue": "Bảo mật vân tay"
-        },
-        {
-          "optionID": "125",
-          "optionValue": "Nhận diện khuôn mặt"
-        },
-        {
-          "optionID": "126",
-          "optionValue": "Chống nước & bụi"
-        },
-        {
-          "optionID": "127",
-          "optionValue": "Hỗ trọ 5G"
-        }
-      ]
-    },
-    {
-      "typeID": "19",
-      "typeName": "Hiệu năng và pin",
-      "values": []
-    }
-  ],
-  "accounts": [
-    {
-      "accountID": "CT061",
-      "accountName": "Bui Minh Khanh",
-      "avt": "/avt.jpg",
-      "passwd": "123456a@",
-      "phoneNumber": "0336917223",
-      "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
-      "email": "khanhwf@gmail.com"
-    },
-    {
-      "accountID": "CT062",
-      "accountName": "Bui Minh Khanh",
-      "avt": "/avt.jpg",
-      "passwd": "123456a@",
-      "phoneNumber": "0336917223",
-      "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
-      "email": "khanhwf@gmail.com"
-    },
-    {
-      "accountID": "CT063",
-      "accountName": "Bui Minh Khanh",
-      "avt": "/avt.jpg",
-      "passwd": "123456a@",
-      "phoneNumber": "0336917223",
-      "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
-      "email": "khanhwf@gmail.com"
-    },
-    {
-      "accountID": "CT064",
-      "accountName": "Bui Minh Khanh",
-      "avt": "/avt.jpg",
-      "passwd": "123456a@",
-      "phoneNumber": "0336917223",
-      "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
-      "email": "khanhwf@gmail.com"
-    },
-    {
-      "accountID": "CT065",
-      "accountName": "Bui Minh Khanh",
-      "avt": "/avt.jpg",
-      "passwd": "123456a@",
-      "phoneNumber": "0336917223",
-      "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
-      "email": "khanhwf@gmail.com"
-    },
-    {
-      "accountID": "CT066",
-      "accountName": "Bui Minh Khanh",
-      "avt": "/avt.jpg",
-      "passwd": "123456a@",
-      "phoneNumber": "0336917223",
-      "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
-      "email": "khanhwf@gmail.com"
-    },
-    {
-      "accountID": "CT067",
-      "accountName": "Bui Minh Khanh",
-      "avt": "/avt.jpg",
-      "passwd": "123456a@",
-      "phoneNumber": "0336917223",
-      "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
-      "email": "khanhwf@gmail.com"
-    },
-    {
-      "accountID": "CT068",
-      "accountName": "Bui Minh Khanh",
-      "avt": "/avt.jpg",
-      "passwd": "123456a@",
-      "phoneNumber": "0336917223",
-      "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
-      "email": "khanhwf@gmail.com"
-    },
-    {
-      "accountID": "CT069",
-      "accountName": "Bui Minh Khanh",
-      "avt": "/avt.jpg",
-      "passwd": "123456a@",
-      "phoneNumber": "0336917223",
-      "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
-      "email": "khanhwf@gmail.com"
-    },
-    {
-      "accountID": "CT070",
-      "accountName": "Bui Minh Khanh",
-      "avt": "/avt.jpg",
-      "passwd": "123456a@",
-      "phoneNumber": "0336917223",
-      "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
-      "email": "khanhwf@gmail.com"
-    }
-  ],
-  "invoices": [
-    {
-      "invoiceID": "011",
-      "status": "NEW",
-      "payment": "COD",
-      "city": "Hà Nội",
-      "ward": "La Thành",
-      "provice": "Hà Nội",
-      "phoneNumber": "0388725928",
-      "detailAddress": "946 Đê La Thành",
-      "createdAt": "2024-05-15 18:01:5",
-      "accountName": "Bùi Minh Khánh",
-      "products": [
-        {
-          "quantity": 1,
-          "price": 15000000,
-          "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
-        },
-        {
-          "quantity": 2,
-          "price": 15000000,
-          "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
-        }
-      ]
-    },
-    {
-      "invoiceID": "012",
-      "status": "NEW",
-      "payment": "COD",
-      "city": "Hà Nội",
-      "ward": "La Thành",
-      "provice": "Hà Nội",
-      "phoneNumber": "0388725928",
-      "detailAddress": "946 Đê La Thành",
-      "createdAt": "2024-05-15 18:01:5",
-      "accountName": "Bùi Minh Khánh",
-      "products": [
-        {
-          "quantity": 1,
-          "price": 15000000,
-          "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
-        },
-        {
-          "quantity": 2,
-          "price": 15000000,
-          "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
-        }
-      ]
-    },
-    {
-      "invoiceID": "013",
-      "status": "NEW",
-      "payment": "COD",
-      "city": "Hà Nội",
-      "ward": "La Thành",
-      "provice": "Hà Nội",
-      "phoneNumber": "0388725928",
-      "detailAddress": "946 Đê La Thành",
-      "createdAt": "2024-05-15 18:01:5",
-      "accountName": "Bùi Minh Khánh",
-      "products": [
-        {
-          "quantity": 1,
-          "price": 15000000,
-          "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
-        },
-        {
-          "quantity": 2,
-          "price": 15000000,
-          "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
-        }
-      ]
-    },
-    {
-      "invoiceID": "014",
-      "status": "NEW",
-      "payment": "COD",
-      "city": "Hà Nội",
-      "ward": "La Thành",
-      "provice": "Hà Nội",
-      "phoneNumber": "0388725928",
-      "detailAddress": "946 Đê La Thành",
-      "createdAt": "2024-05-15 18:01:5",
-      "accountName": "Bùi Minh Khánh",
-      "products": [
-        {
-          "quantity": 1,
-          "price": 15000000,
-          "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
-        },
-        {
-          "quantity": 2,
-          "price": 15000000,
-          "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
-        }
-      ]
-    },
-    {
-      "invoiceID": "015",
-      "status": "NEW",
-      "payment": "COD",
-      "city": "Hà Nội",
-      "ward": "La Thành",
-      "provice": "Hà Nội",
-      "phoneNumber": "0388725928",
-      "detailAddress": "946 Đê La Thành",
-      "createdAt": "2024-05-15 18:01:5",
-      "accountName": "Bùi Minh Khánh",
-      "products": [
-        {
-          "quantity": 1,
-          "price": 15000000,
-          "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
-        },
-        {
-          "quantity": 2,
-          "price": 15000000,
-          "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
-        }
-      ]
-    },
-    {
-      "invoiceID": "016",
-      "status": "NEW",
-      "payment": "COD",
-      "city": "Hà Nội",
-      "ward": "La Thành",
-      "provice": "Hà Nội",
-      "phoneNumber": "0388725928",
-      "detailAddress": "946 Đê La Thành",
-      "createdAt": "2024-05-15 18:01:5",
-      "accountName": "Bùi Minh Khánh",
-      "products": [
-        {
-          "quantity": 1,
-          "price": 15000000,
-          "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
-        },
-        {
-          "quantity": 2,
-          "price": 15000000,
-          "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
         }
       ]
     }

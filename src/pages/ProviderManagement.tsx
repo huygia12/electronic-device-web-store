@@ -11,6 +11,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
   TableBody,
@@ -38,7 +39,7 @@ const ProviderManagement = () => {
 
   const deleteProvider = (providerID: string) => {
     const temp = existingproviders.filter(
-      (provider) => provider.id !== providerID
+      (provider) => provider.providerID !== providerID
     );
     setExistingProvider(temp);
   };
@@ -70,9 +71,9 @@ const ProviderManagement = () => {
           <CardTitle className="text-8">Danh sách các nhà phân phối</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col px-6 pb-4">
-          <div className="overflow-auto relative h-[58vh]">
+          <ScrollArea className="relative h-[58vh]">
             <Table>
-              <TableHeader className="border-b-secondary-foreground border-b-2 sticky top-0 bg-white">
+              <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white">
                 <tr>
                   {colName.map((item, key) => {
                     return (
@@ -93,10 +94,10 @@ const ProviderManagement = () => {
                       {index + 1}
                     </TableCell>
                     <TableCell className="text-center  text-base">
-                      {provider.name}
+                      {provider.providerName}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {provider.id}
+                      {provider.providerID}
                     </TableCell>
                     <TableCell className="text-center text-base">
                       {provider.products}
@@ -112,7 +113,7 @@ const ProviderManagement = () => {
                       </ProviderDialog>
                       <Button
                         variant="negative"
-                        onClick={() => deleteProvider(provider.id)}
+                        onClick={() => deleteProvider(provider.providerID)}
                       >
                         <Trash2 />
                       </Button>
@@ -121,7 +122,7 @@ const ProviderManagement = () => {
                 ))}
               </TableBody>
             </Table>
-          </div>
+          </ScrollArea>
         </CardContent>
       </Card>
 

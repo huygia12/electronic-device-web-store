@@ -9,27 +9,25 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { BriefOrderAttributes } from "@/declare";
+import { Invoice } from "@/declare";
 import { useRouteLoaderData } from "react-router-dom";
 
 const OrderManagement = () => {
-  const ordersData = useRouteLoaderData(
-    "order_management"
-  ) as BriefOrderAttributes[];
+  const invoiceData = useRouteLoaderData("invoice_management") as Invoice[];
 
   return (
     <>
-      {/** Table */}
+      {/** TABLE */}
       <Card className="rounded-2xl shadow-lg mt-8 mb-4">
         <CardHeader className="py-6 px-10">
           <CardTitle className="text-8">Đơn hàng cần xác nhận</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col px-6 pb-4">
-          <OrderTable orders={ordersData} />
+          <OrderTable orders={invoiceData} />
         </CardContent>
       </Card>
 
-      {/** Pagination */}
+      {/** PAGINATION */}
       <Pagination>
         <PaginationContent>
           <PaginationItem>

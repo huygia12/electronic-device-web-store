@@ -28,6 +28,7 @@ import {
   TooltipTrigger,
   Tooltip,
 } from "@/components/ui/tooltip";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 log.setLevel("error");
 
@@ -43,22 +44,23 @@ const colName: string[] = [
   "BẢO HÀNH",
   "THAO TÁC",
 ];
-
 const ProductManagement = () => {
   const productsData = useRouteLoaderData("product_management") as Product[];
 
   const getPriceRange = (product: Product): string => {
-    const len = product.productItem.length;
+    const len = product.items.length;
     if (len === 0) {
-      log.warn("Product doesn't have any items!");
+      /** Doesnt have any items */
       return "";
     } else if (len === 1) {
-      return product.productItem[0].price.toLocaleString();
+      /** Have only one item */
+      return product.items[0].price.toLocaleString();
     }
 
-    let min: number = product.productItem[0].price;
-    let max: number = product.productItem[0].price;
-    product.productItem.forEach((item) => {
+    /** Find and return the range*/
+    let min: number = product.items[0].price;
+    let max: number = product.items[0].price;
+    product.items.forEach((item) => {
       if (item.price < min) {
         min = item.price;
       }
@@ -75,21 +77,24 @@ const ProductManagement = () => {
   };
 
   const getSaleRange = (product: Product): string => {
-    const len = product.productItem.length;
+    const len = product.items.length;
     if (len === 0) {
-      log.warn("Product doesn't have any items!");
+      /** Doesnt have any items */
       return "";
     } else if (len === 1) {
-      return String(product.productItem[0].discount);
+      /** Have only one item */
+      return String(product.items[0].discount);
     }
 
-    let min: number = product.productItem[0].discount;
-    let max: number = product.productItem[0].discount;
-    product.productItem.forEach((item) => {
+    /** Find and return the range*/
+    let min: number = product.items[0].discount ?? 0;
+    let max: number = product.items[0].discount ?? 0;
+    product.items.forEach((item) => {
+      if (!item.discount) return;
       if (item.discount < min) {
         min = item.discount;
       }
-      if (item.discount > max) {
+      if (max && item.discount > max) {
         max = item.discount;
       }
     });
@@ -129,9 +134,9 @@ const ProductManagement = () => {
           <CardTitle className="text-8">Danh sách sản phẩm</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col px-6 pb-4">
-          <div className="overflow-auto relative h-[58vh]">
+          <ScrollArea className="relative h-[58vh]">
             <Table>
-              <TableHeader className="border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
+              <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
                 <tr>
                   {colName.map((item, key) => {
                     return (
@@ -149,17 +154,17 @@ const ProductManagement = () => {
                 {productsData?.map((product, index) => (
                   <TableRow key={index}>
                     <TableCell className="text-center text-base">
-                      {index}
+                      {index + 1}
                     </TableCell>
                     <TableCell className="text-center text-base">
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
                             <div className="max-w-80 truncate">
-                              {product.name}
+                              {product.productName}
                             </div>
                           </TooltipTrigger>
-                          <TooltipContent>{product.name}</TooltipContent>
+                          <TooltipContent>{product.productName}</TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
                     </TableCell>
@@ -167,13 +172,13 @@ const ProductManagement = () => {
                       {product.id}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {`${product.length}cm/${product.width}cm/${product.height}cm`}
+                      {`${product.len}cm/${product.width}cm/${product.height}cm`}
                     </TableCell>
                     <TableCell className="text-center text-base">
                       {`${product.weight}gram`}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {product.category}
+                      {product.categoryName}
                     </TableCell>
                     <TableCell className="text-center text-base">
                       {`${getPriceRange(product)}đ`}
@@ -196,7 +201,7 @@ const ProductManagement = () => {
                 ))}
               </TableBody>
             </Table>
-          </div>
+          </ScrollArea>
         </CardContent>
       </Card>
 

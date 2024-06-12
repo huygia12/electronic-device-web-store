@@ -5,7 +5,7 @@ import { type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/utils/helpers";
 const customStyles: string =
-  "text-white font-bold hover_bg-primary-softer hover_text-primary hover_ring-2 hover_ring-primary transition ease-out duration-100";
+  "text-white font-bold hover_bg-primary-softer hover_text-primary transition ease-out duration-100";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -20,7 +20,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         className={cn(
           buttonVariants({ variant, size, className }),
-          customStyles
+          customStyles,
+          props.disabled && "opacity-50 disabled_pointer-events-none"
         )}
         ref={ref}
         {...props}

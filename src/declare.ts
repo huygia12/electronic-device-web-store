@@ -1,101 +1,126 @@
 import { z } from "zod";
 
-export interface ProductAttributes {
-  id: string;
-  name: string;
-  cate: string;
-  tag: string[];
-  quantity: number;
-  price: number;
-  discount: string;
-  img: string;
-  comments: number;
-  rates: number;
-  itemDetailID: string;
-}
-
-export interface BriefOrderAttributes {
-  customer: string;
-  id: string;
-  createdAt: string;
-  products: number;
-  total: number;
-  status: string;
-}
-
 export interface ChartData {
   name: string;
   revenue: number;
 }
 
-export interface User {
-  id: string;
-  name: string;
-  avt: string;
-  createdAt: string;
-  phoneNumber: string;
-  email: string;
-  passwd: string;
+export interface Provider {
+  providerID: string;
+  providerName: string;
+  products: number;
 }
 
 export interface Category {
-  id: string;
-  name: string;
+  categoryID: string;
+  categoryName: string;
   products: number;
 }
 
-export interface Provider {
-  id: string;
-  name: string;
-  products: number;
+interface AttributeOption {
+  optionID: string;
+  optionValue: string;
 }
 
-export interface AdminNavItem {
-  name: string;
-  url: string;
-  icon: JSX.Element;
-  hasChild: boolean;
-  children: AdminNavSubItem[];
-}
-
-export interface AdminNavSubItem {
-  name: string;
-  url: string;
-  icon: JSX.Element;
-}
-
-export interface ProductAttributeValue {
-  id: string;
-  name: string;
-}
-
-export interface ProductAttribute {
-  id: string;
-  name: string;
-  values: ProductAttributeValue[];
+export interface AttributeType {
+  typeID: string;
+  typeName: string;
+  values: AttributeOption[];
 }
 
 export interface ProductItem {
-  id: string;
+  itemID: string;
   thump: string;
   quantity: number;
   price: number;
-  prior: boolean;
   productCode: string;
   discount: number;
-  color: string;
-  storage: string;
-  productImage: string[];
+  colorName: string;
+  storageName: string;
+  images: string[];
 }
 
-// const ProductImage = z.object({
-//   id: z.string(),
-//   src: z.string(),
-// });
+interface Review {
+  reviewID: string;
+  reviewContent: string;
+  rating: number;
+  createdAt: Date;
+  accountName: string;
+}
+
+export interface Product {
+  id: string;
+  productName: string;
+  description: string;
+  height: number;
+  weight: number;
+  len: number;
+  width: number;
+  gurantee: number;
+  categoryName: string;
+  providerName: string;
+  attributes: {
+    typeName: string;
+    optionValue: string;
+  }[];
+  items: ProductItem[];
+  reviews: Review[];
+}
+
+export interface Account {
+  accountID: string;
+  accountName: string;
+  avt: string;
+  phoneNumber?: string;
+  createdAt: Date;
+  editedAt: Date;
+  isBanned: boolean;
+  email: string;
+}
+
+export interface Invoice {
+  invoiceID: string;
+  status: string;
+  payment: string;
+  city: string;
+  ward: string;
+  province: string;
+  phoneNumber: string;
+  detailAddress: string;
+  createdAt: Date;
+  accountName: string;
+  products: {
+    quantity: number;
+    price: number;
+    productName: string;
+    discount: number;
+  }[];
+}
+
+export interface InvoiceProduct {
+  productID: string;
+  itemID: string;
+  quantity: number;
+}
+
+export type ProductParams = {
+  id: string;
+};
+
+/** SCHEMA */
+const ProductAttributeSchema = z.object({
+  typeID: z.string().min(1, { message: "String cannot be blank" }),
+  attributeValue: z.array(
+    z.string().min(1, { message: "String cannot be blank" })
+  ),
+});
+
+const AttributeTypeSchema = z.object({
+  typeValue: z.string().min(1, { message: "String cannot be blank" }),
+});
 
 const ItemSchema = z
   .object({
-    id: z.string(),
     thump: z.string().min(1, { message: "String cannot be blank" }),
     quantity: z
       .number({ message: "Not a number" })
@@ -109,23 +134,27 @@ const ItemSchema = z
       .finite({ message: "Not a finite number" })
       .safe({ message: "Not in the int range" }),
     productCode: z.string().min(1, { message: "String cannot be blank" }),
-    discount: z.number({ message: "Not a number" }).default(0),
-    color: z.string().min(1, "String cannot be blank"),
-    storage: z.string(),
+    colorName: z.string().min(1, { message: "String cannot be blank" }),
+    storageName: z.string(),
+    discount: z
+      .number({ message: "Not a number" })
+      .min(0, { message: "Must greater than 0" })
+      .max(100, { message: "Must less than 100" })
+      .default(0),
+    src: z.array(z.string().min(1, { message: "String cannot be blank" })),
   })
-  .partial({ id: true, discount: true, storage: true });
+  .partial({ storageName: true });
 
 const ProductSchema = z
   .object({
-    id: z.string(),
-    name: z.string().min(1, { message: "String cannot be blank" }),
+    productName: z.string().min(1, { message: "String cannot be blank" }),
     description: z.string(),
     height: z
       .number({ message: "Not a number" })
       .positive({ message: "Not an positive number" })
       .finite({ message: "Not an finite number" })
       .safe({ message: "Not in the int range" }),
-    length: z
+    len: z
       .number({ message: "Not a number" })
       .positive({ message: "Not an positive number" })
       .finite({ message: "Not an finite number" })
@@ -149,11 +178,56 @@ const ProductSchema = z
     categoryID: z.string().min(1, { message: "String cannot be blank" }),
     branchID: z.string().min(1, { message: "String cannot be blank" }),
   })
-  .partial({ id: true, description: true });
+  .partial({
+    description: true,
+  });
 
-type ItemPrototype = z.infer<typeof ItemSchema>;
-type ProductPrototype = z.infer<typeof ProductSchema>;
+const AccountSchema = z
+  .object({
+    accountName: z.string().min(1, { message: "String cannot be blank" }),
+    avt: z.string().min(1, { message: "String cannot be blank" }),
+    idBanned: z.boolean().default(false),
+    phoneNumber: z.string().regex(new RegExp("^[0-9]+$")),
+    email: z.string().email({ message: "Must be a valid email" }),
+    passwd: z
+      .string()
+      .min(1, { message: "Must contain atleast 1 character" })
+      .max(100, { message: "Must less than 100 characters" }),
+  })
+  .partial({ phoneNumber: true });
 
-export type Product = ProductPrototype & {
-  items: ItemPrototype[];
+const InvoiceSchema = z.object({
+  payment: z.string().default("COD"),
+  city: z.string().min(1, { message: "String cannot be blank" }),
+  ward: z.string().min(1, { message: "String cannot be blank" }),
+  province: z.string().min(1, { message: "String cannot be blank" }),
+  detailAddress: z.string().min(1, { message: "String cannot be blank" }),
+  phoneNumber: z.string().regex(new RegExp("^[0-9]+$")),
+  accountID: z.string().min(1, { message: "String cannot be blank" }),
+});
+
+const InvoiceProductSchema = z.object({
+  quantity: z
+    .number({ message: "Not a number" })
+    .int({ message: "Not an integer number" })
+    .positive({ message: "Not a positive number" })
+    .finite({ message: "Not a finite number" })
+    .safe({ message: "Not in the int range" }),
+  productID: z.string().min(1, { message: "String cannot be blank" }),
+});
+
+const CategorySchema = z.string().min(1, { message: "String cannot be blank" });
+
+const ProviderSchema = z.string().min(1, { message: "String cannot be blank" });
+
+export {
+  ProductAttributeSchema,
+  AttributeTypeSchema,
+  ItemSchema,
+  ProductSchema,
+  AccountSchema,
+  InvoiceSchema,
+  InvoiceProductSchema,
+  CategorySchema,
+  ProviderSchema,
 };

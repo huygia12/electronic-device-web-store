@@ -1,8 +1,6 @@
 import Announcement from "./Announcement.tsx";
 import Products from "./Products.tsx";
 import Intro from "./Intro.tsx";
-import Homepage from "./Homepage.tsx";
-import Recruitment from "./Recruitment.tsx";
 import Dashboard from "./Dashboard.tsx";
 import UserManagement from "./UserManagement.tsx";
 import CategoryManagement from "./CategoryManagement.tsx";
@@ -24,11 +22,18 @@ import {
   attributesLoader,
   categoriesLoader,
   ordersLoader,
+  productDetailLoader,
   productsLoader,
   providersLoader,
   usersLoader,
 } from "@/api/preApiLoader.ts";
 import { ProductEdittion } from "./ProductEdittion.tsx";
+import Homepage from "./Homepage.tsx";
+import { PhasesLayout } from "./PhasesLayout.tsx";
+import ProductDetail from "./ProductDetail.tsx";
+import { CartVisting } from "./CartVisting.tsx";
+import { CartCheckout } from "./CartCheckout.tsx";
+import Recruitment from "./Recruitment.tsx";
 
 const publicRoutes = createBrowserRouter([
   {
@@ -46,7 +51,32 @@ const publicRoutes = createBrowserRouter([
       },
       {
         path: "products",
-        element: <Products />,
+        children: [
+          {
+            index: true,
+            element: <Products />,
+          },
+          {
+            path: ":id",
+            id: "product_detail",
+            loader: productDetailLoader,
+            element: <ProductDetail />,
+          },
+        ],
+      },
+      {
+        path: "cart",
+        element: <PhasesLayout />,
+        children: [
+          {
+            path: "view",
+            element: <CartVisting />,
+          },
+          {
+            path: "checkout",
+            element: <CartCheckout />,
+          },
+        ],
       },
       {
         path: "recruitment",
@@ -89,7 +119,7 @@ const publicRoutes = createBrowserRouter([
       },
       {
         path: "received-orders",
-        id: "order_management",
+        id: "invoice_management",
         loader: ordersLoader,
         element: <OrderManagement />,
       },

@@ -25,8 +25,21 @@ import {
 import { Button } from "../ui/button";
 import { NavLink } from "react-router-dom";
 import AdminAccordion from "../adminAccordion";
-import { AdminNavItem } from "@/declare";
 import { ScrollArea } from "../ui/scroll-area";
+
+interface AdminNavItem {
+  name: string;
+  url: string;
+  icon: JSX.Element;
+  hasChild: boolean;
+  children: AdminNavSubItem[];
+}
+
+interface AdminNavSubItem {
+  name: string;
+  url: string;
+  icon: JSX.Element;
+}
 
 const navItems: AdminNavItem[] = [
   {
@@ -130,7 +143,7 @@ const AdminHeader = () => {
                 {navItems.map((item, index) =>
                   item.hasChild ? (
                     <AdminAccordion key={index} subItems={item.children}>
-                      <div className="flex text-[1.3rem] items-center gap-2 px-2.5 text-muted-foreground hover_text-primary-foreground">
+                      <div className="flex text-[1.1rem] items-center gap-2 px-2.5 text-muted-foreground hover_text-primary-foreground">
                         <span>{item.icon}</span>
                         <span>{item.name}</span>
                       </div>
@@ -139,7 +152,7 @@ const AdminHeader = () => {
                     <div key={index}>
                       <NavLink
                         to={item.url}
-                        className="flex text-[1.3rem] border-b py-4 px-2.5"
+                        className="flex text-[1.1rem] border-b py-4 px-2.5"
                       >
                         <SheetClose className="flex items-center gap-2 text-muted-foreground hover_text-primary-foreground">
                           <span>{item.icon}</span>

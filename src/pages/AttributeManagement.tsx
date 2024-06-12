@@ -12,6 +12,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
   TableBody,
@@ -20,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ProductAttribute } from "@/declare";
+import { AttributeType } from "@/declare";
 import { Eye, Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { useRouteLoaderData } from "react-router-dom";
 
@@ -29,7 +30,7 @@ const colName: string[] = ["STT", "THỂ LOẠI", "ID", "SỐ GIÁ TRỊ", "THAO
 const AttributeManagement = () => {
   const attributesData = useRouteLoaderData(
     "attribute_management"
-  ) as ProductAttribute[];
+  ) as AttributeType[];
 
   return (
     <>
@@ -59,9 +60,9 @@ const AttributeManagement = () => {
           <CardTitle className="text-8">Danh sách các thể loại</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col px-6 pb-4">
-          <div className="overflow-auto relative h-[58vh]">
+          <ScrollArea className="relative h-[58vh]">
             <Table>
-              <TableHeader className="border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
+              <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
                 <tr>
                   {colName.map((item, key) => {
                     return (
@@ -79,13 +80,13 @@ const AttributeManagement = () => {
                 {attributesData.map((attr, index) => (
                   <TableRow key={index}>
                     <TableCell className="text-center text-base">
-                      {index}
+                      {index + 1}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {attr.name}
+                      {attr.typeName}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {attr.id}
+                      {attr.typeID}
                     </TableCell>
                     <TableCell className="text-center text-base">
                       {attr.values.length}
@@ -115,7 +116,7 @@ const AttributeManagement = () => {
                 ))}
               </TableBody>
             </Table>
-          </div>
+          </ScrollArea>
         </CardContent>
       </Card>
 

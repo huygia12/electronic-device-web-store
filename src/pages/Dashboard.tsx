@@ -14,14 +14,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ChartData } from "@/declare";
+import { Invoice, ChartData, Account } from "@/declare";
 import OrderTable from "@/components/orderTable";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import CustomLineChart from "@/components/customLineChart";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import log from "loglevel";
 
-const orderListLink = "/admin/received-orders";
+log.setLevel("error");
+
+const ORDERS_LINK = "/admin/received-orders";
+
 const cardItem = [
   {
     name: "Doanh thu",
@@ -87,6 +93,39 @@ const revenueData: ChartData[] = [
 ];
 
 const Dashboard = () => {
+  const [ordersData, setOrdersData] = useState<Invoice[]>([]);
+  const [customersData, setCustomersData] = useState<Account[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const ordersRes = await axios.get<Invoice[]>(
+          "http://localhost:4000/invoices"
+        );
+        const usersRes = await axios.get<Account[]>(
+          "http://localhost:4000/accounts"
+        );
+
+        setCustomersData(usersRes.data);
+        setOrdersData(ordersRes.data);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          // AxiosError-specific handling
+          log.error("Axios error:", error.message);
+          if (error.response) {
+            log.error("Response data:", error.response.data);
+            log.error("Response status:", error.response.status);
+          }
+        } else {
+          // General error handling
+          log.error("Unexpected error:", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <div className="flex flex-col py-8">
@@ -118,11 +157,11 @@ const Dashboard = () => {
             <CardTitle className="text-8">Đơn hàng cần xác nhận</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col px-6 pb-4">
-            <OrderTable orders={order} />
+            <OrderTable orders={ordersData} />
           </CardContent>
           <CardFooter className="flex justify-center">
             <NavLink
-              to={orderListLink}
+              to={ORDERS_LINK}
               className="flex text-blue-500 hover_underline"
             >
               Xem tất cả &nbsp; <ArrowRight />
@@ -146,7 +185,7 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent className="flex flex-col pb-4 px-0">
               <ScrollArea className="h-[20rem] px-4">
-                {newCustomers.map((customer, index) => {
+                {customersData.map((customer, index) => {
                   return (
                     <Card key={index} className="mb-4 flex flex-row py-4">
                       <CardHeader className="p-4">
@@ -157,9 +196,9 @@ const Dashboard = () => {
                       </CardHeader>
                       <CardContent className="col-span-3 p-0 w-full max-w-60 h-full my-auto">
                         <div className="font-extrabold text-[1.1rem] truncate">
-                          {customer.customer}
+                          {customer.accountName}
                         </div>
-                        {`Đã gia nhập ngày ${customer.createdAt.toLocaleDateString()}`}
+                        {`Đã gia nhập ngày ${customer.createdAt}`}
                       </CardContent>
                       <CardFooter className="p-0 px-5 flex">
                         <NavLink to="#">

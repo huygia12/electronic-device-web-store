@@ -27,7 +27,7 @@ const AdminAccordion: React.FC<AdminAccordionProps> = ({
               <NavLink
                 key={index}
                 to={subItem.url}
-                className="text-[1.1rem] text-secondary-foreground hover_text-primary"
+                className="text-[1rem] text-secondary-foreground hover_text-primary"
               >
                 <SheetClose className="flex items-center pl-10 pb-5 gap-2">
                   <span> {subItem.icon} </span>

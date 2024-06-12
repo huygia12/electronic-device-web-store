@@ -11,6 +11,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
   TableBody,
@@ -45,7 +46,7 @@ const CategoryManagement = () => {
     let checkExisting: boolean = false;
     existingCategories.forEach((cate) => {
       newCategoryName.length !== 0 &&
-        cate.name.toLowerCase() === newCategoryName.toLowerCase() &&
+        cate.categoryName.toLowerCase() === newCategoryName.toLowerCase() &&
         (checkExisting = true);
     });
 
@@ -54,14 +55,18 @@ const CategoryManagement = () => {
       console.log("Already exist!");
     } else {
       // Add to current category list
-      tempCategories.push({ id: "", name: newCategoryName, products: 0 });
+      tempCategories.push({
+        categoryID: "",
+        categoryName: newCategoryName,
+        products: 0,
+      });
       setExistingCategories(tempCategories);
     }
   };
 
   const handleDeleteCategory = (categoryID: string) => {
     const temp = existingCategories.filter(
-      (category) => category.id !== categoryID
+      (category) => category.categoryID !== categoryID
     );
     setExistingCategories(temp);
   };
@@ -98,9 +103,9 @@ const CategoryManagement = () => {
           <CardTitle className="text-8">Phân loại danh mục</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col px-6 pb-4">
-          <div className="overflow-auto relative h-[58vh]">
+          <ScrollArea className="relative h-[58vh]">
             <Table>
-              <TableHeader className="border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
+              <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
                 <tr>
                   {colName.map((item, key) => {
                     return (
@@ -121,10 +126,10 @@ const CategoryManagement = () => {
                       {index + 1}
                     </TableCell>
                     <TableCell className="text-center  text-base">
-                      {cate.name}
+                      {cate.categoryName}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {cate.id}
+                      {cate.categoryID}
                     </TableCell>
                     <TableCell className="text-center text-base">
                       {cate.products}
@@ -144,7 +149,7 @@ const CategoryManagement = () => {
                       </CategoryDialog>
                       <Button
                         variant="negative"
-                        onClick={() => handleDeleteCategory(cate.id)}
+                        onClick={() => handleDeleteCategory(cate.categoryID)}
                       >
                         <Trash2 />
                       </Button>
@@ -153,7 +158,7 @@ const CategoryManagement = () => {
                 ))}
               </TableBody>
             </Table>
-          </div>
+          </ScrollArea>
         </CardContent>
       </Card>
 

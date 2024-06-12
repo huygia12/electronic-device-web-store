@@ -6,15 +6,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BriefOrderAttributes } from "@/declare";
+import { Invoice } from "@/declare";
 import { HTMLAttributes } from "react";
 import { Button } from "./ui/button";
 import { Check, Eye, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { ScrollArea } from "./ui/scroll-area";
 
 interface OrderTableProps extends HTMLAttributes<HTMLDivElement> {
-  orders: BriefOrderAttributes[];
+  orders: Invoice[];
 }
 
 const colName: string[] = [
@@ -29,9 +30,9 @@ const colName: string[] = [
 
 const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
   return (
-    <div className={cn("overflow-auto relative max-h-[70vh]", className)}>
+    <ScrollArea className={cn("relative max-h-[70vh]", className)}>
       <Table>
-        <TableHeader className="border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
+        <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
           <tr>
             {colName.map((item, key) => {
               return (
@@ -46,20 +47,19 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
           </tr>
         </TableHeader>
         <TableBody>
-          {/* <ScrollArea className="max-h-[10vh]"> */}
-          {props.orders.map((invoice, index) => (
+          {props.orders?.map((invoice, index) => (
             <TableRow key={index}>
               <TableCell className="text-center text-base">
-                {invoice.customer}
+                {invoice.accountName}
               </TableCell>
               <TableCell className="text-center  text-base">
-                {invoice.id}
+                {invoice.invoiceID}
               </TableCell>
               <TableCell className="text-center text-base">
-                {invoice.createdAt}
+                {`${invoice.createdAt}`}
               </TableCell>
-              <TableCell className="text-center text-base">{`${invoice.products} sản phẩm`}</TableCell>
-              <TableCell className="text-center text-base">{`${invoice.total.toLocaleString()}đ`}</TableCell>
+              <TableCell className="text-center text-base">{`${invoice.products.length} sản phẩm`}</TableCell>
+              <TableCell className="text-center text-base">{`${invoice.products.reduce((prev, cur) => prev + cur.price, 0)}đ`}</TableCell>
               <TableCell className="text-center">
                 <Badge className="bg-blue-500 text-white hover_bg-blue-500">
                   {invoice.status}
@@ -78,10 +78,9 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
               </TableCell>
             </TableRow>
           ))}
-          {/* </ScrollArea> */}
         </TableBody>
       </Table>
-    </div>
+    </ScrollArea>
   );
 };
 

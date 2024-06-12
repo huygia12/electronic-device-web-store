@@ -10,6 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import {
   Table,
@@ -20,7 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import UserDialog from "@/components/userDialog";
-import { User } from "@/declare";
+import { Account } from "@/declare";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
@@ -37,20 +38,11 @@ const colName: string[] = [
 ];
 
 const UserManagement = () => {
-  const usersData = useRouteLoaderData("user_management") as User[];
+  const usersData = useRouteLoaderData("user_management") as Account[];
   const [existingUsers, setExistUsers] = useState(usersData);
 
-  // const modifyUsers = (userID: string) => {
-  //   const temp = existingUsers.forEach((user) => {
-  //       if(user.id === userID){
-
-  //       }
-  //   });
-  //   setExistUsers(temp);
-  // };
-
   const deleteUser = (userID: string) => {
-    const temp = existingUsers.filter((user) => user.id !== userID);
+    const temp = existingUsers.filter((user) => user.accountID !== userID);
     setExistUsers(temp);
   };
 
@@ -82,9 +74,9 @@ const UserManagement = () => {
           <CardTitle className="text-8">Danh sách khách hàng</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col px-6 pb-4">
-          <div className="overflow-auto relavtive h-[58vh]">
+          <ScrollArea className=" relavtive h-[58vh]">
             <Table>
-              <TableHeader className="border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
+              <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
                 <tr>
                   {colName.map((item, key) => {
                     return (
@@ -105,16 +97,16 @@ const UserManagement = () => {
                       {index + 1}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {user.id}
+                      {user.accountID}
                     </TableCell>
                     <TableCell className="text-center  text-base">
-                      {user.name}
+                      {user.accountName}
                     </TableCell>
                     <TableCell className="text-center text-base">
                       {user.phoneNumber}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {user.createdAt}
+                      {`${user.createdAt}`}
                     </TableCell>
                     <TableCell className="text-center text-base">
                       {user.email}
@@ -136,7 +128,7 @@ const UserManagement = () => {
                       </UserDialog>
                       <Button
                         variant="negative"
-                        onClick={() => deleteUser(user.id)}
+                        onClick={() => deleteUser(user.accountID)}
                       >
                         <Trash2 />
                       </Button>
@@ -145,7 +137,7 @@ const UserManagement = () => {
                 ))}
               </TableBody>
             </Table>
-          </div>
+          </ScrollArea>
         </CardContent>
       </Card>
 

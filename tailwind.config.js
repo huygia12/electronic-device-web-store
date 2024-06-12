@@ -85,6 +85,10 @@ module.exports = {
         myLayout: "75%",
         adminLayout: "90%",
       },
+      boxShadow: {
+        general:
+          "1px 2px 10px 3px rgba(0, 0, 0, 0.3), 0 -2px 4px -2px rgba(0, 0, 0, 0.1)",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

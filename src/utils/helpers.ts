@@ -19,7 +19,9 @@ const buttonVariants = cva(
         neutral:
           "bg-blue-600 text-white rounded-md px-2 text-md hover_!bg-blue-100 hover_!text-blue-400 hover_!ring-2 hover_!ring-blue-600 transition ease-out duration-100",
         negative:
-          " bg-primary text-white rounded-md px-2 text-md hover_!bg-primary-softer hover_!text-primary-foreground hover_!ring-2 hover_!ring-primary transition ease-out duration-100",
+          "bg-primary text-white rounded-md px-2 text-md hover_!bg-primary-softer hover_!text-primary-foreground hover_!ring-2 hover_!ring-primary transition ease-out duration-100",
+        dashed:
+          "!text-slate-600 border-dashed border-slate-600 border-2 rounded-md bg-white hover_!bg-slate-600 hover_!ring-none hover_!text-white transition ease-out duration-200",
       },
       size: {
         default: "h-10 px-4 py-2",
