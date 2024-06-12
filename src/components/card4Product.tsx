@@ -9,7 +9,12 @@ import SaleTag from "./ui/saleTag";
 import RatingPoint from "./ui/ratingPoint";
 import React, { HTMLAttributes, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Product, ProductItem } from "@/declare";
+import {
+  Error,
+  LocalStorageProductItem,
+  Product,
+  ProductItem,
+} from "@/declare";
 import { afterDiscount } from "@/utils/product.ts";
 import { Button } from "./ui/button";
 import { NavLink } from "react-router-dom";
@@ -44,6 +49,9 @@ import SlideShow from "@/components/ui/slideShow";
 import { Checkbox } from "./ui/checkbox";
 import Autoplay from "embla-carousel-autoplay";
 import { buttonVariants } from "@/utils/helpers";
+import { useLocalStorage } from "@/utils/customHook";
+import { toast } from "sonner";
+
 interface CardProductProps extends HTMLAttributes<HTMLDivElement> {
   product: Product;
 }
@@ -52,9 +60,64 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
   const [currentItem, setCurrentItem] = useState<ProductItem>(
     props.product.items[0]
   );
+  const [itemsInLocal, setItemsInLocal] = useLocalStorage<
+    LocalStorageProductItem[]
+  >("cart", []);
+  const [quantityError, setQuantityError] = useState<Error>({ success: true });
+  const [inputQuantity, setInputQuantity] = useState(1);
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: true })
   );
+
+  const checkDisableButton = () => {
+    return quantityError.success && currentItem.quantity > 0;
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (inputQuantity > currentItem.quantity) {
+      setQuantityError({ success: false, message: "Số lượng không đủ!" });
+      return;
+    }
+
+    let checkExisted: boolean = false;
+    const bucket: LocalStorageProductItem[] = itemsInLocal.map((i) => i);
+
+    bucket.map((item) => {
+      if (
+        item.itemID === currentItem.itemID &&
+        item.productID === props.product.id
+      ) {
+        item.quantity += inputQuantity;
+        checkExisted = true;
+      }
+    });
+    checkExisted ||
+      bucket.push({
+        productID: props.product.id,
+        itemID: currentItem.itemID,
+        quantity: inputQuantity,
+      });
+    toast.success("Thêm vào giỏ hàng thành công!");
+    setItemsInLocal(bucket);
+  };
+
+  const handleQuantityInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    try {
+      const value = Number(e.target.value);
+      if (value < 1) {
+        setQuantityError({ success: false, message: "Số lượng không hợp lệ!" });
+        return;
+      }
+      setInputQuantity(value);
+      setQuantityError({ success: true });
+    } catch (error) {
+      setQuantityError({ success: false, message: "Số lượng không hợp lệ!" });
+    }
+  };
 
   return (
     <Card
@@ -232,13 +295,22 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
                       type="number"
                       className="max-w-24 mt-2"
                       min={1}
+                      max={currentItem.quantity > 1 ? currentItem.quantity : 1}
                       defaultValue={1}
+                      onChange={(e) => handleQuantityInput(e)}
                     />
+                    {quantityError && !quantityError.success && (
+                      <div className="text-red-600 mt-4">
+                        {quantityError.message}
+                      </div>
+                    )}
                     <DialogClose
                       className={cn(
                         "mt-14 w-full flex items-center text-[1.2rem] min-h-12",
                         buttonVariants({ variant: "neutral" })
                       )}
+                      disabled={!checkDisableButton()}
+                      onClick={(e) => handleAddToCart(e)}
                     >
                       <ShoppingBasket /> &nbsp; Thêm vào giỏ hàng
                     </DialogClose>

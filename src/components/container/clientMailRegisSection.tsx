@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { BsSendExclamation } from "react-icons/bs";
 
 const ClientSection = () => {
@@ -16,7 +16,6 @@ const ClientSection = () => {
           placeholder="Nhập email của bạn"
           className="w-[30rem] rounded-r-none focus_mr-1"
         />
-        <Toaster richColors />
         <Button
           variant="negative"
           onClick={() =>

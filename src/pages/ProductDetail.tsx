@@ -6,7 +6,12 @@ import {
 } from "@/components/ui/carousel";
 import RatingPoint from "@/components/ui/ratingPoint";
 import SlideShow from "@/components/ui/slideShow";
-import { Product, ProductItem } from "@/declare";
+import {
+  LocalStorageProductItem,
+  Error,
+  Product,
+  ProductItem,
+} from "@/declare";
 import { afterDiscount, getAverageRatingPoint } from "@/utils/product";
 import log from "loglevel";
 import React, { useState } from "react";
@@ -34,6 +39,8 @@ import {
 } from "@/components/ui/accordion";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouteLoaderData } from "react-router-dom";
+import { useLocalStorage } from "@/utils/customHook";
+import { toast } from "sonner";
 
 log.setLevel("error");
 
@@ -42,19 +49,69 @@ const ProductDetail = () => {
   const [currentItem, setCurrentItem] = useState<ProductItem>(
     productData.items[0]
   );
+  const [itemsInLocal, setItemsInLocal] = useLocalStorage<
+    LocalStorageProductItem[]
+  >("cart", []);
+  const [quantityError, setQuantityError] = useState<Error>({ success: true });
+  const [inputQuantity, setInputQuantity] = useState(1);
+
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: true })
   );
 
-  const checkItemAvailability = () => {
-    return currentItem?.quantity;
+  const checkDisableButton = () => {
+    return quantityError.success && currentItem.quantity > 0;
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (inputQuantity > currentItem.quantity) {
+      setQuantityError({ success: false, message: "Số lượng không đủ!" });
+      return;
+    }
+
+    let checkExisted: boolean = false;
+    const bucket: LocalStorageProductItem[] = itemsInLocal.map((i) => i);
+
+    bucket.map((item) => {
+      if (
+        item.itemID === currentItem.itemID &&
+        item.productID === productData.id
+      ) {
+        item.quantity += inputQuantity;
+        checkExisted = true;
+      }
+    });
+    checkExisted ||
+      bucket.push({
+        productID: productData.id,
+        itemID: currentItem.itemID,
+        quantity: inputQuantity,
+      });
+    toast.success("Thêm vào giỏ hàng thành công!");
+    setItemsInLocal(bucket);
+  };
+
+  const handleQuantityInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    try {
+      const value = Number(e.target.value);
+      if (value < 1) {
+        setQuantityError({ success: false, message: "Số lượng không hợp lệ!" });
+        return;
+      }
+      setInputQuantity(value);
+      setQuantityError({ success: true });
+    } catch (error) {
+      setQuantityError({ success: false, message: "Số lượng không hợp lệ!" });
+    }
   };
 
   return (
     <>
-      {!productData ? (
-        <></>
-      ) : (
+      {productData && (
         <div>
           <header className="border-b-2 border-b-slate-200 flex items-baseline justify-between mb-10">
             <span className="flex pb-4 gap-2 items-baseline">
@@ -128,8 +185,8 @@ const ProductDetail = () => {
                   <del className="text-slate-500">{`${currentItem ? currentItem?.price.toLocaleString() : 0}đ`}</del>
                 </div>
                 <div className="flex gap-2">
-                  {checkItemAvailability() ? "Còn hàng" : "Hết hàng"}
-                  {checkItemAvailability() ? (
+                  {checkDisableButton() ? "Còn hàng" : "Hết hàng"}
+                  {checkDisableButton() ? (
                     <CircleCheck className="text-green-500 " />
                   ) : (
                     <CircleX className="text-red-500" />
@@ -190,19 +247,27 @@ const ProductDetail = () => {
                   type="number"
                   className="max-w-24 mt-2"
                   min={1}
+                  max={currentItem.quantity > 1 ? currentItem.quantity : 1}
                   defaultValue={1}
+                  onChange={(e) => handleQuantityInput(e)}
                 />
+                {quantityError && !quantityError.success && (
+                  <div className="text-red-600 mt-4">
+                    {quantityError.message}
+                  </div>
+                )}
                 <div className="mt-14 w-full grid grid-cols-2 gap-1">
                   <Button
                     variant="neutral"
-                    disabled={!checkItemAvailability()}
+                    disabled={!checkDisableButton()}
                     className="flex items-center text-[1.2rem] min-h-12"
+                    onClick={(e) => handleAddToCart(e)}
                   >
                     <ShoppingBasket /> &nbsp; Thêm vào giỏ hàng
                   </Button>
                   <Button
                     variant="negative"
-                    disabled={!checkItemAvailability()}
+                    disabled={!checkDisableButton()}
                     className="flex items-center text-[1.2rem] min-h-12"
                   >
                     <Coins /> &nbsp; Mua ngay

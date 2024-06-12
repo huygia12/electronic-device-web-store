@@ -97,7 +97,7 @@ export interface Invoice {
   }[];
 }
 
-export interface InvoiceProduct {
+export interface LocalStorageProductItem {
   productID: string;
   itemID: string;
   quantity: number;
@@ -106,6 +106,28 @@ export interface InvoiceProduct {
 export type ProductParams = {
   id: string;
 };
+
+export interface Error {
+  success: boolean;
+  message?: string;
+}
+
+export interface CartItem {
+  id: string;
+  productName: string;
+  height: number;
+  weight: number;
+  len: number;
+  width: number;
+  itemID: string;
+  thump: string;
+  quantity: number;
+  price: number;
+  productCode: string;
+  discount: number;
+  colorName: string;
+  storageName: string;
+}
 
 /** SCHEMA */
 const ProductAttributeSchema = z.object({

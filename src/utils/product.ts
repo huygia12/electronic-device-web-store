@@ -1,4 +1,4 @@
-import { Product } from "@/declare";
+import { CartItem, Product } from "@/declare";
 
 /**
  * Apply discount to an amount of money(vnd)
@@ -24,4 +24,20 @@ const getAverageRatingPoint = (product: Product): number => {
   );
 };
 
-export { afterDiscount, getAverageRatingPoint };
+const getTotalDiscountAmount = (items: CartItem[]): number => {
+  return items.reduce(
+    (prev, cur) => prev + cur.price * (cur.discount / 100) * cur.quantity,
+    0
+  );
+};
+
+const getTotalAmount = (items: CartItem[]): number => {
+  return items.reduce((prev, cur) => prev + cur.price * cur.quantity, 0);
+};
+
+export {
+  afterDiscount,
+  getAverageRatingPoint,
+  getTotalDiscountAmount,
+  getTotalAmount,
+};

@@ -37,7 +37,7 @@ const PhasesLayout = () => {
 
   return (
     <>
-      <div className="flex space-x-8 justify-center mb-14">
+      <div className="flex space-x-8 justify-center mb-10">
         {phases.map((item, index) => {
           return (
             <span key={index} className="flex items-center space-x-8">

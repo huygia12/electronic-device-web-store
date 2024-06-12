@@ -4,6 +4,7 @@ import AppClientHeader from "../components/container/clientHeader";
 import React from "react";
 import { Outlet } from "react-router-dom";
 import ScrollToTop from "@/components/ScrollToTop";
+import { Toaster } from "sonner";
 
 const ClientLayout: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const ClientLayout: React.FC = () => {
       </main>
       <MailRegisSection />
       <AppFooter />
+      <Toaster richColors />
     </>
   );
 };
