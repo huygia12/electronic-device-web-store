@@ -213,10 +213,10 @@ const ProductEdittion = () => {
                     return (
                       <SelectItem
                         key={index}
-                        value={cate.id}
+                        value={cate.categoryID}
                         className="max-w-[30rem] truncate"
                       >
-                        {cate.name}
+                        {cate.categoryName}
                       </SelectItem>
                     );
                   })}
@@ -238,10 +238,10 @@ const ProductEdittion = () => {
                     return (
                       <SelectItem
                         key={index}
-                        value={provider.id}
+                        value={provider.providerID}
                         className="max-w-[30rem] truncate"
                       >
-                        {provider.name}
+                        {provider.providerName}
                       </SelectItem>
                     );
                   })}

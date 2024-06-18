@@ -11,7 +11,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { HTMLAttributes, useState } from "react";
 import { Provider } from "@/declare";
-import { buttonVariants } from "@/utils/helpers";
+import { buttonVariants } from "@/utils/constants";
 
 interface ProviderDialogProps extends HTMLAttributes<HTMLFormElement> {
   provider?: Provider;
@@ -24,7 +24,7 @@ const ProviderDialog: React.FC<ProviderDialogProps> = ({
   className,
   ...props
 }) => {
-  const [newName, setNewName] = useState(props.provider?.name || "");
+  const [newName, setNewName] = useState(props.provider?.providerName || "");
   const [isDisable, setIsDisable] = useState(true);
 
   // const editEvent = () => {
@@ -57,7 +57,7 @@ const ProviderDialog: React.FC<ProviderDialogProps> = ({
             </Label>
             <Input
               id="name"
-              defaultValue={props.provider?.name ?? ""}
+              defaultValue={props.provider?.providerName ?? ""}
               className="col-span-3"
               onChange={(e) => handleInputEvent(e)}
             />

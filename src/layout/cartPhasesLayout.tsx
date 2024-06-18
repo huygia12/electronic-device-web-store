@@ -1,11 +1,11 @@
 import { cn } from "@/lib/utils";
+import { useCartProps } from "@/utils/customHook";
 import {
   ArrowRight,
   PackageCheck,
   PackageOpen,
   ShoppingBag,
 } from "lucide-react";
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
 
 interface Phase {
@@ -33,7 +33,7 @@ const phases: Phase[] = [
 ];
 
 const PhasesLayout = () => {
-  const [phaseID] = useState<string>("1");
+  const { phaseID } = useCartProps();
 
   return (
     <>

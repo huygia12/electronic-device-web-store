@@ -5,9 +5,9 @@
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
-      "len": 10.2,
+      "len": 10,
       "width": 5,
-      "weight": 2.3,
+      "weight": 1000,
       "gurantee": 13,
       "categoryName": "Điện thoại",
       "providerName": "Samsung",
@@ -66,7 +66,7 @@
         {
           "itemID": "111",
           "thump": "/purple-thump.jpg",
-          "quantity": 10,
+          "quantity": 0,
           "price": 15000000,
           "productCode": "1101",
           "discount": 10,
@@ -113,17 +113,102 @@
             "/purple-4.jpg",
             "/purple-5.jpg"
           ]
+        },
+        {
+          "itemID": "114",
+          "thump": "/purple-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "productCode": "1101",
+          "discount": 10,
+          "colorName": "Tím",
+          "storageName": "256GB",
+          "images": [
+            "/purple-1.jpg",
+            "/purple-2.jpg",
+            "/purple-3.jpg",
+            "/purple-4.jpg",
+            "/purple-5.jpg"
+          ]
+        },
+        {
+          "itemID": "115",
+          "thump": "/purple-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "productCode": "1101",
+          "discount": 10,
+          "colorName": "Tím",
+          "storageName": "256GB",
+          "images": [
+            "/purple-1.jpg",
+            "/purple-2.jpg",
+            "/purple-3.jpg",
+            "/purple-4.jpg",
+            "/purple-5.jpg"
+          ]
+        },
+        {
+          "itemID": "116",
+          "thump": "/purple-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "productCode": "1101",
+          "discount": 10,
+          "colorName": "Tím",
+          "storageName": "256GB",
+          "images": [
+            "/purple-1.jpg",
+            "/purple-2.jpg",
+            "/purple-3.jpg",
+            "/purple-4.jpg",
+            "/purple-5.jpg"
+          ]
+        },
+        {
+          "itemID": "117",
+          "thump": "/purple-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "productCode": "1101",
+          "discount": 10,
+          "colorName": "Tím",
+          "storageName": "256GB",
+          "images": [
+            "/purple-1.jpg",
+            "/purple-2.jpg",
+            "/purple-3.jpg",
+            "/purple-4.jpg",
+            "/purple-5.jpg"
+          ]
+        },
+        {
+          "itemID": "118",
+          "thump": "/purple-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "productCode": "1101",
+          "discount": 10,
+          "colorName": "Tím",
+          "storageName": "256GB",
+          "images": [
+            "/purple-1.jpg",
+            "/purple-2.jpg",
+            "/purple-3.jpg",
+            "/purple-4.jpg",
+            "/purple-5.jpg"
+          ]
         }
       ]
     },
     {
-      "productID": "12",
+      "id": "12",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
-      "len": 10.2,
+      "len": 10,
       "width": 5,
-      "weight": 2.3,
+      "weight": 1000,
       "gurantee": 12,
       "categoryName": "Điện thoại",
       "providerName": "Samsung",
@@ -199,13 +284,13 @@
       ]
     },
     {
-      "productID": "13",
+      "id": "13",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
-      "len": 10.2,
+      "len": 10,
       "width": 5,
-      "weight": 2.3,
+      "weight": 1000,
       "gurantee": 13,
       "categoryName": "Điện thoại",
       "providerName": "Samsung",
@@ -281,13 +366,13 @@
       ]
     },
     {
-      "productID": "14",
+      "id": "14",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
-      "len": 10.2,
+      "len": 10,
       "width": 5,
-      "weight": 2.3,
+      "weight": 1000,
       "gurantee": 13,
       "categoryName": "Điện thoại",
       "providerName": "Samsung",
@@ -363,13 +448,13 @@
       ]
     },
     {
-      "productID": "15",
+      "id": "15",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
-      "len": 10.2,
+      "len": 10,
       "width": 5,
-      "weight": 2.3,
+      "weight": 1000,
       "gurantee": 13,
       "categoryName": "Điện thoại",
       "providerName": "Samsung",
@@ -445,13 +530,13 @@
       ]
     },
     {
-      "productID": "16",
+      "id": "16",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
-      "len": 10.2,
+      "len": 10,
       "width": 5,
-      "weight": 2.3,
+      "weight": 1000,
       "gurantee": 13,
       "categoryName": "Điện thoại",
       "providerName": "Samsung",
@@ -527,13 +612,13 @@
       ]
     },
     {
-      "productID": "17",
+      "id": "17",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
-      "len": 10.2,
+      "len": 10,
       "width": 5,
-      "weight": 2.3,
+      "weight": 1000,
       "gurantee": 13,
       "categoryName": "Điện thoại",
       "providerName": "Samsung",
@@ -609,13 +694,13 @@
       ]
     },
     {
-      "productID": "18",
+      "id": "18",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
-      "len": 10.2,
+      "len": 10,
       "width": 5,
-      "weight": 2.3,
+      "weight": 1000,
       "gurantee": 13,
       "categoryName": "Điện thoại",
       "providerName": "Samsung",
@@ -691,13 +776,13 @@
       ]
     },
     {
-      "productID": "19",
+      "id": "19",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
-      "len": 10.2,
+      "len": 10,
       "width": 5,
-      "weight": 2.3,
+      "weight": 1000,
       "gurantee": 13,
       "categoryName": "Điện thoại",
       "providerName": "Samsung",
@@ -773,13 +858,13 @@
       ]
     },
     {
-      "productID": "20",
+      "id": "20",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
-      "len": 10.2,
+      "len": 10,
       "width": 5,
-      "weight": 2.3,
+      "weight": 1000,
       "gurantee": 13,
       "categoryName": "Điện thoại",
       "providerName": "Samsung",
@@ -855,13 +940,13 @@
       ]
     },
     {
-      "productID": "21",
+      "id": "21",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
-      "len": 10.2,
+      "len": 10,
       "width": 5,
-      "weight": 2.3,
+      "weight": 1000,
       "gurantee": 13,
       "categoryName": "Điện thoại",
       "providerName": "Samsung",
@@ -937,13 +1022,13 @@
       ]
     },
     {
-      "productID": "22",
+      "id": "22",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
-      "len": 10.2,
+      "len": 10,
       "width": 5,
-      "weight": 2.3,
+      "weight": 1000,
       "gurantee": 13,
       "categoryName": "Điện thoại",
       "providerName": "Samsung",
@@ -1019,13 +1104,13 @@
       ]
     },
     {
-      "productID": "23",
+      "id": "23",
       "productName": "Samsung Galaxy S23 FE 5G",
       "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
       "height": 5,
-      "len": 10.2,
+      "len": 10,
       "width": 5,
-      "weight": 2.3,
+      "weight": 1000,
       "gurantee": 13,
       "categoryName": "Điện thoại",
       "providerName": "Samsung",

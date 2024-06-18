@@ -6,15 +6,17 @@ import CounterLabel from "@/components/ui/counterLabel";
 import { TfiHeadphoneAlt } from "react-icons/tfi";
 import CustomAvt from "../ui/customAvt";
 import { PackageSearch, Search } from "lucide-react";
+import { useCartProps } from "@/utils/customHook";
 
 const navComponents: { title: string; path: string }[] = [
   { title: "Trang chủ", path: "/" },
   { title: "Giới thiệu", path: "/intro" },
-  { title: "Tin tức", path: "/announcement" },
-  { title: "Liên hệ", path: "/intro" },
+  { title: "Liên hệ", path: "#footer" },
 ];
 
 const AppClientHeader = () => {
+  const { itemsInLocal } = useCartProps();
+
   return (
     <header className="w-full flex flex-col sticky top-0 z-50 shadow-xl">
       <div className="flex justify-around bg-third">
@@ -23,8 +25,6 @@ const AppClientHeader = () => {
             <TfiHeadphoneAlt className="pr-2" size={20} />
             Gọi mua hàng: &nbsp;
             <b> Hà Nội: 0388.725.928 (8h-21h)</b>
-            {/* <b> Tư vấn build PC: 0388.725.928 (8h-21h)</b>
-            <b> Hà Nội: 0388.725.928 (8h-21h)</b> */}
           </span>
           <span>
             {navComponents.map((item, index) => {
@@ -62,7 +62,7 @@ const AppClientHeader = () => {
                 unstable_viewTransition
               >
                 <FiShoppingBag size={40} />
-                <CounterLabel counter={6} />
+                <CounterLabel counter={itemsInLocal.length} />
               </NavLink>
               <NavLink to="/" className="relative" unstable_viewTransition>
                 <LiaShippingFastSolid size={45} />

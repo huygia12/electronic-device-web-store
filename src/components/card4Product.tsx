@@ -48,21 +48,19 @@ import { Input } from "./ui/input";
 import SlideShow from "@/components/ui/slideShow";
 import { Checkbox } from "./ui/checkbox";
 import Autoplay from "embla-carousel-autoplay";
-import { buttonVariants } from "@/utils/helpers";
-import { useLocalStorage } from "@/utils/customHook";
 import { toast } from "sonner";
+import { useCartProps } from "@/utils/customHook";
+import { buttonVariants } from "@/utils/constants";
 
 interface CardProductProps extends HTMLAttributes<HTMLDivElement> {
   product: Product;
 }
 
 const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
+  const { itemsInLocal, setItemsInLocal } = useCartProps();
   const [currentItem, setCurrentItem] = useState<ProductItem>(
     props.product.items[0]
   );
-  const [itemsInLocal, setItemsInLocal] = useLocalStorage<
-    LocalStorageProductItem[]
-  >("cart", []);
   const [quantityError, setQuantityError] = useState<Error>({ success: true });
   const [inputQuantity, setInputQuantity] = useState(1);
   const plugin = React.useRef(
@@ -82,9 +80,11 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
     }
 
     let checkExisted: boolean = false;
-    const bucket: LocalStorageProductItem[] = itemsInLocal.map((i) => i);
+    const bucket: LocalStorageProductItem[] | undefined = itemsInLocal.map(
+      (i) => i
+    );
 
-    bucket.map((item) => {
+    bucket?.map((item) => {
       if (
         item.itemID === currentItem.itemID &&
         item.productID === props.product.id
@@ -94,29 +94,25 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
       }
     });
     checkExisted ||
-      bucket.push({
+      bucket?.push({
         productID: props.product.id,
         itemID: currentItem.itemID,
         quantity: inputQuantity,
       });
     toast.success("Thêm vào giỏ hàng thành công!");
-    setItemsInLocal(bucket);
+    bucket && setItemsInLocal(bucket);
   };
 
   const handleQuantityInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    try {
-      const value = Number(e.target.value);
-      if (value < 1) {
-        setQuantityError({ success: false, message: "Số lượng không hợp lệ!" });
-        return;
-      }
-      setInputQuantity(value);
-      setQuantityError({ success: true });
-    } catch (error) {
+    const value = Number(e.target.value);
+    if (value < 1) {
       setQuantityError({ success: false, message: "Số lượng không hợp lệ!" });
+      return;
     }
+    setInputQuantity(value);
+    setQuantityError({ success: true });
   };
 
   return (

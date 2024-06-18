@@ -17,7 +17,7 @@ export interface Category {
   products: number;
 }
 
-interface AttributeOption {
+export interface AttributeOption {
   optionID: string;
   optionValue: string;
 }
@@ -68,14 +68,13 @@ export interface Product {
 }
 
 export interface Account {
-  accountID: string;
   accountName: string;
-  avt: string;
-  phoneNumber?: string;
-  createdAt: Date;
-  editedAt: Date;
-  isBanned: boolean;
   email: string;
+  accountID?: string;
+  avt?: string;
+  phoneNumber?: string;
+  createdAt?: Date;
+  editedAt?: Date;
 }
 
 export interface Invoice {
@@ -127,6 +126,23 @@ export interface CartItem {
   discount: number;
   colorName: string;
   storageName: string;
+}
+
+export interface Province {
+  ProvinceID: number;
+  ProvinceName: string;
+}
+
+export interface District {
+  DistrictID: number;
+  ProvinceID: number;
+  DistrictName: string;
+}
+
+export interface Ward {
+  WardCode: string;
+  DistrictID: number;
+  WardName: string;
 }
 
 /** SCHEMA */

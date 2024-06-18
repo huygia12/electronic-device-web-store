@@ -39,19 +39,17 @@ import {
 } from "@/components/ui/accordion";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouteLoaderData } from "react-router-dom";
-import { useLocalStorage } from "@/utils/customHook";
 import { toast } from "sonner";
+import { useCartProps } from "@/utils/customHook";
 
 log.setLevel("error");
 
 const ProductDetail = () => {
+  const { itemsInLocal, setItemsInLocal } = useCartProps();
   const productData = useRouteLoaderData("product_detail") as Product;
   const [currentItem, setCurrentItem] = useState<ProductItem>(
     productData.items[0]
   );
-  const [itemsInLocal, setItemsInLocal] = useLocalStorage<
-    LocalStorageProductItem[]
-  >("cart", []);
   const [quantityError, setQuantityError] = useState<Error>({ success: true });
   const [inputQuantity, setInputQuantity] = useState(1);
 
@@ -84,7 +82,7 @@ const ProductDetail = () => {
       }
     });
     checkExisted ||
-      bucket.push({
+      bucket?.push({
         productID: productData.id,
         itemID: currentItem.itemID,
         quantity: inputQuantity,

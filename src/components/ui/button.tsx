@@ -3,7 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/utils/helpers";
+import { buttonVariants } from "@/utils/constants";
 const customStyles: string =
   "text-white font-bold hover_bg-primary-softer hover_text-primary transition ease-out duration-100";
 

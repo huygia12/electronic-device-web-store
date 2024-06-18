@@ -1,12 +1,21 @@
-// import {
-//   CategoryLoaderType,
-//   ProviderLoaderType,
-//   categoriesLoader,
-//   providersLoader,
-// } from "@/api/productPagesLoader";
+import Badge from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -14,15 +23,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { Category, Provider } from "@/declare";
+import { AttributeOption, AttributeType, Category, Provider } from "@/declare";
+import { cn } from "@/lib/utils";
 import axios from "axios";
 import log from "loglevel";
-import { Plus, Trash2 } from "lucide-react";
+import { Check, ChevronsUpDown, Plus, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 log.setLevel("error");
+
+interface ProductAttribute {
+  typeID: string;
+  typeName: string;
+  optionID: string;
+  optionName: string;
+}
 
 const ProductAddition = () => {
   const [thumps, setThumps] = useState<string[]>([""]);
@@ -30,6 +46,13 @@ const ProductAddition = () => {
   const [itemCounter, setItemCounter] = useState<number>(1);
   const [categories, setCategories] = useState<Category[]>([]);
   const [providers, setProviders] = useState<Provider[]>([]);
+  const [attributes, setAttributes] = useState<AttributeType[]>([]);
+  const [selectedAttr, setSelectedAttr] = useState<AttributeType>();
+  // const [selectedOptionID, setSelectedOptionID] = useState<string>();
+  const [open, setOpen] = useState(false);
+  const [attriAdditionBucket, setAttrAdditionBucket] = useState<
+    ProductAttribute[]
+  >([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,9 +63,13 @@ const ProductAddition = () => {
         const providersRes = await axios.get<Provider[]>(
           "http://localhost:4000/providers"
         );
+        const attrsRes = await axios.get<AttributeType[]>(
+          "http://localhost:4000/attributes"
+        );
 
         setCategories(categoriesRes.data);
         setProviders(providersRes.data);
+        setAttributes(attrsRes.data);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           // AxiosError-specific handling
@@ -121,15 +148,55 @@ const ProductAddition = () => {
     itemCounter > 1 && setItemCounter(itemCounter - 1);
   };
 
+  const findAttribute = (id: string | undefined): AttributeType | undefined => {
+    return id ? attributes.find((value) => value.typeID === id) : undefined;
+  };
+
+  const handleOptionSelection = (optionID: string) => {
+    const selectedOption: AttributeOption | undefined =
+      selectedAttr?.values.find((attr) => attr.optionID === optionID);
+
+    if (selectedOption && selectedAttr) {
+      const bucket: ProductAttribute[] = [
+        ...attriAdditionBucket,
+        {
+          typeID: selectedAttr.typeID,
+          typeName: selectedAttr.typeName,
+          optionID: selectedOption.optionID,
+          optionName: selectedOption.optionValue,
+        },
+      ];
+      setAttrAdditionBucket(bucket);
+    }
+  };
+
+  const handleDeleteAttribute = (attribute: ProductAttribute) => {
+    const bucket = attriAdditionBucket.filter(
+      (attr) =>
+        attr.typeID !== attribute.typeID || attr.optionID !== attribute.optionID
+    );
+    setAttrAdditionBucket(bucket);
+  };
+
+  const getAvailableAttributeType = (): AttributeType[] => {
+    return attributes.filter(
+      (attr) =>
+        attriAdditionBucket.find(
+          (productAttr) => productAttr.typeID === attr.typeID
+        ) === undefined
+    );
+  };
+
   return (
     <>
       <h1 className="text-4xl font-extrabold mt-8 mb-10">Thêm sản phẩm</h1>
-      <form>
+      <form onSubmit={(e) => e.preventDefault()}>
         {/** PRODUCT */}
-        <div className="my-12 grid grid-cols-2 gap-8 w-full">
-          <div className="grid gap-8">
+        <div className="grid grid-cols-2 gap-8 mb-8">
+          {/** LEFT */}
+          <div className="grid gap-4 grid-cols-3">
             {/** PRODUCT NAME */}
-            <div className="grid gap-2">
+            <div className="space-y-2 col-span-3">
               <Label htmlFor="name" className="text-lg font-extrabold">
                 Tên sản phẩm
                 <span className="text-red-600 ">*</span>
@@ -142,7 +209,7 @@ const ProductAddition = () => {
               />
             </div>
             {/** GURANTEE TIME SPAN */}
-            <div className="grid gap-2">
+            <div className="space-y-2">
               <Label className="text-lg font-extrabold">
                 Thời hạn bảo hành(tháng)
                 <span className="text-red-600 ">*</span>
@@ -153,58 +220,8 @@ const ProductAddition = () => {
                 className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
               />
             </div>
-          </div>
-          <div className="grid grid-cols-4 gap-8">
-            {/** LENGTH */}
-            <div className="grid gap-2">
-              <Label htmlFor="length" className="text-lg font-extrabold">
-                Dài(cm)
-                <span className="text-red-600 ">*</span>
-              </Label>
-              <Input
-                id="length"
-                type="number"
-                className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-              />
-            </div>
-            {/** WIDTH */}
-            <div className="grid gap-2">
-              <Label htmlFor="width" className="text-lg font-extrabold">
-                Rộng(cm)
-                <span className="text-red-600 ">*</span>
-              </Label>
-              <Input
-                id="width"
-                type="number"
-                className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-              />
-            </div>
-            {/** HEIGHT */}
-            <div className="grid gap-2">
-              <Label htmlFor="height" className="text-lg font-extrabold">
-                Cao(cm)
-                <span className="text-red-600 ">*</span>
-              </Label>
-              <Input
-                id="height"
-                type="number"
-                className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-              />
-            </div>
-            {/** WEIGHT */}
-            <div className="grid gap-2">
-              <Label htmlFor="weight" className="text-lg font-extrabold">
-                Nặng(gram)
-                <span className="text-red-600 ">*</span>
-              </Label>
-              <Input
-                id="weight"
-                type="number"
-                className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-              />
-            </div>
             {/** CATEGORY */}
-            <div className="col-span-2 grid gap-2 ">
+            <div className="space-y-2">
               <Label htmlFor="category" className="text-lg font-extrabold">
                 Danh mục
                 <span className="text-red-600 ">*</span>
@@ -229,7 +246,7 @@ const ProductAddition = () => {
               </Select>
             </div>
             {/** PROVIDER */}
-            <div className="col-span-2 grid gap-2 ">
+            <div className="space-y-2">
               <Label htmlFor="provider" className="text-lg font-extrabold">
                 Nhà phân phối
                 <span className="text-red-600 ">*</span>
@@ -253,18 +270,182 @@ const ProductAddition = () => {
                 </SelectContent>
               </Select>
             </div>
+            {/** SIZE */}
+            <div className="col-span-3 grid grid-cols-4 gap-4">
+              {/** LENGTH */}
+              <div className="space-y-2">
+                <Label htmlFor="length" className="text-lg font-extrabold">
+                  Dài(cm)
+                  <span className="text-red-600 ">*</span>
+                </Label>
+                <Input
+                  id="length"
+                  type="number"
+                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                />
+              </div>
+              {/** WIDTH */}
+              <div className="space-y-2">
+                <Label htmlFor="width" className="text-lg font-extrabold">
+                  Rộng(cm)
+                  <span className="text-red-600 ">*</span>
+                </Label>
+                <Input
+                  id="width"
+                  type="number"
+                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                />
+              </div>
+              {/** HEIGHT */}
+              <div className="space-y-2">
+                <Label htmlFor="height" className="text-lg font-extrabold">
+                  Cao(cm)
+                  <span className="text-red-600 ">*</span>
+                </Label>
+                <Input
+                  id="height"
+                  type="number"
+                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                />
+              </div>
+              {/** WEIGHT */}
+              <div className="space-y-2">
+                <Label htmlFor="weight" className="text-lg font-extrabold">
+                  Nặng(gram)
+                  <span className="text-red-600 ">*</span>
+                </Label>
+                <Input
+                  id="weight"
+                  type="number"
+                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                />
+              </div>
+            </div>
+            <div className="col-span-3 grid grid-cols-2 gap-4">
+              {/** ATTRIBUTES */}
+              <div className="space-y-2 flex flex-col">
+                <Label htmlFor="atr" className="text-lg font-extrabold">
+                  Thể loại
+                </Label>
+                <Popover open={open} onOpenChange={() => setOpen(!open)}>
+                  <PopoverTrigger
+                    asChild
+                    className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                  >
+                    <Button
+                      variant="normal"
+                      role="combobox"
+                      // aria-expanded={open}
+                      className="justify-between focus_!ring-2"
+                    >
+                      {selectedAttr
+                        ? selectedAttr.typeName
+                        : "Chọn thể loại..."}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-max p-0">
+                    <Command>
+                      <CommandInput
+                        placeholder="Tìm thể loại..."
+                        className="text-lg"
+                      />
+                      <CommandList>
+                        <CommandEmpty className="text-stone-500 text-center p-4">
+                          Không tìm thấy.
+                        </CommandEmpty>
+                        <CommandGroup>
+                          {getAvailableAttributeType().map((attr, index) => (
+                            <CommandItem
+                              key={index}
+                              value={attr.typeName}
+                              onSelect={() => {
+                                setSelectedAttr(
+                                  attr.typeID === selectedAttr?.typeID
+                                    ? undefined
+                                    : attr
+                                );
+                                // setSelectedOptionID(undefined);
+                                setOpen(false);
+                              }}
+                              className="text-lg"
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  selectedAttr?.typeID === attr.typeID
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {attr.typeName}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </div>
+              {/** OPTIONS */}
+              <div className="space-y-2">
+                <Label htmlFor="option" className="text-lg font-extrabold">
+                  Giá trị
+                </Label>
+                <Select onValueChange={(value) => handleOptionSelection(value)}>
+                  <SelectTrigger className="border-2 border-stone-400 text-lg min-h-12 focus_border-none">
+                    <SelectValue id="option" className="p-0" />
+                  </SelectTrigger>
+                  <SelectContent className="">
+                    {findAttribute(selectedAttr?.typeID)?.values.map(
+                      (option, index) => {
+                        return (
+                          <SelectItem
+                            key={index}
+                            value={option.optionID}
+                            className="max-w-[30rem] truncate"
+                          >
+                            {option.optionValue}
+                          </SelectItem>
+                        );
+                      }
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            {/** PRODUCT ATTRIBUTES */}
+            <ScrollArea className="col-span-3">
+              <div className="flex py-6 space-x-2">
+                {attriAdditionBucket?.map((attr, index) => (
+                  <Badge
+                    variant="outline"
+                    key={index}
+                    className="w-max text-base bg-secondary text-secondary-foreground"
+                  >
+                    <span>{`${attr.typeName} : ${attr.optionName}`}</span>
+                    <X
+                      className="ml-2 hover_text-primary cursor-pointer"
+                      onClick={() => handleDeleteAttribute(attr)}
+                    />
+                  </Badge>
+                ))}
+              </div>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
           </div>
-          <div className="col-span-2 grid gap-2">
+          {/** RIGHT */}
+          <div className="space-y-2 mb-10">
             <Label htmlFor="desc" className="text-lg font-extrabold">
               Mô tả
             </Label>
             <Textarea
               id="desc"
-              className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+              placeholder="...abc"
+              className="border-2 border-stone-400 text-lg min-h-12 focus_border-none h-full"
             />
           </div>
         </div>
-        <Separator />
 
         {/** ITEMS */}
         <ul className="mb-8">
@@ -325,7 +506,7 @@ const ProductAddition = () => {
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-4">
-                    <div className="grid gap-2">
+                    <div className="space-y-2">
                       <Label
                         htmlFor={`price-${parentIndex}`}
                         className="text-lg font-extrabold"
@@ -339,7 +520,7 @@ const ProductAddition = () => {
                         className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                       />
                     </div>
-                    <div className="grid gap-2">
+                    <div className="space-y-2">
                       <Label
                         htmlFor={`quantity-${parentIndex}`}
                         className="text-lg font-extrabold"
@@ -355,7 +536,7 @@ const ProductAddition = () => {
                         className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                       />
                     </div>
-                    <div className="grid gap-2">
+                    <div className="space-y-2">
                       <Label
                         htmlFor={`code-${parentIndex}`}
                         className="text-lg font-extrabold"
@@ -371,7 +552,7 @@ const ProductAddition = () => {
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-4">
-                    <div className="grid gap-2">
+                    <div className="space-y-2">
                       <Label
                         htmlFor={`discount-${parentIndex}`}
                         className="text-lg font-extrabold"
@@ -386,7 +567,7 @@ const ProductAddition = () => {
                         className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                       />
                     </div>
-                    <div className="grid gap-2">
+                    <div className="space-y-2">
                       <Label
                         htmlFor={`color-${parentIndex}`}
                         className="text-lg font-extrabold"
@@ -399,7 +580,7 @@ const ProductAddition = () => {
                         className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                       />
                     </div>
-                    <div className="grid gap-2">
+                    <div className="space-y-2">
                       <Label
                         htmlFor={`capacity-${parentIndex}`}
                         className="text-lg font-extrabold"

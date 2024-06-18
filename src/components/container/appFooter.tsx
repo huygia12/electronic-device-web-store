@@ -6,6 +6,7 @@ interface AppFooterProps extends HTMLAttributes<HTMLElement> {}
 const AppFooter: React.FC<AppFooterProps> = ({ className }) => {
   return (
     <footer
+      id="footer"
       className={cn(
         "w-full flex justify-evenly shadow-inner mt-auto",
         className

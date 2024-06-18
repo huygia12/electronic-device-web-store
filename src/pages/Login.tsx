@@ -10,12 +10,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { NavLink, Navigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LoadingSpinner from "@/components/ui/loadingSpinner";
-import { useState } from "react";
 import axios from "axios";
+import { reqConfig } from "@/utils/axiosConfig";
+import { useCurrAccount } from "@/utils/customHook";
+import { publicRoutes } from "./routes";
 
 const LoginSchema = z.object({
   email: z.string().email({ message: "Email không đúng định dạng!" }),
@@ -23,6 +25,11 @@ const LoginSchema = z.object({
 });
 
 type LoginForm = z.infer<typeof LoginSchema>;
+
+const axiosInstance = axios.create({
+  baseURL: "http://localhost:8000/v1",
+  timeout: 5000, // Timeout set to 5 seconds
+});
 
 const Login = () => {
   const {
@@ -33,30 +40,38 @@ const Login = () => {
   } = useForm<LoginForm>({
     resolver: zodResolver(LoginSchema),
   });
-
-  const [success, setSucess] = useState(false);
+  const { setCurrAccount } = useCurrAccount();
 
   const handleLoginFormSubmission: SubmitHandler<LoginForm> = async (data) => {
     try {
-      const res = await axios.post("http://localhost:8000/auth/login", {
-        email: data.email,
-        password: data.password,
-      });
+      const res = await axiosInstance.post(
+        "/user/login",
+        {
+          email: data.email,
+          password: data.password,
+        },
+        reqConfig
+      );
 
       console.log(isSubmitSuccessful, res);
       console.log(isSubmitSuccessful);
-      setSucess(true);
-      // throw new Error();
+      setCurrAccount({ accountName: "root", email: data.email });
+      publicRoutes.navigate("/", { unstable_viewTransition: true });
     } catch (error) {
-      setError("root", {
-        message: "Tài khoản hiện không thể đăng nhập!",
-      });
+      if (axios.isAxiosError(error)) {
+        setError("root", {
+          message: "Tài khoản hiện không thể đăng nhập!",
+        });
+        // Handle error response if available
+        if (error.response) {
+          console.error("Response data:", error.response.data);
+          console.error("Response status:", error.response.status);
+        }
+      } else {
+        console.error("Unexpected error:", error);
+      }
     }
   };
-
-  if (success) {
-    return <Navigate to={"/"} replace={true} />;
-  }
 
   return (
     <form
@@ -109,7 +124,7 @@ const Login = () => {
             </NavLink>
           </div>
         </CardContent>
-        <CardFooter className="flex flex-col">
+        <CardFooter className="flex flex-col justify-center">
           <Button
             type="submit"
             disabled={isSubmitting}

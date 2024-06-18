@@ -24,6 +24,12 @@ const getAverageRatingPoint = (product: Product): number => {
   );
 };
 
+/**
+ * Make sum from the discounted amount of all CartItems
+ *
+ * @param {CartItem[]} items - The list of CartItem
+ * @returns The total discounted amount
+ */
 const getTotalDiscountAmount = (items: CartItem[]): number => {
   return items.reduce(
     (prev, cur) => prev + cur.price * (cur.discount / 100) * cur.quantity,
@@ -31,6 +37,12 @@ const getTotalDiscountAmount = (items: CartItem[]): number => {
   );
 };
 
+/**
+ * Caculate the raw total ammount of the bill(CartItems)
+ *
+ * @param {CartItem[]} items - The list of CartItem
+ * @returns The totals
+ */
 const getTotalAmount = (items: CartItem[]): number => {
   return items.reduce((prev, cur) => prev + cur.price * cur.quantity, 0);
 };

@@ -5,10 +5,11 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import ScrollToTop from "@/components/ScrollToTop";
 import { Toaster } from "sonner";
+import CartProvider from "@/context/cartProvider";
 
 const ClientLayout: React.FC = () => {
   return (
-    <>
+    <CartProvider>
       <ScrollToTop />
       <AppClientHeader />
       <main className="flex justify-center w-full py-10 min-h-[70vh]">
@@ -19,7 +20,7 @@ const ClientLayout: React.FC = () => {
       <MailRegisSection />
       <AppFooter />
       <Toaster richColors />
-    </>
+    </CartProvider>
   );
 };
 

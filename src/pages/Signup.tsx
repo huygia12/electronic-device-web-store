@@ -9,12 +9,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { NavLink, Navigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LoadingSpinner from "@/components/ui/loadingSpinner";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { publicRoutes } from "./routes";
+import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
+import axios from "axios";
+import { useCurrAccount } from "@/utils/customHook";
 
 const SignupSchema = z.object({
   accountName: z.string().min(1, { message: "Tên không được bỏ trống!" }),
@@ -30,11 +34,12 @@ const Signup = () => {
     register,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
   } = useForm<SignupForm>({
     resolver: zodResolver(SignupSchema),
   });
   const [passwordVisibility, setPasswordvisibility] = useState(false);
+  const { setCurrAccount } = useCurrAccount();
 
   const handleSignupFormSubmission: SubmitHandler<SignupForm> = async (
     data
@@ -47,25 +52,39 @@ const Signup = () => {
         return;
       }
 
-      await new Promise((e) => setTimeout(e, 5000));
-      // const res = axios.post("http://localhost:8000/auth/signup", {
-      //   name: data.accountName,
-      //   email: data.email,
-      //   password: data.password,
-      //   role: "USER",
-      // });
+      await axiosInstance.post(
+        "/user/signup",
+        {
+          name: data.accountName,
+          email: data.email,
+          password: data.password,
+          role: "CLIENT",
+        },
+        reqConfig
+      );
 
-      // throw new Error();
+      setCurrAccount({ accountName: data.accountName, email: data.email });
+      publicRoutes.navigate("/", { unstable_viewTransition: true });
     } catch (error) {
-      setError("root", {
-        message: "Đăng ký thất bại!",
-      });
+      if (axios.isAxiosError(error)) {
+        if (error.code === "ECONNABORTED") {
+          setError("root", {
+            message: "Đăng ký thất bại!",
+          });
+        } else {
+          console.error("Axios error:", error.message);
+        }
+        // Handle error response if available
+        if (error.response) {
+          console.error("Response data:", error.response.data);
+          console.error("Response status:", error.response.status);
+        }
+      } else {
+        console.error("Unexpected error:", error);
+      }
     }
   };
 
-  if (isSubmitSuccessful) {
-    return <Navigate to="/" replace={true} />;
-  }
   return (
     <form
       onSubmit={handleSubmit((data) => handleSignupFormSubmission(data))}
@@ -154,19 +173,25 @@ const Signup = () => {
                 </div>
               </div>
               {errors.password && (
-                <div className="text-red-600">{errors.password.message}</div>
+                <div className="text-red-600 mt-2">
+                  {errors.password.message}
+                </div>
               )}
             </div>
-            <Button type="submit" variant="neutral" className="w-full">
-              {!isSubmitting ? (
-                "Tạo tài khoản"
-              ) : (
-                <LoadingSpinner size={26} className="text-white" />
+            <div className="grid gap-2">
+              <Button type="submit" variant="neutral" className="w-full">
+                {!isSubmitting ? (
+                  "Tạo tài khoản"
+                ) : (
+                  <LoadingSpinner size={26} className="text-white" />
+                )}
+              </Button>
+              {errors.root && (
+                <div className="text-red-600 mx-auto">
+                  {errors.root.message}
+                </div>
               )}
-            </Button>
-            {errors.root && (
-              <div className="text-red-600">{errors.root.message}</div>
-            )}
+            </div>
           </div>
           <div className="mt-4 text-center text-sm">
             Bạn đã có tài khoản? &nbsp;

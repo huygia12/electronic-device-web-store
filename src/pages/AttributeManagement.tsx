@@ -1,17 +1,8 @@
 import AttributeDialog from "@/components/attributeDialog";
-import { AttributeOptionDialog } from "@/components/attributeOptionDialog";
+import OptionDialog from "@/components/optionDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
@@ -22,20 +13,25 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { AttributeType } from "@/declare";
-import { Eye, Plus, Search, SquarePen, Trash2 } from "lucide-react";
+import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 
-const colName: string[] = ["STT", "THỂ LOẠI", "ID", "SỐ GIÁ TRỊ", "THAO TÁC"];
+const attrTypeColsName: string[] = ["STT", "THỂ LOẠI", "ID", "THAO TÁC"];
+
+const attrOptionColsName: string[] = ["STT", "TÊN GIÁ TRỊ", "ID", "THAO TÁC"];
 
 const AttributeManagement = () => {
   const attributesData = useRouteLoaderData(
     "attribute_management"
   ) as AttributeType[];
+  const [selectedAttr, setSelectedAttr] = useState<AttributeType>(
+    attributesData[0]
+  );
 
   return (
-    <>
-      {/** Add and search */}
-      <Card className="rounded-2xl shadow-lg my-8">
+    <section className=" grid grid-cols-5 gap-4">
+      <Card className="rounded-2xl shadow-lg mt-8 col-span-5">
         <CardContent className="flex justify-between p-6">
           <AttributeDialog formTitle="Thêm thể loại mới">
             <Button variant="positive" className="text-xl">
@@ -54,17 +50,17 @@ const AttributeManagement = () => {
         </CardContent>
       </Card>
 
-      {/** Table */}
-      <Card className="rounded-2xl shadow-lg mb-8">
+      {/** ATTRIBUTE TYPE TABLE */}
+      <Card className="rounded-2xl shadow-lg col-span-3">
         <CardHeader className="py-5 px-10">
           <CardTitle className="text-8">Danh sách các thể loại</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-col px-6 pb-4">
-          <ScrollArea className="relative h-[58vh]">
+        <CardContent className="px-6">
+          <ScrollArea className="relative h-[64vh]">
             <Table>
               <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
                 <tr>
-                  {colName.map((item, key) => {
+                  {attrTypeColsName.map((item, key) => {
                     return (
                       <TableHead
                         key={key}
@@ -78,7 +74,15 @@ const AttributeManagement = () => {
               </TableHeader>
               <TableBody>
                 {attributesData.map((attr, index) => (
-                  <TableRow key={index}>
+                  <TableRow
+                    onClick={() => setSelectedAttr(attr)}
+                    key={index}
+                    className={
+                      attr.typeID === selectedAttr.typeID
+                        ? "bg-theme-softer"
+                        : ""
+                    }
+                  >
                     <TableCell className="text-center text-base">
                       {index + 1}
                     </TableCell>
@@ -88,21 +92,15 @@ const AttributeManagement = () => {
                     <TableCell className="text-center text-base">
                       {attr.typeID}
                     </TableCell>
-                    <TableCell className="text-center text-base">
-                      {attr.values.length}
-                    </TableCell>
                     <TableCell className="flex items-center justify-center space-x-2">
-                      <AttributeOptionDialog
-                        attribute={attr}
-                        formTitle="Danh sách giá trị"
-                      >
-                        <Button variant="neutral">
-                          <Eye />
+                      <OptionDialog formTitle="Thêm giá trị">
+                        <Button variant="positive">
+                          <Plus />
                         </Button>
-                      </AttributeOptionDialog>
+                      </OptionDialog>
                       <AttributeDialog
-                        formTitle="Thêm thể loại mới"
                         attribute={attr}
+                        formTitle="Sửa thể loại mới"
                       >
                         <Button variant="neutral">
                           <SquarePen />
@@ -120,32 +118,58 @@ const AttributeManagement = () => {
         </CardContent>
       </Card>
 
-      {/** Pagination */}
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#" isActive>
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    </>
+      {/** ATTRIBUTE OPTION TABLE */}
+      <Card className="rounded-2xl shadow-lg col-span-2 !max-h-[40.8rem]">
+        <CardContent className="py-16">
+          <ScrollArea className="relative h-[64vh]">
+            <Table>
+              <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
+                <tr>
+                  {attrOptionColsName.map((item, key) => {
+                    return (
+                      <TableHead
+                        key={key}
+                        className=" text-center text-black font-extrabold text-[1rem]"
+                      >
+                        {item}
+                      </TableHead>
+                    );
+                  })}
+                </tr>
+              </TableHeader>
+              <TableBody>
+                {selectedAttr.values.map((option, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="text-center text-base">
+                      {index + 1}
+                    </TableCell>
+                    <TableCell className="text-center  text-base">
+                      {option.optionValue}
+                    </TableCell>
+                    <TableCell className="text-center text-base">
+                      {option.optionID}
+                    </TableCell>
+                    <TableCell
+                      colSpan={3}
+                      className="flex items-center justify-center space-x-2"
+                    >
+                      <OptionDialog option={option} formTitle="Sửa giá trị">
+                        <Button variant="neutral">
+                          <SquarePen />
+                        </Button>
+                      </OptionDialog>
+                      <Button variant="negative">
+                        <Trash2 />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </ScrollArea>
+        </CardContent>
+      </Card>
+    </section>
   );
 };
 

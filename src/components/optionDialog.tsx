@@ -7,18 +7,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { HTMLAttributes } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { HTMLAttributes } from "react";
-import { AttributeType } from "@/declare";
+import { AttributeOption } from "@/declare";
 import { buttonVariants } from "@/utils/constants";
 
 interface AttibuteDialogProps extends HTMLAttributes<HTMLFormElement> {
-  attribute?: AttributeType;
+  option?: AttributeOption;
   formTitle: string;
 }
 
-const AttributeDialog: React.FC<AttibuteDialogProps> = ({
+const OptionDialog: React.FC<AttibuteDialogProps> = ({
   className,
   ...props
 }) => {
@@ -36,7 +36,7 @@ const AttributeDialog: React.FC<AttibuteDialogProps> = ({
             </Label>
             <Input
               id="name"
-              defaultValue={props.attribute?.typeName}
+              defaultValue={props.option?.optionValue}
               className="col-span-3"
             />
           </div>
@@ -59,4 +59,4 @@ const AttributeDialog: React.FC<AttibuteDialogProps> = ({
   );
 };
 
-export default AttributeDialog;
+export default OptionDialog;

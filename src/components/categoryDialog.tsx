@@ -11,7 +11,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { HTMLAttributes, useState } from "react";
 import { Category } from "@/declare";
-import { buttonVariants } from "@/utils/helpers";
+import { buttonVariants } from "@/utils/constants";
 
 interface CategoryDialogProps extends HTMLAttributes<HTMLFormElement> {
   category?: Category;
@@ -24,7 +24,7 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
   className,
   ...props
 }) => {
-  const [newName, setNewName] = useState(props.category?.name || "");
+  const [newName, setNewName] = useState(props.category?.categoryName || "");
   // const [isDisable, setIsDisable] = useState(true);
 
   const handleInputEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +53,7 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
             </Label>
             <Input
               id="name"
-              defaultValue={props.category?.name ?? ""}
+              defaultValue={props.category?.categoryName ?? ""}
               className="col-span-3"
               onChange={(e) => handleInputEvent(e)}
             />

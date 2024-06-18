@@ -10,7 +10,7 @@ import { Invoice } from "@/declare";
 import { HTMLAttributes } from "react";
 import { Button } from "./ui/button";
 import { Check, Eye, X } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import Badge from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "./ui/scroll-area";
 

@@ -1,4 +1,3 @@
-import { User } from "@/declare";
 import { HTMLAttributes, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "./ui/label";
@@ -12,11 +11,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { buttonVariants } from "@/utils/helpers";
 import { Eye, EyeOff } from "lucide-react";
+import { Account } from "@/declare";
+import { buttonVariants } from "@/utils/constants";
 
 interface UserDialogProps extends HTMLAttributes<HTMLFormElement> {
-  user?: User;
+  user?: Account;
   formTitle: string;
 }
 
@@ -49,7 +49,7 @@ const UserDialog: React.FC<UserDialogProps> = ({ className, ...props }) => {
                 </Label>
                 <Input
                   id="name"
-                  defaultValue={props.user?.name ?? ""}
+                  defaultValue={props.user?.accountName ?? ""}
                   placeholder="Nguyễn Văn A"
                   className="h-full text-xl"
                 />
@@ -88,7 +88,6 @@ const UserDialog: React.FC<UserDialogProps> = ({ className, ...props }) => {
                 <Input
                   id="passwd"
                   type={hide ? "password" : "text"}
-                  defaultValue={props.user?.passwd ?? ""}
                   className="h-full text-xl"
                 />
                 <button

@@ -1,4 +1,3 @@
-import Announcement from "./Announcement.tsx";
 import Products from "./Products.tsx";
 import Intro from "./Intro.tsx";
 import Dashboard from "./Dashboard.tsx";
@@ -29,11 +28,10 @@ import {
 } from "@/api/preApiLoader.ts";
 import { ProductEdittion } from "./ProductEdittion.tsx";
 import Homepage from "./Homepage.tsx";
-import { PhasesLayout } from "./PhasesLayout.tsx";
+import { PhasesLayout } from "../layout/cartPhasesLayout.tsx";
 import ProductDetail from "./ProductDetail.tsx";
 import { CartVisting } from "./CartVisting.tsx";
 import { CartCheckout } from "./CartCheckout.tsx";
-import Recruitment from "./Recruitment.tsx";
 
 const publicRoutes = createBrowserRouter([
   {
@@ -77,14 +75,6 @@ const publicRoutes = createBrowserRouter([
             element: <CartCheckout />,
           },
         ],
-      },
-      {
-        path: "recruitment",
-        element: <Recruitment />,
-      },
-      {
-        path: "announcement",
-        element: <Announcement />,
       },
       {
         path: "login",

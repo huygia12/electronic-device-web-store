@@ -7,10 +7,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import log from "loglevel";
 import { Button } from "@/components/ui/button";
-import { CartItem, LocalStorageProductItem, Product } from "@/declare";
+import { CartItem, Error, LocalStorageProductItem, Product } from "@/declare";
 import {
   afterDiscount,
   getTotalAmount,
@@ -28,7 +28,21 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
-import { useLocalStorage } from "@/utils/customHook";
+import { useNavigate } from "react-router-dom";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { cn } from "@/lib/utils";
+import { arrayInReverse } from "@/utils/helpers";
+import { useCartProps } from "@/utils/customHook";
+import { buttonVariants } from "@/utils/constants";
 
 log.setLevel("error");
 
@@ -37,15 +51,24 @@ const header = [
   "Ảnh",
   "Sản Phẩm",
   "Giá",
-  "Số lượng",
   "Giảm Giá",
   "Thành Tiền",
+  "Số lượng",
   "Thao tác",
 ];
 
 const CartVisting = () => {
-  const [itemsInLocal] = useLocalStorage<LocalStorageProductItem[]>("cart", []);
+  const { itemsInLocal, setItemsInLocal, removeInvoice, setPhaseID } =
+    useCartProps();
   const [invoiceProductData, setInvoiceProductData] = useState<CartItem[]>([]);
+  const navigate = useNavigate();
+  const [quantityErrors, setQuantityErrors] = useState<Error[]>(
+    new Array(itemsInLocal.length).fill({ sucess: true })
+  );
+
+  useEffect(() => {
+    setPhaseID("1");
+  }, [setPhaseID]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,7 +105,6 @@ const CartVisting = () => {
             });
           });
         });
-
         setInvoiceProductData(bucket);
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
@@ -101,6 +123,63 @@ const CartVisting = () => {
 
     fetchData();
   }, [itemsInLocal]);
+
+  const handleNextStepEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    navigate("/cart/checkout", { unstable_viewTransition: true });
+  };
+
+  const handleDeleteProduct = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    productID: string,
+    itemID: string
+  ) => {
+    e.preventDefault();
+
+    const bucket: LocalStorageProductItem[] = [];
+    itemsInLocal.map((item) => {
+      if (item.productID != productID || item.itemID != itemID) {
+        bucket.push(item);
+      }
+    });
+    setItemsInLocal(bucket);
+  };
+
+  const handleQuantityInput = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+    productID: string,
+    itemID: string
+  ) => {
+    e.preventDefault();
+
+    const newQuantity = Number(e.target.value);
+    const bucket = quantityErrors.map((element, iter) => {
+      if (iter === index) {
+        if (newQuantity < 1) {
+          return {
+            success: false,
+            message: "Không hợp lệ!",
+          };
+        } else {
+          const localItems = itemsInLocal.map((item) =>
+            item.productID === productID && item.itemID === itemID
+              ? {
+                  ...item,
+                  quantity: newQuantity,
+                }
+              : item
+          );
+          localItems && setItemsInLocal(localItems);
+
+          return { success: true };
+        }
+      }
+      return element;
+    });
+    setQuantityErrors(bucket);
+  };
 
   return (
     <div className="grid grid-cols-4 w-full gap-4">
@@ -132,59 +211,103 @@ const CartVisting = () => {
                   </tr>
                 </TableHeader>
                 <TableBody>
-                  {invoiceProductData.map((prod, index) => {
-                    return (
-                      <TableRow key={index} className="">
-                        <TableCell className="text-center text-base">
-                          {index + 1}
-                        </TableCell>
-                        <TableCell className="text-center text-base">
-                          <img
-                            src={prod.thump}
-                            alt={prod.id}
-                            className="max-h-20"
-                          />
-                        </TableCell>
-                        <TableCell className="text-center text-base max-w-[15rem] truncate">
-                          {prod.productName}
-                          <br />
-                          {`${prod.storageName} | ${prod.colorName}`}
-                        </TableCell>
-                        <TableCell className="text-center text-base">
-                          {prod.price.toLocaleString() + "đ"}
-                        </TableCell>
-                        <TableCell className="text-center text-base">
-                          <Input
-                            id="quantity"
-                            type="number"
-                            className="max-w-20 mt-2"
-                            min={1}
-                            defaultValue={prod.quantity}
-                          />
-                        </TableCell>
-                        <TableCell className="text-center text-base">
-                          {prod.discount + "%"}
-                        </TableCell>
-                        <TableCell className="text-center text-base">
-                          {afterDiscount(
-                            prod.price,
-                            prod.discount
-                          ).toLocaleString() + "đ"}
-                        </TableCell>
-                        <TableCell className="text-center text-base">
-                          <Button variant="negative">
-                            <Trash2 />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                  {arrayInReverse<CartItem>(invoiceProductData).map(
+                    (prod, index) => {
+                      return (
+                        <TableRow key={index} className="">
+                          <TableCell className="text-center text-base">
+                            {index + 1}
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            <img
+                              src={prod.thump}
+                              alt={prod.id}
+                              className="max-h-20"
+                            />
+                          </TableCell>
+                          <TableCell className="text-center text-base max-w-[15rem] truncate">
+                            {prod.productName}
+                            <br />
+                            {`${prod.storageName} | ${prod.colorName}`}
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            {prod.price.toLocaleString() + "đ"}
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            {prod.discount + "%"}
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            {afterDiscount(
+                              prod.price,
+                              prod.discount
+                            ).toLocaleString() + "đ"}
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            <Input
+                              id="quantity"
+                              type="number"
+                              className="max-w-20 mt-2 mx-auto"
+                              min={1}
+                              onChange={(e) =>
+                                handleQuantityInput(
+                                  e,
+                                  index,
+                                  prod.id,
+                                  prod.itemID
+                                )
+                              }
+                              value={prod.quantity}
+                            />
+                            {quantityErrors[index] &&
+                              !quantityErrors[index].success && (
+                                <div className="text-red-600 mt-2 mx-auto">
+                                  {quantityErrors[index].message}
+                                </div>
+                              )}
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            <Button
+                              onClick={(e) =>
+                                handleDeleteProduct(e, prod.id, prod.itemID)
+                              }
+                              variant="negative"
+                            >
+                              <Trash2 />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    }
+                  )}
                 </TableBody>
               </Table>
             </ScrollArea>
-            <Button variant="negative" className="w-full">
-              Xóa hết giỏ hàng
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger
+                className={cn(
+                  "w-full mt-auto",
+                  buttonVariants({ variant: "negative" })
+                )}
+              >
+                Xóa hết giỏ hàng
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Bạn muốn xóa hết giỏ hàng?
+                  </AlertDialogTitle>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="flex items-center">
+                  <AlertDialogCancel className="m-0">Hủy</AlertDialogCancel>
+                  <AlertDialogAction
+                    className={cn(buttonVariants({ variant: "negative" }))}
+                    onClick={() => removeInvoice()}
+                  >
+                    Xác nhân
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </>
         )}
       </section>
@@ -225,13 +348,16 @@ const CartVisting = () => {
             </div>
           </CardContent>
           <CardFooter className="mt-4 px-4">
+            {/* <NavLink to="/cart/checkout"> */}
             <Button
               variant="neutral"
               disabled={invoiceProductData.length === 0}
               className="ml-auto"
+              onClick={(e) => handleNextStepEvent(e)}
             >
-              Thanh Toán
+              Đặt hàng
             </Button>
+            {/* </NavLink> */}
           </CardFooter>
         </Card>
       </section>
