@@ -1529,103 +1529,103 @@
   ],
   "accounts": [
     {
-      "accountID": "CT061",
+      "id": "CT061",
       "accountName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
       "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
+      "createdAt": "2024-05-15 12:11:05",
       "email": "khanhwf@gmail.com"
     },
     {
-      "accountID": "CT062",
+      "id": "CT062",
       "accountName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
       "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
+      "createdAt": "2024-05-15 12:11:05",
       "email": "khanhwf@gmail.com"
     },
     {
-      "accountID": "CT063",
+      "id": "CT063",
       "accountName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
       "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
+      "createdAt": "2024-05-15 12:11:05",
       "email": "khanhwf@gmail.com"
     },
     {
-      "accountID": "CT064",
+      "id": "CT064",
       "accountName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
       "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
+      "createdAt": "2024-05-15 12:11:05",
       "email": "khanhwf@gmail.com"
     },
     {
-      "accountID": "CT065",
+      "id": "CT065",
       "accountName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
       "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
+      "createdAt": "2024-05-15 12:11:05",
       "email": "khanhwf@gmail.com"
     },
     {
-      "accountID": "CT066",
+      "id": "CT066",
       "accountName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
       "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
+      "createdAt": "2024-05-15 12:11:05",
       "email": "khanhwf@gmail.com"
     },
     {
-      "accountID": "CT067",
+      "id": "CT067",
       "accountName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
       "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
+      "createdAt": "2024-05-15 12:11:05",
       "email": "khanhwf@gmail.com"
     },
     {
-      "accountID": "CT068",
+      "id": "CT068",
       "accountName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
       "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
+      "createdAt": "2024-05-15 12:11:05",
       "email": "khanhwf@gmail.com"
     },
     {
-      "accountID": "CT069",
+      "id": "CT069",
       "accountName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
       "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
+      "createdAt": "2024-05-15 12:11:05",
       "email": "khanhwf@gmail.com"
     },
     {
-      "accountID": "CT070",
+      "id": "CT070",
       "accountName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
       "isBanned": false,
-      "createdAt": "2024-05-15 12:11:5",
+      "createdAt": "2024-05-15 12:11:05",
       "email": "khanhwf@gmail.com"
     }
   ],
@@ -1636,23 +1636,33 @@
       "payment": "COD",
       "city": "Hà Nội",
       "ward": "La Thành",
-      "provice": "Hà Nội",
+      "province": "Hà Nội",
       "phoneNumber": "0388725928",
       "detailAddress": "946 Đê La Thành",
       "createdAt": "2024-05-15 18:01:5",
       "accountName": "Bùi Minh Khánh",
       "products": [
         {
-          "quantity": 1,
-          "price": 15000000,
+          "id": "11",
           "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "colorName": "Đen",
+          "storageName": "256GB"
         },
         {
-          "quantity": 2,
-          "price": 15000000,
+          "id": "12",
           "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "colorName": "Đen",
+          "storageName": "256GB"
         }
       ]
     },
@@ -1662,23 +1672,33 @@
       "payment": "COD",
       "city": "Hà Nội",
       "ward": "La Thành",
-      "provice": "Hà Nội",
+      "province": "Hà Nội",
       "phoneNumber": "0388725928",
       "detailAddress": "946 Đê La Thành",
       "createdAt": "2024-05-15 18:01:5",
       "accountName": "Bùi Minh Khánh",
       "products": [
         {
-          "quantity": 1,
-          "price": 15000000,
+          "id": "11",
           "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "colorName": "Đen",
+          "storageName": "256GB"
         },
         {
-          "quantity": 2,
-          "price": 15000000,
+          "id": "12",
           "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "colorName": "Đen",
+          "storageName": "256GB"
         }
       ]
     },
@@ -1688,23 +1708,33 @@
       "payment": "COD",
       "city": "Hà Nội",
       "ward": "La Thành",
-      "provice": "Hà Nội",
+      "province": "Hà Nội",
       "phoneNumber": "0388725928",
       "detailAddress": "946 Đê La Thành",
       "createdAt": "2024-05-15 18:01:5",
       "accountName": "Bùi Minh Khánh",
       "products": [
         {
-          "quantity": 1,
-          "price": 15000000,
+          "id": "11",
           "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "colorName": "Đen",
+          "storageName": "256GB"
         },
         {
-          "quantity": 2,
-          "price": 15000000,
+          "id": "12",
           "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "colorName": "Đen",
+          "storageName": "256GB"
         }
       ]
     },
@@ -1714,23 +1744,33 @@
       "payment": "COD",
       "city": "Hà Nội",
       "ward": "La Thành",
-      "provice": "Hà Nội",
+      "province": "Hà Nội",
       "phoneNumber": "0388725928",
       "detailAddress": "946 Đê La Thành",
       "createdAt": "2024-05-15 18:01:5",
       "accountName": "Bùi Minh Khánh",
       "products": [
         {
-          "quantity": 1,
-          "price": 15000000,
+          "id": "11",
           "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "colorName": "Đen",
+          "storageName": "256GB"
         },
         {
-          "quantity": 2,
-          "price": 15000000,
+          "id": "12",
           "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "colorName": "Đen",
+          "storageName": "256GB"
         }
       ]
     },
@@ -1740,23 +1780,33 @@
       "payment": "COD",
       "city": "Hà Nội",
       "ward": "La Thành",
-      "provice": "Hà Nội",
+      "province": "Hà Nội",
       "phoneNumber": "0388725928",
       "detailAddress": "946 Đê La Thành",
       "createdAt": "2024-05-15 18:01:5",
       "accountName": "Bùi Minh Khánh",
       "products": [
         {
-          "quantity": 1,
-          "price": 15000000,
+          "id": "11",
           "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "colorName": "Đen",
+          "storageName": "256GB"
         },
         {
-          "quantity": 2,
-          "price": 15000000,
+          "id": "12",
           "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "colorName": "Đen",
+          "storageName": "256GB"
         }
       ]
     },
@@ -1766,23 +1816,33 @@
       "payment": "COD",
       "city": "Hà Nội",
       "ward": "La Thành",
-      "provice": "Hà Nội",
+      "province": "Hà Nội",
       "phoneNumber": "0388725928",
       "detailAddress": "946 Đê La Thành",
       "createdAt": "2024-05-15 18:01:5",
       "accountName": "Bùi Minh Khánh",
       "products": [
         {
-          "quantity": 1,
-          "price": 15000000,
+          "id": "11",
           "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "colorName": "Đen",
+          "storageName": "256GB"
         },
         {
-          "quantity": 2,
-          "price": 15000000,
+          "id": "12",
           "productName": "Samsung Galaxy S23 FE 5G",
-          "discount": 12
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
+          "quantity": 10,
+          "price": 15000000,
+          "colorName": "Đen",
+          "storageName": "256GB"
         }
       ]
     }

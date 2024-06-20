@@ -27,7 +27,7 @@ const LoginSchema = z.object({
 type LoginForm = z.infer<typeof LoginSchema>;
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000/v1",
+  baseURL: import.meta.env.VITE_API_URL,
   timeout: 5000, // Timeout set to 5 seconds
 });
 
@@ -138,7 +138,7 @@ const Login = () => {
             )}
           </Button>
           {errors.root && (
-            <div className="text-red-600">{errors.root.message}</div>
+            <div className="text-red-600 mt-4">{errors.root.message}</div>
           )}
           <div className="mt-4 text-center text-sm">
             Bạn đã có tài khoản? &nbsp;

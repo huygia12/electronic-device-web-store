@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+export interface LinkItem {
+  name: string;
+  src: string;
+}
+
 export interface ChartData {
   name: string;
   revenue: number;
@@ -70,7 +75,7 @@ export interface Product {
 export interface Account {
   accountName: string;
   email: string;
-  accountID?: string;
+  id?: string;
   avt?: string;
   phoneNumber?: string;
   createdAt?: Date;
@@ -85,15 +90,10 @@ export interface Invoice {
   ward: string;
   province: string;
   phoneNumber: string;
-  detailAddress: string;
+  detailAddress?: string;
   createdAt: Date;
   accountName: string;
-  products: {
-    quantity: number;
-    price: number;
-    productName: string;
-    discount: number;
-  }[];
+  products: CartItem[];
 }
 
 export interface LocalStorageProductItem {
@@ -112,18 +112,19 @@ export interface Error {
 }
 
 export interface CartItem {
-  id: string;
   productName: string;
+  price: number;
+  quantity: number;
+  discount: number;
+
+  id: string;
   height: number;
   weight: number;
   len: number;
   width: number;
   itemID: string;
   thump: string;
-  quantity: number;
-  price: number;
   productCode: string;
-  discount: number;
   colorName: string;
   storageName: string;
 }

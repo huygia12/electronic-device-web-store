@@ -58,13 +58,13 @@ const ProductAddition = () => {
     const fetchData = async () => {
       try {
         const categoriesRes = await axios.get<Category[]>(
-          "http://localhost:4000/categories"
+          import.meta.env.VITE_API_URL + "/categories"
         );
         const providersRes = await axios.get<Provider[]>(
-          "http://localhost:4000/providers"
+          import.meta.env.VITE_API_URL + "/providers"
         );
         const attrsRes = await axios.get<AttributeType[]>(
-          "http://localhost:4000/attributes"
+          import.meta.env.VITE_API_URL + "/attributes"
         );
 
         setCategories(categoriesRes.data);

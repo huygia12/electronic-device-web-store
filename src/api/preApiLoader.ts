@@ -15,7 +15,9 @@ log.setLevel("error");
 
 const productsLoader = async (): Promise<Product[] | undefined> => {
   try {
-    const res = await axios.get<Product[]>("http://localhost:4000/products");
+    const res = await axios.get<Product[]>(
+      import.meta.env.VITE_API_URL + "/products"
+    );
 
     return res.data;
   } catch (error) {
@@ -35,7 +37,9 @@ const productsLoader = async (): Promise<Product[] | undefined> => {
 
 const categoriesLoader = async (): Promise<Category[] | undefined> => {
   try {
-    const res = await axios.get<Category[]>("http://localhost:4000/categories");
+    const res = await axios.get<Category[]>(
+      import.meta.env.VITE_API_URL + "/categories"
+    );
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -54,7 +58,9 @@ const categoriesLoader = async (): Promise<Category[] | undefined> => {
 
 const providersLoader = async (): Promise<Provider[] | undefined> => {
   try {
-    const res = await axios.get<Provider[]>("http://localhost:4000/providers");
+    const res = await axios.get<Provider[]>(
+      import.meta.env.VITE_API_URL + "/providers"
+    );
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -74,7 +80,7 @@ const providersLoader = async (): Promise<Provider[] | undefined> => {
 const attributesLoader = async (): Promise<AttributeType[] | undefined> => {
   try {
     const res = await axios.get<AttributeType[]>(
-      "http://localhost:4000/attributes"
+      import.meta.env.VITE_API_URL + "/attributes"
     );
     return res.data;
   } catch (error) {
@@ -94,7 +100,9 @@ const attributesLoader = async (): Promise<AttributeType[] | undefined> => {
 
 const usersLoader = async (): Promise<Account[] | undefined> => {
   try {
-    const res = await axios.get<Account[]>("http://localhost:4000/accounts");
+    const res = await axios.get<Account[]>(
+      import.meta.env.VITE_API_URL + "/accounts"
+    );
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -113,7 +121,9 @@ const usersLoader = async (): Promise<Account[] | undefined> => {
 
 const ordersLoader = async (): Promise<Invoice[] | undefined> => {
   try {
-    const res = await axios.get<Invoice[]>("http://localhost:4000/invoices");
+    const res = await axios.get<Invoice[]>(
+      import.meta.env.VITE_API_URL + "/invoices"
+    );
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -139,7 +149,7 @@ const productDetailLoader = async ({
 }: Args): Promise<Product | undefined> => {
   try {
     const res = await axios.get<Product>(
-      "http://localhost:4000/products/" + params.id
+      import.meta.env.VITE_API_URL + "/products/" + params.id
     );
     return res.data;
   } catch (error) {

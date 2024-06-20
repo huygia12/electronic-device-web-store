@@ -42,7 +42,7 @@ const UserManagement = () => {
   const [existingUsers, setExistUsers] = useState(usersData);
 
   const deleteUser = (userID: string) => {
-    const temp = existingUsers.filter((user) => user.accountID !== userID);
+    const temp = existingUsers.filter((user) => user.id !== userID);
     setExistUsers(temp);
   };
 
@@ -97,7 +97,7 @@ const UserManagement = () => {
                       {index + 1}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {user.accountID}
+                      {user.id}
                     </TableCell>
                     <TableCell className="text-center  text-base">
                       {user.accountName}
@@ -128,7 +128,7 @@ const UserManagement = () => {
                       </UserDialog>
                       <Button
                         variant="negative"
-                        onClick={() => deleteUser(user.accountID)}
+                        onClick={() => user.id && deleteUser(user.id)}
                       >
                         <Trash2 />
                       </Button>

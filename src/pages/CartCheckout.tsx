@@ -113,7 +113,7 @@ const CartCheckout = () => {
     const fetchData = async () => {
       try {
         const productsRes = await axios.get<Product[]>(
-          "http://localhost:4000/products"
+          import.meta.env.VITE_API_URL + "/products"
         );
 
         const bucket: CartItem[] = [];
@@ -415,9 +415,9 @@ const CartCheckout = () => {
     clearErrors("province");
   };
 
-  const handleShippingFormSubmisstion: SubmitHandler<ShippingForm> = async (
-    data
-  ) => {
+  const handleShippingFormSubmisstion: SubmitHandler<
+    ShippingForm
+  > = async () => {
     try {
       toast.success("Thanh toán thành công!");
       removeInvoice();

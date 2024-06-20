@@ -183,4 +183,5 @@ const AdminHeader = () => {
   );
 };
 
+export type { AdminNavSubItem, AdminNavItem };
 export default AdminHeader;

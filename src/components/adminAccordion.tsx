@@ -5,9 +5,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
-import { AdminNavSubItem } from "@/declare";
 import { NavLink } from "react-router-dom";
 import { SheetClose } from "./ui/sheet";
+import { AdminNavSubItem } from "./container/adminHeader";
 
 interface AdminAccordionProps extends HTMLAttributes<HTMLDivElement> {
   subItems: AdminNavSubItem[];

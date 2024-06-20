@@ -30,7 +30,7 @@ const AttributeManagement = () => {
   );
 
   return (
-    <section className=" grid grid-cols-5 gap-4">
+    <div className=" grid grid-cols-5 gap-4">
       <Card className="rounded-2xl shadow-lg mt-8 col-span-5">
         <CardContent className="flex justify-between p-6">
           <AttributeDialog formTitle="Thêm thể loại mới">
@@ -169,7 +169,7 @@ const AttributeManagement = () => {
           </ScrollArea>
         </CardContent>
       </Card>
-    </section>
+    </div>
   );
 };
 

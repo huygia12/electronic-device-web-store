@@ -7,11 +7,23 @@ import { TfiHeadphoneAlt } from "react-icons/tfi";
 import CustomAvt from "../ui/customAvt";
 import { PackageSearch, Search } from "lucide-react";
 import { useCartProps } from "@/utils/customHook";
+import { LinkItem } from "@/declare";
 
 const navComponents: { title: string; path: string }[] = [
-  { title: "Trang chủ", path: "/" },
-  { title: "Giới thiệu", path: "/intro" },
-  { title: "Liên hệ", path: "#footer" },
+  { title: "Trang Chủ", path: "/" },
+  { title: "Giới Thiệu", path: "/intro" },
+  { title: "Liên Hệ", path: "#footer" },
+];
+
+const clientOption: LinkItem[] = [
+  {
+    name: "Tài Khoản Của Tôi",
+    src: "/profile",
+  },
+  {
+    name: "Đăng Xuất",
+    src: "/signup",
+  },
 ];
 
 const AppClientHeader = () => {
@@ -64,21 +76,24 @@ const AppClientHeader = () => {
                 <FiShoppingBag size={40} />
                 <CounterLabel counter={itemsInLocal.length} />
               </NavLink>
-              <NavLink to="/" className="relative" unstable_viewTransition>
+              <NavLink
+                to="/profile/orders"
+                className="relative"
+                unstable_viewTransition
+              >
                 <LiaShippingFastSolid size={45} />
                 <CounterLabel counter={6} />
               </NavLink>
-              <NavLink to="/" className="relative" unstable_viewTransition>
+              <NavLink
+                to="/lookup"
+                className="relative"
+                unstable_viewTransition
+              >
                 <PackageSearch size={40} />
               </NavLink>
             </div>
           </div>
-          <CustomAvt
-            avt="/avt.jpg"
-            name="Nguyen Trung Hieu"
-            alt="user"
-            className="ml-10"
-          />
+          <CustomAvt className="ml-10" options={clientOption} />
         </div>
       </div>
     </header>

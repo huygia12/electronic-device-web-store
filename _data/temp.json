@@ -1,1187 +1,218 @@
 {
-  "products": [
+  "invoices": [
     {
-      "id": "11",
-      "productName": "Samsung Galaxy S23 FE 5G",
-      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
-      "height": 5,
-      "len": 10,
-      "width": 5,
-      "weight": 1000,
-      "gurantee": 13,
-      "categoryName": "Điện thoại",
-      "providerName": "Samsung",
-      "reviews": [
+      "invoiceID": "011",
+      "status": "NEW",
+      "payment": "COD",
+      "city": "Hà Nội",
+      "ward": "La Thành",
+      "provice": "Hà Nội",
+      "phoneNumber": "0388725928",
+      "detailAddress": "946 Đê La Thành",
+      "createdAt": "2024-05-15 18:01:5",
+      "accountName": "Bùi Minh Khánh",
+      "products": [
         {
-          "reviewID": "1",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
-        },
-        {
-          "reviewID": "2",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
-        }
-      ],
-      "attributes": [
-        {
-          "typeName": "RAM",
-          "optionValue": "128GB"
-        },
-        {
-          "typeName": "Camera",
-          "optionValue": "Zoom quang học"
-        },
-        {
-          "typeName": "Màn hình",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "typeName": "Tính năng đặc biệt",
-          "optionValue": "A.I phone"
-        }
-      ],
-      "items": [
-        {
+          "id": "11",
+          "productName": "Samsung Galaxy S23 FE 5G",
           "itemID": "110",
+          "discount": 12,
           "thump": "/black-thump.jpg",
           "quantity": 10,
           "price": 15000000,
-          "productCode": "1100",
-          "discount": 12,
           "colorName": "Đen",
-          "storageName": "256GB",
-          "images": [
-            "/black-1.jpg",
-            "/black-2.jpg",
-            "/black-3.jpg",
-            "/black-4.jpg",
-            "/black-5.jpg"
-          ]
+          "storageName": "256GB"
         },
         {
-          "itemID": "111",
-          "thump": "/purple-thump.jpg",
-          "quantity": 0,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        },
-        {
-          "itemID": "112",
+          "id": "12",
+          "productName": "Samsung Galaxy S23 FE 5G",
+          "itemID": "110",
+          "discount": 12,
           "thump": "/black-thump.jpg",
           "quantity": 10,
           "price": 15000000,
-          "productCode": "1100",
-          "discount": 12,
           "colorName": "Đen",
-          "storageName": "256GB",
-          "images": [
-            "/black-1.jpg",
-            "/black-2.jpg",
-            "/black-3.jpg",
-            "/black-4.jpg",
-            "/black-5.jpg"
-          ]
-        },
-        {
-          "itemID": "113",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        },
-        {
-          "itemID": "114",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        },
-        {
-          "itemID": "115",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        },
-        {
-          "itemID": "116",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        },
-        {
-          "itemID": "117",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        },
-        {
-          "itemID": "118",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
+          "storageName": "256GB"
         }
       ]
     },
     {
-      "id": "12",
-      "productName": "Samsung Galaxy S23 FE 5G",
-      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
-      "height": 5,
-      "len": 10,
-      "width": 5,
-      "weight": 1000,
-      "gurantee": 12,
-      "categoryName": "Điện thoại",
-      "providerName": "Samsung",
-      "reviews": [
+      "invoiceID": "012",
+      "status": "NEW",
+      "payment": "COD",
+      "city": "Hà Nội",
+      "ward": "La Thành",
+      "provice": "Hà Nội",
+      "phoneNumber": "0388725928",
+      "detailAddress": "946 Đê La Thành",
+      "createdAt": "2024-05-15 18:01:5",
+      "accountName": "Bùi Minh Khánh",
+      "products": [
         {
-          "reviewID": "1",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
-        },
-        {
-          "reviewID": "2",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
-        }
-      ],
-      "attributes": [
-        {
-          "typeName": "RAM",
-          "optionValue": "128GB"
-        },
-        {
-          "typeName": "Camera",
-          "optionValue": "Zoom quang học"
-        },
-        {
-          "typeName": "Màn hình",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "typeName": "Tính năng đặc biệt",
-          "optionValue": "A.I phone"
-        }
-      ],
-      "items": [
-        {
+          "id": "11",
+          "productName": "Samsung Galaxy S23 FE 5G",
           "itemID": "110",
+          "discount": 12,
           "thump": "/black-thump.jpg",
           "quantity": 10,
           "price": 15000000,
-          "productCode": "1100",
-          "discount": 12,
           "colorName": "Đen",
-          "storageName": "256GB",
-          "images": [
-            "/black-1.jpg",
-            "/black-2.jpg",
-            "/black-3.jpg",
-            "/black-4.jpg",
-            "/black-5.jpg"
-          ]
+          "storageName": "256GB"
         },
         {
-          "itemID": "111",
-          "thump": "/purple-thump.jpg",
+          "id": "12",
+          "productName": "Samsung Galaxy S23 FE 5G",
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
           "quantity": 10,
           "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
+          "colorName": "Đen",
+          "storageName": "256GB"
         }
       ]
     },
     {
-      "id": "13",
-      "productName": "Samsung Galaxy S23 FE 5G",
-      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
-      "height": 5,
-      "len": 10,
-      "width": 5,
-      "weight": 1000,
-      "gurantee": 13,
-      "categoryName": "Điện thoại",
-      "providerName": "Samsung",
-      "reviews": [
+      "invoiceID": "013",
+      "status": "NEW",
+      "payment": "COD",
+      "city": "Hà Nội",
+      "ward": "La Thành",
+      "provice": "Hà Nội",
+      "phoneNumber": "0388725928",
+      "detailAddress": "946 Đê La Thành",
+      "createdAt": "2024-05-15 18:01:5",
+      "accountName": "Bùi Minh Khánh",
+      "products": [
         {
-          "reviewID": "1",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
-        },
-        {
-          "reviewID": "2",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
-        }
-      ],
-      "attributes": [
-        {
-          "typeName": "RAM",
-          "optionValue": "128GB"
-        },
-        {
-          "typeName": "Camera",
-          "optionValue": "Zoom quang học"
-        },
-        {
-          "typeName": "Màn hình",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "typeName": "Tính năng đặc biệt",
-          "optionValue": "A.I phone"
-        }
-      ],
-      "items": [
-        {
+          "id": "11",
+          "productName": "Samsung Galaxy S23 FE 5G",
           "itemID": "110",
+          "discount": 12,
           "thump": "/black-thump.jpg",
           "quantity": 10,
           "price": 15000000,
-          "productCode": "1100",
-          "discount": 12,
           "colorName": "Đen",
-          "storageName": "256GB",
-          "images": [
-            "/black-1.jpg",
-            "/black-2.jpg",
-            "/black-3.jpg",
-            "/black-4.jpg",
-            "/black-5.jpg"
-          ]
+          "storageName": "256GB"
         },
         {
-          "itemID": "111",
-          "thump": "/purple-thump.jpg",
+          "id": "12",
+          "productName": "Samsung Galaxy S23 FE 5G",
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
           "quantity": 10,
           "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
+          "colorName": "Đen",
+          "storageName": "256GB"
         }
       ]
     },
     {
-      "id": "14",
-      "productName": "Samsung Galaxy S23 FE 5G",
-      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
-      "height": 5,
-      "len": 10,
-      "width": 5,
-      "weight": 1000,
-      "gurantee": 13,
-      "categoryName": "Điện thoại",
-      "providerName": "Samsung",
-      "reviews": [
+      "invoiceID": "014",
+      "status": "NEW",
+      "payment": "COD",
+      "city": "Hà Nội",
+      "ward": "La Thành",
+      "provice": "Hà Nội",
+      "phoneNumber": "0388725928",
+      "detailAddress": "946 Đê La Thành",
+      "createdAt": "2024-05-15 18:01:5",
+      "accountName": "Bùi Minh Khánh",
+      "products": [
         {
-          "reviewID": "1",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
-        },
-        {
-          "reviewID": "2",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
-        }
-      ],
-      "attributes": [
-        {
-          "typeName": "RAM",
-          "optionValue": "128GB"
-        },
-        {
-          "typeName": "Camera",
-          "optionValue": "Zoom quang học"
-        },
-        {
-          "typeName": "Màn hình",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "typeName": "Tính năng đặc biệt",
-          "optionValue": "A.I phone"
-        }
-      ],
-      "items": [
-        {
+          "id": "11",
+          "productName": "Samsung Galaxy S23 FE 5G",
           "itemID": "110",
+          "discount": 12,
           "thump": "/black-thump.jpg",
           "quantity": 10,
           "price": 15000000,
-          "productCode": "1100",
-          "discount": 12,
           "colorName": "Đen",
-          "storageName": "256GB",
-          "images": [
-            "/black-1.jpg",
-            "/black-2.jpg",
-            "/black-3.jpg",
-            "/black-4.jpg",
-            "/black-5.jpg"
-          ]
+          "storageName": "256GB"
         },
         {
-          "itemID": "111",
-          "thump": "/purple-thump.jpg",
+          "id": "12",
+          "productName": "Samsung Galaxy S23 FE 5G",
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
           "quantity": 10,
           "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
+          "colorName": "Đen",
+          "storageName": "256GB"
         }
       ]
     },
     {
-      "id": "15",
-      "productName": "Samsung Galaxy S23 FE 5G",
-      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
-      "height": 5,
-      "len": 10,
-      "width": 5,
-      "weight": 1000,
-      "gurantee": 13,
-      "categoryName": "Điện thoại",
-      "providerName": "Samsung",
-      "reviews": [
+      "invoiceID": "015",
+      "status": "NEW",
+      "payment": "COD",
+      "city": "Hà Nội",
+      "ward": "La Thành",
+      "provice": "Hà Nội",
+      "phoneNumber": "0388725928",
+      "detailAddress": "946 Đê La Thành",
+      "createdAt": "2024-05-15 18:01:5",
+      "accountName": "Bùi Minh Khánh",
+      "products": [
         {
-          "reviewID": "1",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
-        },
-        {
-          "reviewID": "2",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
-        }
-      ],
-      "attributes": [
-        {
-          "typeName": "RAM",
-          "optionValue": "128GB"
-        },
-        {
-          "typeName": "Camera",
-          "optionValue": "Zoom quang học"
-        },
-        {
-          "typeName": "Màn hình",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "typeName": "Tính năng đặc biệt",
-          "optionValue": "A.I phone"
-        }
-      ],
-      "items": [
-        {
+          "id": "11",
+          "productName": "Samsung Galaxy S23 FE 5G",
           "itemID": "110",
+          "discount": 12,
           "thump": "/black-thump.jpg",
           "quantity": 10,
           "price": 15000000,
-          "productCode": "1100",
-          "discount": 12,
           "colorName": "Đen",
-          "storageName": "256GB",
-          "images": [
-            "/black-1.jpg",
-            "/black-2.jpg",
-            "/black-3.jpg",
-            "/black-4.jpg",
-            "/black-5.jpg"
-          ]
+          "storageName": "256GB"
         },
         {
-          "itemID": "111",
-          "thump": "/purple-thump.jpg",
+          "id": "12",
+          "productName": "Samsung Galaxy S23 FE 5G",
+          "itemID": "110",
+          "discount": 12,
+          "thump": "/black-thump.jpg",
           "quantity": 10,
           "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
+          "colorName": "Đen",
+          "storageName": "256GB"
         }
       ]
     },
     {
-      "id": "16",
-      "productName": "Samsung Galaxy S23 FE 5G",
-      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
-      "height": 5,
-      "len": 10,
-      "width": 5,
-      "weight": 1000,
-      "gurantee": 13,
-      "categoryName": "Điện thoại",
-      "providerName": "Samsung",
-      "reviews": [
+      "invoiceID": "016",
+      "status": "NEW",
+      "payment": "COD",
+      "city": "Hà Nội",
+      "ward": "La Thành",
+      "provice": "Hà Nội",
+      "phoneNumber": "0388725928",
+      "detailAddress": "946 Đê La Thành",
+      "createdAt": "2024-05-15 18:01:5",
+      "accountName": "Bùi Minh Khánh",
+      "products": [
         {
-          "reviewID": "1",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
-        },
-        {
-          "reviewID": "2",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
-        }
-      ],
-      "attributes": [
-        {
-          "typeName": "RAM",
-          "optionValue": "128GB"
-        },
-        {
-          "typeName": "Camera",
-          "optionValue": "Zoom quang học"
-        },
-        {
-          "typeName": "Màn hình",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "typeName": "Tính năng đặc biệt",
-          "optionValue": "A.I phone"
-        }
-      ],
-      "items": [
-        {
+          "id": "11",
+          "productName": "Samsung Galaxy S23 FE 5G",
           "itemID": "110",
+          "discount": 12,
           "thump": "/black-thump.jpg",
           "quantity": 10,
           "price": 15000000,
-          "productCode": "1100",
-          "discount": 12,
           "colorName": "Đen",
-          "storageName": "256GB",
-          "images": [
-            "/black-1.jpg",
-            "/black-2.jpg",
-            "/black-3.jpg",
-            "/black-4.jpg",
-            "/black-5.jpg"
-          ]
+          "storageName": "256GB"
         },
         {
-          "itemID": "111",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "17",
-      "productName": "Samsung Galaxy S23 FE 5G",
-      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
-      "height": 5,
-      "len": 10,
-      "width": 5,
-      "weight": 1000,
-      "gurantee": 13,
-      "categoryName": "Điện thoại",
-      "providerName": "Samsung",
-      "reviews": [
-        {
-          "reviewID": "1",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
-        },
-        {
-          "reviewID": "2",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
-        }
-      ],
-      "attributes": [
-        {
-          "typeName": "RAM",
-          "optionValue": "128GB"
-        },
-        {
-          "typeName": "Camera",
-          "optionValue": "Zoom quang học"
-        },
-        {
-          "typeName": "Màn hình",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "typeName": "Tính năng đặc biệt",
-          "optionValue": "A.I phone"
-        }
-      ],
-      "items": [
-        {
+          "id": "12",
+          "productName": "Samsung Galaxy S23 FE 5G",
           "itemID": "110",
+          "discount": 12,
           "thump": "/black-thump.jpg",
           "quantity": 10,
           "price": 15000000,
-          "productCode": "1100",
-          "discount": 12,
           "colorName": "Đen",
-          "storageName": "256GB",
-          "images": [
-            "/black-1.jpg",
-            "/black-2.jpg",
-            "/black-3.jpg",
-            "/black-4.jpg",
-            "/black-5.jpg"
-          ]
-        },
-        {
-          "itemID": "111",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "18",
-      "productName": "Samsung Galaxy S23 FE 5G",
-      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
-      "height": 5,
-      "len": 10,
-      "width": 5,
-      "weight": 1000,
-      "gurantee": 13,
-      "categoryName": "Điện thoại",
-      "providerName": "Samsung",
-      "reviews": [
-        {
-          "reviewID": "1",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
-        },
-        {
-          "reviewID": "2",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
-        }
-      ],
-      "attributes": [
-        {
-          "typeName": "RAM",
-          "optionValue": "128GB"
-        },
-        {
-          "typeName": "Camera",
-          "optionValue": "Zoom quang học"
-        },
-        {
-          "typeName": "Màn hình",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "typeName": "Tính năng đặc biệt",
-          "optionValue": "A.I phone"
-        }
-      ],
-      "items": [
-        {
-          "itemID": "110",
-          "thump": "/black-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1100",
-          "discount": 12,
-          "colorName": "Đen",
-          "storageName": "256GB",
-          "images": [
-            "/black-1.jpg",
-            "/black-2.jpg",
-            "/black-3.jpg",
-            "/black-4.jpg",
-            "/black-5.jpg"
-          ]
-        },
-        {
-          "itemID": "111",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "19",
-      "productName": "Samsung Galaxy S23 FE 5G",
-      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
-      "height": 5,
-      "len": 10,
-      "width": 5,
-      "weight": 1000,
-      "gurantee": 13,
-      "categoryName": "Điện thoại",
-      "providerName": "Samsung",
-      "reviews": [
-        {
-          "reviewID": "1",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
-        },
-        {
-          "reviewID": "2",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
-        }
-      ],
-      "attributes": [
-        {
-          "typeName": "RAM",
-          "optionValue": "128GB"
-        },
-        {
-          "typeName": "Camera",
-          "optionValue": "Zoom quang học"
-        },
-        {
-          "typeName": "Màn hình",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "typeName": "Tính năng đặc biệt",
-          "optionValue": "A.I phone"
-        }
-      ],
-      "items": [
-        {
-          "itemID": "110",
-          "thump": "/black-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1100",
-          "discount": 12,
-          "colorName": "Đen",
-          "storageName": "256GB",
-          "images": [
-            "/black-1.jpg",
-            "/black-2.jpg",
-            "/black-3.jpg",
-            "/black-4.jpg",
-            "/black-5.jpg"
-          ]
-        },
-        {
-          "itemID": "111",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "20",
-      "productName": "Samsung Galaxy S23 FE 5G",
-      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
-      "height": 5,
-      "len": 10,
-      "width": 5,
-      "weight": 1000,
-      "gurantee": 13,
-      "categoryName": "Điện thoại",
-      "providerName": "Samsung",
-      "reviews": [
-        {
-          "reviewID": "1",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
-        },
-        {
-          "reviewID": "2",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
-        }
-      ],
-      "attributes": [
-        {
-          "typeName": "RAM",
-          "optionValue": "128GB"
-        },
-        {
-          "typeName": "Camera",
-          "optionValue": "Zoom quang học"
-        },
-        {
-          "typeName": "Màn hình",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "typeName": "Tính năng đặc biệt",
-          "optionValue": "A.I phone"
-        }
-      ],
-      "items": [
-        {
-          "itemID": "110",
-          "thump": "/black-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1100",
-          "discount": 12,
-          "colorName": "Đen",
-          "storageName": "256GB",
-          "images": [
-            "/black-1.jpg",
-            "/black-2.jpg",
-            "/black-3.jpg",
-            "/black-4.jpg",
-            "/black-5.jpg"
-          ]
-        },
-        {
-          "itemID": "111",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "21",
-      "productName": "Samsung Galaxy S23 FE 5G",
-      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
-      "height": 5,
-      "len": 10,
-      "width": 5,
-      "weight": 1000,
-      "gurantee": 13,
-      "categoryName": "Điện thoại",
-      "providerName": "Samsung",
-      "reviews": [
-        {
-          "reviewID": "1",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
-        },
-        {
-          "reviewID": "2",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
-        }
-      ],
-      "attributes": [
-        {
-          "typeName": "RAM",
-          "optionValue": "128GB"
-        },
-        {
-          "typeName": "Camera",
-          "optionValue": "Zoom quang học"
-        },
-        {
-          "typeName": "Màn hình",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "typeName": "Tính năng đặc biệt",
-          "optionValue": "A.I phone"
-        }
-      ],
-      "items": [
-        {
-          "itemID": "110",
-          "thump": "/black-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1100",
-          "discount": 12,
-          "colorName": "Đen",
-          "storageName": "256GB",
-          "images": [
-            "/black-1.jpg",
-            "/black-2.jpg",
-            "/black-3.jpg",
-            "/black-4.jpg",
-            "/black-5.jpg"
-          ]
-        },
-        {
-          "itemID": "111",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "22",
-      "productName": "Samsung Galaxy S23 FE 5G",
-      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
-      "height": 5,
-      "len": 10,
-      "width": 5,
-      "weight": 1000,
-      "gurantee": 13,
-      "categoryName": "Điện thoại",
-      "providerName": "Samsung",
-      "reviews": [
-        {
-          "reviewID": "1",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
-        },
-        {
-          "reviewID": "2",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
-        }
-      ],
-      "attributes": [
-        {
-          "typeName": "RAM",
-          "optionValue": "128GB"
-        },
-        {
-          "typeName": "Camera",
-          "optionValue": "Zoom quang học"
-        },
-        {
-          "typeName": "Màn hình",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "typeName": "Tính năng đặc biệt",
-          "optionValue": "A.I phone"
-        }
-      ],
-      "items": [
-        {
-          "itemID": "110",
-          "thump": "/black-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1100",
-          "discount": 12,
-          "colorName": "Đen",
-          "storageName": "256GB",
-          "images": [
-            "/black-1.jpg",
-            "/black-2.jpg",
-            "/black-3.jpg",
-            "/black-4.jpg",
-            "/black-5.jpg"
-          ]
-        },
-        {
-          "itemID": "111",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "23",
-      "productName": "Samsung Galaxy S23 FE 5G",
-      "description": "Samsung Galaxy S23 FE 5G là thiết bị Galaxy FE tốt nhất từ trước đến nay mà Samsung ra mắt. Trang bị những tính năng cao cấp từ thiết kế đến hiệu suất vượt trội, hệ thống camera chụp đêm đáng kinh ngạc. Tất cả kết hợp để mang tới trải nghiệm hoàn hảo dành cho công việc lẫn giải trí.",
-      "height": 5,
-      "len": 10,
-      "width": 5,
-      "weight": 1000,
-      "gurantee": 13,
-      "categoryName": "Điện thoại",
-      "providerName": "Samsung",
-      "reviews": [
-        {
-          "reviewID": "1",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
-        },
-        {
-          "reviewID": "2",
-          "reviewContent": "Thiết kế rất đẹp!",
-          "rating": 4,
-          "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
-        }
-      ],
-      "attributes": [
-        {
-          "typeName": "RAM",
-          "optionValue": "128GB"
-        },
-        {
-          "typeName": "Camera",
-          "optionValue": "Zoom quang học"
-        },
-        {
-          "typeName": "Màn hình",
-          "optionValue": "Trên 6 inch"
-        },
-        {
-          "typeName": "Tính năng đặc biệt",
-          "optionValue": "A.I phone"
-        }
-      ],
-      "items": [
-        {
-          "itemID": "110",
-          "thump": "/black-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1100",
-          "discount": 12,
-          "colorName": "Đen",
-          "storageName": "256GB",
-          "images": [
-            "/black-1.jpg",
-            "/black-2.jpg",
-            "/black-3.jpg",
-            "/black-4.jpg",
-            "/black-5.jpg"
-          ]
-        },
-        {
-          "itemID": "111",
-          "thump": "/purple-thump.jpg",
-          "quantity": 10,
-          "price": 15000000,
-          "productCode": "1101",
-          "discount": 10,
-          "colorName": "Tím",
-          "storageName": "256GB",
-          "images": [
-            "/purple-1.jpg",
-            "/purple-2.jpg",
-            "/purple-3.jpg",
-            "/purple-4.jpg",
-            "/purple-5.jpg"
-          ]
+          "storageName": "256GB"
         }
       ]
     }

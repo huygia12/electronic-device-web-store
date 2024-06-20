@@ -32,6 +32,8 @@ import { PhasesLayout } from "../layout/cartPhasesLayout.tsx";
 import ProductDetail from "./ProductDetail.tsx";
 import { CartVisting } from "./CartVisting.tsx";
 import { CartCheckout } from "./CartCheckout.tsx";
+import InvoicesLookup from "./InvoicesLookup.tsx";
+import MyInvoices from "./MyInvoices.tsx";
 
 const publicRoutes = createBrowserRouter([
   {
@@ -75,6 +77,39 @@ const publicRoutes = createBrowserRouter([
             element: <CartCheckout />,
           },
         ],
+      },
+      {
+        path: "profile",
+        children: [
+          {
+            index: true,
+            element: <Products />,
+          },
+          {
+            path: "orders",
+            id: "my_invoices",
+            loader: ordersLoader,
+            element: <MyInvoices />,
+          },
+        ],
+      },
+      {
+        path: "cart",
+        element: <PhasesLayout />,
+        children: [
+          {
+            path: "view",
+            element: <CartVisting />,
+          },
+          {
+            path: "checkout",
+            element: <CartCheckout />,
+          },
+        ],
+      },
+      {
+        path: "lookup",
+        element: <InvoicesLookup />,
       },
       {
         path: "login",

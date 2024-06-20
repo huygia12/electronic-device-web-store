@@ -100,10 +100,10 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const ordersRes = await axios.get<Invoice[]>(
-          "http://localhost:4000/invoices"
+          import.meta.env.VITE_API_URL + "/invoices"
         );
         const usersRes = await axios.get<Account[]>(
-          "http://localhost:4000/accounts"
+          import.meta.env.VITE_API_URL + "/accounts"
         );
 
         setCustomersData(usersRes.data);

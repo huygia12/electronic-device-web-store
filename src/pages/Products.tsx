@@ -28,10 +28,10 @@ const Products = () => {
     const fetchData = async () => {
       try {
         const productsRes = await axios.get<Product[]>(
-          "http://localhost:4000/products"
+          import.meta.env.VITE_API_URL + "/products"
         );
         const attributesRes = await axios.get<AttributeType[]>(
-          "http://localhost:4000/attributes"
+          import.meta.env.VITE_API_URL + "/attributes"
         );
         console.log(attributesRes.data);
         setAttributesData(attributesRes.data);
