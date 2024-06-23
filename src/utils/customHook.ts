@@ -47,9 +47,10 @@ const useCartProps = () => {
 };
 
 const useCurrAccount = () => {
-  const { currAccount, setCurrAccount } = useContext(AccountContext);
+  const { currAccount, setCurrAccount, clearCurrAccount } =
+    useContext(AccountContext);
 
-  return { currAccount, setCurrAccount };
+  return { currAccount, setCurrAccount, clearCurrAccount };
 };
 
 export { useLocalStorage, useCartProps, useCurrAccount };

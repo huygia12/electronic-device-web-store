@@ -28,7 +28,6 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,8 +42,7 @@ import { cn } from "@/lib/utils";
 import { arrayInReverse } from "@/utils/helpers";
 import { useCartProps } from "@/utils/customHook";
 import { buttonVariants } from "@/utils/constants";
-
-log.setLevel("error");
+import { publicRoutes } from "./routes";
 
 const header = [
   "STT",
@@ -61,7 +59,6 @@ const CartVisting = () => {
   const { itemsInLocal, setItemsInLocal, removeInvoice, setPhaseID } =
     useCartProps();
   const [invoiceProductData, setInvoiceProductData] = useState<CartItem[]>([]);
-  const navigate = useNavigate();
   const [quantityErrors, setQuantityErrors] = useState<Error[]>(
     new Array(itemsInLocal.length).fill({ sucess: true })
   );
@@ -124,10 +121,14 @@ const CartVisting = () => {
     fetchData();
   }, [itemsInLocal]);
 
-  const handleNextStepEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleNextStepEvent = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
     e.preventDefault();
 
-    navigate("/cart/checkout", { unstable_viewTransition: true });
+    await publicRoutes.navigate("/cart/checkout", {
+      unstable_viewTransition: true,
+    });
   };
 
   const handleDeleteProduct = (
@@ -353,7 +354,7 @@ const CartVisting = () => {
               variant="neutral"
               disabled={invoiceProductData.length === 0}
               className="ml-auto"
-              onClick={(e) => handleNextStepEvent(e)}
+              onClick={async (e) => await handleNextStepEvent(e)}
             >
               Đặt hàng
             </Button>

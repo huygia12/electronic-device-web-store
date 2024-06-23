@@ -18,8 +18,6 @@ import { MoneyInput } from "@/components/ui/moneyInput";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 
-log.setLevel("error");
-
 const Products = () => {
   const [productsData, setProductsData] = useState<Product[]>([]);
   const [attributesData, setAttributesData] = useState<AttributeType[]>([]);

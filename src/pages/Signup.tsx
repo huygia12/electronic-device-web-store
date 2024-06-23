@@ -17,8 +17,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { publicRoutes } from "./routes";
 import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
-import axios from "axios";
-import { useCurrAccount } from "@/utils/customHook";
+import axios, { HttpStatusCode } from "axios";
+import log from "loglevel";
 
 const SignupSchema = z.object({
   accountName: z.string().min(1, { message: "Tên không được bỏ trống!" }),
@@ -39,7 +39,6 @@ const Signup = () => {
     resolver: zodResolver(SignupSchema),
   });
   const [passwordVisibility, setPasswordvisibility] = useState(false);
-  const { setCurrAccount } = useCurrAccount();
 
   const handleSignupFormSubmission: SubmitHandler<SignupForm> = async (
     data
@@ -63,25 +62,34 @@ const Signup = () => {
         reqConfig
       );
 
-      setCurrAccount({ accountName: data.accountName, email: data.email });
-      publicRoutes.navigate("/", { unstable_viewTransition: true });
+      await publicRoutes.navigate("/login", { unstable_viewTransition: true });
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.code === "ECONNABORTED") {
+        if (error.response?.status == HttpStatusCode.Conflict) {
+          setError("email", {
+            message: "Email đã được sử dụng!",
+          });
+        } else {
           setError("root", {
             message: "Đăng ký thất bại!",
           });
-        } else {
-          console.error("Axios error:", error.message);
         }
         // Handle error response if available
         if (error.response) {
-          console.error("Response data:", error.response.data);
-          console.error("Response status:", error.response.status);
+          log.warn(`Response data: ${error.response.data}`);
+          log.warn(`Response status: ${error.response.status})`);
         }
       } else {
-        console.error("Unexpected error:", error);
+        log.error("Unexpected error:", error);
       }
+    }
+  };
+
+  const handleEnterKeyEvent = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
     }
   };
 
@@ -143,11 +151,13 @@ const Signup = () => {
                       id="password"
                       type={passwordVisibility ? "text" : "password"}
                       autoComplete="new-password"
+                      onKeyDown={(e) => handleEnterKeyEvent(e)}
                       className="pr-10"
                     />
                     <button
                       className="cursor-pointer absolute right-2 top-2"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
                         setPasswordvisibility(!passwordVisibility);
                       }}
                     >
@@ -169,6 +179,7 @@ const Signup = () => {
                     id="retypePassword"
                     type="password"
                     autoComplete="new-password"
+                    onKeyDown={(e) => handleEnterKeyEvent(e)}
                   />
                 </div>
               </div>

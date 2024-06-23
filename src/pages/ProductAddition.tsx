@@ -31,8 +31,6 @@ import log from "loglevel";
 import { Check, ChevronsUpDown, Plus, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
-log.setLevel("error");
-
 interface ProductAttribute {
   typeID: string;
   typeName: string;

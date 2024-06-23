@@ -10,14 +10,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LoadingSpinner from "@/components/ui/loadingSpinner";
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 import { reqConfig } from "@/utils/axiosConfig";
 import { useCurrAccount } from "@/utils/customHook";
 import { publicRoutes } from "./routes";
+import log from "loglevel";
+import { AccountSummary } from "@/declare";
 
 const LoginSchema = z.object({
   email: z.string().email({ message: "Email không đúng định dạng!" }),
@@ -36,15 +38,20 @@ const Login = () => {
     register,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
   } = useForm<LoginForm>({
     resolver: zodResolver(LoginSchema),
   });
+  const location = useLocation();
+  const from: string = location.state?.from?.pathname ?? "/";
   const { setCurrAccount } = useCurrAccount();
 
   const handleLoginFormSubmission: SubmitHandler<LoginForm> = async (data) => {
     try {
-      const res = await axiosInstance.post(
+      const res = await axiosInstance.post<{
+        message: string;
+        info: AccountSummary;
+      }>(
         "/user/login",
         {
           email: data.email,
@@ -52,23 +59,42 @@ const Login = () => {
         },
         reqConfig
       );
-
-      console.log(isSubmitSuccessful, res);
-      console.log(isSubmitSuccessful);
-      setCurrAccount({ accountName: "root", email: data.email });
-      publicRoutes.navigate("/", { unstable_viewTransition: true });
+      const account: AccountSummary = res.data.info;
+      setCurrAccount(account);
+      console.log(from);
+      await publicRoutes.navigate(
+        account.role === "ADMIN" ? "/admin" : from === "/login" ? "/" : from,
+        {
+          unstable_viewTransition: true,
+          replace: true,
+        }
+      );
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setError("root", {
-          message: "Tài khoản hiện không thể đăng nhập!",
-        });
+        if (error.response?.status == HttpStatusCode.Conflict) {
+          setError("root", {
+            message: "Bạn chưa logout tài khoản hiện tại!",
+          });
+        } else if (error.response?.status == HttpStatusCode.BadRequest) {
+          setError("root", {
+            message: "Tài khoản không tồn tại!",
+          });
+        } else if (error.response?.status == HttpStatusCode.Unauthorized) {
+          setError("password", {
+            message: "Mật khẩu chưa chính xác!",
+          });
+        } else {
+          setError("root", {
+            message: "Tài khoản hiện không thể đăng nhập!",
+          });
+        }
         // Handle error response if available
         if (error.response) {
-          console.error("Response data:", error.response.data);
-          console.error("Response status:", error.response.status);
+          log.warn(`Response data: ${error.response.data}`);
+          log.warn(`Response status: ${error.response.status})`);
         }
       } else {
-        console.error("Unexpected error:", error);
+        log.error("Unexpected error:", error);
       }
     }
   };

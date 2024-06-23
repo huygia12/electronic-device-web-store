@@ -13,7 +13,6 @@ import {
   ProductItem,
 } from "@/declare";
 import { afterDiscount, getAverageRatingPoint } from "@/utils/product";
-import log from "loglevel";
 import React, { useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -41,8 +40,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useRouteLoaderData } from "react-router-dom";
 import { toast } from "sonner";
 import { useCartProps } from "@/utils/customHook";
-
-log.setLevel("error");
 
 const ProductDetail = () => {
   const { itemsInLocal, setItemsInLocal } = useCartProps();

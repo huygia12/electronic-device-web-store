@@ -24,8 +24,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import log from "loglevel";
 
-log.setLevel("error");
-
 const ORDERS_LINK = "/admin/received-orders";
 
 const cardItem = [

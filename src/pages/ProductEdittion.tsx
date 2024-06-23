@@ -16,8 +16,6 @@ import log from "loglevel";
 import { Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-log.setLevel("error");
-
 const ProductEdittion = () => {
   const [thumps, setThumps] = useState<string[]>([""]);
   const [imgsArray, setImgs] = useState<string[][]>([[""]]);

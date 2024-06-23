@@ -2,7 +2,8 @@ import { z } from "zod";
 
 export interface LinkItem {
   name: string;
-  src: string;
+  src?: string;
+  handleClick?: () => void;
 }
 
 export interface ChartData {
@@ -80,6 +81,13 @@ export interface Account {
   phoneNumber?: string;
   createdAt?: Date;
   editedAt?: Date;
+}
+
+export interface AccountSummary {
+  name: string;
+  id: string;
+  avatar: string | null;
+  role: string;
 }
 
 export interface Invoice {

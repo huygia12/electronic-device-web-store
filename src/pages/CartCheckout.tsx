@@ -32,9 +32,7 @@ import z from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
-
-log.setLevel("error");
+import { publicRoutes } from "./routes";
 
 interface ProvinceRes {
   data: Province[];
@@ -92,7 +90,6 @@ const CartCheckout = () => {
   const [shippingFee, setShippingFee] = useState<number>();
   const [shippingTime, setShippingTime] = useState(0);
   const [total, setTotal] = useState(0);
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -421,7 +418,7 @@ const CartCheckout = () => {
     try {
       toast.success("Thanh toán thành công!");
       removeInvoice();
-      navigate("/");
+      await publicRoutes.navigate("/", { unstable_viewTransition: true });
     } catch (error) {
       setError("root", {
         message: "Tài khoản hiện không thể đăng nhập!",

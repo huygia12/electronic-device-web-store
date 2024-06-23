@@ -1,22 +1,28 @@
-import { Account } from "@/declare";
-import { ReactNode, createContext, useState } from "react";
+import { AccountSummary } from "@/declare";
+import { useLocalStorage } from "@/utils/customHook";
+import { ReactNode, createContext } from "react";
 
 interface AccountContextProps {
-  currAccount: Account | undefined;
-  setCurrAccount: (account: Account | undefined) => void;
+  currAccount: AccountSummary | undefined;
+  setCurrAccount: (account: AccountSummary | undefined) => void;
+  clearCurrAccount: () => void;
 }
 
 const AccountContext = createContext<AccountContextProps>({
   currAccount: undefined,
   setCurrAccount: () => {},
+  clearCurrAccount: () => {},
 });
 
 const AccountProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [currAccount, setCurrAccount] = useState<Account | undefined>();
+  const [currAccount, setCurrAccount, clearCurrAccount] = useLocalStorage<
+    AccountSummary | undefined
+  >("account", undefined);
 
   const value: AccountContextProps = {
     currAccount,
     setCurrAccount,
+    clearCurrAccount,
   };
   return (
     <AccountContext.Provider value={value}>{children}</AccountContext.Provider>

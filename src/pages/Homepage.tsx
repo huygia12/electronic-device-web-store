@@ -27,7 +27,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-log.setLevel("error");
 
 const slides: { src: string; alt: string; link: string }[] = [
   { src: "/slideShow1.png", alt: "slide1", link: "/products" },

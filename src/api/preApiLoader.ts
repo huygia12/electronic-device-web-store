@@ -11,8 +11,6 @@ import axios from "axios";
 import log from "loglevel";
 import { ActionFunctionArgs, ParamParseKey, Params } from "react-router-dom";
 
-log.setLevel("error");
-
 const productsLoader = async (): Promise<Product[] | undefined> => {
   try {
     const res = await axios.get<Product[]>(

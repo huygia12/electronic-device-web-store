@@ -26,6 +26,12 @@ import { Button } from "../ui/button";
 import { NavLink } from "react-router-dom";
 import AdminAccordion from "../adminAccordion";
 import { ScrollArea } from "../ui/scroll-area";
+import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
+import { toast } from "sonner";
+import { publicRoutes } from "@/pages/routes";
+import log from "loglevel";
+import React, { useRef } from "react";
+import { useCurrAccount } from "@/utils/customHook";
 
 interface AdminNavItem {
   name: string;
@@ -124,8 +130,33 @@ const navItems: AdminNavItem[] = [
 ];
 
 const AdminHeader = () => {
+  const { clearCurrAccount } = useCurrAccount();
+
+  const userOptions = useRef([
+    {
+      name: "Tài Khoản Của Tôi",
+      src: "/profile",
+    },
+    {
+      name: "Đăng Xuất",
+      handleClick: async () => {
+        try {
+          await axiosInstance.delete("/user/logout", reqConfig);
+
+          toast.success("Đăng xuất thành công!");
+          clearCurrAccount();
+          await publicRoutes.navigate("/login", {
+            unstable_viewTransition: true,
+          });
+        } catch (error: unknown) {
+          log.warn(`Response data: ${error}`);
+        }
+      },
+    },
+  ]);
+
   return (
-    <div className="w-full py-2 flex flex-col sticky top-0 z-50 bg-theme shadow-xl items-center">
+    <div className="w-full py-3 flex flex-col sticky top-0 z-50 bg-theme shadow-xl items-center">
       <div className="w-adminLayout flex items-center justify-between">
         {/** NAV BAR */}
         <Sheet>
@@ -176,7 +207,7 @@ const AdminHeader = () => {
               className="left-[-0.9rem] top-[-1.1rem]"
             />
           </div>
-          <CustomAvt avt="/avt.jpg" name="Admin" alt="ad" className="ml-10" />
+          <CustomAvt className="ml-10" options={userOptions.current} />
         </div>
       </div>
     </div>

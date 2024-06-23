@@ -34,6 +34,8 @@ import { CartVisting } from "./CartVisting.tsx";
 import { CartCheckout } from "./CartCheckout.tsx";
 import InvoicesLookup from "./InvoicesLookup.tsx";
 import MyInvoices from "./MyInvoices.tsx";
+import { ProtectedRoute } from "@/components/container/protectedRoute.tsx";
+import Unauthorized from "./Unauthorized.tsx";
 
 const publicRoutes = createBrowserRouter([
   {
@@ -65,33 +67,14 @@ const publicRoutes = createBrowserRouter([
         ],
       },
       {
-        path: "cart",
-        element: <PhasesLayout />,
-        children: [
-          {
-            path: "view",
-            element: <CartVisting />,
-          },
-          {
-            path: "checkout",
-            element: <CartCheckout />,
-          },
-        ],
-      },
-      {
-        path: "profile",
-        children: [
-          {
-            index: true,
-            element: <Products />,
-          },
-          {
-            path: "orders",
-            id: "my_invoices",
-            loader: ordersLoader,
-            element: <MyInvoices />,
-          },
-        ],
+        path: "orders",
+        id: "my_invoices",
+        loader: ordersLoader,
+        element: (
+          <ProtectedRoute>
+            <MyInvoices />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "cart",
@@ -103,7 +86,11 @@ const publicRoutes = createBrowserRouter([
           },
           {
             path: "checkout",
-            element: <CartCheckout />,
+            element: (
+              <ProtectedRoute>
+                <CartCheckout />
+              </ProtectedRoute>
+            ),
           },
         ],
       },
@@ -119,11 +106,19 @@ const publicRoutes = createBrowserRouter([
         path: "signup",
         element: <Signup />,
       },
+      {
+        path: "unauthorized",
+        element: <Unauthorized />,
+      },
     ],
   },
   {
     path: "admin",
-    element: <AdminLayout />,
+    element: (
+      <ProtectedRoute allowedRoles={["ADMIN"]}>
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <PageNotFound />,
     children: [
       {
@@ -195,6 +190,4 @@ const publicRoutes = createBrowserRouter([
   },
 ]);
 
-const privateRoutes = [{}];
-
-export { publicRoutes, privateRoutes };
+export { publicRoutes };

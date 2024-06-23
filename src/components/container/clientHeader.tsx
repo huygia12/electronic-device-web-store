@@ -6,8 +6,12 @@ import CounterLabel from "@/components/ui/counterLabel";
 import { TfiHeadphoneAlt } from "react-icons/tfi";
 import CustomAvt from "../ui/customAvt";
 import { PackageSearch, Search } from "lucide-react";
-import { useCartProps } from "@/utils/customHook";
-import { LinkItem } from "@/declare";
+import { useCartProps, useCurrAccount } from "@/utils/customHook";
+import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
+import { publicRoutes } from "@/pages/routes";
+import log from "loglevel";
+import { useRef } from "react";
+import { toast } from "sonner";
 
 const navComponents: { title: string; path: string }[] = [
   { title: "Trang Chủ", path: "/" },
@@ -15,19 +19,33 @@ const navComponents: { title: string; path: string }[] = [
   { title: "Liên Hệ", path: "#footer" },
 ];
 
-const clientOption: LinkItem[] = [
-  {
-    name: "Tài Khoản Của Tôi",
-    src: "/profile",
-  },
-  {
-    name: "Đăng Xuất",
-    src: "/signup",
-  },
-];
-
 const AppClientHeader = () => {
   const { itemsInLocal } = useCartProps();
+  const { currAccount, clearCurrAccount } = useCurrAccount();
+
+  const userOptions = useRef([
+    {
+      name: "Tài Khoản Của Tôi",
+      src: "/profile",
+    },
+    {
+      name: "Đăng Xuất",
+      handleClick: async () => {
+        console.log("run useref");
+        try {
+          await axiosInstance.delete("/user/logout", reqConfig);
+
+          toast.success("Đăng xuất thành công!");
+          clearCurrAccount();
+          await publicRoutes.navigate("/login", {
+            unstable_viewTransition: true,
+          });
+        } catch (error: unknown) {
+          log.warn(`Response data: ${error}`);
+        }
+      },
+    },
+  ]);
 
   return (
     <header className="w-full flex flex-col sticky top-0 z-50 shadow-xl">
@@ -76,14 +94,16 @@ const AppClientHeader = () => {
                 <FiShoppingBag size={40} />
                 <CounterLabel counter={itemsInLocal.length} />
               </NavLink>
-              <NavLink
-                to="/profile/orders"
-                className="relative"
-                unstable_viewTransition
-              >
-                <LiaShippingFastSolid size={45} />
-                <CounterLabel counter={6} />
-              </NavLink>
+              {currAccount && (
+                <NavLink
+                  to="orders"
+                  className="relative"
+                  unstable_viewTransition
+                >
+                  <LiaShippingFastSolid size={45} />
+                  <CounterLabel counter={6} />
+                </NavLink>
+              )}
               <NavLink
                 to="/lookup"
                 className="relative"
@@ -93,7 +113,7 @@ const AppClientHeader = () => {
               </NavLink>
             </div>
           </div>
-          <CustomAvt className="ml-10" options={clientOption} />
+          <CustomAvt className="ml-10" options={userOptions.current} />
         </div>
       </div>
     </header>

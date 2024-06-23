@@ -2,8 +2,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
@@ -18,17 +16,6 @@ import { useCurrAccount } from "@/utils/customHook";
 interface CustomAvtProps extends HTMLAttributes<HTMLDivElement> {
   options?: LinkItem[];
 }
-
-const defaultOptions: LinkItem[] = [
-  {
-    name: "Đăng Nhập",
-    src: "/login",
-  },
-  {
-    name: "Đăng Ký",
-    src: "/signup",
-  },
-];
 
 const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
   const { currAccount } = useCurrAccount();
@@ -45,7 +32,7 @@ const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
           >
             <Avatar className="h-[3.5rem] w-[3.5rem]">
               <AvatarImage
-                src={currAccount?.avt}
+                src={currAccount?.avatar ?? ""}
                 width={40}
                 height={40}
                 alt="AVT"
@@ -57,27 +44,49 @@ const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="center">
-          {currAccount && (
-            <DropdownMenuLabel className="border-b-2 border-stone-500">
-              Tài Khoản Của Tôi
-            </DropdownMenuLabel>
-          )}
-          <DropdownMenuSeparator />
-          {(props.options && currAccount ? props.options : defaultOptions).map(
-            (item, index) => (
+        {props.options && currAccount && (
+          <DropdownMenuContent align="center">
+            {props.options.map((item, index) => (
               <DropdownMenuItem key={index}>
-                <NavLink to={item.src} unstable_viewTransition>
-                  {item.name}
-                </NavLink>
+                {item.src ? (
+                  <NavLink
+                    to={item.src}
+                    onClick={item.handleClick}
+                    unstable_viewTransition={true}
+                  >
+                    {item.name}
+                  </NavLink>
+                ) : (
+                  <button onClick={item.handleClick}>{item.name}</button>
+                )}
               </DropdownMenuItem>
-            )
-          )}
-        </DropdownMenuContent>
+            ))}
+          </DropdownMenuContent>
+        )}
       </DropdownMenu>
-      <div className="font-extrabold max-w-52 text-[1.2rem] truncate ...">
-        {currAccount?.accountName}
-      </div>
+      {currAccount ? (
+        <div className="font-extrabold max-w-52 text-[1.2rem] truncate ...">
+          {currAccount.name}
+        </div>
+      ) : (
+        <>
+          <NavLink
+            className="hover_text-primary-foreground hover_font-semibold"
+            to="/login"
+            unstable_viewTransition={true}
+          >
+            Đăng nhập
+          </NavLink>
+          <span>/</span>
+          <NavLink
+            className="hover_text-primary-foreground hover_font-semibold"
+            to="/signup"
+            unstable_viewTransition={true}
+          >
+            Đăng ký
+          </NavLink>
+        </>
+      )}
     </div>
   );
 };

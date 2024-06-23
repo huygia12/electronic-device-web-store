@@ -21,7 +21,6 @@ import {
 import { Product } from "@/declare";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { NavLink, useRouteLoaderData } from "react-router-dom";
-import log from "loglevel";
 import {
   TooltipContent,
   TooltipProvider,
@@ -29,8 +28,6 @@ import {
   Tooltip,
 } from "@/components/ui/tooltip";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-log.setLevel("error");
 
 const colName: string[] = [
   "STT",
