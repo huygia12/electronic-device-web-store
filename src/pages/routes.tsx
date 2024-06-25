@@ -17,15 +17,7 @@ import PageNotFound from "./PageNotFound.tsx";
 import AdminLayout from "@/layout/adminLayout.tsx";
 import { ProductAddition } from "./ProductAddition.tsx";
 import AttributeManagement from "./AttributeManagement.tsx";
-import {
-  attributesLoader,
-  categoriesLoader,
-  ordersLoader,
-  productDetailLoader,
-  productsLoader,
-  providersLoader,
-  usersLoader,
-} from "@/api/preApiLoader.ts";
+import loader from "@/api/preApiLoader.ts";
 import { ProductEdittion } from "./ProductEdittion.tsx";
 import Homepage from "./Homepage.tsx";
 import { PhasesLayout } from "../layout/cartPhasesLayout.tsx";
@@ -61,7 +53,7 @@ const publicRoutes = createBrowserRouter([
           {
             path: ":id",
             id: "product_detail",
-            loader: productDetailLoader,
+            loader: loader.getProductDetail,
             element: <ProductDetail />,
           },
         ],
@@ -69,7 +61,7 @@ const publicRoutes = createBrowserRouter([
       {
         path: "orders",
         id: "my_invoices",
-        loader: ordersLoader,
+        loader: loader.getOrders,
         element: (
           <ProtectedRoute>
             <MyInvoices />
@@ -128,19 +120,19 @@ const publicRoutes = createBrowserRouter([
       {
         path: "managed-users",
         id: "user_management",
-        loader: usersLoader,
+        loader: loader.getUsers,
         element: <UserManagement />,
       },
       {
         path: "managed-categories",
         id: "category_management",
-        loader: categoriesLoader,
+        loader: loader.getCategories,
         element: <CategoryManagement />,
       },
       {
         path: "received-orders",
         id: "invoice_management",
-        loader: ordersLoader,
+        loader: loader.getOrders,
         element: <OrderManagement />,
       },
       {
@@ -158,7 +150,7 @@ const publicRoutes = createBrowserRouter([
       {
         path: "managed-providers",
         id: "provider_management",
-        loader: providersLoader,
+        loader: loader.getProviders,
         element: <ProviderManagement />,
       },
       {
@@ -167,7 +159,7 @@ const publicRoutes = createBrowserRouter([
           {
             index: true,
             id: "product_management",
-            loader: productsLoader,
+            loader: loader.getProducts,
             element: <ProductManagement />,
           },
           {
@@ -181,7 +173,7 @@ const publicRoutes = createBrowserRouter([
           {
             path: "attributes",
             id: "attribute_management",
-            loader: attributesLoader,
+            loader: loader.getAttributes,
             element: <AttributeManagement />,
           },
         ],

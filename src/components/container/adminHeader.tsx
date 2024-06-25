@@ -30,7 +30,7 @@ import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
 import { toast } from "sonner";
 import { publicRoutes } from "@/pages/routes";
 import log from "loglevel";
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { useCurrAccount } from "@/utils/customHook";
 
 interface AdminNavItem {
@@ -141,7 +141,7 @@ const AdminHeader = () => {
       name: "Đăng Xuất",
       handleClick: async () => {
         try {
-          await axiosInstance.delete("/user/logout", reqConfig);
+          await axiosInstance.delete("/users/logout", reqConfig);
 
           toast.success("Đăng xuất thành công!");
           clearCurrAccount();

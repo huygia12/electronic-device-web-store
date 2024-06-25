@@ -236,10 +236,10 @@ const ProductEdittion = () => {
                     return (
                       <SelectItem
                         key={index}
-                        value={provider.providerID}
+                        value={provider.id}
                         className="max-w-[30rem] truncate"
                       >
-                        {provider.providerName}
+                        {provider.name}
                       </SelectItem>
                     );
                   })}

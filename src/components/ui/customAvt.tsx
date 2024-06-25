@@ -28,11 +28,11 @@ const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
-            className="overflow-hidden rounded-full h-14 w-14 focus-visible_outline-none"
+            className="overflow-hidden rounded-full h-14 w-14 hover_!ring-2"
           >
-            <Avatar className="h-[3.5rem] w-[3.5rem]">
+            <Avatar className="h-[3.5rem] w-[3.5rem] focus-visible_!outline-none ">
               <AvatarImage
-                src={currAccount?.avatar ?? ""}
+                src={currAccount?.avatar ?? "/blankAvt.jpg"}
                 width={40}
                 height={40}
                 alt="AVT"
@@ -64,29 +64,9 @@ const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
           </DropdownMenuContent>
         )}
       </DropdownMenu>
-      {currAccount ? (
-        <div className="font-extrabold max-w-52 text-[1.2rem] truncate ...">
-          {currAccount.name}
-        </div>
-      ) : (
-        <>
-          <NavLink
-            className="hover_text-primary-foreground hover_font-semibold"
-            to="/login"
-            unstable_viewTransition={true}
-          >
-            Đăng nhập
-          </NavLink>
-          <span>/</span>
-          <NavLink
-            className="hover_text-primary-foreground hover_font-semibold"
-            to="/signup"
-            unstable_viewTransition={true}
-          >
-            Đăng ký
-          </NavLink>
-        </>
-      )}
+      <div className="font-semibold max-w-52 text-[1.2rem] truncate ...">
+        {currAccount?.name}
+      </div>
     </div>
   );
 };

@@ -52,7 +52,7 @@ const Login = () => {
         message: string;
         info: AccountSummary;
       }>(
-        "/user/login",
+        "/users/login",
         {
           email: data.email,
           password: data.password,
@@ -61,7 +61,6 @@ const Login = () => {
       );
       const account: AccountSummary = res.data.info;
       setCurrAccount(account);
-      console.log(from);
       await publicRoutes.navigate(
         account.role === "ADMIN" ? "/admin" : from === "/login" ? "/" : from,
         {

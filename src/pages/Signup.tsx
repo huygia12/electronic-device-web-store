@@ -52,12 +52,12 @@ const Signup = () => {
       }
 
       await axiosInstance.post(
-        "/user/signup",
+        "/users/signup",
         {
           name: data.accountName,
           email: data.email,
           password: data.password,
-          role: "CLIENT",
+          role: "ADMIN",
         },
         reqConfig
       );

@@ -7,11 +7,16 @@ import {
   ProductParams,
   Provider,
 } from "@/declare";
+import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
 import axios from "axios";
 import log from "loglevel";
 import { ActionFunctionArgs, ParamParseKey, Params } from "react-router-dom";
 
-const productsLoader = async (): Promise<Product[] | undefined> => {
+interface Args extends ActionFunctionArgs {
+  params: Params<ParamParseKey<string>> | ProductParams;
+}
+
+const getProducts = async (): Promise<Product[] | undefined> => {
   try {
     const res = await axios.get<Product[]>(
       import.meta.env.VITE_API_URL + "/products"
@@ -33,7 +38,7 @@ const productsLoader = async (): Promise<Product[] | undefined> => {
   }
 };
 
-const categoriesLoader = async (): Promise<Category[] | undefined> => {
+const getCategories = async (): Promise<Category[] | undefined> => {
   try {
     const res = await axios.get<Category[]>(
       import.meta.env.VITE_API_URL + "/categories"
@@ -54,12 +59,13 @@ const categoriesLoader = async (): Promise<Category[] | undefined> => {
   }
 };
 
-const providersLoader = async (): Promise<Provider[] | undefined> => {
+const getProviders = async (): Promise<Provider[] | undefined> => {
   try {
-    const res = await axios.get<Provider[]>(
-      import.meta.env.VITE_API_URL + "/providers"
+    const res = await axiosInstance.get<{ info: Provider[] }>(
+      import.meta.env.VITE_API_URL + "/providers",
+      reqConfig
     );
-    return res.data;
+    return res.data.info;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       // AxiosError-specific handling
@@ -75,7 +81,7 @@ const providersLoader = async (): Promise<Provider[] | undefined> => {
   }
 };
 
-const attributesLoader = async (): Promise<AttributeType[] | undefined> => {
+const getAttributes = async (): Promise<AttributeType[] | undefined> => {
   try {
     const res = await axios.get<AttributeType[]>(
       import.meta.env.VITE_API_URL + "/attributes"
@@ -96,7 +102,7 @@ const attributesLoader = async (): Promise<AttributeType[] | undefined> => {
   }
 };
 
-const usersLoader = async (): Promise<Account[] | undefined> => {
+const getUsers = async (): Promise<Account[] | undefined> => {
   try {
     const res = await axios.get<Account[]>(
       import.meta.env.VITE_API_URL + "/accounts"
@@ -117,7 +123,7 @@ const usersLoader = async (): Promise<Account[] | undefined> => {
   }
 };
 
-const ordersLoader = async (): Promise<Invoice[] | undefined> => {
+const getOrders = async (): Promise<Invoice[] | undefined> => {
   try {
     const res = await axios.get<Invoice[]>(
       import.meta.env.VITE_API_URL + "/invoices"
@@ -138,11 +144,7 @@ const ordersLoader = async (): Promise<Invoice[] | undefined> => {
   }
 };
 
-interface Args extends ActionFunctionArgs {
-  params: Params<ParamParseKey<string>> | ProductParams;
-}
-
-const productDetailLoader = async ({
+const getProductDetail = async ({
   params,
 }: Args): Promise<Product | undefined> => {
   try {
@@ -165,12 +167,12 @@ const productDetailLoader = async ({
   }
 };
 
-export {
-  productsLoader,
-  categoriesLoader,
-  providersLoader,
-  attributesLoader,
-  usersLoader,
-  ordersLoader,
-  productDetailLoader,
+export default {
+  getProducts,
+  getCategories,
+  getProviders,
+  getAttributes,
+  getUsers,
+  getOrders,
+  getProductDetail,
 };

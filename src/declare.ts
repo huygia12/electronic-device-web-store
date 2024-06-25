@@ -12,9 +12,13 @@ export interface ChartData {
 }
 
 export interface Provider {
-  providerID: string;
-  providerName: string;
-  products: number;
+  id: string;
+  name: string;
+  createdAt?: string;
+  updateAt?: string;
+  products?: number;
+  // providerID?: string;
+  // providerName?: string;
 }
 
 export interface Category {

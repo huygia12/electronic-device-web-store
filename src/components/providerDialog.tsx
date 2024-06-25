@@ -12,41 +12,45 @@ import { Input } from "./ui/input";
 import { HTMLAttributes, useState } from "react";
 import { Provider } from "@/declare";
 import { buttonVariants } from "@/utils/constants";
+import { cn } from "@/lib/utils";
 
 interface ProviderDialogProps extends HTMLAttributes<HTMLFormElement> {
   provider?: Provider;
   formTitle: string;
   selectedCategoryLastValue?: string;
-  // acceptHandler: (name: string) => void;
+  handleDialogAcceptEvent: (
+    name: string,
+    ...arg: (string | undefined)[]
+  ) => Promise<void>;
 }
 
 const ProviderDialog: React.FC<ProviderDialogProps> = ({
   className,
   ...props
 }) => {
-  const [newName, setNewName] = useState(props.provider?.providerName || "");
+  const [name, setName] = useState<string>(props.provider?.name ?? "");
   const [isDisable, setIsDisable] = useState(true);
 
-  // const editEvent = () => {
-  //   props.acceptHandler && props.acceptHandler(newName);
-  // };
-
   const handleInputEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const prevContent = props.selectedCategoryLastValue;
-    console.log(prevContent, newName + "new");
-    setNewName(e.target.value);
-    if (prevContent && prevContent !== e.target.value) {
-      console.log("yes");
-      setIsDisable(false);
+    e.preventDefault();
+    setName(e.target.value);
+    if (e.target.value.length === 0) {
+      setIsDisable(true);
       return;
     }
-    setIsDisable(true);
+    setIsDisable(false);
+  };
+
+  const resetInputValue = () => {
+    setName(props.provider?.name ?? "");
   };
 
   return (
     <form>
       <Dialog>
-        <DialogTrigger asChild>{props.children}</DialogTrigger>
+        <DialogTrigger asChild onClick={() => resetInputValue()}>
+          {props.children}
+        </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{props.formTitle}</DialogTitle>
@@ -56,9 +60,11 @@ const ProviderDialog: React.FC<ProviderDialogProps> = ({
               Nhà phân phối
             </Label>
             <Input
+              type="text"
               id="name"
-              defaultValue={props.provider?.providerName ?? ""}
               className="col-span-3"
+              value={name}
+              autoComplete="off"
               onChange={(e) => handleInputEvent(e)}
             />
           </div>
@@ -67,13 +73,15 @@ const ProviderDialog: React.FC<ProviderDialogProps> = ({
               type="submit"
               disabled={isDisable}
               className={buttonVariants({
-                variant: isDisable ? "outline" : "positive",
+                variant: isDisable ? "secondary" : "positive",
               })}
-              // onClick={() => editEvent()}
+              onClick={async () =>
+                await props.handleDialogAcceptEvent(name, props.provider?.id)
+              }
             >
               Lưu
             </DialogClose>
-            <DialogClose className={buttonVariants({ variant: "negative" })}>
+            <DialogClose className={cn(buttonVariants({ variant: "outline" }))}>
               Hủy
             </DialogClose>
           </DialogFooter>

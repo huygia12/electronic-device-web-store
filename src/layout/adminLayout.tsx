@@ -9,7 +9,7 @@ const AdminLayout: React.FC = () => {
     <>
       <ScrollToTop />
       <AdminHeader />
-      <main className="flex min-h-[100vh] w-full flex-col">
+      <main className="flex min-h-[80vh] h-max w-full flex-col">
         <div className="w-adminLayout mx-auto pb-10">
           <Outlet />
         </div>

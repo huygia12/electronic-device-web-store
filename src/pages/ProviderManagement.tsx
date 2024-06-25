@@ -1,16 +1,7 @@
 import { ProviderDialog } from "@/components/providerDialog";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
@@ -21,137 +12,288 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Provider } from "@/declare";
+import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
+import { useCurrAccount } from "@/utils/customHook";
+import axios from "axios";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
+import log from "loglevel";
+import { toast } from "sonner";
+import loader from "@/api/preApiLoader.ts";
+import { arrayInReverse } from "@/utils/helpers";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { buttonVariants } from "@/utils/constants";
+import { Separator } from "@radix-ui/react-select";
 
 const colName: string[] = [
   "STT",
-  "TÊN NHÀ PHÂN PHỐI",
   "MÃ NHÀ PHÂN PHỐI",
+  "TÊN NHÀ PHÂN PHỐI",
   "SỐ SẢN PHẨM",
-  "THAO TÁC",
 ];
 
 const ProviderManagement = () => {
-  const providersData = useRouteLoaderData("provider_management") as Provider[];
-  const [existingproviders, setExistingProvider] = useState(providersData);
+  const { currAccount } = useCurrAccount();
+  const providersData = useRouteLoaderData("provider_management") as
+    | Provider[]
+    | undefined;
+  const [existingproviders, setExistingProvider] = useState<
+    Provider[] | undefined
+  >(providersData);
+  const [selectedProvider, setSelectedProvider] = useState<Provider>();
+  const [searchingInput, setSearchingInput] = useState("");
 
-  const deleteProvider = (providerID: string) => {
-    const temp = existingproviders.filter(
-      (provider) => provider.providerID !== providerID
-    );
-    setExistingProvider(temp);
+  const handleAddProvider = async (name: string) => {
+    const processedName: string = name.trim();
+    try {
+      await axiosInstance.post(
+        import.meta.env.VITE_API_URL + "/providers",
+        {
+          name: processedName,
+        },
+        {
+          headers: {
+            user_id: currAccount?.id,
+          },
+          ...reqConfig,
+        }
+      );
+
+      const providers = await loader.getProviders();
+      setExistingProvider(providers);
+      toast.success("Thêm thành công!");
+    } catch (error) {
+      toast.error("Thêm thất bại!");
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          log.warn(`Response data: ${error.response.data}`);
+          log.warn(`Response status: ${error.response.status})`);
+        }
+      } else {
+        log.error("Unexpected error:", error);
+      }
+    }
+  };
+
+  const handleUpdateProvider = async (name: string, id: string | undefined) => {
+    const processedName: string = name.trim();
+    try {
+      await axios.patch(
+        import.meta.env.VITE_API_URL + `/providers/${id}`,
+        {
+          name: processedName,
+        },
+        {
+          headers: {
+            user_id: currAccount?.id,
+          },
+          ...reqConfig,
+        }
+      );
+
+      const providers = await loader.getProviders();
+      setExistingProvider(providers);
+      setSelectedProvider(undefined);
+      toast.success("Thay đổi thành công!");
+    } catch (error) {
+      toast.error("Thay đổi thất bại!");
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          log.warn(`Response data: ${error.response.data}`);
+          log.warn(`Response status: ${error.response.status})`);
+        }
+      } else {
+        log.error("Unexpected error:", error);
+      }
+    }
+  };
+
+  const handleDeleteProvider = async (providerID: string) => {
+    try {
+      await axios.delete(
+        import.meta.env.VITE_API_URL + `/providers/${providerID}`,
+        {
+          headers: {
+            user_id: currAccount?.id,
+          },
+          ...reqConfig,
+        }
+      );
+      const providers = await loader.getProviders();
+      setExistingProvider(providers);
+      setSelectedProvider(undefined);
+      toast.success("Thay đổi thành công!");
+    } catch (error) {
+      toast.error("Thay đổi thất bại!");
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          log.warn(`Response data: ${error.response.data}`);
+          log.warn(`Response status: ${error.response.status})`);
+        }
+      } else {
+        log.error("Unexpected error:", error);
+      }
+    }
   };
 
   return (
-    <>
-      <Card className="rounded-2xl shadow-lg my-8">
-        <CardContent className="flex justify-between p-6">
-          <ProviderDialog formTitle="Thêm nhà phân phối mới">
-            <Button variant="positive" className="text-xl">
-              Thêm nhà phân phối mới
-              <Plus />
-            </Button>
-          </ProviderDialog>
-          <div className="relative flex-1 md_grow-0 h-[2.5rem]">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Tìm kiếm..."
-              className="h-full text-xl w-full rounded-lg bg-background pl-8 md_w-[200px] lg_w-[336px]"
-            />
-          </div>
-        </CardContent>
-      </Card>
+    <section>
+      <div className="relative h-[3rem] mt-8 mb-4">
+        <Search className="absolute left-4 top-3 h-6 w-6 text-muted-foreground" />
+        <Input
+          type="search"
+          placeholder="Tìm kiếm..."
+          className="h-full text-lg w-full rounded-xl bg-background pl-14 focus-visible_!ring-0 focus-visible_!ring-offset-0"
+          onChange={(e) => setSearchingInput(e.target.value)}
+        />
+      </div>
 
       {/** Table */}
-      <Card className="rounded-2xl shadow-lg mb-4">
-        <CardHeader className="py-6 px-10">
-          <CardTitle className="text-8">Danh sách các nhà phân phối</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col px-6 pb-4">
-          <ScrollArea className="relative h-[58vh]">
-            <Table>
-              <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white">
-                <tr>
-                  {colName.map((item, key) => {
-                    return (
-                      <TableHead
-                        key={key}
-                        className=" text-center text-black font-extrabold text-[1rem]"
-                      >
-                        {item}
-                      </TableHead>
-                    );
-                  })}
-                </tr>
-              </TableHeader>
-              <TableBody>
-                {existingproviders.map((provider, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="text-center text-base">
-                      {index + 1}
-                    </TableCell>
-                    <TableCell className="text-center  text-base">
-                      {provider.providerName}
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      {provider.providerID}
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      {provider.products}
-                    </TableCell>
-                    <TableCell className="flex items-center justify-center space-x-2">
-                      <ProviderDialog
-                        formTitle="Sửa thông tin nhà phân phối"
-                        provider={provider}
-                      >
-                        <Button variant="neutral">
-                          <SquarePen />
-                        </Button>
-                      </ProviderDialog>
-                      <Button
-                        variant="negative"
-                        onClick={() => deleteProvider(provider.providerID)}
-                      >
-                        <Trash2 />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </ScrollArea>
-        </CardContent>
-      </Card>
+      <div className="flex gap-4">
+        <Card className="rounded-xl shadow-lg flex-1">
+          <CardContent className="flex flex-col p-4">
+            {existingproviders && existingproviders.length !== 0 ? (
+              <ScrollArea className="relative h-[58vh]">
+                <Table>
+                  <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white">
+                    <tr>
+                      {colName.map((item, key) => {
+                        return (
+                          <TableHead
+                            key={key}
+                            className=" text-center text-black font-extrabold text-[1rem]"
+                          >
+                            {item}
+                          </TableHead>
+                        );
+                      })}
+                    </tr>
+                  </TableHeader>
+                  <TableBody>
+                    {arrayInReverse(existingproviders)
+                      .filter((provider) =>
+                        provider.name
+                          .toLowerCase()
+                          .includes(searchingInput.toLowerCase())
+                      )
+                      .map((provider, index) => (
+                        <TableRow
+                          key={index}
+                          className={
+                            selectedProvider &&
+                            (provider.id === selectedProvider.id
+                              ? "bg-theme-softer"
+                              : "")
+                          }
+                          onClick={() => setSelectedProvider(provider)}
+                        >
+                          <TableCell className="text-center text-base">
+                            {index + 1}
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            {provider.id}
+                          </TableCell>
+                          <TableCell className="text-center  text-base">
+                            {provider.name}
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            {provider.products}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    <tr>
+                      <td>
+                        <Separator />
+                      </td>
+                    </tr>
+                  </TableBody>
+                </Table>
+              </ScrollArea>
+            ) : (
+              <div className="flex flex-col items-center">
+                <img width={500} src="/empty-box.svg" alt="emptyCart" />
+                <span className="text-xl font-medium text-slate-500 mb-10">
+                  Bạn chưa có nhà cung cấp nào!
+                </span>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
-      {/** Pagination */}
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#" isActive>
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    </>
+        <Card className="rounded-xl shadow-lg">
+          <CardContent className="p-4 space-y-4 contain-content">
+            <ProviderDialog
+              formTitle="Thêm nhà phân phối mới"
+              handleDialogAcceptEvent={handleAddProvider}
+            >
+              <Button className="" variant="positive">
+                <Plus />
+              </Button>
+            </ProviderDialog>
+            {selectedProvider ? (
+              <>
+                <ProviderDialog
+                  formTitle="Sửa thông tin nhà phân phối"
+                  provider={selectedProvider}
+                  handleDialogAcceptEvent={handleUpdateProvider}
+                >
+                  <Button variant="neutral">
+                    <SquarePen />
+                  </Button>
+                </ProviderDialog>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="negative">
+                      <Trash2 />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Bạn muốn xóa?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Hành động này sẽ trực tiếp xóa nhà phân phối và không
+                        thể hoàn tác.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogAction
+                        onClick={() =>
+                          handleDeleteProvider(selectedProvider.id)
+                        }
+                        className={buttonVariants({
+                          variant: "negative",
+                        })}
+                      >
+                        Xóa
+                      </AlertDialogAction>
+                      <AlertDialogCancel className="mt-0">
+                        Hủy
+                      </AlertDialogCancel>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </>
+            ) : (
+              <>
+                <SquarePen className="mx-4 !mt-6" />
+                <Trash2 className="mx-4 !mt-6" />
+              </>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </section>
   );
 };
 
