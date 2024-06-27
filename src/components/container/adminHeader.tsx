@@ -4,7 +4,6 @@ import CounterLabel from "../ui/counterLabel";
 import CustomAvt from "../ui/customAvt";
 import {
   Home,
-  LineChart,
   Package2,
   Users2,
   Shapes,
@@ -93,7 +92,7 @@ const navItems: AdminNavItem[] = [
         icon: <Boxes className="h-5 w-5" />,
       },
       {
-        name: "Thể loại",
+        name: "Thuộc tính sản phẩm",
         url: "/admin/managed-products/attributes",
         icon: <Tags className="h-5 w-5" />,
       },
@@ -110,13 +109,6 @@ const navItems: AdminNavItem[] = [
     name: "Đánh giá",
     url: "/admin/received-reviews",
     icon: <MessageSquareCode className="h-5 w-5" />,
-    hasChild: false,
-    children: [],
-  },
-  {
-    name: "Thống kê",
-    url: "/admin/statistic",
-    icon: <LineChart className="h-5 w-5" />,
     hasChild: false,
     children: [],
   },
@@ -149,7 +141,7 @@ const AdminHeader = () => {
             unstable_viewTransition: true,
           });
         } catch (error: unknown) {
-          log.warn(`Response data: ${error}`);
+          log.error(`Response data: ${error}`);
         }
       },
     },

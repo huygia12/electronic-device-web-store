@@ -152,7 +152,7 @@ const ProductAddition = () => {
 
   const handleOptionSelection = (optionID: string) => {
     const selectedOption: AttributeOption | undefined =
-      selectedAttr?.values.find((attr) => attr.optionID === optionID);
+      selectedAttr?.options.find((attr) => attr.optionID === optionID);
 
     if (selectedOption && selectedAttr) {
       const bucket: ProductAttribute[] = [
@@ -233,10 +233,10 @@ const ProductAddition = () => {
                     return (
                       <SelectItem
                         key={index}
-                        value={cate.categoryID}
+                        value={cate.id}
                         className="max-w-[30rem] truncate"
                       >
-                        {cate.categoryName}
+                        {cate.name}
                       </SelectItem>
                     );
                   })}
@@ -258,10 +258,10 @@ const ProductAddition = () => {
                     return (
                       <SelectItem
                         key={index}
-                        value={provider.providerID}
+                        value={provider.id}
                         className="max-w-[30rem] truncate"
                       >
-                        {provider.providerName}
+                        {provider.name}
                       </SelectItem>
                     );
                   })}
@@ -395,7 +395,7 @@ const ProductAddition = () => {
                     <SelectValue id="option" className="p-0" />
                   </SelectTrigger>
                   <SelectContent className="">
-                    {findAttribute(selectedAttr?.typeID)?.values.map(
+                    {findAttribute(selectedAttr?.typeID)?.options.map(
                       (option, index) => {
                         return (
                           <SelectItem

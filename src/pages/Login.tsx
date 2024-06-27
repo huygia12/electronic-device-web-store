@@ -88,10 +88,8 @@ const Login = () => {
           });
         }
         // Handle error response if available
-        if (error.response) {
-          log.warn(`Response data: ${error.response.data}`);
-          log.warn(`Response status: ${error.response.status})`);
-        }
+        log.error(`Response data: ${error.response?.data}`);
+        log.error(`Response status: ${error.response?.status})`);
       } else {
         log.error("Unexpected error:", error);
       }

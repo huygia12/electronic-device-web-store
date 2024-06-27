@@ -9,7 +9,7 @@ const axiosInstance = axios.create({
 });
 
 const reqConfig: AxiosRequestConfig = {
-  withCredentials: true, // Include credentials in requests
+  // withCredentials: true, // Include credentials in requests
 };
 
 export { axiosInstance, reqConfig };

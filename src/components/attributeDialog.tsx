@@ -16,6 +16,7 @@ import { buttonVariants } from "@/utils/constants";
 interface AttibuteDialogProps extends HTMLAttributes<HTMLFormElement> {
   attribute?: AttributeType;
   formTitle: string;
+  handleDialogAcceptEvent: (name: string) => Promise<void>;
 }
 
 const AttributeDialog: React.FC<AttibuteDialogProps> = ({

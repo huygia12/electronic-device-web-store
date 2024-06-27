@@ -16,6 +16,7 @@ import { buttonVariants } from "@/utils/constants";
 interface AttibuteDialogProps extends HTMLAttributes<HTMLFormElement> {
   option?: AttributeOption;
   formTitle: string;
+  handleDialogAcceptEvent: (name: string) => Promise<void>;
 }
 
 const OptionDialog: React.FC<AttibuteDialogProps> = ({
@@ -32,7 +33,7 @@ const OptionDialog: React.FC<AttibuteDialogProps> = ({
           </DialogHeader>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right text-lg">
-              Thể loại
+              Giá trị
             </Label>
             <Input
               id="name"

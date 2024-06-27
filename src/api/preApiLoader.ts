@@ -18,9 +18,7 @@ interface Args extends ActionFunctionArgs {
 
 const getProducts = async (): Promise<Product[] | undefined> => {
   try {
-    const res = await axios.get<Product[]>(
-      import.meta.env.VITE_API_URL + "/products"
-    );
+    const res = await axiosInstance.get<Product[]>("/products");
 
     return res.data;
   } catch (error) {
@@ -40,10 +38,11 @@ const getProducts = async (): Promise<Product[] | undefined> => {
 
 const getCategories = async (): Promise<Category[] | undefined> => {
   try {
-    const res = await axios.get<Category[]>(
-      import.meta.env.VITE_API_URL + "/categories"
+    const res = await axiosInstance.get<{ info: Category[] }>(
+      "/categories",
+      reqConfig
     );
-    return res.data;
+    return res.data.info;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       // AxiosError-specific handling
@@ -62,7 +61,7 @@ const getCategories = async (): Promise<Category[] | undefined> => {
 const getProviders = async (): Promise<Provider[] | undefined> => {
   try {
     const res = await axiosInstance.get<{ info: Provider[] }>(
-      import.meta.env.VITE_API_URL + "/providers",
+      "/providers",
       reqConfig
     );
     return res.data.info;
@@ -83,8 +82,9 @@ const getProviders = async (): Promise<Provider[] | undefined> => {
 
 const getAttributes = async (): Promise<AttributeType[] | undefined> => {
   try {
-    const res = await axios.get<AttributeType[]>(
-      import.meta.env.VITE_API_URL + "/attributes"
+    const res = await axiosInstance.get<AttributeType[]>(
+      "/attributes",
+      reqConfig
     );
     return res.data;
   } catch (error) {
@@ -104,10 +104,8 @@ const getAttributes = async (): Promise<AttributeType[] | undefined> => {
 
 const getUsers = async (): Promise<Account[] | undefined> => {
   try {
-    const res = await axios.get<Account[]>(
-      import.meta.env.VITE_API_URL + "/accounts"
-    );
-    return res.data;
+    const res = await axiosInstance.get<{ info: Account[] }>("/accounts");
+    return res.data.info;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       // AxiosError-specific handling
@@ -125,10 +123,8 @@ const getUsers = async (): Promise<Account[] | undefined> => {
 
 const getOrders = async (): Promise<Invoice[] | undefined> => {
   try {
-    const res = await axios.get<Invoice[]>(
-      import.meta.env.VITE_API_URL + "/invoices"
-    );
-    return res.data;
+    const res = await axiosInstance.get<{ info: Invoice[] }>("/invoices");
+    return res.data.info;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       // AxiosError-specific handling
@@ -148,10 +144,10 @@ const getProductDetail = async ({
   params,
 }: Args): Promise<Product | undefined> => {
   try {
-    const res = await axios.get<Product>(
-      import.meta.env.VITE_API_URL + "/products/" + params.id
+    const res = await axiosInstance.get<{ info: Product }>(
+      "/products/" + params.id
     );
-    return res.data;
+    return res.data.info;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       // AxiosError-specific handling

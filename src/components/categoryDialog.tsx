@@ -16,60 +16,65 @@ import { buttonVariants } from "@/utils/constants";
 interface CategoryDialogProps extends HTMLAttributes<HTMLFormElement> {
   category?: Category;
   formTitle: string;
-  selectedCategoryLastValue?: string;
-  handleAcceptEvent: (categoryName: string) => void;
+  handleDialogAcceptEvent: (name: string) => Promise<void>;
 }
 
 const CategoryDialog: React.FC<CategoryDialogProps> = ({
   className,
   ...props
 }) => {
-  const [newName, setNewName] = useState(props.category?.categoryName || "");
-  // const [isDisable, setIsDisable] = useState(true);
+  const [name, setName] = useState<string>(props.category?.name ?? "");
+  const [isDisable, setIsDisable] = useState(true);
 
   const handleInputEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const prevContent = props.selectedCategoryLastValue;
-    // console.log(prevContent, newName + "new");
-    setNewName(e.target.value);
-    // if (prevContent && prevContent !== e.target.value) {
-    //   console.log("yes");
-    //   setIsDisable(false);
-    //   return;
-    // }
-    // setIsDisable(true);
+    e.preventDefault();
+    setName(e.target.value);
+    if (e.target.value.length === 0) {
+      setIsDisable(true);
+      return;
+    }
+    setIsDisable(false);
+  };
+
+  const resetInputValue = () => {
+    setName(props.category?.name ?? "");
   };
 
   return (
     <form>
       <Dialog>
-        <DialogTrigger asChild>{props.children}</DialogTrigger>
+        <DialogTrigger asChild onClick={() => resetInputValue()}>
+          {props.children}
+        </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{props.formTitle}</DialogTitle>
           </DialogHeader>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right text-lg">
+          <div className="grid grid-cols-5 items-center gap-10">
+            <Label htmlFor="name" className="col-span-2 text-right text-lg">
               Danh mục
             </Label>
             <Input
+              type="text"
               id="name"
-              defaultValue={props.category?.categoryName ?? ""}
               className="col-span-3"
+              value={name}
+              autoComplete="off"
               onChange={(e) => handleInputEvent(e)}
             />
           </div>
           <DialogFooter>
             <DialogClose
               type="submit"
-              // disabled={isDisable}
-              // className={buttonVariants({
-              //   variant: isDisable ? "outline" : "positive",
-              // })}
-              onClick={() => props.handleAcceptEvent(newName)}
+              disabled={isDisable}
+              className={buttonVariants({
+                variant: isDisable ? "secondary" : "positive",
+              })}
+              onClick={async () => await props.handleDialogAcceptEvent(name)}
             >
               Lưu
             </DialogClose>
-            <DialogClose className={buttonVariants({ variant: "negative" })}>
+            <DialogClose className={buttonVariants({ variant: "outline" })}>
               Hủy
             </DialogClose>
           </DialogFooter>

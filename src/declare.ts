@@ -22,9 +22,13 @@ export interface Provider {
 }
 
 export interface Category {
-  categoryID: string;
-  categoryName: string;
-  products: number;
+  id: string;
+  name: string;
+  createdAt?: string;
+  updateAt?: string;
+  products?: number;
+  // categoryID: string;
+  // categoryName: string;
 }
 
 export interface AttributeOption {
@@ -35,7 +39,7 @@ export interface AttributeOption {
 export interface AttributeType {
   typeID: string;
   typeName: string;
-  values: AttributeOption[];
+  options: AttributeOption[];
 }
 
 export interface ProductItem {

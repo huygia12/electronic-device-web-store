@@ -67,7 +67,7 @@ const Products = () => {
                 </h5>
                 <Separator className="border-1 border-slate-400" />
                 <RadioGroup className="pl-4 space-y-2">
-                  {attr.values.map((option, childIndex) => {
+                  {attr.options.map((option, childIndex) => {
                     return (
                       <div
                         key={childIndex}

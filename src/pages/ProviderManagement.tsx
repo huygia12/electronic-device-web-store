@@ -14,7 +14,7 @@ import {
 import { Provider } from "@/declare";
 import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
 import { useCurrAccount } from "@/utils/customHook";
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
@@ -58,13 +58,13 @@ const ProviderManagement = () => {
     const processedName: string = name.trim();
     try {
       await axiosInstance.post(
-        import.meta.env.VITE_API_URL + "/providers",
+        "/providers",
         {
           name: processedName,
         },
         {
           headers: {
-            user_id: currAccount?.id,
+            "User-id": currAccount?.id,
           },
           ...reqConfig,
         }
@@ -74,29 +74,31 @@ const ProviderManagement = () => {
       setExistingProvider(providers);
       toast.success("Thêm thành công!");
     } catch (error) {
-      toast.error("Thêm thất bại!");
       if (axios.isAxiosError(error)) {
-        if (error.response) {
-          log.warn(`Response data: ${error.response.data}`);
-          log.warn(`Response status: ${error.response.status})`);
+        if (error.response?.status == HttpStatusCode.Conflict) {
+          toast.error("Thêm thất bại: nhà cung cấp này đã tồn tại!");
+        } else {
+          toast.error("Thêm thất bại!");
         }
+        log.error(`Response data: ${error.response?.data}`);
+        log.error(`Response status: ${error.response?.status})`);
       } else {
         log.error("Unexpected error:", error);
       }
     }
   };
 
-  const handleUpdateProvider = async (name: string, id: string | undefined) => {
+  const handleUpdateProvider = async (name: string) => {
     const processedName: string = name.trim();
     try {
-      await axios.patch(
-        import.meta.env.VITE_API_URL + `/providers/${id}`,
+      await axiosInstance.patch(
+        `/providers/${selectedProvider?.id}`,
         {
           name: processedName,
         },
         {
           headers: {
-            user_id: currAccount?.id,
+            "User-id": currAccount?.id,
           },
           ...reqConfig,
         }
@@ -107,29 +109,28 @@ const ProviderManagement = () => {
       setSelectedProvider(undefined);
       toast.success("Thay đổi thành công!");
     } catch (error) {
-      toast.error("Thay đổi thất bại!");
       if (axios.isAxiosError(error)) {
-        if (error.response) {
-          log.warn(`Response data: ${error.response.data}`);
-          log.warn(`Response status: ${error.response.status})`);
+        if (error.response?.status == HttpStatusCode.Conflict) {
+          toast.error("Thay đổi thất bại: nhà cung cấp này đã tồn tại!");
+        } else {
+          toast.error("Thay đổi thất bại!");
         }
+        log.error(`Response data: ${error.response?.data}`);
+        log.error(`Response status: ${error.response?.status})`);
       } else {
         log.error("Unexpected error:", error);
       }
     }
   };
 
-  const handleDeleteProvider = async (providerID: string) => {
+  const handleDeleteProvider = async () => {
     try {
-      await axios.delete(
-        import.meta.env.VITE_API_URL + `/providers/${providerID}`,
-        {
-          headers: {
-            user_id: currAccount?.id,
-          },
-          ...reqConfig,
-        }
-      );
+      await axiosInstance.delete(`/providers/${selectedProvider?.id}`, {
+        headers: {
+          "User-id": currAccount?.id,
+        },
+        ...reqConfig,
+      });
       const providers = await loader.getProviders();
       setExistingProvider(providers);
       setSelectedProvider(undefined);
@@ -137,10 +138,8 @@ const ProviderManagement = () => {
     } catch (error) {
       toast.error("Thay đổi thất bại!");
       if (axios.isAxiosError(error)) {
-        if (error.response) {
-          log.warn(`Response data: ${error.response.data}`);
-          log.warn(`Response status: ${error.response.status})`);
-        }
+        log.error(`Response data: ${error.response?.data}`);
+        log.error(`Response status: ${error.response?.status})`);
       } else {
         log.error("Unexpected error:", error);
       }
@@ -268,9 +267,7 @@ const ProviderManagement = () => {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogAction
-                        onClick={() =>
-                          handleDeleteProvider(selectedProvider.id)
-                        }
+                        onClick={() => handleDeleteProvider()}
                         className={buttonVariants({
                           variant: "negative",
                         })}

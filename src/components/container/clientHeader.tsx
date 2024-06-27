@@ -40,7 +40,7 @@ const AppClientHeader = () => {
             unstable_viewTransition: true,
           });
         } catch (error: unknown) {
-          log.warn(`Response data: ${error}`);
+          log.error(`Response data: ${error}`);
         }
       },
     },

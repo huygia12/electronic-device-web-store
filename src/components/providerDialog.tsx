@@ -12,16 +12,11 @@ import { Input } from "./ui/input";
 import { HTMLAttributes, useState } from "react";
 import { Provider } from "@/declare";
 import { buttonVariants } from "@/utils/constants";
-import { cn } from "@/lib/utils";
 
 interface ProviderDialogProps extends HTMLAttributes<HTMLFormElement> {
   provider?: Provider;
   formTitle: string;
-  selectedCategoryLastValue?: string;
-  handleDialogAcceptEvent: (
-    name: string,
-    ...arg: (string | undefined)[]
-  ) => Promise<void>;
+  handleDialogAcceptEvent: (name: string) => Promise<void>;
 }
 
 const ProviderDialog: React.FC<ProviderDialogProps> = ({
@@ -75,13 +70,11 @@ const ProviderDialog: React.FC<ProviderDialogProps> = ({
               className={buttonVariants({
                 variant: isDisable ? "secondary" : "positive",
               })}
-              onClick={async () =>
-                await props.handleDialogAcceptEvent(name, props.provider?.id)
-              }
+              onClick={async () => await props.handleDialogAcceptEvent(name)}
             >
               Lưu
             </DialogClose>
-            <DialogClose className={cn(buttonVariants({ variant: "outline" }))}>
+            <DialogClose className={buttonVariants({ variant: "outline" })}>
               Hủy
             </DialogClose>
           </DialogFooter>

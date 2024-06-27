@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import log from "loglevel";
+import { axiosInstance } from "@/utils/axiosConfig";
 
 const ORDERS_LINK = "/admin/received-orders";
 
@@ -97,12 +98,8 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const ordersRes = await axios.get<Invoice[]>(
-          import.meta.env.VITE_API_URL + "/invoices"
-        );
-        const usersRes = await axios.get<Account[]>(
-          import.meta.env.VITE_API_URL + "/accounts"
-        );
+        const ordersRes = await axiosInstance.get<Invoice[]>("/invoices");
+        const usersRes = await axiosInstance.get<Account[]>("/accounts");
 
         setCustomersData(usersRes.data);
         setOrdersData(ordersRes.data);
