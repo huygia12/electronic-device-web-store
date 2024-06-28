@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Invoice, ChartData, Account } from "@/declare";
+import { Invoice, ChartData, User } from "@/declare";
 import OrderTable from "@/components/orderTable";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -93,13 +93,13 @@ const revenueData: ChartData[] = [
 
 const Dashboard = () => {
   const [ordersData, setOrdersData] = useState<Invoice[]>([]);
-  const [customersData, setCustomersData] = useState<Account[]>([]);
+  const [customersData, setCustomersData] = useState<User[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const ordersRes = await axiosInstance.get<Invoice[]>("/invoices");
-        const usersRes = await axiosInstance.get<Account[]>("/accounts");
+        const usersRes = await axiosInstance.get<User[]>("/users");
 
         setCustomersData(usersRes.data);
         setOrdersData(ordersRes.data);
@@ -185,13 +185,13 @@ const Dashboard = () => {
                     <Card key={index} className="mb-4 flex flex-row py-4">
                       <CardHeader className="p-4">
                         <Avatar>
-                          <AvatarImage src={customer.avt} />
+                          <AvatarImage src={customer.avatar} />
                           <AvatarFallback>avt</AvatarFallback>
                         </Avatar>
                       </CardHeader>
                       <CardContent className="col-span-3 p-0 w-full max-w-60 h-full my-auto">
                         <div className="font-extrabold text-[1.1rem] truncate">
-                          {customer.accountName}
+                          {customer.userName}
                         </div>
                         {`Đã gia nhập ngày ${customer.createdAt}`}
                       </CardContent>

@@ -50,7 +50,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
           {props.orders?.map((invoice, index) => (
             <TableRow key={index}>
               <TableCell className="text-center text-base">
-                {invoice.accountName}
+                {invoice.userName}
               </TableCell>
               <TableCell className="text-center  text-base">
                 {invoice.invoiceID}

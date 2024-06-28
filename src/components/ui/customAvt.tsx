@@ -11,14 +11,14 @@ import { cn } from "@/lib/utils";
 import { NavLink } from "react-router-dom";
 import { User } from "lucide-react";
 import { LinkItem } from "@/declare";
-import { useCurrAccount } from "@/utils/customHook";
+import { useCurrUser } from "@/utils/customHook";
 
 interface CustomAvtProps extends HTMLAttributes<HTMLDivElement> {
   options?: LinkItem[];
 }
 
 const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
-  const { currAccount } = useCurrAccount();
+  const { currUser } = useCurrUser();
 
   return (
     <div
@@ -32,7 +32,7 @@ const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
           >
             <Avatar className="h-[3.5rem] w-[3.5rem] focus-visible_!outline-none ">
               <AvatarImage
-                src={currAccount?.avatar ?? "/blankAvt.jpg"}
+                src={currUser?.avatar ?? "/blankAvt.jpg"}
                 width={40}
                 height={40}
                 alt="AVT"
@@ -44,7 +44,7 @@ const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        {props.options && currAccount && (
+        {props.options && currUser && (
           <DropdownMenuContent align="center">
             {props.options.map((item, index) => (
               <DropdownMenuItem key={index}>
@@ -65,7 +65,7 @@ const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
         )}
       </DropdownMenu>
       <div className="font-semibold max-w-52 text-[1.2rem] truncate ...">
-        {currAccount?.name}
+        {currUser?.userName}
       </div>
     </div>
   );

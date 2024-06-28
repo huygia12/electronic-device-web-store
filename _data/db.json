@@ -82,31 +82,31 @@
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         },
         {
           "reviewID": "2",
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         }
       ],
       "attributes": [
         {
-          "typeName": "RAM",
+          "typeValue": "RAM",
           "optionValue": "128GB"
         },
         {
-          "typeName": "Camera",
+          "typeValue": "Camera",
           "optionValue": "Zoom quang học"
         },
         {
-          "typeName": "Màn hình",
+          "typeValue": "Màn hình",
           "optionValue": "Trên 6 inch"
         },
         {
-          "typeName": "Tính năng đặc biệt",
+          "typeValue": "Tính năng đặc biệt",
           "optionValue": "A.I phone"
         }
       ],
@@ -141,31 +141,31 @@
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         },
         {
           "reviewID": "2",
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         }
       ],
       "attributes": [
         {
-          "typeName": "RAM",
+          "typeValue": "RAM",
           "optionValue": "128GB"
         },
         {
-          "typeName": "Camera",
+          "typeValue": "Camera",
           "optionValue": "Zoom quang học"
         },
         {
-          "typeName": "Màn hình",
+          "typeValue": "Màn hình",
           "optionValue": "Trên 6 inch"
         },
         {
-          "typeName": "Tính năng đặc biệt",
+          "typeValue": "Tính năng đặc biệt",
           "optionValue": "A.I phone"
         }
       ],
@@ -342,31 +342,31 @@
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         },
         {
           "reviewID": "2",
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         }
       ],
       "attributes": [
         {
-          "typeName": "RAM",
+          "typeValue": "RAM",
           "optionValue": "128GB"
         },
         {
-          "typeName": "Camera",
+          "typeValue": "Camera",
           "optionValue": "Zoom quang học"
         },
         {
-          "typeName": "Màn hình",
+          "typeValue": "Màn hình",
           "optionValue": "Trên 6 inch"
         },
         {
-          "typeName": "Tính năng đặc biệt",
+          "typeValue": "Tính năng đặc biệt",
           "optionValue": "A.I phone"
         }
       ],
@@ -424,31 +424,31 @@
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         },
         {
           "reviewID": "2",
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         }
       ],
       "attributes": [
         {
-          "typeName": "RAM",
+          "typeValue": "RAM",
           "optionValue": "128GB"
         },
         {
-          "typeName": "Camera",
+          "typeValue": "Camera",
           "optionValue": "Zoom quang học"
         },
         {
-          "typeName": "Màn hình",
+          "typeValue": "Màn hình",
           "optionValue": "Trên 6 inch"
         },
         {
-          "typeName": "Tính năng đặc biệt",
+          "typeValue": "Tính năng đặc biệt",
           "optionValue": "A.I phone"
         }
       ],
@@ -506,31 +506,31 @@
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         },
         {
           "reviewID": "2",
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         }
       ],
       "attributes": [
         {
-          "typeName": "RAM",
+          "typeValue": "RAM",
           "optionValue": "128GB"
         },
         {
-          "typeName": "Camera",
+          "typeValue": "Camera",
           "optionValue": "Zoom quang học"
         },
         {
-          "typeName": "Màn hình",
+          "typeValue": "Màn hình",
           "optionValue": "Trên 6 inch"
         },
         {
-          "typeName": "Tính năng đặc biệt",
+          "typeValue": "Tính năng đặc biệt",
           "optionValue": "A.I phone"
         }
       ],
@@ -588,31 +588,31 @@
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         },
         {
           "reviewID": "2",
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         }
       ],
       "attributes": [
         {
-          "typeName": "RAM",
+          "typeValue": "RAM",
           "optionValue": "128GB"
         },
         {
-          "typeName": "Camera",
+          "typeValue": "Camera",
           "optionValue": "Zoom quang học"
         },
         {
-          "typeName": "Màn hình",
+          "typeValue": "Màn hình",
           "optionValue": "Trên 6 inch"
         },
         {
-          "typeName": "Tính năng đặc biệt",
+          "typeValue": "Tính năng đặc biệt",
           "optionValue": "A.I phone"
         }
       ],
@@ -670,31 +670,31 @@
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         },
         {
           "reviewID": "2",
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         }
       ],
       "attributes": [
         {
-          "typeName": "RAM",
+          "typeValue": "RAM",
           "optionValue": "128GB"
         },
         {
-          "typeName": "Camera",
+          "typeValue": "Camera",
           "optionValue": "Zoom quang học"
         },
         {
-          "typeName": "Màn hình",
+          "typeValue": "Màn hình",
           "optionValue": "Trên 6 inch"
         },
         {
-          "typeName": "Tính năng đặc biệt",
+          "typeValue": "Tính năng đặc biệt",
           "optionValue": "A.I phone"
         }
       ],
@@ -752,31 +752,31 @@
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         },
         {
           "reviewID": "2",
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         }
       ],
       "attributes": [
         {
-          "typeName": "RAM",
+          "typeValue": "RAM",
           "optionValue": "128GB"
         },
         {
-          "typeName": "Camera",
+          "typeValue": "Camera",
           "optionValue": "Zoom quang học"
         },
         {
-          "typeName": "Màn hình",
+          "typeValue": "Màn hình",
           "optionValue": "Trên 6 inch"
         },
         {
-          "typeName": "Tính năng đặc biệt",
+          "typeValue": "Tính năng đặc biệt",
           "optionValue": "A.I phone"
         }
       ],
@@ -834,31 +834,31 @@
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         },
         {
           "reviewID": "2",
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         }
       ],
       "attributes": [
         {
-          "typeName": "RAM",
+          "typeValue": "RAM",
           "optionValue": "128GB"
         },
         {
-          "typeName": "Camera",
+          "typeValue": "Camera",
           "optionValue": "Zoom quang học"
         },
         {
-          "typeName": "Màn hình",
+          "typeValue": "Màn hình",
           "optionValue": "Trên 6 inch"
         },
         {
-          "typeName": "Tính năng đặc biệt",
+          "typeValue": "Tính năng đặc biệt",
           "optionValue": "A.I phone"
         }
       ],
@@ -916,31 +916,31 @@
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         },
         {
           "reviewID": "2",
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         }
       ],
       "attributes": [
         {
-          "typeName": "RAM",
+          "typeValue": "RAM",
           "optionValue": "128GB"
         },
         {
-          "typeName": "Camera",
+          "typeValue": "Camera",
           "optionValue": "Zoom quang học"
         },
         {
-          "typeName": "Màn hình",
+          "typeValue": "Màn hình",
           "optionValue": "Trên 6 inch"
         },
         {
-          "typeName": "Tính năng đặc biệt",
+          "typeValue": "Tính năng đặc biệt",
           "optionValue": "A.I phone"
         }
       ],
@@ -998,31 +998,31 @@
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         },
         {
           "reviewID": "2",
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         }
       ],
       "attributes": [
         {
-          "typeName": "RAM",
+          "typeValue": "RAM",
           "optionValue": "128GB"
         },
         {
-          "typeName": "Camera",
+          "typeValue": "Camera",
           "optionValue": "Zoom quang học"
         },
         {
-          "typeName": "Màn hình",
+          "typeValue": "Màn hình",
           "optionValue": "Trên 6 inch"
         },
         {
-          "typeName": "Tính năng đặc biệt",
+          "typeValue": "Tính năng đặc biệt",
           "optionValue": "A.I phone"
         }
       ],
@@ -1080,31 +1080,31 @@
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         },
         {
           "reviewID": "2",
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         }
       ],
       "attributes": [
         {
-          "typeName": "RAM",
+          "typeValue": "RAM",
           "optionValue": "128GB"
         },
         {
-          "typeName": "Camera",
+          "typeValue": "Camera",
           "optionValue": "Zoom quang học"
         },
         {
-          "typeName": "Màn hình",
+          "typeValue": "Màn hình",
           "optionValue": "Trên 6 inch"
         },
         {
-          "typeName": "Tính năng đặc biệt",
+          "typeValue": "Tính năng đặc biệt",
           "optionValue": "A.I phone"
         }
       ],
@@ -1162,31 +1162,31 @@
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         },
         {
           "reviewID": "2",
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         }
       ],
       "attributes": [
         {
-          "typeName": "RAM",
+          "typeValue": "RAM",
           "optionValue": "128GB"
         },
         {
-          "typeName": "Camera",
+          "typeValue": "Camera",
           "optionValue": "Zoom quang học"
         },
         {
-          "typeName": "Màn hình",
+          "typeValue": "Màn hình",
           "optionValue": "Trên 6 inch"
         },
         {
-          "typeName": "Tính năng đặc biệt",
+          "typeValue": "Tính năng đặc biệt",
           "optionValue": "A.I phone"
         }
       ],
@@ -1244,31 +1244,31 @@
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 6:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         },
         {
           "reviewID": "2",
           "reviewContent": "Thiết kế rất đẹp!",
           "rating": 4,
           "createdAt": "2024-6-6 7:6:6",
-          "accountName": "Bùi Minh Khánh"
+          "userName": "Bùi Minh Khánh"
         }
       ],
       "attributes": [
         {
-          "typeName": "RAM",
+          "typeValue": "RAM",
           "optionValue": "128GB"
         },
         {
-          "typeName": "Camera",
+          "typeValue": "Camera",
           "optionValue": "Zoom quang học"
         },
         {
-          "typeName": "Màn hình",
+          "typeValue": "Màn hình",
           "optionValue": "Trên 6 inch"
         },
         {
-          "typeName": "Tính năng đặc biệt",
+          "typeValue": "Tính năng đặc biệt",
           "optionValue": "A.I phone"
         }
       ],
@@ -1313,7 +1313,7 @@
   "attributes": [
     {
       "typeID": "11",
-      "typeName": "RAM",
+      "typeValue": "RAM",
       "values": [
         {
           "optionID": "123",
@@ -1335,7 +1335,7 @@
     },
     {
       "typeID": "12",
-      "typeName": "CARD đồ họa",
+      "typeValue": "CARD đồ họa",
       "values": [
         {
           "optionID": "123",
@@ -1349,7 +1349,7 @@
     },
     {
       "typeID": "13",
-      "typeName": "Ổ cứng",
+      "typeValue": "Ổ cứng",
       "values": [
         {
           "optionID": "123",
@@ -1371,7 +1371,7 @@
     },
     {
       "typeID": "14",
-      "typeName": "Nhu cầu",
+      "typeValue": "Nhu cầu",
       "values": [
         {
           "optionID": "123",
@@ -1397,7 +1397,7 @@
     },
     {
       "typeID": "15",
-      "typeName": "Màn Hình",
+      "typeValue": "Màn Hình",
       "values": [
         {
           "optionID": "123",
@@ -1415,7 +1415,7 @@
     },
     {
       "typeID": "16",
-      "typeName": "CPU",
+      "typeValue": "CPU",
       "values": [
         {
           "optionID": "123",
@@ -1457,7 +1457,7 @@
     },
     {
       "typeID": "20",
-      "typeName": "Camera",
+      "typeValue": "Camera",
       "values": [
         {
           "optionID": "123",
@@ -1479,7 +1479,7 @@
     },
     {
       "typeID": "17",
-      "typeName": "Màn hình",
+      "typeValue": "Màn hình",
       "values": [
         {
           "optionID": "123",
@@ -1497,7 +1497,7 @@
     },
     {
       "typeID": "18",
-      "typeName": "Tính năng đặc biệt",
+      "typeValue": "Tính năng đặc biệt",
       "values": [
         {
           "optionID": "123",
@@ -1523,14 +1523,14 @@
     },
     {
       "typeID": "19",
-      "typeName": "Hiệu năng và pin",
+      "typeValue": "Hiệu năng và pin",
       "values": []
     }
   ],
-  "accounts": [
+  "users": [
     {
       "id": "CT061",
-      "accountName": "Bui Minh Khanh",
+      "userName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
@@ -1540,7 +1540,7 @@
     },
     {
       "id": "CT062",
-      "accountName": "Bui Minh Khanh",
+      "userName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
@@ -1550,7 +1550,7 @@
     },
     {
       "id": "CT063",
-      "accountName": "Bui Minh Khanh",
+      "userName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
@@ -1560,7 +1560,7 @@
     },
     {
       "id": "CT064",
-      "accountName": "Bui Minh Khanh",
+      "userName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
@@ -1570,7 +1570,7 @@
     },
     {
       "id": "CT065",
-      "accountName": "Bui Minh Khanh",
+      "userName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
@@ -1580,7 +1580,7 @@
     },
     {
       "id": "CT066",
-      "accountName": "Bui Minh Khanh",
+      "userName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
@@ -1590,7 +1590,7 @@
     },
     {
       "id": "CT067",
-      "accountName": "Bui Minh Khanh",
+      "userName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
@@ -1600,7 +1600,7 @@
     },
     {
       "id": "CT068",
-      "accountName": "Bui Minh Khanh",
+      "userName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
@@ -1610,7 +1610,7 @@
     },
     {
       "id": "CT069",
-      "accountName": "Bui Minh Khanh",
+      "userName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
@@ -1620,7 +1620,7 @@
     },
     {
       "id": "CT070",
-      "accountName": "Bui Minh Khanh",
+      "userName": "Bui Minh Khanh",
       "avt": "/avt.jpg",
       "passwd": "123456a@",
       "phoneNumber": "0336917223",
@@ -1640,7 +1640,7 @@
       "phoneNumber": "0388725928",
       "detailAddress": "946 Đê La Thành",
       "createdAt": "2024-05-15 18:01:5",
-      "accountName": "Bùi Minh Khánh",
+      "userName": "Bùi Minh Khánh",
       "products": [
         {
           "id": "11",
@@ -1676,7 +1676,7 @@
       "phoneNumber": "0388725928",
       "detailAddress": "946 Đê La Thành",
       "createdAt": "2024-05-15 18:01:5",
-      "accountName": "Bùi Minh Khánh",
+      "userName": "Bùi Minh Khánh",
       "products": [
         {
           "id": "11",
@@ -1712,7 +1712,7 @@
       "phoneNumber": "0388725928",
       "detailAddress": "946 Đê La Thành",
       "createdAt": "2024-05-15 18:01:5",
-      "accountName": "Bùi Minh Khánh",
+      "userName": "Bùi Minh Khánh",
       "products": [
         {
           "id": "11",
@@ -1748,7 +1748,7 @@
       "phoneNumber": "0388725928",
       "detailAddress": "946 Đê La Thành",
       "createdAt": "2024-05-15 18:01:5",
-      "accountName": "Bùi Minh Khánh",
+      "userName": "Bùi Minh Khánh",
       "products": [
         {
           "id": "11",
@@ -1784,7 +1784,7 @@
       "phoneNumber": "0388725928",
       "detailAddress": "946 Đê La Thành",
       "createdAt": "2024-05-15 18:01:5",
-      "accountName": "Bùi Minh Khánh",
+      "userName": "Bùi Minh Khánh",
       "products": [
         {
           "id": "11",
@@ -1820,7 +1820,7 @@
       "phoneNumber": "0388725928",
       "detailAddress": "946 Đê La Thành",
       "createdAt": "2024-05-15 18:01:5",
-      "accountName": "Bùi Minh Khánh",
+      "userName": "Bùi Minh Khánh",
       "products": [
         {
           "id": "11",

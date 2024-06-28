@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { AttributeType } from "@/declare";
+import { AttributeOption, AttributeType } from "@/declare";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
@@ -29,41 +29,42 @@ import {
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/utils/constants";
 import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
-import { useCurrAccount } from "@/utils/customHook";
+import { useCurrUser } from "@/utils/customHook";
 import loader from "@/api/preApiLoader.ts";
 import { toast } from "sonner";
 import log from "loglevel";
 import axios, { HttpStatusCode } from "axios";
 import { Separator } from "@/components/ui/separator";
+import { arrayInReverse } from "@/utils/helpers";
 
-const attrTypeColsName: string[] = ["STT", "ID", "THUỘC TÍNH"];
+const attrTypeColsName: string[] = ["STT", "THUỘC TÍNH"];
 
-const attrOptionColsName: string[] = ["STT", "ID", "GIÁ TRỊ"];
+const attrOptionColsName: string[] = ["STT", "GIÁ TRỊ"];
 
 const AttributeManagement = () => {
-  const { currAccount } = useCurrAccount();
+  const { currUser } = useCurrUser();
   const attributeTypesLoader = useRouteLoaderData(
     "attribute_management"
   ) as AttributeType[];
   const [attributeTypes, setAttributeTypes] = useState<
     AttributeType[] | undefined
   >(attributeTypesLoader);
-  const [selectedAttr, setSelectedAttr] = useState<AttributeType>(
-    attributeTypesLoader[0]
-  );
-  const [setSearchingInput] = useState("");
+  const [selectedAttr, setSelectedAttr] = useState<AttributeType>();
+  const [selectedAttrOption, setSelectedAttrOption] =
+    useState<AttributeOption>();
+  const [searchingInput, setSearchingInput] = useState("");
 
   const handleAddAttributeType = async (name: string) => {
     const processedName: string = name.trim();
     try {
       await axiosInstance.post(
-        "/attributes",
+        "/attributes/types",
         {
-          name: processedName,
+          value: processedName,
         },
         {
           headers: {
-            "User-id": currAccount?.id,
+            "User-id": currUser?.userID,
           },
           ...reqConfig,
         }
@@ -72,6 +73,8 @@ const AttributeManagement = () => {
       const attributes: AttributeType[] | undefined =
         await loader.getAttributes();
       setAttributeTypes(attributes);
+      setSelectedAttr(undefined);
+      setSelectedAttrOption(undefined);
       toast.success("Thêm thành công!");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -92,13 +95,13 @@ const AttributeManagement = () => {
     const processedName: string = name.trim();
     try {
       await axiosInstance.patch(
-        `/attributes/${selectedAttr?.typeID}`,
+        `/attributes/types/${selectedAttr?.typeID}`,
         {
-          name: processedName,
+          value: processedName,
         },
         {
           headers: {
-            "User-id": currAccount?.id,
+            "User-id": currUser?.userID,
           },
           ...reqConfig,
         }
@@ -107,6 +110,8 @@ const AttributeManagement = () => {
       const attributes: AttributeType[] | undefined =
         await loader.getAttributes();
       setAttributeTypes(attributes);
+      setSelectedAttr(undefined);
+      setSelectedAttrOption(undefined);
       toast.success("Thay đổi thành công!");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -125,17 +130,19 @@ const AttributeManagement = () => {
     }
   };
 
-  const handleDeleteAttributes = async () => {
+  const handleDeleteAttributeType = async () => {
     try {
-      await axiosInstance.delete(`/attributes/${selectedAttr?.typeID}`, {
+      await axiosInstance.delete(`/attributes/types/${selectedAttr?.typeID}`, {
         headers: {
-          "User-id": currAccount?.id,
+          "User-id": currUser?.userID,
         },
         ...reqConfig,
       });
       const attributes: AttributeType[] | undefined =
         await loader.getAttributes();
       setAttributeTypes(attributes);
+      setSelectedAttr(undefined);
+      setSelectedAttrOption(undefined);
       toast.success("Thay đổi thành công!");
     } catch (error) {
       toast.error("Thay đổi thất bại!");
@@ -150,6 +157,119 @@ const AttributeManagement = () => {
     }
   };
 
+  const handleAddAttributeOption = async (name: string) => {
+    const processedName: string = name.trim();
+    try {
+      await axiosInstance.post(
+        "/attributes/options",
+        {
+          value: processedName,
+          id: selectedAttr?.typeID,
+        },
+        {
+          headers: {
+            "User-id": currUser?.userID,
+          },
+          ...reqConfig,
+        }
+      );
+
+      const attributes: AttributeType[] | undefined =
+        await loader.getAttributes();
+      setAttributeTypes(attributes);
+      setSelectedAttr(
+        attributes?.find((attr) => attr.typeID === selectedAttr?.typeID)
+      );
+      setSelectedAttrOption(undefined);
+      toast.success("Thêm thành công!");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == HttpStatusCode.Conflict) {
+          toast.error("Thêm thất bại: giá trị này đã tồn tại!");
+        } else {
+          toast.error("Thêm thất bại!");
+        }
+        log.error(`Response data: ${error.response?.data}`);
+        log.error(`Response status: ${error.response?.status})`);
+      } else {
+        log.error("Unexpected error:", error);
+      }
+    }
+  };
+
+  const handleUpdateAttributeOption = async (name: string) => {
+    const processedName: string = name.trim();
+    try {
+      await axiosInstance.patch(
+        `/attributes/options/${selectedAttrOption?.optionID}`,
+        {
+          value: processedName,
+          id: selectedAttr?.typeID,
+        },
+        {
+          headers: {
+            "User-id": currUser?.userID,
+          },
+          ...reqConfig,
+        }
+      );
+
+      const attributes: AttributeType[] | undefined =
+        await loader.getAttributes();
+      setAttributeTypes(attributes);
+      setSelectedAttr(
+        attributes?.find((attr) => attr.typeID === selectedAttr?.typeID)
+      );
+      setSelectedAttrOption(undefined);
+      toast.success("Thay đổi thành công!");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status == HttpStatusCode.Conflict) {
+          toast.error("Thay đổi thất bại: giá trị này đã tồn tại!");
+        } else {
+          toast.error("Thay đổi thất bại!");
+        }
+        if (error.response) {
+          log.error(`Response data: ${error.response.data}`);
+          log.error(`Response status: ${error.response.status})`);
+        }
+      } else {
+        log.error("Unexpected error:", error);
+      }
+    }
+  };
+
+  const handleDeleteAttributeOption = async () => {
+    try {
+      await axiosInstance.delete(
+        `/attributes/options/${selectedAttrOption?.optionID}`,
+        {
+          headers: {
+            "User-id": currUser?.userID,
+          },
+          ...reqConfig,
+        }
+      );
+      const attributes: AttributeType[] | undefined =
+        await loader.getAttributes();
+      setAttributeTypes(attributes);
+      setSelectedAttr(
+        attributes?.find((attr) => attr.typeID === selectedAttr?.typeID)
+      );
+      setSelectedAttrOption(undefined);
+      toast.success("Thay đổi thành công!");
+    } catch (error) {
+      toast.error("Thay đổi thất bại!");
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          log.error(`Response data: ${error.response.data}`);
+          log.error(`Response status: ${error.response.status})`);
+        }
+      } else {
+        log.error("Unexpected error:", error);
+      }
+    }
+  };
   return (
     <section className=" grid grid-cols-5 gap-4">
       {/** SEARCH BOX */}
@@ -159,7 +279,11 @@ const AttributeManagement = () => {
           type="search"
           placeholder="Tìm kiếm..."
           className="h-full text-lg w-full rounded-xl bg-background pl-14 focus-visible_!ring-0 focus-visible_!ring-offset-0"
-          onChange={(e) => setSearchingInput(e.target.value)}
+          onChange={(e) => {
+            setSearchingInput(e.target.value);
+            setSelectedAttr(undefined);
+            setSelectedAttrOption(undefined);
+          }}
         />
       </div>
 
@@ -203,7 +327,7 @@ const AttributeManagement = () => {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogAction
-                        onClick={() => handleDeleteAttributes()}
+                        onClick={() => handleDeleteAttributeType()}
                         className={buttonVariants({
                           variant: "negative",
                         })}
@@ -229,52 +353,67 @@ const AttributeManagement = () => {
         {/** ATTRIBUTE TYPE TABLE */}
         <Card className="rounded-xl shadow-lg flex-1">
           <CardContent className="p-4">
-            <ScrollArea className="relative h-[64vh]">
-              <Table>
-                <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
-                  <tr>
-                    {attrTypeColsName.map((item, key) => {
-                      return (
-                        <TableHead
-                          key={key}
-                          className=" text-center text-black font-extrabold text-[1rem]"
+            {attributeTypes && attributeTypes.length !== 0 ? (
+              <ScrollArea className="relative h-[64vh]">
+                <Table>
+                  <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
+                    <tr>
+                      {attrTypeColsName.map((item, key) => {
+                        return (
+                          <TableHead
+                            key={key}
+                            className=" text-center text-black font-extrabold text-[1rem]"
+                          >
+                            {item}
+                          </TableHead>
+                        );
+                      })}
+                    </tr>
+                  </TableHeader>
+                  <TableBody>
+                    {arrayInReverse(attributeTypes)
+                      .filter((attr) =>
+                        attr.typeValue
+                          .toLowerCase()
+                          .includes(searchingInput.toLowerCase())
+                      )
+                      .map((attr, index) => (
+                        <TableRow
+                          onClick={() => {
+                            setSelectedAttr(attr);
+                            setSelectedAttrOption(undefined);
+                          }}
+                          key={index}
+                          className={
+                            selectedAttr && attr.typeID === selectedAttr.typeID
+                              ? "bg-theme-softer"
+                              : ""
+                          }
                         >
-                          {item}
-                        </TableHead>
-                      );
-                    })}
-                  </tr>
-                </TableHeader>
-                <TableBody>
-                  {attributeTypes?.map((attr, index) => (
-                    <TableRow
-                      onClick={() => setSelectedAttr(attr)}
-                      key={index}
-                      className={
-                        attr.typeID === selectedAttr.typeID
-                          ? "bg-theme-softer"
-                          : ""
-                      }
-                    >
-                      <TableCell className="text-center text-base">
-                        {index + 1}
-                      </TableCell>
-                      <TableCell className="text-center text-base">
-                        {attr.typeID}
-                      </TableCell>
-                      <TableCell className="text-center text-base">
-                        {attr.typeName}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                  <tr>
-                    <td>
-                      <Separator />
-                    </td>
-                  </tr>
-                </TableBody>
-              </Table>
-            </ScrollArea>
+                          <TableCell className="text-center text-base">
+                            {index + 1}
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            {attr.typeValue}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    <tr>
+                      <td>
+                        <Separator />
+                      </td>
+                    </tr>
+                  </TableBody>
+                </Table>
+              </ScrollArea>
+            ) : (
+              <div className="flex flex-col items-center">
+                <img width={400} src="/empty-box.svg" alt="emptyCart" />
+                <span className="text-xl font-medium text-slate-500 mb-10">
+                  Chưa có thuộc tính nào!
+                </span>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -283,69 +422,91 @@ const AttributeManagement = () => {
       <div className="col-span-2 flex gap-4">
         {/** ATTRIBUTE OPTION TABLE */}
         <Card className="rounded-xl shadow-lg !max-h-[40.8rem] flex-1">
-          <CardContent className="p-4">
-            <ScrollArea className="relative h-[64vh]">
-              <Table>
-                <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
-                  <tr>
-                    {attrOptionColsName.map((item, key) => {
-                      return (
-                        <TableHead
-                          key={key}
-                          className=" text-center text-black font-extrabold text-[1rem]"
+          <CardContent className="p-4 h-full">
+            {selectedAttr && selectedAttr.options.length !== 0 ? (
+              <ScrollArea className="relative h-[64vh]">
+                <Table>
+                  <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
+                    <tr>
+                      {attrOptionColsName.map((item, key) => {
+                        return (
+                          <TableHead
+                            key={key}
+                            className=" text-center text-black font-extrabold text-[1rem]"
+                          >
+                            {item}
+                          </TableHead>
+                        );
+                      })}
+                    </tr>
+                  </TableHeader>
+                  <TableBody>
+                    {arrayInReverse(selectedAttr.options).map(
+                      (option, index) => (
+                        <TableRow
+                          onClick={() => setSelectedAttrOption(option)}
+                          className={
+                            selectedAttrOption &&
+                            option.optionID === selectedAttrOption.optionID
+                              ? "bg-theme-softer"
+                              : ""
+                          }
+                          key={index}
                         >
-                          {item}
-                        </TableHead>
-                      );
-                    })}
-                  </tr>
-                </TableHeader>
-                <TableBody>
-                  {selectedAttr.options.map((option, index) => (
-                    <TableRow key={index}>
-                      <TableCell className="text-center text-base">
-                        {index + 1}
-                      </TableCell>
-                      <TableCell className="text-center text-base">
-                        {option.optionID}
-                      </TableCell>
-                      <TableCell className="text-center  text-base">
-                        {option.optionValue}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                  <tr>
-                    <td>
-                      <Separator />
-                    </td>
-                  </tr>
-                </TableBody>
-              </Table>
-            </ScrollArea>
+                          <TableCell className="text-center text-base">
+                            {index + 1}
+                          </TableCell>
+                          <TableCell className="text-center  text-base">
+                            {option.optionValue}
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )}
+                    <tr>
+                      <td>
+                        <Separator />
+                      </td>
+                    </tr>
+                  </TableBody>
+                </Table>
+              </ScrollArea>
+            ) : (
+              <div className="flex flex-col items-center">
+                <img width={400} src="/empty-box.svg" alt="emptyCart" />
+                <span className="text-xl font-medium text-slate-500">
+                  Chưa có giá trị nào!
+                </span>
+              </div>
+            )}
           </CardContent>
         </Card>
+
         {/** ATTRIBUTE OPTION'S TOOLS */}
         <Card className="rounded-xl shadow-lg">
           <CardContent className="p-4 space-y-4 contain-content">
-            <OptionDialog
-              formTitle="Thêm giá trị mới"
-              handleDialogAcceptEvent={handleAddAttributeType}
-            >
-              <Button className="" variant="positive">
-                <Plus />
-              </Button>
-            </OptionDialog>
             {selectedAttr ? (
+              <OptionDialog
+                formTitle="Thêm giá trị mới"
+                handleDialogAcceptEvent={handleAddAttributeOption}
+              >
+                <Button className="" variant="positive">
+                  <Plus />
+                </Button>
+              </OptionDialog>
+            ) : (
+              <Plus className="mx-4 !mb-7v !mt-3" />
+            )}
+            {selectedAttrOption && selectedAttr?.options ? (
               <>
-                <AttributeDialog
-                  attribute={selectedAttr}
+                <OptionDialog
+                  option={selectedAttrOption}
                   formTitle="Sửa tên giá trị"
-                  handleDialogAcceptEvent={handleUpdateAttributeType}
+                  handleDialogAcceptEvent={handleUpdateAttributeOption}
                 >
                   <Button variant="neutral">
                     <SquarePen />
                   </Button>
-                </AttributeDialog>
+                </OptionDialog>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="negative">
@@ -362,7 +523,7 @@ const AttributeManagement = () => {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogAction
-                        onClick={() => handleDeleteAttributes()}
+                        onClick={() => handleDeleteAttributeOption()}
                         className={buttonVariants({
                           variant: "negative",
                         })}

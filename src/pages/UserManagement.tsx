@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import UserDialog from "@/components/userDialog";
-import { Account } from "@/declare";
+import { User } from "@/declare";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
@@ -38,11 +38,11 @@ const colName: string[] = [
 ];
 
 const UserManagement = () => {
-  const usersData = useRouteLoaderData("user_management") as Account[];
+  const usersData = useRouteLoaderData("user_management") as User[];
   const [existingUsers, setExistUsers] = useState(usersData);
 
   const deleteUser = (userID: string) => {
-    const temp = existingUsers.filter((user) => user.id !== userID);
+    const temp = existingUsers.filter((user) => user.userID !== userID);
     setExistUsers(temp);
   };
 
@@ -97,13 +97,13 @@ const UserManagement = () => {
                       {index + 1}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {user.id}
+                      {user.userID}
                     </TableCell>
                     <TableCell className="text-center  text-base">
-                      {user.accountName}
+                      {user.userName}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {user.phoneNumber}
+                      {user.phoneNum}
                     </TableCell>
                     <TableCell className="text-center text-base">
                       {`${user.createdAt}`}
@@ -128,7 +128,7 @@ const UserManagement = () => {
                       </UserDialog>
                       <Button
                         variant="negative"
-                        onClick={() => user.id && deleteUser(user.id)}
+                        onClick={() => user.userID && deleteUser(user.userID)}
                       >
                         <Trash2 />
                       </Button>

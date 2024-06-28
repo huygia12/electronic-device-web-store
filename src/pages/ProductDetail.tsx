@@ -162,7 +162,7 @@ const ProductDetail = () => {
                     {productData.attributes.map((attr, index) => (
                       <TableRow key={index}>
                         <TableCell className="font-medium">
-                          {attr.typeName}
+                          {attr.typeValue}
                         </TableCell>
                         <TableCell>{attr.optionValue}</TableCell>
                       </TableRow>

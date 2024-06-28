@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/table";
 import { Category } from "@/declare";
 import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
-import { useCurrAccount } from "@/utils/customHook";
+import { useCurrUser } from "@/utils/customHook";
 import { arrayInReverse } from "@/utils/helpers";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -39,7 +39,7 @@ import { Separator } from "@/components/ui/separator";
 const colName: string[] = ["STT", "MÃ DANH MỤC", "TÊN DANH MỤC", "SỐ SẢN PHẨM"];
 
 const CategoryManagement = () => {
-  const { currAccount } = useCurrAccount();
+  const { currUser } = useCurrUser();
   const categoriesData = useRouteLoaderData("category_management") as
     | Category[]
     | undefined;
@@ -57,7 +57,7 @@ const CategoryManagement = () => {
         },
         {
           headers: {
-            "User-id": currAccount?.id,
+            "User-id": currUser?.userID,
           },
           ...reqConfig,
         }
@@ -85,13 +85,13 @@ const CategoryManagement = () => {
     const processedName: string = name.trim();
     try {
       await axiosInstance.patch(
-        `/categories/${selectedCategory?.id}`,
+        `/categories/${selectedCategory?.categoryID}`,
         {
           name: processedName,
         },
         {
           headers: {
-            "User-id": currAccount?.id,
+            "User-id": currUser?.userID,
           },
           ...reqConfig,
         }
@@ -118,12 +118,15 @@ const CategoryManagement = () => {
 
   const handleDeleteCategory = async () => {
     try {
-      await axiosInstance.delete(`/categories/${selectedCategory?.id}`, {
-        headers: {
-          "User-id": currAccount?.id,
-        },
-        ...reqConfig,
-      });
+      await axiosInstance.delete(
+        `/categories/${selectedCategory?.categoryID}`,
+        {
+          headers: {
+            "User-id": currUser?.userID,
+          },
+          ...reqConfig,
+        }
+      );
       const categorys = await loader.getCategories();
       setExistingCategories(categorys);
       setSelectedCategory(undefined);
@@ -175,7 +178,7 @@ const CategoryManagement = () => {
                   <TableBody>
                     {arrayInReverse(existingCategories)
                       .filter((cate) =>
-                        cate.name
+                        cate.categoryName
                           .toLowerCase()
                           .includes(searchingInput.toLowerCase())
                       )
@@ -184,7 +187,7 @@ const CategoryManagement = () => {
                           key={index}
                           className={
                             selectedCategory &&
-                            (cate.id === selectedCategory.id
+                            (cate.categoryID === selectedCategory.categoryID
                               ? "bg-theme-softer"
                               : "")
                           }
@@ -194,10 +197,10 @@ const CategoryManagement = () => {
                             {index + 1}
                           </TableCell>
                           <TableCell className="text-center text-base">
-                            {cate.id}
+                            {cate.categoryID}
                           </TableCell>
                           <TableCell className="text-center  text-base">
-                            {cate.name}
+                            {cate.categoryName}
                           </TableCell>
                           <TableCell className="text-center text-base">
                             {cate.products}

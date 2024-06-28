@@ -125,7 +125,7 @@ const MyInvoices = () => {
                               <span className="font-semibold">
                                 Tên Khách Hàng: &nbsp;
                               </span>
-                              <span>{selectedInvoice.accountName}</span>
+                              <span>{selectedInvoice.userName}</span>
                             </div>
                             <div>
                               <span className="font-semibold">

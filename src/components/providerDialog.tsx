@@ -23,7 +23,7 @@ const ProviderDialog: React.FC<ProviderDialogProps> = ({
   className,
   ...props
 }) => {
-  const [name, setName] = useState<string>(props.provider?.name ?? "");
+  const [name, setName] = useState<string>(props.provider?.providerName ?? "");
   const [isDisable, setIsDisable] = useState(true);
 
   const handleInputEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +37,7 @@ const ProviderDialog: React.FC<ProviderDialogProps> = ({
   };
 
   const resetInputValue = () => {
-    setName(props.provider?.name ?? "");
+    setName(props.provider?.providerName ?? "");
   };
 
   return (

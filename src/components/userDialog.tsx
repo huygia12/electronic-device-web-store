@@ -12,11 +12,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Eye, EyeOff } from "lucide-react";
-import { Account } from "@/declare";
+import { User } from "@/declare";
 import { buttonVariants } from "@/utils/constants";
 
 interface UserDialogProps extends HTMLAttributes<HTMLFormElement> {
-  user?: Account;
+  user?: User;
   formTitle: string;
 }
 
@@ -49,7 +49,7 @@ const UserDialog: React.FC<UserDialogProps> = ({ className, ...props }) => {
                 </Label>
                 <Input
                   id="name"
-                  defaultValue={props.user?.accountName ?? ""}
+                  defaultValue={props.user?.userName ?? ""}
                   placeholder="Nguyễn Văn A"
                   className="h-full text-xl"
                 />
@@ -75,7 +75,7 @@ const UserDialog: React.FC<UserDialogProps> = ({ className, ...props }) => {
                 <Input
                   id="phoneNum"
                   type="text"
-                  defaultValue={props.user?.phoneNumber ?? ""}
+                  defaultValue={props.user?.phoneNum ?? ""}
                   placeholder="+84"
                   className="h-full text-xl"
                 />

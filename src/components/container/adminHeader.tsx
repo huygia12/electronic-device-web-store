@@ -27,10 +27,9 @@ import AdminAccordion from "../adminAccordion";
 import { ScrollArea } from "../ui/scroll-area";
 import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
 import { toast } from "sonner";
-import { publicRoutes } from "@/pages/routes";
 import log from "loglevel";
 import { useRef } from "react";
-import { useCurrAccount } from "@/utils/customHook";
+import { useCurrUser } from "@/utils/customHook";
 
 interface AdminNavItem {
   name: string;
@@ -122,7 +121,7 @@ const navItems: AdminNavItem[] = [
 ];
 
 const AdminHeader = () => {
-  const { clearCurrAccount } = useCurrAccount();
+  const { clearCurrUser } = useCurrUser();
 
   const userOptions = useRef([
     {
@@ -136,10 +135,7 @@ const AdminHeader = () => {
           await axiosInstance.delete("/users/logout", reqConfig);
 
           toast.success("Đăng xuất thành công!");
-          clearCurrAccount();
-          await publicRoutes.navigate("/login", {
-            unstable_viewTransition: true,
-          });
+          clearCurrUser();
         } catch (error: unknown) {
           log.error(`Response data: ${error}`);
         }

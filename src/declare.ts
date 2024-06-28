@@ -12,23 +12,15 @@ export interface ChartData {
 }
 
 export interface Provider {
-  id: string;
-  name: string;
-  createdAt?: string;
-  updateAt?: string;
+  providerID: string;
+  providerName: string;
   products?: number;
-  // providerID?: string;
-  // providerName?: string;
 }
 
 export interface Category {
-  id: string;
-  name: string;
-  createdAt?: string;
-  updateAt?: string;
+  categoryID: string;
+  categoryName: string;
   products?: number;
-  // categoryID: string;
-  // categoryName: string;
 }
 
 export interface AttributeOption {
@@ -38,7 +30,7 @@ export interface AttributeOption {
 
 export interface AttributeType {
   typeID: string;
-  typeName: string;
+  typeValue: string;
   options: AttributeOption[];
 }
 
@@ -59,7 +51,7 @@ interface Review {
   reviewContent: string;
   rating: number;
   createdAt: Date;
-  accountName: string;
+  userName: string;
 }
 
 export interface Product {
@@ -74,26 +66,26 @@ export interface Product {
   categoryName: string;
   providerName: string;
   attributes: {
-    typeName: string;
+    typeValue: string;
     optionValue: string;
   }[];
   items: ProductItem[];
   reviews: Review[];
 }
 
-export interface Account {
-  accountName: string;
+export interface User {
+  userName: string;
   email: string;
-  id?: string;
-  avt?: string;
-  phoneNumber?: string;
+  userID?: string;
+  avatar?: string;
+  phoneNum?: string;
   createdAt?: Date;
   editedAt?: Date;
 }
 
-export interface AccountSummary {
-  name: string;
-  id: string;
+export interface UserSummary {
+  userName: string;
+  userID: string;
   avatar: string | null;
   role: string;
 }
@@ -108,7 +100,7 @@ export interface Invoice {
   phoneNumber: string;
   detailAddress?: string;
   createdAt: Date;
-  accountName: string;
+  userName: string;
   products: CartItem[];
 }
 
@@ -237,9 +229,9 @@ const ProductSchema = z
     description: true,
   });
 
-const AccountSchema = z
+const UserSchema = z
   .object({
-    accountName: z.string().min(1, { message: "String cannot be blank" }),
+    userName: z.string().min(1, { message: "String cannot be blank" }),
     avt: z.string().min(1, { message: "String cannot be blank" }),
     idBanned: z.boolean().default(false),
     phoneNumber: z.string().regex(new RegExp("^[0-9]+$")),
@@ -258,7 +250,7 @@ const InvoiceSchema = z.object({
   province: z.string().min(1, { message: "String cannot be blank" }),
   detailAddress: z.string().min(1, { message: "String cannot be blank" }),
   phoneNumber: z.string().regex(new RegExp("^[0-9]+$")),
-  accountID: z.string().min(1, { message: "String cannot be blank" }),
+  userID: z.string().min(1, { message: "String cannot be blank" }),
 });
 
 const InvoiceProductSchema = z.object({
@@ -280,7 +272,7 @@ export {
   AttributeTypeSchema,
   ItemSchema,
   ProductSchema,
-  AccountSchema,
+  UserSchema,
   InvoiceSchema,
   InvoiceProductSchema,
   CategorySchema,

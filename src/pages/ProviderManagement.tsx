@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Provider } from "@/declare";
 import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
-import { useCurrAccount } from "@/utils/customHook";
+import { useCurrUser } from "@/utils/customHook";
 import axios, { HttpStatusCode } from "axios";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -44,7 +44,7 @@ const colName: string[] = [
 ];
 
 const ProviderManagement = () => {
-  const { currAccount } = useCurrAccount();
+  const { currUser } = useCurrUser();
   const providersData = useRouteLoaderData("provider_management") as
     | Provider[]
     | undefined;
@@ -64,7 +64,7 @@ const ProviderManagement = () => {
         },
         {
           headers: {
-            "User-id": currAccount?.id,
+            "User-id": currUser?.userID,
           },
           ...reqConfig,
         }
@@ -92,13 +92,13 @@ const ProviderManagement = () => {
     const processedName: string = name.trim();
     try {
       await axiosInstance.patch(
-        `/providers/${selectedProvider?.id}`,
+        `/providers/${selectedProvider?.providerID}`,
         {
           name: processedName,
         },
         {
           headers: {
-            "User-id": currAccount?.id,
+            "User-id": currUser?.userID,
           },
           ...reqConfig,
         }
@@ -124,10 +124,11 @@ const ProviderManagement = () => {
   };
 
   const handleDeleteProvider = async () => {
+    console.log("user id", currUser?.userID);
     try {
-      await axiosInstance.delete(`/providers/${selectedProvider?.id}`, {
+      await axiosInstance.delete(`/providers/${selectedProvider?.providerID}`, {
         headers: {
-          "User-id": currAccount?.id,
+          "User-id": currUser?.userID,
         },
         ...reqConfig,
       });
@@ -182,7 +183,7 @@ const ProviderManagement = () => {
                   <TableBody>
                     {arrayInReverse(existingproviders)
                       .filter((provider) =>
-                        provider.name
+                        provider.providerName
                           .toLowerCase()
                           .includes(searchingInput.toLowerCase())
                       )
@@ -191,7 +192,7 @@ const ProviderManagement = () => {
                           key={index}
                           className={
                             selectedProvider &&
-                            (provider.id === selectedProvider.id
+                            (provider.providerID === selectedProvider.providerID
                               ? "bg-theme-softer"
                               : "")
                           }
@@ -201,10 +202,10 @@ const ProviderManagement = () => {
                             {index + 1}
                           </TableCell>
                           <TableCell className="text-center text-base">
-                            {provider.id}
+                            {provider.providerID}
                           </TableCell>
                           <TableCell className="text-center  text-base">
-                            {provider.name}
+                            {provider.providerName}
                           </TableCell>
                           <TableCell className="text-center text-base">
                             {provider.products}

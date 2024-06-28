@@ -96,8 +96,8 @@ const Homepage = () => {
             <SelectContent className="right-[-104%] top-[-2.7rem]">
               {providersData.map((provider, index) => {
                 return (
-                  <SelectItem key={index} value={provider.id}>
-                    {provider.name}
+                  <SelectItem key={index} value={provider.providerID}>
+                    {provider.providerName}
                   </SelectItem>
                 );
               })}

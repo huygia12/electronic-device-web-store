@@ -1,5 +1,5 @@
 import {
-  Account,
+  User,
   AttributeType,
   Category,
   Invoice,
@@ -82,11 +82,11 @@ const getProviders = async (): Promise<Provider[] | undefined> => {
 
 const getAttributes = async (): Promise<AttributeType[] | undefined> => {
   try {
-    const res = await axiosInstance.get<AttributeType[]>(
+    const res = await axiosInstance.get<{ info: AttributeType[] }>(
       "/attributes",
       reqConfig
     );
-    return res.data;
+    return res.data.info;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       // AxiosError-specific handling
@@ -102,9 +102,9 @@ const getAttributes = async (): Promise<AttributeType[] | undefined> => {
   }
 };
 
-const getUsers = async (): Promise<Account[] | undefined> => {
+const getUsers = async (): Promise<User[] | undefined> => {
   try {
-    const res = await axiosInstance.get<{ info: Account[] }>("/accounts");
+    const res = await axiosInstance.get<{ info: User[] }>("/users");
     return res.data.info;
   } catch (error) {
     if (axios.isAxiosError(error)) {

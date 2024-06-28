@@ -44,7 +44,7 @@ const InvoicesLookup = () => {
           </div>
           <div className="flex justify-between">
             <span>Khách Hàng</span>
-            <span>{searchingResult.accountName}</span>
+            <span>{searchingResult.userName}</span>
           </div>
           <div className="flex justify-between">
             <span>Ngày Đặt Hàng</span>

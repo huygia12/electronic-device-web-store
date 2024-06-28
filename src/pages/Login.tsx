@@ -16,10 +16,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import LoadingSpinner from "@/components/ui/loadingSpinner";
 import axios, { HttpStatusCode } from "axios";
 import { reqConfig } from "@/utils/axiosConfig";
-import { useCurrAccount } from "@/utils/customHook";
+import { useCurrUser } from "@/utils/customHook";
 import { publicRoutes } from "./routes";
 import log from "loglevel";
-import { AccountSummary } from "@/declare";
+import { UserSummary } from "@/declare";
 
 const LoginSchema = z.object({
   email: z.string().email({ message: "Email không đúng định dạng!" }),
@@ -44,25 +44,26 @@ const Login = () => {
   });
   const location = useLocation();
   const from: string = location.state?.from?.pathname ?? "/";
-  const { setCurrAccount } = useCurrAccount();
+  const { setCurrUser } = useCurrUser();
 
   const handleLoginFormSubmission: SubmitHandler<LoginForm> = async (data) => {
     try {
       const res = await axiosInstance.post<{
         message: string;
-        info: AccountSummary;
+        info: UserSummary;
       }>(
         "/users/login",
         {
-          email: data.email,
-          password: data.password,
+          email: data.email.trim(),
+          password: data.password.trim(),
         },
         reqConfig
       );
-      const account: AccountSummary = res.data.info;
-      setCurrAccount(account);
+      const user: UserSummary = res.data.info;
+      setCurrUser(user);
+      console.log("role: ", user.role);
       await publicRoutes.navigate(
-        account.role === "ADMIN" ? "/admin" : from === "/login" ? "/" : from,
+        user.role === "ADMIN" ? "/admin" : from === "/login" ? "/" : from,
         {
           unstable_viewTransition: true,
           replace: true,

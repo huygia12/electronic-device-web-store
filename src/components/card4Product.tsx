@@ -136,7 +136,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
             return (
               <CardTag
                 key={index}
-                type={attr.typeName}
+                type={attr.typeValue}
                 content={attr.optionValue}
               />
             );

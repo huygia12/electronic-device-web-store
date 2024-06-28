@@ -63,7 +63,7 @@ const Products = () => {
             return (
               <li key={parentIndex} className="space-y-4 mb-8">
                 <h5 className="text-slate-700 font-extrabold">
-                  {attr.typeName}
+                  {attr.typeValue}
                 </h5>
                 <Separator className="border-1 border-slate-400" />
                 <RadioGroup className="pl-4 space-y-2">

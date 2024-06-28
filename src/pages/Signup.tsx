@@ -21,7 +21,7 @@ import axios, { HttpStatusCode } from "axios";
 import log from "loglevel";
 
 const SignupSchema = z.object({
-  accountName: z.string().min(1, { message: "Tên không được bỏ trống!" }),
+  userName: z.string().min(1, { message: "Tên không được bỏ trống!" }),
   email: z.string().email({ message: "Email không đúng định dạng!" }),
   password: z.string().min(6, { message: "Mật khẩu chứa tối thiểu 6 kí tự!" }),
   retypePassword: z.string(),
@@ -54,9 +54,9 @@ const Signup = () => {
       await axiosInstance.post(
         "/users/signup",
         {
-          name: data.accountName,
-          email: data.email,
-          password: data.password,
+          name: data.userName.trim(),
+          email: data.email.trim(),
+          password: data.password.trim(),
           role: "ADMIN",
         },
         reqConfig
@@ -113,13 +113,13 @@ const Signup = () => {
                 <span className="text-red-600 ">*</span>
               </Label>
               <Input
-                {...register("accountName")}
+                {...register("userName")}
                 id="first-name"
                 autoComplete="username"
                 placeholder="Nguyễn Văn A"
               />
-              {errors.accountName && (
-                <div className="text-red-600">{errors.accountName.message}</div>
+              {errors.userName && (
+                <div className="text-red-600">{errors.userName.message}</div>
               )}
             </div>
             <div className="grid gap-2">
@@ -190,7 +190,12 @@ const Signup = () => {
               )}
             </div>
             <div className="grid gap-2">
-              <Button type="submit" variant="neutral" className="w-full">
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                variant="neutral"
+                className="w-full"
+              >
                 {!isSubmitting ? (
                   "Tạo tài khoản"
                 ) : (

@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import log from "loglevel";
 import { CartContext } from "@/context/cartProvider";
-import { AccountContext } from "@/context/accountProvider";
+import { UserContext } from "@/context/userProvider";
 
 log.setLevel("warn");
 
@@ -46,11 +46,10 @@ const useCartProps = () => {
   return { itemsInLocal, setItemsInLocal, removeInvoice, phaseID, setPhaseID };
 };
 
-const useCurrAccount = () => {
-  const { currAccount, setCurrAccount, clearCurrAccount } =
-    useContext(AccountContext);
+const useCurrUser = () => {
+  const { currUser, setCurrUser, clearCurrUser } = useContext(UserContext);
 
-  return { currAccount, setCurrAccount, clearCurrAccount };
+  return { currUser, setCurrUser, clearCurrUser };
 };
 
-export { useLocalStorage, useCartProps, useCurrAccount };
+export { useLocalStorage, useCartProps, useCurrUser };

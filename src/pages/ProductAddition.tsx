@@ -26,14 +26,13 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { AttributeOption, AttributeType, Category, Provider } from "@/declare";
 import { cn } from "@/lib/utils";
-import axios from "axios";
-import log from "loglevel";
 import { Check, ChevronsUpDown, Plus, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import preLoader from "@/api/preApiLoader";
 
 interface ProductAttribute {
   typeID: string;
-  typeName: string;
+  typeValue: string;
   optionID: string;
   optionName: string;
 }
@@ -46,7 +45,6 @@ const ProductAddition = () => {
   const [providers, setProviders] = useState<Provider[]>([]);
   const [attributes, setAttributes] = useState<AttributeType[]>([]);
   const [selectedAttr, setSelectedAttr] = useState<AttributeType>();
-  // const [selectedOptionID, setSelectedOptionID] = useState<string>();
   const [open, setOpen] = useState(false);
   const [attriAdditionBucket, setAttrAdditionBucket] = useState<
     ProductAttribute[]
@@ -54,33 +52,13 @@ const ProductAddition = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const categoriesRes = await axios.get<Category[]>(
-          import.meta.env.VITE_API_URL + "/categories"
-        );
-        const providersRes = await axios.get<Provider[]>(
-          import.meta.env.VITE_API_URL + "/providers"
-        );
-        const attrsRes = await axios.get<AttributeType[]>(
-          import.meta.env.VITE_API_URL + "/attributes"
-        );
+      const categories = await preLoader.getCategories();
+      const providers = await preLoader.getProviders();
+      const attributes = await preLoader.getAttributes();
 
-        setCategories(categoriesRes.data);
-        setProviders(providersRes.data);
-        setAttributes(attrsRes.data);
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          log.error("Axios error:", error.message);
-          if (error.response) {
-            log.error("Response data:", error.response.data);
-            log.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          log.error("Unexpected error:", error);
-        }
-      }
+      setCategories(categories ?? []);
+      setProviders(providers ?? []);
+      setAttributes(attributes ?? []);
     };
 
     fetchData();
@@ -159,7 +137,7 @@ const ProductAddition = () => {
         ...attriAdditionBucket,
         {
           typeID: selectedAttr.typeID,
-          typeName: selectedAttr.typeName,
+          typeValue: selectedAttr.typeValue,
           optionID: selectedOption.optionID,
           optionName: selectedOption.optionValue,
         },
@@ -233,10 +211,10 @@ const ProductAddition = () => {
                     return (
                       <SelectItem
                         key={index}
-                        value={cate.id}
+                        value={cate.categoryID}
                         className="max-w-[30rem] truncate"
                       >
-                        {cate.name}
+                        {cate.categoryName}
                       </SelectItem>
                     );
                   })}
@@ -258,10 +236,10 @@ const ProductAddition = () => {
                     return (
                       <SelectItem
                         key={index}
-                        value={provider.id}
+                        value={provider.providerID}
                         className="max-w-[30rem] truncate"
                       >
-                        {provider.name}
+                        {provider.providerName}
                       </SelectItem>
                     );
                   })}
@@ -337,7 +315,7 @@ const ProductAddition = () => {
                       className="justify-between focus_!ring-2"
                     >
                       {selectedAttr
-                        ? selectedAttr.typeName
+                        ? selectedAttr.typeValue
                         : "Chọn thể loại..."}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -356,7 +334,7 @@ const ProductAddition = () => {
                           {getAvailableAttributeType().map((attr, index) => (
                             <CommandItem
                               key={index}
-                              value={attr.typeName}
+                              value={attr.typeValue}
                               onSelect={() => {
                                 setSelectedAttr(
                                   attr.typeID === selectedAttr?.typeID
@@ -376,7 +354,7 @@ const ProductAddition = () => {
                                     : "opacity-0"
                                 )}
                               />
-                              {attr.typeName}
+                              {attr.typeValue}
                             </CommandItem>
                           ))}
                         </CommandGroup>
@@ -421,7 +399,7 @@ const ProductAddition = () => {
                     key={index}
                     className="w-max text-base bg-secondary text-secondary-foreground"
                   >
-                    <span>{`${attr.typeName} : ${attr.optionName}`}</span>
+                    <span>{`${attr.typeValue} : ${attr.optionName}`}</span>
                     <X
                       className="ml-2 hover_text-primary cursor-pointer"
                       onClick={() => handleDeleteAttribute(attr)}

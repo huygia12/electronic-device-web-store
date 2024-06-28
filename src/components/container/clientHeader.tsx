@@ -6,7 +6,7 @@ import CounterLabel from "@/components/ui/counterLabel";
 import { TfiHeadphoneAlt } from "react-icons/tfi";
 import CustomAvt from "../ui/customAvt";
 import { PackageSearch, Search } from "lucide-react";
-import { useCartProps, useCurrAccount } from "@/utils/customHook";
+import { useCartProps, useCurrUser } from "@/utils/customHook";
 import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
 import { publicRoutes } from "@/pages/routes";
 import log from "loglevel";
@@ -21,7 +21,7 @@ const navComponents: { title: string; path: string }[] = [
 
 const AppClientHeader = () => {
   const { itemsInLocal } = useCartProps();
-  const { currAccount, clearCurrAccount } = useCurrAccount();
+  const { currUser, clearCurrUser } = useCurrUser();
 
   const userOptions = useRef([
     {
@@ -35,7 +35,7 @@ const AppClientHeader = () => {
           await axiosInstance.delete("/users/logout", reqConfig);
 
           toast.success("Đăng xuất thành công!");
-          clearCurrAccount();
+          clearCurrUser();
           await publicRoutes.navigate("/login", {
             unstable_viewTransition: true,
           });
@@ -93,7 +93,7 @@ const AppClientHeader = () => {
                 <FiShoppingBag size={40} />
                 <CounterLabel counter={itemsInLocal.length} />
               </NavLink>
-              {currAccount && (
+              {currUser && (
                 <NavLink
                   to="orders"
                   className="relative"
@@ -112,7 +112,7 @@ const AppClientHeader = () => {
               </NavLink>
             </div>
           </div>
-          {currAccount ? (
+          {currUser ? (
             <CustomAvt className="ml-10" options={userOptions.current} />
           ) : (
             <div className="space-x-2 text-[1.1rem] flex justify-end">

@@ -23,7 +23,7 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
   className,
   ...props
 }) => {
-  const [name, setName] = useState<string>(props.category?.name ?? "");
+  const [name, setName] = useState<string>(props.category?.categoryName ?? "");
   const [isDisable, setIsDisable] = useState(true);
 
   const handleInputEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +37,7 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
   };
 
   const resetInputValue = () => {
-    setName(props.category?.name ?? "");
+    setName(props.category?.categoryName ?? "");
   };
 
   return (
