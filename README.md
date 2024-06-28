@@ -5,7 +5,7 @@ width="150" hspace="10" vspace="10">
 
 ||
 
-Font-end môn **Phát Triển Ứng Dụng Web** của sinh viên Học viện Kỹ thuật mật mã.
+FE môn **Phát Triển Ứng Dụng Web** của sinh viên Học viện Kỹ thuật mật mã.
 
 **_Khóa CT6_**
 
