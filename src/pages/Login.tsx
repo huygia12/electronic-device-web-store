@@ -15,7 +15,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LoadingSpinner from "@/components/ui/loadingSpinner";
 import axios, { HttpStatusCode } from "axios";
-import { reqConfig } from "@/utils/axiosConfig";
+import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
 import { useCurrUser } from "@/utils/customHook";
 import { publicRoutes } from "./routes";
 import log from "loglevel";
@@ -27,11 +27,6 @@ const LoginSchema = z.object({
 });
 
 type LoginForm = z.infer<typeof LoginSchema>;
-
-const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-  timeout: 5000, // Timeout set to 5 seconds
-});
 
 const Login = () => {
   const {

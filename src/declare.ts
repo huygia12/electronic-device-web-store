@@ -34,16 +34,45 @@ export interface AttributeType {
   options: AttributeOption[];
 }
 
+export interface ProductAttribute {
+  typeID: string;
+  typeValue: string;
+  optionID: string;
+  optionName: string;
+}
+
 export interface ProductItem {
   itemID: string;
   thump: string;
   quantity: number;
   price: number;
   productCode: string;
-  discount: number;
+  discount: number | null;
   colorName: string;
-  storageName: string;
+  storageName: string | null;
   images: string[];
+}
+
+export interface ProductItemInput {
+  thump: File | null;
+  quantity: number | null;
+  price: number | null;
+  productCode: string | null;
+  discount: number | null;
+  colorName: string | null;
+  storageName: string | null;
+  images: File[] | null;
+}
+
+export interface ProductItemUpdate {
+  thump: File | string | null;
+  quantity: number | null;
+  price: number | null;
+  productCode: string | null;
+  discount: number | null;
+  colorName: string | null;
+  storageName: string | null;
+  images: File[] | string[] | null;
 }
 
 interface Review {
@@ -55,14 +84,14 @@ interface Review {
 }
 
 export interface Product {
-  id: string;
+  productID: string;
   productName: string;
   description: string;
   height: number;
   weight: number;
   len: number;
   width: number;
-  gurantee: number;
+  warranty: number;
   categoryName: string;
   providerName: string;
   attributes: {
@@ -71,6 +100,59 @@ export interface Product {
   }[];
   items: ProductItem[];
   reviews: Review[];
+}
+
+export interface ProductDetail {
+  productID: string;
+  productName: string;
+  description: string | null;
+  length: number;
+  width: number;
+  height: number;
+  weight: number;
+  warranty: number;
+  categoryID: string | null;
+  providerID: string | null;
+  options: (string | null)[];
+  items: ProductItem[];
+}
+
+export interface ProductSummary {
+  productID: string;
+  productName: string;
+  description: string;
+  height: number;
+  weight: number;
+  length: number;
+  width: number;
+  warranty: number;
+  categoryName: string;
+  providerName: string;
+}
+
+export interface ProductInsertPayload {
+  productName: string;
+  description: string | null;
+  length: number;
+  width: number;
+  height: number;
+  weight: number;
+  warranty: number;
+  categoryID: string;
+  providerID: string;
+  options: string[];
+  productItems: ProductItemInsertPayload[];
+}
+
+export interface ProductItemInsertPayload {
+  thump: string | null;
+  quantity: number | null;
+  price: number | null;
+  productCode: string | null;
+  discount: number | null;
+  colorName: string | null;
+  storageName: string | null;
+  images: string[] | null;
 }
 
 export interface User {
@@ -124,17 +206,17 @@ export interface CartItem {
   price: number;
   quantity: number;
   discount: number;
-
-  id: string;
-  height: number;
-  weight: number;
-  len: number;
-  width: number;
-  itemID: string;
-  thump: string;
   productCode: string;
   colorName: string;
   storageName: string;
+
+  id?: string;
+  height?: number;
+  weight?: number;
+  len?: number;
+  width?: number;
+  itemID?: string;
+  thump?: string;
 }
 
 export interface Province {
@@ -155,6 +237,47 @@ export interface Ward {
 }
 
 /** SCHEMA */
+const ProductSchema = z.object({
+  productName: z.string().min(1, { message: "Không được bỏ trống!" }),
+  warranty: z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z
+      .number({ message: "Không hợp lệ!" })
+      .positive({ message: "Không hợp lệ!" })
+      .safe({ message: "Không hợp lệ!" })
+  ),
+  description: z.string().nullable(),
+  categoryID: z.string().min(1, { message: "Không được bỏ trống!" }),
+  providerID: z.string().min(1, { message: "Không được bỏ trống!" }),
+  height: z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z
+      .number({ message: "Không hợp lệ!" })
+      .positive({ message: "Không hợp lệ!" })
+      .safe({ message: "Không hợp lệ!" })
+  ),
+  length: z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z
+      .number({ message: "Không hợp lệ!" })
+      .positive({ message: "Không hợp lệ!" })
+      .safe({ message: "Không hợp lệ!" })
+  ),
+  width: z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z
+      .number({ message: "Không hợp lệ!" })
+      .positive({ message: "Không hợp lệ!" })
+      .safe({ message: "Không hợp lệ!" })
+  ),
+  weight: z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z
+      .number({ message: "Không hợp lệ!" })
+      .positive({ message: "Không hợp lệ!" })
+      .safe({ message: "Không hợp lệ!" })
+  ),
+});
 const ProductAttributeSchema = z.object({
   typeID: z.string().min(1, { message: "String cannot be blank" }),
   attributeValue: z.array(
@@ -191,43 +314,6 @@ const ItemSchema = z
     src: z.array(z.string().min(1, { message: "String cannot be blank" })),
   })
   .partial({ storageName: true });
-
-const ProductSchema = z
-  .object({
-    productName: z.string().min(1, { message: "String cannot be blank" }),
-    description: z.string(),
-    height: z
-      .number({ message: "Not a number" })
-      .positive({ message: "Not an positive number" })
-      .finite({ message: "Not an finite number" })
-      .safe({ message: "Not in the int range" }),
-    len: z
-      .number({ message: "Not a number" })
-      .positive({ message: "Not an positive number" })
-      .finite({ message: "Not an finite number" })
-      .safe({ message: "Not in the int range" }),
-    width: z
-      .number({ message: "Not a number" })
-      .positive({ message: "Not an positive number" })
-      .finite({ message: "Not an finite number" })
-      .safe({ message: "Not in the int range" }),
-    weight: z
-      .number({ message: "Not a number" })
-      .positive({ message: "Not an positive number" })
-      .finite({ message: "Not an finite number" })
-      .safe({ message: "Not in the int range" }),
-    gurantee: z
-      .number({ message: "Not a number" })
-      .int({ message: "Not an integer number" })
-      .positive({ message: "Not a positive number" })
-      .finite({ message: "Not a finite number" })
-      .safe({ message: "Not in the int range" }),
-    categoryID: z.string().min(1, { message: "String cannot be blank" }),
-    branchID: z.string().min(1, { message: "String cannot be blank" }),
-  })
-  .partial({
-    description: true,
-  });
 
 const UserSchema = z
   .object({
@@ -268,10 +354,10 @@ const CategorySchema = z.string().min(1, { message: "String cannot be blank" });
 const ProviderSchema = z.string().min(1, { message: "String cannot be blank" });
 
 export {
+  ProductSchema,
   ProductAttributeSchema,
   AttributeTypeSchema,
   ItemSchema,
-  ProductSchema,
   UserSchema,
   InvoiceSchema,
   InvoiceProductSchema,

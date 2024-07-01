@@ -25,7 +25,7 @@ import axios from "axios";
 import log from "loglevel";
 import { axiosInstance } from "@/utils/axiosConfig";
 
-const ORDERS_LINK = "/admin/received-orders";
+const ORDERS_LINK = "/admin/orders";
 
 const cardItem = [
   {

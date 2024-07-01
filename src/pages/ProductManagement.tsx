@@ -1,15 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import {
   Table,
   TableBody,
@@ -18,7 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Product } from "@/declare";
+import { ProductSummary } from "@/declare";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { NavLink, useRouteLoaderData } from "react-router-dom";
 import {
@@ -28,182 +30,233 @@ import {
   Tooltip,
 } from "@/components/ui/tooltip";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useState } from "react";
+import { buttonVariants } from "@/utils/constants";
+import { arrayInReverse } from "@/utils/helpers";
+import { Separator } from "@/components/ui/separator";
+import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
+import { useCurrUser } from "@/utils/customHook";
+import log from "loglevel";
+import loader from "@/api/preApiLoader.ts";
+import { toast } from "sonner";
+import axios from "axios";
+import { clearImagesInFB } from "@/utils/product";
 
 const colName: string[] = [
   "STT",
   "TÊN SẢN PHẨM",
-  "ID",
   "KÍCH THƯỚC(dài/rộng/cao)",
   "KHỐI LƯỢNG",
-  "LOẠI SẢN PHẨM",
-  "KHOẢNG GIÁ",
-  "KHOẢNG GIẢM GIÁ",
+  "DANH MỤC",
+  "NHÀ PHÂN PHỐI",
   "BẢO HÀNH",
-  "THAO TÁC",
 ];
 const ProductManagement = () => {
-  const productsData = useRouteLoaderData("product_management") as Product[];
+  const productsData = useRouteLoaderData(
+    "product_management"
+  ) as ProductSummary[];
+  const [productSummaryList, setProductSummaryList] = useState<
+    ProductSummary[] | undefined
+  >(productsData);
+  const [selectedProduct, setSelectedProduct] = useState<ProductSummary>();
+  const [searchingInput, setSearchingInput] = useState("");
+  const { currUser } = useCurrUser();
 
-  const getPriceRange = (product: Product): string => {
-    const len = product.items.length;
-    if (len === 0) {
-      /** Doesnt have any items */
-      return "";
-    } else if (len === 1) {
-      /** Have only one item */
-      return product.items[0].price.toLocaleString();
-    }
+  const handleDeleteProduct = async () => {
+    try {
+      const res = await axiosInstance.delete<{ info: string[] }>(
+        `/products/${selectedProduct?.productID}`,
+        {
+          headers: {
+            "User-id": currUser?.userID,
+          },
+          ...reqConfig,
+        }
+      );
+      const productSummaryList: ProductSummary[] | undefined =
+        await loader.getProducts();
 
-    /** Find and return the range*/
-    let min: number = product.items[0].price;
-    let max: number = product.items[0].price;
-    product.items.forEach((item) => {
-      if (item.price < min) {
-        min = item.price;
+      clearImagesInFB(res.data.info);
+      setProductSummaryList(productSummaryList);
+      setSelectedProduct(undefined);
+      toast.success("Thay đổi thành công!");
+    } catch (error) {
+      toast.error("Thay đổi thất bại!");
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          log.error(`Response data: ${error.response.data}`);
+          log.error(`Response status: ${error.response.status})`);
+        }
+      } else {
+        log.error("Unexpected error:", error);
       }
-      if (item.price > max) {
-        max = item.price;
-      }
-    });
-
-    if (min == max) {
-      return min.toLocaleString();
     }
-
-    return `${min.toLocaleString()} - ${max.toLocaleString()}`;
-  };
-
-  const getSaleRange = (product: Product): string => {
-    const len = product.items.length;
-    if (len === 0) {
-      /** Doesnt have any items */
-      return "";
-    } else if (len === 1) {
-      /** Have only one item */
-      return String(product.items[0].discount);
-    }
-
-    /** Find and return the range*/
-    let min: number = product.items[0].discount ?? 0;
-    let max: number = product.items[0].discount ?? 0;
-    product.items.forEach((item) => {
-      if (!item.discount) return;
-      if (item.discount < min) {
-        min = item.discount;
-      }
-      if (max && item.discount > max) {
-        max = item.discount;
-      }
-    });
-
-    if (min == max) {
-      return String(min);
-    }
-
-    return `${min}-${max}`;
   };
 
   return (
-    <>
-      {/** Add and search */}
-      <Card className="rounded-2xl shadow-lg my-8">
-        <CardContent className="flex justify-between p-6">
-          <NavLink to="/admin/managed-products/add">
-            <Button variant="positive" className="text-xl">
-              Thêm sản phẩm mới
-              <Plus />
-            </Button>
-          </NavLink>
-          <div className="relative my-auto h-[2.5rem]">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Tìm kiếm..."
-              className="h-full text-xl w-full rounded-lg bg-background pl-8 md_w-[200px] lg_w-[336px]"
-            />
-          </div>
-        </CardContent>
-      </Card>
+    <section>
+      {/**Search */}
+      <div className="relative h-[3rem] mt-8 mb-4">
+        <Search className="absolute left-4 top-3 h-6 w-6 text-muted-foreground" />
+        <Input
+          type="search"
+          placeholder="Tìm kiếm..."
+          className="h-full text-lg w-full rounded-xl bg-background pl-14 focus-visible_!ring-0 focus-visible_!ring-offset-0"
+          onChange={(e) => setSearchingInput(e.target.value)}
+        />
+      </div>
 
-      {/** Table */}
-      <Card className="rounded-2xl shadow-lg mb-4">
-        <CardHeader className="py-6 px-10">
-          <CardTitle className="text-8">Danh sách sản phẩm</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col px-6 pb-4">
-          <ScrollArea className="relative h-[58vh]">
-            <Table>
-              <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
-                <tr>
-                  {colName.map((item, key) => {
-                    return (
-                      <TableHead
-                        key={key}
-                        className=" text-center text-black font-extrabold text-[1rem]"
+      <div className="flex gap-4">
+        {/** Table */}
+        <Card className="rounded-2xl shadow-lg flex-1">
+          <CardContent className="flex flex-col p-4">
+            {productSummaryList && productSummaryList.length !== 0 ? (
+              <ScrollArea className="relative h-[58vh]">
+                <Table>
+                  <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
+                    <tr>
+                      {colName.map((item, key) => {
+                        return (
+                          <TableHead
+                            key={key}
+                            className=" text-center text-black font-extrabold text-[1rem]"
+                          >
+                            {item}
+                          </TableHead>
+                        );
+                      })}
+                    </tr>
+                  </TableHeader>
+                  <TableBody>
+                    {arrayInReverse(productSummaryList)
+                      .filter((product) =>
+                        product.productName
+                          .toLowerCase()
+                          .includes(searchingInput.toLowerCase())
+                      )
+                      .map((product, index) => (
+                        <TableRow
+                          key={index}
+                          className={
+                            selectedProduct &&
+                            (product.productID === selectedProduct.productID
+                              ? "bg-theme-softer"
+                              : "")
+                          }
+                          onClick={() => setSelectedProduct(product)}
+                        >
+                          <TableCell className="text-center text-base">
+                            {index + 1}
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger>
+                                  <div className="max-w-80 truncate">
+                                    {product.productName}
+                                  </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  {product.productName}
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            {`${product.length}cm/${product.width}cm/${product.height}cm`}
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            {`${product.weight}gram`}
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            {product.categoryName}
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            {product.providerName}
+                          </TableCell>
+                          <TableCell className="text-center text-base">
+                            {`${product.warranty} tháng`}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    <tr>
+                      <td>
+                        <Separator />
+                      </td>
+                    </tr>
+                  </TableBody>
+                </Table>
+              </ScrollArea>
+            ) : (
+              <div className="flex flex-col items-center">
+                <img width={500} src="/empty-box.svg" alt="emptyCart" />
+                <span className="text-xl font-medium text-slate-500 mb-10">
+                  Bạn chưa có sản phẩm nào!
+                </span>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-xl shadow-lg">
+          <CardContent className="p-4 space-y-4 flex flex-col contain-content">
+            <NavLink to="/admin/products/add" unstable_viewTransition>
+              <Button variant="positive">
+                <Plus />
+              </Button>
+            </NavLink>
+            {selectedProduct ? (
+              <>
+                <NavLink
+                  to={`/admin/products/${selectedProduct.productID}`}
+                  unstable_viewTransition
+                >
+                  <Button variant="neutral">
+                    <SquarePen />
+                  </Button>
+                </NavLink>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="negative">
+                      <Trash2 />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Bạn muốn xóa?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Hành động này sẽ trực tiếp xóa sản phẩm và không thể
+                        hoàn tác.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogAction
+                        onClick={() => handleDeleteProduct()}
+                        className={buttonVariants({
+                          variant: "negative",
+                        })}
                       >
-                        {item}
-                      </TableHead>
-                    );
-                  })}
-                </tr>
-              </TableHeader>
-              <TableBody>
-                {productsData?.map((product, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="text-center text-base">
-                      {index + 1}
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <div className="max-w-80 truncate">
-                              {product.productName}
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>{product.productName}</TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      {product.id}
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      {`${product.len}cm/${product.width}cm/${product.height}cm`}
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      {`${product.weight}gram`}
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      {product.categoryName}
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      {`${getPriceRange(product)}đ`}
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      {`${getSaleRange(product)}%`}
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      {`${product.gurantee} tháng`}
-                    </TableCell>
-                    <TableCell className="flex items-center justify-center space-x-2">
-                      <Button variant="neutral">
-                        <SquarePen />
-                      </Button>
-                      <Button variant="negative">
-                        <Trash2 />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </ScrollArea>
-        </CardContent>
-      </Card>
+                        Xóa
+                      </AlertDialogAction>
+                      <AlertDialogCancel className="mt-0">
+                        Hủy
+                      </AlertDialogCancel>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </>
+            ) : (
+              <>
+                <SquarePen className="mx-4 !mt-6" />
+                <Trash2 className="mx-4 !mt-6" />
+              </>
+            )}
+          </CardContent>
+        </Card>
+      </div>
 
       {/** Pagination */}
-      <Pagination>
+      {/* <Pagination>
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious href="#" />
@@ -226,8 +279,8 @@ const ProductManagement = () => {
             <PaginationNext href="#" />
           </PaginationItem>
         </PaginationContent>
-      </Pagination>
-    </>
+      </Pagination> */}
+    </section>
   );
 };
 

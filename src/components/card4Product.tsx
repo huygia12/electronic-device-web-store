@@ -87,7 +87,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
     bucket?.map((item) => {
       if (
         item.itemID === currentItem.itemID &&
-        item.productID === props.product.id
+        item.productID === props.product.productID
       ) {
         item.quantity += inputQuantity;
         checkExisted = true;
@@ -95,7 +95,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
     });
     checkExisted ||
       bucket?.push({
-        productID: props.product.id,
+        productID: props.product.productID,
         itemID: currentItem.itemID,
         quantity: inputQuantity,
       });
@@ -122,7 +122,10 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
         className
       )}
     >
-      <NavLink to={"/products/" + props.product.id} unstable_viewTransition>
+      <NavLink
+        to={"/products/" + props.product.productID}
+        unstable_viewTransition
+      >
         <img src={props.product.items[0].thump} alt="machine" />
         <CardHeader className="p-1.5 mt-2">
           <CardTitle className="text-[1.1rem] hover_underline hover_text-primary-foreground">
@@ -208,7 +211,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
                   <div className="mb-8 flex ml-4">
                     <span className="flex items-center text-[0.8rem] mr-10">
                       <BadgeCheck className="text-primary mr-2" />
-                      Hàng chính hãng - Bảo hành {props.product.gurantee} tháng
+                      Hàng chính hãng - Bảo hành {props.product.warranty} tháng
                     </span>
                     <span className="flex items-center text-[0.8rem]">
                       <Truck className="text-primary mr-2" />

@@ -6,7 +6,6 @@ import CategoryManagement from "./CategoryManagement.tsx";
 import { ProductManagement } from "./ProductManagement.tsx";
 import OrderManagement from "./OrderManagement.tsx";
 import ReviewManagement from "./ReviewManagement.tsx";
-import Statis from "./Statis.tsx";
 import StoreManagement from "./StoreManagement.tsx";
 import ProviderManagement from "./ProviderManagement.tsx";
 import Login from "./Login.tsx";
@@ -118,43 +117,39 @@ const publicRoutes = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "managed-users",
+        path: "users",
         id: "user_management",
         loader: loader.getUsers,
         element: <UserManagement />,
       },
       {
-        path: "managed-categories",
+        path: "categories",
         id: "category_management",
         loader: loader.getCategories,
         element: <CategoryManagement />,
       },
       {
-        path: "received-orders",
+        path: "orders",
         id: "invoice_management",
         loader: loader.getOrders,
         element: <OrderManagement />,
       },
       {
-        path: "received-reviews",
+        path: "reviews",
         element: <ReviewManagement />,
-      },
-      {
-        path: "statistic",
-        element: <Statis />,
       },
       {
         path: "store",
         element: <StoreManagement />,
       },
       {
-        path: "managed-providers",
+        path: "providers",
         id: "provider_management",
         loader: loader.getProviders,
         element: <ProviderManagement />,
       },
       {
-        path: "managed-products",
+        path: "products",
         children: [
           {
             index: true,
@@ -164,6 +159,8 @@ const publicRoutes = createBrowserRouter([
           },
           {
             path: ":id",
+            id: "product_edition",
+            loader: loader.getProductDetail,
             element: <ProductEdittion />,
           },
           {

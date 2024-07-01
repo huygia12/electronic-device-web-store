@@ -33,7 +33,6 @@ const invoiceListHeader: string[] = [
 
 const productListHeader: string[] = [
   "STT",
-  "Ảnh",
   "Sản Phẩm",
   "Giá",
   "Giảm Giá",
@@ -75,7 +74,7 @@ const MyInvoices = () => {
                 </tr>
               </TableHeader>
               <TableBody>
-                {invoiceData.map((invoice, index) => (
+                {invoiceData?.map((invoice, index) => (
                   <TableRow
                     key={index}
                     onSelect={() => handleInvoiceSelection(invoice)}
@@ -170,13 +169,6 @@ const MyInvoices = () => {
                                     <TableRow key={index}>
                                       <TableCell className="text-center text-base">
                                         {index + 1}
-                                      </TableCell>
-                                      <TableCell className="text-center text-base">
-                                        <img
-                                          src={prod.thump}
-                                          alt={prod.id}
-                                          className="max-h-20"
-                                        />
                                       </TableCell>
                                       <TableCell className="text-center text-base max-w-[15rem] truncate">
                                         {prod.productName}

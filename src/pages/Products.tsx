@@ -59,7 +59,7 @@ const Products = () => {
           LỌC SẢN PHẨM
         </h2>
         <ul className="px-4">
-          {attributesData.map((attr, parentIndex) => {
+          {attributesData?.map((attr, parentIndex) => {
             return (
               <li key={parentIndex} className="space-y-4 mb-8">
                 <h5 className="text-slate-700 font-extrabold">
@@ -67,7 +67,7 @@ const Products = () => {
                 </h5>
                 <Separator className="border-1 border-slate-400" />
                 <RadioGroup className="pl-4 space-y-2">
-                  {attr.options.map((option, childIndex) => {
+                  {attr.options?.map((option, childIndex) => {
                     return (
                       <div
                         key={childIndex}
@@ -131,7 +131,7 @@ const Products = () => {
           </span>
         </div>
         <div className="col-span-3 grid grid-cols-4 gap-4">
-          {productsData.map((product, index) => (
+          {productsData?.map((product, index) => (
             <Card4Product key={index} product={product} />
           ))}
         </div>

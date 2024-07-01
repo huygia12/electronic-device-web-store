@@ -80,10 +80,10 @@ const CartVisting = () => {
             product.items.forEach((item) => {
               if (
                 item.itemID === localItem.itemID &&
-                product.id === localItem.productID
+                product.productID === localItem.productID
               ) {
                 bucket.push({
-                  id: product.id,
+                  id: product.productID,
                   productName: product.productName,
                   height: product.height,
                   weight: product.weight,
@@ -133,8 +133,8 @@ const CartVisting = () => {
 
   const handleDeleteProduct = (
     e: React.MouseEvent<HTMLButtonElement>,
-    productID: string,
-    itemID: string
+    productID: string | undefined,
+    itemID: string | undefined
   ) => {
     e.preventDefault();
 
@@ -150,8 +150,8 @@ const CartVisting = () => {
   const handleQuantityInput = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
-    productID: string,
-    itemID: string
+    productID: string | undefined,
+    itemID: string | undefined
   ) => {
     e.preventDefault();
 

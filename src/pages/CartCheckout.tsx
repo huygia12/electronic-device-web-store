@@ -119,10 +119,10 @@ const CartCheckout = () => {
             product.items.forEach((item) => {
               if (
                 item.itemID === localItem.itemID &&
-                product.id === localItem.productID
+                product.productID === localItem.productID
               ) {
                 bucket.push({
-                  id: product.id,
+                  id: product.productID,
                   productName: product.productName,
                   height: product.height,
                   weight: product.weight,

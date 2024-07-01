@@ -72,7 +72,7 @@ const ProductDetail = () => {
     bucket.map((item) => {
       if (
         item.itemID === currentItem.itemID &&
-        item.productID === productData.id
+        item.productID === productData.productID
       ) {
         item.quantity += inputQuantity;
         checkExisted = true;
@@ -80,7 +80,7 @@ const ProductDetail = () => {
     });
     checkExisted ||
       bucket?.push({
-        productID: productData.id,
+        productID: productData.productID,
         itemID: currentItem.itemID,
         quantity: inputQuantity,
       });
@@ -145,7 +145,7 @@ const ProductDetail = () => {
               <div className="mb-8 flex ml-4">
                 <span className="flex items-center text-[0.8rem] mr-10">
                   <BadgeCheck className="text-primary mr-2" />
-                  Hàng chính hãng - Bảo hành {productData.gurantee} tháng
+                  Hàng chính hãng - Bảo hành {productData.warranty} tháng
                 </span>
                 <span className="flex items-center text-[0.8rem]">
                   <Truck className="text-primary mr-2" />
@@ -176,7 +176,7 @@ const ProductDetail = () => {
             <div>
               <div className="flex justify-between items-baseline mb-12 pb-4 border-b-2 border-dashed border-slate-300">
                 <div className="space-x-4">
-                  <span className="text-3xl font-semibold text-primary-foreground">{`${currentItem ? afterDiscount(currentItem?.price, currentItem.discount).toLocaleString() : 0}đ`}</span>
+                  <span className="text-3xl font-semibold text-primary-foreground">{`${currentItem ? afterDiscount(currentItem?.price, currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
                   <del className="text-slate-500">{`${currentItem ? currentItem?.price.toLocaleString() : 0}đ`}</del>
                 </div>
                 <div className="flex gap-2">
@@ -220,7 +220,7 @@ const ProductDetail = () => {
                               htmlFor={index + ""}
                               className="text-xl font-medium truncate"
                             >
-                              {`${afterDiscount(item.price, item.discount).toLocaleString()}đ`}
+                              {`${afterDiscount(item.price, item.discount ?? 0).toLocaleString()}đ`}
                             </label>
                           </span>
                           <span className="truncate">{`${item.storageName} | ${item.colorName}`}</span>

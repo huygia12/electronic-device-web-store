@@ -6,6 +6,7 @@ import {
   Product,
   ProductParams,
   Provider,
+  ProductSummary,
 } from "@/declare";
 import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
 import axios from "axios";
@@ -16,11 +17,14 @@ interface Args extends ActionFunctionArgs {
   params: Params<ParamParseKey<string>> | ProductParams;
 }
 
-const getProducts = async (): Promise<Product[] | undefined> => {
+const getProducts = async (): Promise<ProductSummary[] | undefined> => {
   try {
-    const res = await axiosInstance.get<Product[]>("/products");
+    const res = await axiosInstance.get<{ info: ProductSummary[] }>(
+      "/products",
+      reqConfig
+    );
 
-    return res.data;
+    return res.data.info;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       // AxiosError-specific handling
@@ -121,10 +125,29 @@ const getUsers = async (): Promise<User[] | undefined> => {
   }
 };
 
+// const getOrders = async (): Promise<Invoice[] | undefined> => {
+//   try {
+//     const res = await axiosInstance.get<{ info: Invoice[] }>("/invoices");
+//     return res.datat.info;
+//   } catch (error) {
+//     if (axios.isAxiosError(error)) {
+//       // AxiosError-specific handling
+//       log.error("Axios error:", error.message);
+//       if (error.response) {
+//         log.error("Response data:", error.response.data);
+//         log.error("Response status:", error.response.status);
+//       }
+//     } else {
+//       // General error handling
+//       log.error("Unexpected error:", error);
+//     }
+//   }
+// };
+
 const getOrders = async (): Promise<Invoice[] | undefined> => {
   try {
-    const res = await axiosInstance.get<{ info: Invoice[] }>("/invoices");
-    return res.data.info;
+    const res = await axiosInstance.get<Invoice[]>("/invoices");
+    return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       // AxiosError-specific handling
@@ -145,8 +168,10 @@ const getProductDetail = async ({
 }: Args): Promise<Product | undefined> => {
   try {
     const res = await axiosInstance.get<{ info: Product }>(
-      "/products/" + params.id
+      "/products/" + params.id,
+      reqConfig
     );
+    // console.log(JSON.stringify(res.data.info));
     return res.data.info;
   } catch (error) {
     if (axios.isAxiosError(error)) {
