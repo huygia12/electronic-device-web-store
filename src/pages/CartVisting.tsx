@@ -10,9 +10,15 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import log from "loglevel";
 import { Button } from "@/components/ui/button";
-import { CartItem, Error, LocalStorageProductItem, Product } from "@/declare";
+import {
+  CartItem,
+  Error,
+  LocalStorageProductItem,
+  ProductDetail,
+} from "@/declare";
 import {
   afterDiscount,
+  getProductCartIDs,
   getTotalAmount,
   getTotalDiscountAmount,
 } from "@/utils/product";
@@ -43,6 +49,7 @@ import { useCartProps } from "@/utils/customHook";
 import { buttonVariants } from "@/utils/constants";
 import { publicRoutes } from "./routes";
 import { arrayInReverse } from "@/utils/helpers";
+import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
 
 const header = [
   "STT",
@@ -70,31 +77,34 @@ const CartVisting = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const productsRes = await axios.get<Product[]>(
-          import.meta.env.VITE_API_URL + "/products"
+        const productsRes = await axiosInstance.post<{ info: ProductDetail[] }>(
+          `/products/cartitems`,
+          getProductCartIDs(itemsInLocal),
+          reqConfig
         );
 
         const bucket: CartItem[] = [];
         itemsInLocal.forEach((localItem) => {
-          productsRes.data.forEach((product) => {
+          productsRes.data.info.forEach((product) => {
             product.items.forEach((item) => {
               if (
                 item.itemID === localItem.itemID &&
                 product.productID === localItem.productID
               ) {
+                console.log(true);
                 bucket.push({
                   id: product.productID,
                   productName: product.productName,
                   height: product.height,
                   weight: product.weight,
-                  len: product.len,
+                  len: product.length,
                   width: product.width,
                   itemID: item.itemID,
                   thump: item.thump,
                   quantity: localItem.quantity,
                   price: item.price,
                   productCode: item.productCode,
-                  discount: item.discount,
+                  discount: item.discount ?? 0,
                   colorName: item.colorName,
                   storageName: item.storageName,
                 });

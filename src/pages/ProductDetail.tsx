@@ -4,16 +4,16 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import RatingPoint from "@/components/ui/ratingPoint";
 import SlideShow from "@/components/ui/slideShow";
 import {
   LocalStorageProductItem,
   Error,
-  Product,
   ProductItem,
+  ProductDetail,
+  ProductAttribute,
 } from "@/declare";
-import { afterDiscount, getAverageRatingPoint } from "@/utils/product";
-import React, { useState } from "react";
+import { afterDiscount, getProductAttribute } from "@/utils/product";
+import React, { useEffect, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
@@ -40,15 +40,45 @@ import { Textarea } from "@/components/ui/textarea";
 import { useRouteLoaderData } from "react-router-dom";
 import { toast } from "sonner";
 import { useCartProps } from "@/utils/customHook";
+import preApiLoader from "@/api/preApiLoader.ts";
+import axios from "axios";
+import log from "loglevel";
 
-const ProductDetail = () => {
+const ProductDetailPage = () => {
   const { itemsInLocal, setItemsInLocal } = useCartProps();
-  const productData = useRouteLoaderData("product_detail") as Product;
+  const productData = useRouteLoaderData("product_detail") as ProductDetail;
   const [currentItem, setCurrentItem] = useState<ProductItem>(
     productData.items[0]
   );
   const [quantityError, setQuantityError] = useState<Error>({ success: true });
   const [inputQuantity, setInputQuantity] = useState(1);
+  const [productAttribute, setProductAttribute] = useState<ProductAttribute[]>(
+    []
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const attributesRes = await preApiLoader.getAttributes();
+
+        setProductAttribute(getProductAttribute(productData, attributesRes));
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          console.log("error");
+          log.error("Axios error:", error.message);
+          if (error.response) {
+            log.error("Response data:", error.response.data);
+            log.error("Response status:", error.response.status);
+          }
+        } else {
+          // General error handling
+          log.error("Unexpected error:", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [productData]);
 
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: true })
@@ -113,7 +143,7 @@ const ProductDetail = () => {
               <h1 className="text-3xl font-bold">{productData.productName}</h1>
               <span className=" text-slate-500 text-[0.8rem]">{`(No.${currentItem.productCode})`}</span>
             </span>
-            <span className="flex items-baseline space-x-2">
+            {/* <span className="flex items-baseline space-x-2">
               <RatingPoint
                 rate={getAverageRatingPoint(productData)}
                 iconSize={18}
@@ -122,7 +152,7 @@ const ProductDetail = () => {
               <span className="text-sm cursor-pointer hover_underline truncate ...">
                 {`${productData.reviews.length} đánh giá`}
               </span>
-            </span>
+            </span> */}
           </header>
           <section className="grid grid-cols-2 gap-10 mb-10">
             {/** LEFT SECTION */}
@@ -159,12 +189,12 @@ const ProductDetail = () => {
                 </h5>
                 <Table className="border-2 border-slate-200">
                   <TableBody>
-                    {productData.attributes.map((attr, index) => (
+                    {productAttribute.map((attr, index) => (
                       <TableRow key={index}>
                         <TableCell className="font-medium">
                           {attr.typeValue}
                         </TableCell>
-                        <TableCell>{attr.optionValue}</TableCell>
+                        <TableCell>{attr.optionName}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -323,4 +353,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default ProductDetailPage;

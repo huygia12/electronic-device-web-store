@@ -15,7 +15,7 @@ const slideShow: React.FC<SlideShowProps> = ({ className, ...props }) => {
         <img
           src={props.src}
           alt={props.alt}
-          className="h-[27rem] w-full object-fill rounded-xl"
+          className="h-[27rem] w-max object-fill rounded-xl mx-auto"
         />
       </NavLink>
     </CarouselItem>

@@ -1,10 +1,14 @@
 import { deleteImageFromFireBase, insertImageToFireBase } from "@/api/firebase";
 import {
+  AttributeType,
   CartItem,
   Product,
+  ProductDetail,
   ProductItemInput,
   ProductItemInsertPayload,
   ProductItemUpdate,
+  ProductAttribute,
+  LocalStorageProductItem,
 } from "@/declare";
 
 /**
@@ -205,6 +209,41 @@ const clearImagesInFB = async (imageUrls: string[]) => {
     })
   );
 };
+
+const getProductAttribute = (
+  products: ProductDetail,
+  attributesData: AttributeType[] | undefined
+) => {
+  const attributes: ProductAttribute[] = products.options.reduce<
+    ProductAttribute[]
+  >((prev, curr) => {
+    const tmp = attributesData?.find((attribute) =>
+      attribute.options.find((option) => option.optionID === curr)
+    );
+    const optionHolder = tmp?.options.find(
+      (option) => option.optionID === curr
+    );
+    if (curr && tmp && optionHolder) {
+      prev.push({
+        typeID: tmp.typeID,
+        typeValue: tmp.typeValue,
+        optionID: optionHolder.optionID,
+        optionName: optionHolder.optionValue,
+      });
+    }
+    return prev;
+  }, []);
+
+  return attributes;
+};
+
+const getProductCartIDs = (cartItems: LocalStorageProductItem[]): string[] => {
+  const productIDs = cartItems.reduce<string[]>((prev, curr) => {
+    prev.push(curr.productID);
+    return prev;
+  }, []);
+  return productIDs;
+};
 export {
   afterDiscount,
   getAverageRatingPoint,
@@ -215,4 +254,6 @@ export {
   getItemList,
   getItemsUpdatePayload,
   clearImagesInFB,
+  getProductAttribute,
+  getProductCartIDs,
 };

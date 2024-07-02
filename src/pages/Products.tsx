@@ -1,6 +1,6 @@
 import Card4Product from "@/components/card4Product";
 import { useEffect, useState } from "react";
-import { AttributeType, Product } from "@/declare";
+import { AttributeType, ProductDetail } from "@/declare";
 import axios from "axios";
 import log from "loglevel";
 import { Button } from "@/components/ui/button";
@@ -17,23 +17,35 @@ import { Label } from "@/components/ui/label";
 import { MoneyInput } from "@/components/ui/moneyInput";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
+import { useSearchParams } from "react-router-dom";
+import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
+import preApiLoader from "@/api/preApiLoader";
 
 const Products = () => {
-  const [productsData, setProductsData] = useState<Product[]>([]);
+  const [searchParams] = useSearchParams();
+  const [productsData, setProductsData] = useState<ProductDetail[]>();
   const [attributesData, setAttributesData] = useState<AttributeType[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const productsRes = await axios.get<Product[]>(
-          import.meta.env.VITE_API_URL + "/products"
-        );
-        const attributesRes = await axios.get<AttributeType[]>(
-          import.meta.env.VITE_API_URL + "/attributes"
-        );
-        console.log(attributesRes.data);
-        setAttributesData(attributesRes.data);
-        setProductsData(productsRes.data);
+        const attributesRes = await preApiLoader.getAttributes();
+
+        let productRes;
+        if (searchParams.get("categoryID")) {
+          productRes = await axiosInstance.get<{ info: ProductDetail[] }>(
+            `/products?categoryID=${searchParams.get("categoryID")}`,
+            reqConfig
+          );
+        } else if (searchParams.get("providerID")) {
+          productRes = await axiosInstance.get<{ info: ProductDetail[] }>(
+            `/products?providerID=${searchParams.get("providerID")}`,
+            reqConfig
+          );
+        }
+
+        setProductsData(productRes?.data.info);
+        setAttributesData(attributesRes ?? []);
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
           // AxiosError-specific handling
@@ -50,7 +62,7 @@ const Products = () => {
     };
 
     fetchData();
-  }, []);
+  }, [searchParams]);
 
   return (
     <div className="grid grid-cols-4 gap-8">

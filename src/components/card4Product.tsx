@@ -1,24 +1,16 @@
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SaleTag from "./ui/saleTag";
-import RatingPoint from "./ui/ratingPoint";
 import React, { HTMLAttributes, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   Error,
   LocalStorageProductItem,
-  Product,
+  ProductDetail,
   ProductItem,
 } from "@/declare";
 import { afterDiscount } from "@/utils/product.ts";
 import { Button } from "./ui/button";
 import { NavLink } from "react-router-dom";
-import { getAverageRatingPoint } from "@/utils/product";
 import {
   BadgeCheck,
   CircleCheck,
@@ -27,7 +19,6 @@ import {
   ShoppingBasket,
   Truck,
 } from "lucide-react";
-import CardTag from "./ui/cardTag";
 import { ScrollArea } from "./ui/scroll-area";
 import {
   Dialog,
@@ -53,7 +44,7 @@ import { useCartProps } from "@/utils/customHook";
 import { buttonVariants } from "@/utils/constants";
 
 interface CardProductProps extends HTMLAttributes<HTMLDivElement> {
-  product: Product;
+  product: ProductDetail;
 }
 
 const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
@@ -118,7 +109,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
   return (
     <Card
       className={cn(
-        "p-2.5 shadow-xl transition ease-out duration-300 hover_scale-105 relative",
+        "p-2.5 shadow-xl transition ease-out duration-300 hover_scale-105 relative flex flex-col justify-between h-full",
         className
       )}
     >
@@ -134,17 +125,6 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
         </CardHeader>
       </NavLink>
       <CardContent className="p-2">
-        <ScrollArea className="mb-5 py-1 pr-1 shadow-inner rounded-sm bg-secondary flex flex-wrap max-h-[7rem] overflow-y-auto">
-          {props.product.attributes.map((attr, index) => {
-            return (
-              <CardTag
-                key={index}
-                type={attr.typeValue}
-                content={attr.optionValue}
-              />
-            );
-          })}
-        </ScrollArea>
         <div className="flex flex-row flex-wrap items-baseline justify-between">
           <div className="text-[1.3rem] font-extrabold text-primary-foreground truncate ...">
             {`${afterDiscount(
@@ -152,27 +132,19 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
               Number(props.product.items[0].discount)
             ).toLocaleString()}đ`}
           </div>
-          <del className="text-[0.8rem] text-secondary-foreground">
-            {`${props.product.items[0].price.toLocaleString()}đ`}
-          </del>
+          {props.product.items[0].discount !== null && (
+            <del className="text-[0.8rem] text-secondary-foreground">
+              {`${props.product.items[0].price.toLocaleString()}đ`}
+            </del>
+          )}
         </div>
-        <SaleTag
-          percentage={`-${props.product.items[0].discount}%`}
-          className="absolute top-0 left-[-1rem]"
-        />
-      </CardContent>
-      <CardFooter className="py-2 px-2 text-[0.9rem] flex flex-col">
-        <div className="w-full flex mb-4">
-          <RatingPoint
-            rate={getAverageRatingPoint(props.product)}
-            iconSize={18}
-            className="text-yellow-500"
+        {props.product.items[0].discount !== null && (
+          <SaleTag
+            percentage={`-${props.product.items[0].discount}%`}
+            className="absolute top-0 left-[-1rem]"
           />
-          <span className="font-light ml-2 truncate ...">
-            {`(${props.product.reviews.length} đánh giá)`}
-          </span>
-        </div>
-        <div className="w-full flex items-center justify-around">
+        )}
+        <div className="w-full flex items-center justify-around mt-4">
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="neutral" onClick={() => {}}>
@@ -224,7 +196,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
                 <div>
                   <div className="flex justify-between items-baseline mb-12 pb-4 border-b-2 border-dashed border-slate-300">
                     <div className="space-x-4">
-                      <span className="text-3xl font-semibold text-primary-foreground">{`${currentItem ? afterDiscount(currentItem?.price, currentItem.discount).toLocaleString() : 0}đ`}</span>
+                      <span className="text-3xl font-semibold text-primary-foreground">{`${currentItem ? afterDiscount(currentItem?.price, currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
                       <del className="text-slate-500">{`${currentItem ? currentItem?.price.toLocaleString() : 0}đ`}</del>
                     </div>
                     <div className="flex gap-2">
@@ -270,7 +242,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
                                     htmlFor={index + ""}
                                     className="text-xl font-medium truncate"
                                   >
-                                    {`${afterDiscount(item.price, item.discount).toLocaleString()}đ`}
+                                    {`${afterDiscount(item.price, item.discount ?? 0).toLocaleString()}đ`}
                                   </label>
                                 </span>
                                 <span className="truncate">{`${item.storageName} | ${item.colorName}`}</span>
@@ -324,7 +296,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
             Mua ngay
           </Button>
         </div>
-      </CardFooter>
+      </CardContent>
     </Card>
   );
 };

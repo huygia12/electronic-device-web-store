@@ -38,7 +38,7 @@ import {
 } from "@/declare";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown, Plus, Trash2, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import preLoader from "@/api/preApiLoader";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -49,7 +49,7 @@ import axios from "axios";
 import log from "loglevel";
 import { toast } from "sonner";
 import LoadingSpinner from "@/components/ui/loadingSpinner";
-import { clearImagesInFB, getItemsUpdatePayload } from "@/utils/product";
+import { getItemsUpdatePayload, getProductAttribute } from "@/utils/product";
 import { useCurrUser } from "@/utils/customHook";
 import { useRouteLoaderData } from "react-router-dom";
 
@@ -87,13 +87,6 @@ const ProductEdittion = () => {
     resolver: zodResolver(ProductSchema),
   });
 
-  const oldImgsholder = useRef<string[]>(
-    edittingProduct.items.reduce<string[]>((prev, curr) => {
-      curr.images.forEach((img) => prev.push(img));
-      return prev;
-    }, [])
-  );
-
   useEffect(() => {
     const fetchData = async () => {
       const categoriesData = await preLoader.getCategories();
@@ -102,23 +95,7 @@ const ProductEdittion = () => {
 
       //init attribute
       setAttrAdditionBucket(
-        edittingProduct.options.reduce<ProductAttribute[]>((prev, curr) => {
-          const tmp = attributesData?.find((attribute) =>
-            attribute.options.find((option) => option.optionID === curr)
-          );
-          const optionHolder = tmp?.options.find(
-            (option) => option.optionID === curr
-          );
-          if (curr && tmp && optionHolder) {
-            prev.push({
-              typeID: tmp.typeID,
-              typeValue: tmp.typeValue,
-              optionID: optionHolder.optionID,
-              optionName: optionHolder.optionValue,
-            });
-          }
-          return prev;
-        }, [])
+        getProductAttribute(edittingProduct, attributesData)
       );
       setCategories(categoriesData ?? []);
       setProviders(providersData ?? []);
@@ -126,7 +103,7 @@ const ProductEdittion = () => {
     };
 
     fetchData();
-  }, [edittingProduct.options]);
+  }, [edittingProduct]);
 
   const handleAddThump = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -278,7 +255,6 @@ const ProductEdittion = () => {
         }, []),
         productItems: [...productItems],
       };
-      clearImagesInFB(oldImgsholder.current);
 
       //update product
       await axiosInstance.patch(

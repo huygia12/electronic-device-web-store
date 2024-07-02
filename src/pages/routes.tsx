@@ -60,7 +60,7 @@ const publicRoutes = createBrowserRouter([
       {
         path: "orders",
         id: "my_invoices",
-        loader: loader.getOrders,
+        // loader: loader.getOrders,
         element: (
           <ProtectedRoute>
             <MyInvoices />

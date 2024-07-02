@@ -89,7 +89,7 @@ export interface Product {
   description: string;
   height: number;
   weight: number;
-  len: number;
+  length: number;
   width: number;
   warranty: number;
   categoryName: string;
@@ -194,6 +194,8 @@ export interface LocalStorageProductItem {
 
 export type ProductParams = {
   id: string;
+  cateID: string;
+  provID: string;
 };
 
 export interface Error {
@@ -208,7 +210,7 @@ export interface CartItem {
   discount: number;
   productCode: string;
   colorName: string;
-  storageName: string;
+  storageName: string | null;
 
   id?: string;
   height?: number;

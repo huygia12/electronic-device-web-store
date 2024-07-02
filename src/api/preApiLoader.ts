@@ -7,6 +7,7 @@ import {
   ProductParams,
   Provider,
   ProductSummary,
+  ProductDetail,
 } from "@/declare";
 import { axiosInstance, reqConfig } from "@/utils/axiosConfig";
 import axios from "axios";
@@ -40,6 +41,29 @@ const getProducts = async (): Promise<ProductSummary[] | undefined> => {
   }
 };
 
+const getProductWithCategoryID = async (
+  categoryID: string
+): Promise<ProductDetail[] | undefined> => {
+  try {
+    const res = await axiosInstance.get<{
+      info: ProductDetail[];
+    }>(`/products?categoryID=${categoryID}`, reqConfig);
+
+    return res.data.info;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      // AxiosError-specific handling
+      log.error("Axios error:", error.message);
+      if (error.response) {
+        log.error("Response data:", error.response.data);
+        log.error("Response status:", error.response.status);
+      }
+    } else {
+      // General error handling
+      log.error("Unexpected error:", error);
+    }
+  }
+};
 const getCategories = async (): Promise<Category[] | undefined> => {
   try {
     const res = await axiosInstance.get<{ info: Category[] }>(
@@ -196,4 +220,5 @@ export default {
   getUsers,
   getOrders,
   getProductDetail,
+  getProductWithCategoryID,
 };
