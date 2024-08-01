@@ -1,4 +1,22 @@
+import { AdminNavItem } from "@/types/component";
+import { Phase } from "@/types/component/cart";
 import { cva } from "class-variance-authority";
+import {
+  Home,
+  Package2,
+  Users2,
+  Shapes,
+  PackageSearch,
+  MessageSquareCode,
+  Store,
+  Factory,
+  Boxes,
+  BadgePercent,
+  Tags,
+  PackageCheck,
+  PackageOpen,
+  ShoppingBag,
+} from "lucide-react";
 
 const badgeVariants = cva(
   "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus_outline-none focus_ring-2 focus_ring-ring focus_ring-offset-2",
@@ -59,4 +77,120 @@ const buttonVariants = cva(
   }
 );
 
-export { badgeVariants, buttonVariants };
+const navItems: AdminNavItem[] = [
+  {
+    name: "Bảng điều khiển",
+    url: "/admin",
+    icon: Home,
+    hasChild: false,
+    children: [],
+  },
+  {
+    name: "Quản lý khách hàng",
+    url: "/admin/users",
+    icon: Users2,
+    hasChild: false,
+    children: [],
+  },
+  {
+    name: "Quản lý danh mục",
+    url: "/admin/categories",
+    icon: Shapes,
+    hasChild: false,
+    children: [],
+  },
+  {
+    name: "Quản lý nhà phân phối",
+    url: "/admin/providers",
+    icon: Factory,
+    hasChild: false,
+    children: [],
+  },
+  {
+    name: "Sản phẩm",
+    url: "/admin/products",
+    icon: Package2,
+    hasChild: true,
+    children: [
+      {
+        name: "Thêm sản phẩm",
+        url: "/admin/products/add",
+        icon: BadgePercent,
+      },
+      {
+        name: "Quản lý sản phẩm",
+        url: "/admin/products",
+        icon: Boxes,
+      },
+      {
+        name: "Thuộc tính sản phẩm",
+        url: "/admin/products/attributes",
+        icon: Tags,
+      },
+    ],
+  },
+  {
+    name: "Đơn hàng",
+    url: "/admin/orders",
+    icon: PackageSearch,
+    hasChild: false,
+    children: [],
+  },
+  {
+    name: "Đánh giá",
+    url: "/admin/reviews",
+    icon: MessageSquareCode,
+    hasChild: false,
+    children: [],
+  },
+  {
+    name: "Cửa hàng",
+    url: "/admin/store",
+    icon: Store,
+    hasChild: false,
+    children: [],
+  },
+];
+
+const phases: Phase[] = [
+  {
+    id: "1",
+    title: "Giỏ Hàng",
+    icon: ShoppingBag,
+  },
+  {
+    id: "2",
+    title: "Đặt Hàng",
+    icon: PackageOpen,
+  },
+  {
+    id: "3",
+    title: "Hoàn Thành Đơn Hàng",
+    icon: PackageCheck,
+  },
+];
+
+const invoiceListHeader: string[] = [
+  "MÃ ĐƠN HÀNG",
+  "NGÀY ĐẶT HÀNG",
+  "TRẠNG THÁI",
+  "THAO TÁC",
+];
+
+const productListHeader: string[] = [
+  "STT",
+  "Sản Phẩm",
+  "Giá",
+  "Giảm Giá",
+  "Thành Tiền",
+  "Số lượng",
+];
+
+export {
+  badgeVariants,
+  buttonVariants,
+  navItems,
+  phases,
+  invoiceListHeader,
+  productListHeader,
+};

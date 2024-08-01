@@ -1,8 +1,8 @@
 import { RouterProvider } from "react-router-dom";
-import { publicRoutes } from "./pages/routes";
+import routes from "./middleware/routes";
 
 function App() {
-  return <RouterProvider router={publicRoutes} />;
+  return <RouterProvider router={routes} />;
 }
 
 export default App;

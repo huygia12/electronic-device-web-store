@@ -1,4 +1,7 @@
-import { deleteImageFromFireBase, insertImageToFireBase } from "@/api/firebase";
+import {
+  deleteImageFromFireBase,
+  insertImageToFireBase,
+} from "@/services/apis";
 import {
   AttributeType,
   CartItem,
@@ -9,7 +12,7 @@ import {
   ProductItemUpdate,
   ProductAttribute,
   LocalStorageProductItem,
-} from "@/declare";
+} from "@/types/api";
 
 /**
  * Apply discount to an amount of money(vnd)
