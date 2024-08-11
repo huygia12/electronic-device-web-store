@@ -1,7 +1,7 @@
 interface Category {
   categoryID: string;
   categoryName: string;
-  products?: number;
+  productQuantity?: number;
 }
 
 export type { Category };

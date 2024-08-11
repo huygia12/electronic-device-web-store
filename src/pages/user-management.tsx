@@ -103,7 +103,7 @@ const UserManagement: FC = () => {
                       {user.userName}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {user.phoneNum}
+                      {user.phoneNumber}
                     </TableCell>
                     <TableCell className="text-center text-base">
                       {`${user.createdAt}`}

@@ -1,18 +1,32 @@
+import { Role } from "@/utils/constants";
+import { Nullable } from "@/utils/declare";
+
 interface User {
+  userID: string;
   userName: string;
   email: string;
-  userID?: string;
-  avatar?: string;
-  phoneNum?: string;
-  createdAt?: Date;
-  editedAt?: Date;
+  phoneNumber: Nullable<string>;
+  avatar: Nullable<string>;
+  isBanned: Nullable<boolean>;
+  role: Role;
+  createdAt: Date;
+  updateAt: Date;
 }
 
-interface UserSummary {
-  userName: string;
+// interface UserSummary {
+//   userName: string;
+//   userID: string;
+//   avatar: string | null;
+//   role: string;
+// }
+
+interface AuthUser {
   userID: string;
-  avatar: string | null;
-  role: string;
+  userName: string;
+  email: string;
+  avatar: Nullable<string>;
+  role: Role;
+  exp: string;
 }
 
-export type { User, UserSummary };
+export type { User, AuthUser };

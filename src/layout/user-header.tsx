@@ -4,13 +4,12 @@ import { FiShoppingBag } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import { TfiHeadphoneAlt } from "react-icons/tfi";
 import { PackageSearch, Search } from "lucide-react";
-import { useCartProps, useCurrentUser } from "@/hooks";
-import { axiosInstance, reqConfig } from "@/services/axios";
+import { useAuth, useCartProps, useCustomNavigate } from "@/hooks";
 import { useRef } from "react";
 import { toast } from "sonner";
 import { CounterLabel } from "@/components/user";
 import CustomAvt from "@/components/common/custom-avatar";
-import routes from "@/middleware/routes";
+import auth from "@/utils/auth";
 
 const navComponents: { title: string; path: string }[] = [
   { title: "Trang Chủ", path: "/" },
@@ -20,7 +19,8 @@ const navComponents: { title: string; path: string }[] = [
 
 const AppClientHeader = () => {
   const { itemsInLocal } = useCartProps();
-  const { currUser, clearCurrUser } = useCurrentUser();
+  const { navigate } = useCustomNavigate();
+  const { logout } = useAuth();
 
   const userOptions = useRef([
     {
@@ -31,13 +31,11 @@ const AppClientHeader = () => {
       name: "Đăng Xuất",
       handleClick: async () => {
         try {
-          await axiosInstance.delete("/users/logout", reqConfig);
+          await logout();
 
           toast.success("Đăng xuất thành công!");
-          clearCurrUser();
-          await routes.navigate("/login", {
-            unstable_viewTransition: true,
-          });
+          auth.token.removeAccessToken();
+          navigate("/login", { unstable_viewTransition: true });
         } catch (error: unknown) {
           console.error(`Response data: ${error}`);
         }
@@ -92,7 +90,7 @@ const AppClientHeader = () => {
                 <FiShoppingBag size={40} />
                 <CounterLabel counter={itemsInLocal.length} />
               </NavLink>
-              {currUser && (
+              {auth.getUser() && (
                 <NavLink
                   to="orders"
                   className="relative"
@@ -111,7 +109,7 @@ const AppClientHeader = () => {
               </NavLink>
             </div>
           </div>
-          {currUser ? (
+          {auth.getUser() ? (
             <CustomAvt className="ml-10" options={userOptions.current} />
           ) : (
             <div className="space-x-2 text-[1.1rem] flex justify-end">

@@ -1,16 +1,16 @@
-import axios from "axios";
+import { Category } from "@/types/api";
 import {
   axiosInstance,
   axiosInstanceWithoutAuthorize,
   reqConfig,
 } from "../axios";
-import { Provider } from "@/types/api";
+import axios from "axios";
 
-const providerApis = {
-  getProviders: async (): Promise<Provider[]> => {
+const categoryApis = {
+  getCategories: async (): Promise<Category[]> => {
     try {
-      const res = await axiosInstanceWithoutAuthorize.get<{ info: Provider[] }>(
-        "/providers",
+      const res = await axiosInstanceWithoutAuthorize.get<{ info: Category[] }>(
+        "/categories",
         reqConfig
       );
       return res.data.info;
@@ -28,31 +28,31 @@ const providerApis = {
       return [];
     }
   },
-  addProvider: async (name: string) => {
+  addCategory: async (name: string) => {
     const response = await axiosInstance.post(
-      "/providers",
+      "/categories",
       {
-        providerName: name,
+        categoryName: name,
       },
       reqConfig
     );
 
     return response;
   },
-  updateProvider: async (providerID: string, newName: string) => {
+  updateCategory: async (categoryID: string, newName: string) => {
     const response = await axiosInstance.put(
-      `/providers/${providerID}`,
+      `/categories/${categoryID}`,
       {
-        providerName: newName,
+        categoryName: newName,
       },
       reqConfig
     );
 
     return response;
   },
-  deleteProvider: async (providerID: string) => {
+  deleteCategory: async (categoryID: string) => {
     const response = await axiosInstance.delete(
-      `/providers/${providerID}`,
+      `/categories/${categoryID}`,
       reqConfig
     );
 
@@ -60,4 +60,4 @@ const providerApis = {
   },
 };
 
-export default providerApis;
+export default categoryApis;

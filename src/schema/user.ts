@@ -26,14 +26,14 @@ const SignupSchema = z.object({
   retypePassword: z.string(),
 });
 
-type SignupForm = z.infer<typeof SignupSchema>;
+type SignupFormProps = z.infer<typeof SignupSchema>;
 
-type LoginForm = z.infer<typeof LoginSchema>;
+type LoginFormProps = z.infer<typeof LoginSchema>;
 
 export {
   UserSchema,
   LoginSchema,
   SignupSchema,
-  type LoginForm,
-  type SignupForm,
+  type LoginFormProps,
+  type SignupFormProps,
 };

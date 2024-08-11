@@ -8,7 +8,7 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import React, { FC, useEffect, useState } from "react";
 import axios from "axios";
-import { Category, ProductDetail, Provider } from "@/types/api";
+import { Category, ProductFullJoin, Provider } from "@/types/api";
 import { SwatchBook } from "lucide-react";
 import {
   Select,
@@ -18,11 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import routes from "../middleware/routes";
-import {
-  getCategories,
-  getProductWithCategoryID,
-  getProviders,
-} from "@/services/apis";
 import BannerImg from "@/components/user/banner-image";
 import {
   CollectionHeader,
@@ -31,13 +26,14 @@ import {
 } from "@/components/user";
 import CardProduct from "@/components/user/product-card";
 import { LAPTOP_ID, PHONE_ID, slides } from "./data";
+import { productApis, providerApis } from "@/services/apis";
+import categoryApis from "@/services/apis/category";
 
 const Homepage: FC = () => {
   const [providersData, setProvidersData] = useState<Provider[]>();
   const [categoriesData, setCategoriesData] = useState<Category[]>();
-
-  const [phonesData, setPhonesData] = useState<ProductDetail[]>();
-  const [laptopsData, setLaptopsData] = useState<ProductDetail[]>();
+  const [phonesData, setPhonesData] = useState<ProductFullJoin[]>();
+  const [laptopsData, setLaptopsData] = useState<ProductFullJoin[]>();
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: true })
   );
@@ -45,15 +41,14 @@ const Homepage: FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const categoriesRes: Category[] | undefined = await getCategories();
-        const providersRes: Provider[] | undefined = await getProviders();
+        const categoriesRes: Category[] = await categoryApis.getCategories();
+        const providersRes: Provider[] = await providerApis.getProviders();
 
-        const phonesDataRes: ProductDetail[] | undefined =
-          await getProductWithCategoryID(PHONE_ID);
-        const laptopsDataRes: ProductDetail[] | undefined =
-          await getProductWithCategoryID(LAPTOP_ID);
+        const phonesDataRes: ProductFullJoin[] =
+          await productApis.getProductsFullJoinWithCategoryID(PHONE_ID);
+        const laptopsDataRes: ProductFullJoin[] =
+          await productApis.getProductsFullJoinWithCategoryID(LAPTOP_ID);
 
-        console.log(JSON.stringify(phonesDataRes));
         setPhonesData(phonesDataRes);
         setLaptopsData(laptopsDataRes);
         setCategoriesData(categoriesRes);

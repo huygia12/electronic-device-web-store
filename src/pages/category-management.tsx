@@ -23,8 +23,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Category } from "@/types/api";
-import { axiosInstance, reqConfig } from "@/services/axios";
-import { useCurrentUser } from "@/hooks";
 import { arrayInReverse } from "@/utils/helpers";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { FC, useState } from "react";
@@ -33,111 +31,87 @@ import { toast } from "sonner";
 import axios, { HttpStatusCode } from "axios";
 import { buttonVariants } from "@/utils/constants";
 import { Separator } from "@/components/ui/separator";
-import { getCategories } from "@/services/apis";
+import categoryApis from "@/services/apis/category";
 
 const colName: string[] = ["STT", "MÃ DANH MỤC", "TÊN DANH MỤC", "SỐ SẢN PHẨM"];
 
 const CategoryManagement: FC = () => {
-  const { currUser } = useCurrentUser();
-  const categoriesData = useRouteLoaderData("category_management") as
-    | Category[]
-    | undefined;
-  const [existingCategories, setExistingCategories] = useState(categoriesData);
+  const categoriesData = useRouteLoaderData(
+    "category_management"
+  ) as Category[];
+  const [categories, setCategories] = useState(categoriesData);
   const [selectedCategory, setSelectedCategory] = useState<Category>();
   const [searchingInput, setSearchingInput] = useState("");
 
   const handleAddCategory = async (name: string) => {
     const processedName: string = name.trim();
     try {
-      await axiosInstance.post(
-        "/categories",
-        {
-          name: processedName,
-        },
-        {
-          headers: {
-            "User-id": currUser?.userID,
-          },
-          ...reqConfig,
-        }
-      );
-
-      const categories = await getCategories();
-      setExistingCategories(categories);
+      await categoryApis.addCategory(processedName);
+      const fetchedCategories: Category[] = await categoryApis.getCategories();
+      setCategories(fetchedCategories);
       toast.success("Thêm thành công!");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status == HttpStatusCode.Conflict) {
           toast.error("Thêm thất bại: danh mục này đã tồn tại!");
-        } else {
-          toast.error("Thêm thất bại!");
+          return;
         }
         console.error(`Response data: ${error.response?.data}`);
         console.error(`Response status: ${error.response?.status})`);
       } else {
         console.error("Unexpected error:", error);
       }
+      toast.error("Thêm thất bại!");
     }
   };
 
   const handleUpdateCategory = async (name: string) => {
+    if (!selectedCategory) return;
     const processedName: string = name.trim();
     try {
-      await axiosInstance.patch(
-        `/categories/${selectedCategory?.categoryID}`,
-        {
-          name: processedName,
-        },
-        {
-          headers: {
-            "User-id": currUser?.userID,
-          },
-          ...reqConfig,
-        }
+      await categoryApis.updateCategory(
+        selectedCategory.categoryID,
+        processedName
       );
-
-      const categories = await getCategories();
-      setExistingCategories(categories);
+      const fetchedCategories: Category[] = await categoryApis.getCategories();
+      setCategories(fetchedCategories);
       setSelectedCategory(undefined);
       toast.success("Thay đổi thành công!");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status == HttpStatusCode.Conflict) {
           toast.error("Thay đổi thất bại: danh mục này đã tồn tại!");
-        } else {
-          toast.error("Thay đổi thất bại!");
+          return;
         }
         console.error(`Response data: ${error.response?.data}`);
         console.error(`Response status: ${error.response?.status})`);
       } else {
         console.error("Unexpected error:", error);
       }
+      toast.error("Thay đổi thất bại!");
     }
   };
 
   const handleDeleteCategory = async () => {
+    if (!selectedCategory) return;
     try {
-      await axiosInstance.delete(
-        `/categories/${selectedCategory?.categoryID}`,
-        {
-          headers: {
-            "User-id": currUser?.userID,
-          },
-          ...reqConfig,
-        }
-      );
-      const categorys = await getCategories();
-      setExistingCategories(categorys);
+      await categoryApis.deleteCategory(selectedCategory.categoryID);
+      const fetchedCategories: Category[] = await categoryApis.getCategories();
+      setCategories(fetchedCategories);
       setSelectedCategory(undefined);
       toast.success("Thay đổi thành công!");
     } catch (error) {
-      toast.error("Thay đổi thất bại!");
       if (axios.isAxiosError(error)) {
+        if (error.response?.status == HttpStatusCode.Conflict) {
+          toast.error("Thay đổi thất bại: tồn tại sản phẩm liên quan!");
+          return;
+        }
         console.error(`Response data: ${error.response?.data}`);
         console.error(`Response status: ${error.response?.status})`);
       } else {
         console.error("Unexpected error:", error);
       }
+      toast.error("Thay đổi thất bại!");
     }
   };
 
@@ -157,7 +131,7 @@ const CategoryManagement: FC = () => {
       <div className="flex gap-4">
         <Card className="rounded-2xl shadow-lg flex-1">
           <CardContent className="flex flex-col p-4">
-            {existingCategories && existingCategories.length !== 0 ? (
+            {categories.length !== 0 ? (
               <ScrollArea className="relative h-[58vh]">
                 <Table>
                   <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
@@ -175,7 +149,7 @@ const CategoryManagement: FC = () => {
                     </tr>
                   </TableHeader>
                   <TableBody>
-                    {arrayInReverse(existingCategories)
+                    {arrayInReverse(categories)
                       .filter((cate) =>
                         cate.categoryName
                           .toLowerCase()
@@ -202,7 +176,7 @@ const CategoryManagement: FC = () => {
                             {cate.categoryName}
                           </TableCell>
                           <TableCell className="text-center text-base">
-                            {cate.products}
+                            {cate.productQuantity || "0"}
                           </TableCell>
                         </TableRow>
                       ))}

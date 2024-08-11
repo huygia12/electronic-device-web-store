@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 import {
   AlertDialog,
@@ -29,49 +29,29 @@ import { toast } from "sonner";
 import axios, { HttpStatusCode } from "axios";
 import { Separator } from "@/components/ui/separator";
 import { arrayInReverse } from "@/utils/helpers";
-import { useCurrentUser } from "@/hooks";
-import { AttributeOption, AttributeType } from "@/types/api";
-import { axiosInstance, reqConfig } from "@/services/axios";
-import { getAttributes } from "@/services/apis";
+import { AttributeOption, Attribute } from "@/types/api";
 import { AttributeDialog, OptionDialog } from "@/components/admin";
+import { attributeApis } from "@/services/apis";
 
 const typeColsName: string[] = ["STT", "THUỘC TÍNH"];
 
 const optionColsName: string[] = ["STT", "GIÁ TRỊ"];
 
-const AttributeManagement = () => {
-  const { currUser } = useCurrentUser();
-  const attributeTypesLoader = useRouteLoaderData(
+const AttributeManagement: FC = () => {
+  const attributeData = useRouteLoaderData(
     "attribute_management"
-  ) as AttributeType[];
-  const [attributeTypes, setAttributeTypes] = useState<
-    AttributeType[] | undefined
-  >(attributeTypesLoader);
-  const [selectedAttr, setSelectedAttr] = useState<AttributeType>();
-  const [selectedAttrOption, setSelectedAttrOption] =
+  ) as Attribute[];
+  const [attributes, setAttributes] = useState<Attribute[]>(attributeData);
+  const [selectedAttribute, setSelectedAttribute] = useState<Attribute>();
+  const [selectedAttributeOption, setSelectedAttributeOption] =
     useState<AttributeOption>();
   const [searchingInput, setSearchingInput] = useState("");
 
   const handleAddAttributeType = async (name: string) => {
     const processedName: string = name.trim();
     try {
-      await axiosInstance.post(
-        "/attributes/types",
-        {
-          value: processedName,
-        },
-        {
-          headers: {
-            "User-id": currUser?.userID,
-          },
-          ...reqConfig,
-        }
-      );
-
-      const attributes: AttributeType[] | undefined = await getAttributes();
-      setAttributeTypes(attributes);
-      setSelectedAttr(undefined);
-      setSelectedAttrOption(undefined);
+      await attributeApis.addAttributeType(processedName);
+      await resetAttributesAfterAttributeProcessing();
       toast.success("Thêm thành công!");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -89,25 +69,14 @@ const AttributeManagement = () => {
   };
 
   const handleUpdateAttributeType = async (name: string) => {
+    if (!selectedAttribute) return;
     const processedName: string = name.trim();
     try {
-      await axiosInstance.patch(
-        `/attributes/types/${selectedAttr?.typeID}`,
-        {
-          value: processedName,
-        },
-        {
-          headers: {
-            "User-id": currUser?.userID,
-          },
-          ...reqConfig,
-        }
+      await attributeApis.updateAttributeType(
+        selectedAttribute.typeID,
+        processedName
       );
-
-      const attributes: AttributeType[] | undefined = await getAttributes();
-      setAttributeTypes(attributes);
-      setSelectedAttr(undefined);
-      setSelectedAttrOption(undefined);
+      await resetAttributesAfterAttributeProcessing();
       toast.success("Thay đổi thành công!");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -127,17 +96,10 @@ const AttributeManagement = () => {
   };
 
   const handleDeleteAttributeType = async () => {
+    if (!selectedAttribute) return;
     try {
-      await axiosInstance.delete(`/attributes/types/${selectedAttr?.typeID}`, {
-        headers: {
-          "User-id": currUser?.userID,
-        },
-        ...reqConfig,
-      });
-      const attributes: AttributeType[] | undefined = await getAttributes();
-      setAttributeTypes(attributes);
-      setSelectedAttr(undefined);
-      setSelectedAttrOption(undefined);
+      await attributeApis.deleteAttribute(selectedAttribute.typeID);
+      await resetAttributesAfterAttributeProcessing();
       toast.success("Thay đổi thành công!");
     } catch (error) {
       toast.error("Thay đổi thất bại!");
@@ -153,28 +115,14 @@ const AttributeManagement = () => {
   };
 
   const handleAddAttributeOption = async (name: string) => {
+    if (!selectedAttribute) return;
     const processedName: string = name.trim();
     try {
-      await axiosInstance.post(
-        "/attributes/options",
-        {
-          value: processedName,
-          id: selectedAttr?.typeID,
-        },
-        {
-          headers: {
-            "User-id": currUser?.userID,
-          },
-          ...reqConfig,
-        }
+      await attributeApis.addAttributeOption(
+        selectedAttribute.typeID,
+        processedName
       );
-
-      const attributes: AttributeType[] | undefined = await getAttributes();
-      setAttributeTypes(attributes);
-      setSelectedAttr(
-        attributes?.find((attr) => attr.typeID === selectedAttr?.typeID)
-      );
-      setSelectedAttrOption(undefined);
+      await resetAttributesAfterOptionProcessing();
       toast.success("Thêm thành công!");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -192,28 +140,15 @@ const AttributeManagement = () => {
   };
 
   const handleUpdateAttributeOption = async (name: string) => {
+    if (!selectedAttributeOption || !selectedAttribute) return;
     const processedName: string = name.trim();
     try {
-      await axiosInstance.patch(
-        `/attributes/options/${selectedAttrOption?.optionID}`,
-        {
-          value: processedName,
-          id: selectedAttr?.typeID,
-        },
-        {
-          headers: {
-            "User-id": currUser?.userID,
-          },
-          ...reqConfig,
-        }
+      await attributeApis.updateAttributeOption(
+        selectedAttributeOption.optionID,
+        selectedAttribute.typeID,
+        processedName
       );
-
-      const attributes: AttributeType[] | undefined = await getAttributes();
-      setAttributeTypes(attributes);
-      setSelectedAttr(
-        attributes?.find((attr) => attr.typeID === selectedAttr?.typeID)
-      );
-      setSelectedAttrOption(undefined);
+      await resetAttributesAfterOptionProcessing();
       toast.success("Thay đổi thành công!");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -233,22 +168,13 @@ const AttributeManagement = () => {
   };
 
   const handleDeleteAttributeOption = async () => {
+    if (!selectedAttributeOption || !selectedAttribute) return;
     try {
-      await axiosInstance.delete(
-        `/attributes/options/${selectedAttrOption?.optionID}`,
-        {
-          headers: {
-            "User-id": currUser?.userID,
-          },
-          ...reqConfig,
-        }
+      await attributeApis.deleteAttributeOption(
+        selectedAttributeOption.typeID,
+        selectedAttributeOption.optionID
       );
-      const attributes: AttributeType[] | undefined = await getAttributes();
-      setAttributeTypes(attributes);
-      setSelectedAttr(
-        attributes?.find((attr) => attr.typeID === selectedAttr?.typeID)
-      );
-      setSelectedAttrOption(undefined);
+      await resetAttributesAfterOptionProcessing();
       toast.success("Thay đổi thành công!");
     } catch (error) {
       toast.error("Thay đổi thất bại!");
@@ -262,6 +188,25 @@ const AttributeManagement = () => {
       }
     }
   };
+
+  const resetAttributesAfterOptionProcessing = async () => {
+    const fetchedAttributes: Attribute[] = await attributeApis.getAttributes();
+    setAttributes(fetchedAttributes);
+    setSelectedAttribute(
+      fetchedAttributes.find(
+        (attr) => attr.typeID === selectedAttribute?.typeID
+      )
+    );
+    setSelectedAttributeOption(undefined);
+  };
+
+  const resetAttributesAfterAttributeProcessing = async () => {
+    const fetchedAttributes: Attribute[] = await attributeApis.getAttributes();
+    setAttributes(fetchedAttributes);
+    setSelectedAttribute(undefined);
+    setSelectedAttributeOption(undefined);
+  };
+
   return (
     <section className=" grid grid-cols-5 gap-4">
       {/** SEARCH BOX */}
@@ -273,8 +218,8 @@ const AttributeManagement = () => {
           className="h-full text-lg w-full rounded-xl bg-background pl-14 focus-visible_!ring-0 focus-visible_!ring-offset-0"
           onChange={(e) => {
             setSearchingInput(e.target.value);
-            setSelectedAttr(undefined);
-            setSelectedAttrOption(undefined);
+            setSelectedAttribute(undefined);
+            setSelectedAttributeOption(undefined);
           }}
         />
       </div>
@@ -292,10 +237,10 @@ const AttributeManagement = () => {
                 <Plus />
               </Button>
             </AttributeDialog>
-            {selectedAttr ? (
+            {selectedAttribute ? (
               <>
                 <AttributeDialog
-                  attribute={selectedAttr}
+                  attribute={selectedAttribute}
                   formTitle="Sửa tên thuộc tính"
                   handleDialogAcceptEvent={handleUpdateAttributeType}
                 >
@@ -345,7 +290,7 @@ const AttributeManagement = () => {
         {/** ATTRIBUTE TYPE TABLE */}
         <Card className="rounded-xl shadow-lg flex-1">
           <CardContent className="p-4">
-            {attributeTypes && attributeTypes.length !== 0 ? (
+            {attributes.length !== 0 ? (
               <ScrollArea className="relative h-[64vh]">
                 <Table>
                   <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
@@ -363,7 +308,7 @@ const AttributeManagement = () => {
                     </tr>
                   </TableHeader>
                   <TableBody>
-                    {arrayInReverse(attributeTypes)
+                    {arrayInReverse(attributes)
                       .filter((attr) =>
                         attr.typeValue
                           .toLowerCase()
@@ -372,12 +317,13 @@ const AttributeManagement = () => {
                       .map((attr, index) => (
                         <TableRow
                           onClick={() => {
-                            setSelectedAttr(attr);
-                            setSelectedAttrOption(undefined);
+                            setSelectedAttribute(attr);
+                            setSelectedAttributeOption(undefined);
                           }}
                           key={index}
                           className={
-                            selectedAttr && attr.typeID === selectedAttr.typeID
+                            selectedAttribute &&
+                            attr.typeID === selectedAttribute.typeID
                               ? "bg-theme-softer"
                               : ""
                           }
@@ -415,7 +361,8 @@ const AttributeManagement = () => {
         {/** ATTRIBUTE OPTION TABLE */}
         <Card className="rounded-xl shadow-lg !max-h-[40.8rem] flex-1">
           <CardContent className="p-4 h-full">
-            {selectedAttr && selectedAttr.options.length !== 0 ? (
+            {selectedAttribute &&
+            selectedAttribute.attributeOptions.length !== 0 ? (
               <ScrollArea className="relative h-[64vh]">
                 <Table>
                   <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
@@ -433,13 +380,13 @@ const AttributeManagement = () => {
                     </tr>
                   </TableHeader>
                   <TableBody>
-                    {arrayInReverse(selectedAttr.options).map(
+                    {arrayInReverse(selectedAttribute.attributeOptions).map(
                       (option, index) => (
                         <TableRow
-                          onClick={() => setSelectedAttrOption(option)}
+                          onClick={() => setSelectedAttributeOption(option)}
                           className={
-                            selectedAttrOption &&
-                            option.optionID === selectedAttrOption.optionID
+                            selectedAttributeOption &&
+                            option.optionID === selectedAttributeOption.optionID
                               ? "bg-theme-softer"
                               : ""
                           }
@@ -476,7 +423,7 @@ const AttributeManagement = () => {
         {/** ATTRIBUTE OPTION'S TOOLS */}
         <Card className="rounded-xl shadow-lg">
           <CardContent className="p-4 space-y-4 contain-content">
-            {selectedAttr ? (
+            {selectedAttribute ? (
               <OptionDialog
                 formTitle="Thêm giá trị mới"
                 handleDialogAcceptEvent={handleAddAttributeOption}
@@ -488,10 +435,10 @@ const AttributeManagement = () => {
             ) : (
               <Plus className="mx-4 !mb-7v !mt-3" />
             )}
-            {selectedAttrOption && selectedAttr?.options ? (
+            {selectedAttributeOption && selectedAttribute?.attributeOptions ? (
               <>
                 <OptionDialog
-                  option={selectedAttrOption}
+                  option={selectedAttributeOption}
                   formTitle="Sửa tên giá trị"
                   handleDialogAcceptEvent={handleUpdateAttributeOption}
                 >

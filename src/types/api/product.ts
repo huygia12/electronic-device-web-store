@@ -1,61 +1,66 @@
-import { Review } from "./review";
-
-interface Product {
-  productID: string;
-  productName: string;
-  description: string;
-  height: number;
-  weight: number;
-  length: number;
-  width: number;
-  warranty: number;
-  categoryName: string;
-  providerName: string;
-  attributes: {
-    typeValue: string;
-    optionValue: string;
-  }[];
-  items: ProductItem[];
-  reviews: Review[];
-}
+import { Nullable, Optional } from "@/utils/declare";
+import { ProductAttribute } from "./attribute";
+import { Category } from "./category";
+import { Provider } from "./provider";
 
 type ProductParams = {
   id: string;
-  cateID: string;
-  provID: string;
+  categoryID: string;
+  providerID: string;
 };
 
-interface ProductDetail {
+interface ItemImage {
+  imageID: string;
+  source: string;
+  itemID: string;
+}
+
+interface ProductItem {
+  productID: string;
+  itemID: string;
+  thump: string;
+  quantity: number;
+  price: number;
+  productCode: string;
+  discount: Nullable<number>;
+  color: string;
+  storage: Nullable<string>;
+  itemImages: ItemImage[];
+}
+
+interface ProductFullJoin {
   productID: string;
   productName: string;
-  description: string | null;
+  description: Nullable<string>;
   length: number;
   width: number;
   height: number;
   weight: number;
   warranty: number;
-  categoryID: string | null;
-  providerID: string | null;
-  options: (string | null)[];
-  items: ProductItem[];
+  category: Category;
+  provider: Provider;
+  productAttributes: {
+    attributeOption: ProductAttribute;
+  }[];
+  productItems: ProductItem[];
 }
 
 interface ProductSummary {
   productID: string;
   productName: string;
-  description: string;
-  height: number;
-  weight: number;
+  description: Nullable<string>;
   length: number;
   width: number;
+  height: number;
+  weight: number;
   warranty: number;
-  categoryName: string;
-  providerName: string;
+  category: Category;
+  provider: Provider;
 }
 
 interface ProductInsertPayload {
   productName: string;
-  description: string | null;
+  description: Optional<string>;
   length: number;
   width: number;
   height: number;
@@ -68,73 +73,44 @@ interface ProductInsertPayload {
 }
 
 interface ProductItemInsertPayload {
-  thump: string | null;
-  quantity: number | null;
-  price: number | null;
-  productCode: string | null;
-  discount: number | null;
-  colorName: string | null;
-  storageName: string | null;
-  images: string[] | null;
-}
-
-interface ProductAttribute {
-  typeID: string;
-  typeValue: string;
-  optionID: string;
-  optionName: string;
-}
-
-interface ProductItem {
-  itemID: string;
   thump: string;
   quantity: number;
   price: number;
   productCode: string;
-  discount: number | null;
-  colorName: string;
-  storageName: string | null;
-  images: string[];
+  discount: number;
+  color: string;
+  storage: Optional<string>;
+  itemImages: string[] | null;
 }
 
-interface ProductItemInput {
-  thump: File | null;
-  quantity: number | null;
-  price: number | null;
-  productCode: string | null;
-  discount: number | null;
-  colorName: string | null;
-  storageName: string | null;
-  images: File[] | null;
+interface ItemInputProps {
+  thump: Nullable<File>;
+  quantity: Nullable<number>;
+  price: Nullable<number>;
+  productCode: Nullable<string>;
+  discount: Nullable<number>;
+  color: Nullable<string>;
+  storage: Nullable<string>;
+  itemImages: Nullable<File[]>;
 }
 
-interface ProductItemUpdate {
-  thump: File | string | null;
-  quantity: number | null;
-  price: number | null;
-  productCode: string | null;
-  discount: number | null;
-  colorName: string | null;
-  storageName: string | null;
-  images: File[] | string[] | null;
-}
-
-interface LocalStorageProductItem {
-  productID: string;
-  itemID: string;
-  quantity: number;
-}
+// interface ProductItemUpdate {
+//   thump: File | string | null;
+//   quantity: number | null;
+//   price: number | null;
+//   productCode: string | null;
+//   discount: number | null;
+//   colorName: string | null;
+//   storageName: string | null;
+//   images: File[] | string[] | null;
+// }
 
 export type {
-  Product,
-  ProductDetail,
+  ProductFullJoin,
   ProductSummary,
-  ProductInsertPayload,
-  ProductItemInsertPayload,
   ProductAttribute,
   ProductItem,
-  ProductItemInput,
-  ProductItemUpdate,
   ProductParams,
-  LocalStorageProductItem,
+  ItemInputProps,
+  ProductInsertPayload,
 };

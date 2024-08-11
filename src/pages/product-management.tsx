@@ -34,12 +34,9 @@ import { useState } from "react";
 import { buttonVariants } from "@/utils/constants";
 import { arrayInReverse } from "@/utils/helpers";
 import { Separator } from "@/components/ui/separator";
-import { axiosInstance, reqConfig } from "@/services/axios";
-import { useCurrentUser } from "@/hooks";
 import { toast } from "sonner";
 import axios from "axios";
-import { clearImagesInFB } from "@/utils/product";
-import { getProducts } from "@/services/apis";
+import { productApis } from "@/services/apis";
 
 const colName: string[] = [
   "STT",
@@ -55,28 +52,18 @@ const ProductManagement = () => {
   const productsData = useRouteLoaderData(
     "product_management"
   ) as ProductSummary[];
-  const [productSummaryList, setProductSummaryList] = useState<
-    ProductSummary[] | undefined
-  >(productsData);
+  const [productsSummary, setProductSummaryList] =
+    useState<ProductSummary[]>(productsData);
   const [selectedProduct, setSelectedProduct] = useState<ProductSummary>();
   const [searchingInput, setSearchingInput] = useState("");
-  const { currUser } = useCurrentUser();
 
   const handleDeleteProduct = async () => {
+    if (!selectedProduct) return;
     try {
-      const res = await axiosInstance.delete<{ info: string[] }>(
-        `/products/${selectedProduct?.productID}`,
-        {
-          headers: {
-            "User-id": currUser?.userID,
-          },
-          ...reqConfig,
-        }
-      );
-      const productSummaryList: ProductSummary[] | undefined =
-        await getProducts();
+      await productApis.deleteProduct(selectedProduct.productID);
+      const productSummaryList: ProductSummary[] =
+        await productApis.getProductsSummary();
 
-      clearImagesInFB(res.data.info);
       setProductSummaryList(productSummaryList);
       setSelectedProduct(undefined);
       toast.success("Thay đổi thành công!");
@@ -110,7 +97,7 @@ const ProductManagement = () => {
         {/** Table */}
         <Card className="rounded-2xl shadow-lg flex-1">
           <CardContent className="flex flex-col p-4">
-            {productSummaryList && productSummaryList.length !== 0 ? (
+            {productsSummary.length !== 0 ? (
               <ScrollArea className="relative h-[58vh]">
                 <Table>
                   <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
@@ -128,7 +115,7 @@ const ProductManagement = () => {
                     </tr>
                   </TableHeader>
                   <TableBody>
-                    {arrayInReverse(productSummaryList)
+                    {arrayInReverse(productsSummary)
                       .filter((product) =>
                         product.productName
                           .toLowerCase()
@@ -169,10 +156,10 @@ const ProductManagement = () => {
                             {`${product.weight}gram`}
                           </TableCell>
                           <TableCell className="text-center text-base">
-                            {product.categoryName}
+                            {product.category.categoryName}
                           </TableCell>
                           <TableCell className="text-center text-base">
-                            {product.providerName}
+                            {product.provider.providerName}
                           </TableCell>
                           <TableCell className="text-center text-base">
                             {`${product.warranty} tháng`}
@@ -254,32 +241,6 @@ const ProductManagement = () => {
           </CardContent>
         </Card>
       </div>
-
-      {/** Pagination */}
-      {/* <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#" isActive>
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination> */}
     </section>
   );
 };

@@ -21,8 +21,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { afterDiscount } from "@/utils/product";
 import { invoiceListHeader, productListHeader } from "@/utils/constants";
+import productService from "@/utils/product";
 
 const PersonalInvoices: FC = () => {
   // const invoiceData = useRouteLoaderData("my_invoices") as Invoice[];
@@ -159,7 +159,7 @@ const PersonalInvoices: FC = () => {
                                             <TableCell className="text-center text-base max-w-[15rem] truncate">
                                               {prod.productName}
                                               <br />
-                                              {`${prod.storageName} | ${prod.colorName}`}
+                                              {`${prod.storage} | ${prod.color}`}
                                             </TableCell>
                                             <TableCell className="text-center text-base">
                                               {prod.price.toLocaleString() +
@@ -169,10 +169,12 @@ const PersonalInvoices: FC = () => {
                                               {prod.discount + "%"}
                                             </TableCell>
                                             <TableCell className="text-center text-base">
-                                              {afterDiscount(
-                                                prod.price,
-                                                prod.discount
-                                              ).toLocaleString() + "đ"}
+                                              {productService
+                                                .afterDiscount(
+                                                  prod.price,
+                                                  prod.discount
+                                                )
+                                                .toLocaleString() + "đ"}
                                             </TableCell>
                                             <TableCell className="text-center text-base">
                                               {prod.quantity}

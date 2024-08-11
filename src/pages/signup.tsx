@@ -14,10 +14,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import { FC, useState } from "react";
 import routes from "../middleware/routes";
-import { axiosInstance, reqConfig } from "@/services/axios";
 import axios, { HttpStatusCode } from "axios";
 import { LoadingSpinner } from "@/components/effect";
-import { SignupForm, SignupSchema } from "@/schema";
+import { SignupFormProps, SignupSchema } from "@/schema";
+import { userApis } from "@/services/apis";
 
 const Signup: FC = () => {
   const {
@@ -25,12 +25,12 @@ const Signup: FC = () => {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<SignupForm>({
+  } = useForm<SignupFormProps>({
     resolver: zodResolver(SignupSchema),
   });
   const [passwordVisibility, setPasswordvisibility] = useState(false);
 
-  const handleSignupFormSubmission: SubmitHandler<SignupForm> = async (
+  const handleSignupFormSubmission: SubmitHandler<SignupFormProps> = async (
     data
   ) => {
     try {
@@ -41,16 +41,7 @@ const Signup: FC = () => {
         return;
       }
 
-      await axiosInstance.post(
-        "/users/signup",
-        {
-          name: data.userName.trim(),
-          email: data.email.trim(),
-          password: data.password.trim(),
-          role: "USER",
-        },
-        reqConfig
-      );
+      await userApis.signup(data);
 
       await routes.navigate("/login", { unstable_viewTransition: true });
     } catch (error) {

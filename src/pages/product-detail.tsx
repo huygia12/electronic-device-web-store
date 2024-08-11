@@ -5,14 +5,13 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
-  LocalStorageProductItem,
   Error,
   ProductItem,
-  ProductDetail,
   ProductAttribute,
+  ProductFullJoin,
+  CartItem,
 } from "@/types/api";
-import { afterDiscount, getProductAttribute } from "@/utils/product";
-import React, { useEffect, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
@@ -39,45 +38,20 @@ import { Textarea } from "@/components/ui/textarea";
 import { useRouteLoaderData } from "react-router-dom";
 import { toast } from "sonner";
 import { useCartProps } from "@/hooks";
-import axios from "axios";
-import { getAttributes } from "@/services/apis";
 import { SlideShow } from "@/components/user";
+import productService from "@/utils/product";
 
-const ProductDetailPage = () => {
+const ProductDetailPage: FC = () => {
   const { itemsInLocal, setItemsInLocal } = useCartProps();
-  const productData = useRouteLoaderData("product_detail") as ProductDetail;
+  const productData = useRouteLoaderData("product_detail") as ProductFullJoin;
   const [currentItem, setCurrentItem] = useState<ProductItem>(
-    productData.items[0]
+    productData.productItems[0]
   );
   const [quantityError, setQuantityError] = useState<Error>({ success: true });
   const [inputQuantity, setInputQuantity] = useState(1);
-  const [productAttribute, setProductAttribute] = useState<ProductAttribute[]>(
-    []
+  const productAttribute = useRef<{ attributeOption: ProductAttribute }[]>(
+    productData.productAttributes
   );
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const attributesRes = await getAttributes();
-
-        setProductAttribute(getProductAttribute(productData, attributesRes));
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          console.log("error");
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
-      }
-    };
-
-    fetchData();
-  }, [productData]);
 
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: true })
@@ -96,8 +70,7 @@ const ProductDetailPage = () => {
     }
 
     let checkExisted: boolean = false;
-    const bucket: LocalStorageProductItem[] = itemsInLocal.map((i) => i);
-
+    const bucket: CartItem[] = itemsInLocal;
     bucket.map((item) => {
       if (
         item.itemID === currentItem.itemID &&
@@ -108,10 +81,21 @@ const ProductDetailPage = () => {
       }
     });
     checkExisted ||
-      bucket?.push({
+      bucket.push({
+        productName: productData.productName,
+        price: currentItem.price,
+        quantity: inputQuantity,
+        discount: currentItem.discount,
+        productCode: currentItem.productCode,
+        color: currentItem.color,
+        storage: currentItem.storage,
+        thump: currentItem.thump,
         productID: productData.productID,
         itemID: currentItem.itemID,
-        quantity: inputQuantity,
+        height: productData.height,
+        length: productData.length,
+        width: productData.width,
+        weight: productData.weight,
       });
     toast.success("Thêm vào giỏ hàng thành công!");
     setItemsInLocal(bucket);
@@ -163,8 +147,14 @@ const ProductDetailPage = () => {
                 className="w-[40rem] mb-16"
               >
                 <CarouselContent>
-                  {currentItem?.images.map((url, index) => {
-                    return <SlideShow src={url} key={index} alt={url} />;
+                  {currentItem.itemImages.map((image, index) => {
+                    return (
+                      <SlideShow
+                        src={image.source}
+                        key={index}
+                        alt={image.itemID}
+                      />
+                    );
                   })}
                 </CarouselContent>
                 <CarouselPrevious className="z-10 top-[13rem] left-0 h-[3rem] w-[3rem] !text-secondary-foreground hover_border-primary" />
@@ -188,12 +178,14 @@ const ProductDetailPage = () => {
                 </h5>
                 <Table className="border-2 border-slate-200">
                   <TableBody>
-                    {productAttribute.map((attr, index) => (
+                    {productAttribute.current.map((attr, index) => (
                       <TableRow key={index}>
                         <TableCell className="font-medium">
-                          {attr.typeValue}
+                          {attr.attributeOption.attributeType.typeValue}
                         </TableCell>
-                        <TableCell>{attr.optionName}</TableCell>
+                        <TableCell>
+                          {attr.attributeOption.optionValue}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -205,7 +197,7 @@ const ProductDetailPage = () => {
             <div>
               <div className="flex justify-between items-baseline mb-12 pb-4 border-b-2 border-dashed border-slate-300">
                 <div className="space-x-4">
-                  <span className="text-3xl font-semibold text-primary-foreground">{`${currentItem ? afterDiscount(currentItem?.price, currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
+                  <span className="text-3xl font-semibold text-primary-foreground">{`${currentItem ? productService.afterDiscount(currentItem.price, currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
                   <del className="text-slate-500">{`${currentItem ? currentItem?.price.toLocaleString() : 0}đ`}</del>
                 </div>
                 <div className="flex gap-2">
@@ -223,7 +215,7 @@ const ProductDetailPage = () => {
                   Chọn sản phẩm:
                 </Label>
                 <div className="width-full grid grid-cols-2 gap-1 mb-10">
-                  {productData.items.map((item, index) => {
+                  {productData.productItems.map((item, index) => {
                     return (
                       <span
                         key={index}
@@ -249,10 +241,10 @@ const ProductDetailPage = () => {
                               htmlFor={index + ""}
                               className="text-xl font-medium truncate"
                             >
-                              {`${afterDiscount(item.price, item.discount ?? 0).toLocaleString()}đ`}
+                              {`${productService.afterDiscount(item.price, item.discount).toLocaleString()}đ`}
                             </label>
                           </span>
-                          <span className="truncate">{`${item.storageName} | ${item.colorName}`}</span>
+                          <span className="truncate">{`${item.storage} | ${item.color}`}</span>
                         </span>
                         <img
                           src={item.thump}

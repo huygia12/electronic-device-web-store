@@ -10,16 +10,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { HttpStatusCode } from "axios";
-import { axiosInstance, reqConfig } from "@/services/axios";
-import { useCurrentUser } from "@/hooks";
-import routes from "../middleware/routes";
-import { UserSummary } from "@/types/api";
 import { LoadingSpinner } from "@/components/effect";
-import { LoginForm, LoginSchema } from "@/schema";
+import { LoginFormProps, LoginSchema } from "@/schema";
 import { FC } from "react";
+import { useAuth } from "@/hooks";
 
 const Login: FC = () => {
   const {
@@ -27,43 +24,23 @@ const Login: FC = () => {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<LoginForm>({
+  } = useForm<LoginFormProps>({
     resolver: zodResolver(LoginSchema),
   });
-  const location = useLocation();
-  const from: string = location.state?.from?.pathname ?? "/";
-  const { setCurrUser } = useCurrentUser();
+  const { login } = useAuth();
 
-  const handleLoginFormSubmission: SubmitHandler<LoginForm> = async (data) => {
+  const handleLoginFormSubmission: SubmitHandler<LoginFormProps> = async (
+    data
+  ) => {
     try {
-      const res = await axiosInstance.post<{
-        message: string;
-        info: UserSummary;
-      }>(
-        "/users/login",
-        {
-          email: data.email.trim(),
-          password: data.password.trim(),
-        },
-        reqConfig
-      );
-      const user: UserSummary = res.data.info;
-      setCurrUser(user);
-      console.log("role: ", user.role);
-      await routes.navigate(
-        user.role === "ADMIN" ? "/admin" : from === "/login" ? "/" : from,
-        {
-          unstable_viewTransition: true,
-          replace: true,
-        }
-      );
+      await login(data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status == HttpStatusCode.Conflict) {
           setError("root", {
             message: "Bạn chưa logout tài khoản hiện tại!",
           });
-        } else if (error.response?.status == HttpStatusCode.BadRequest) {
+        } else if (error.response?.status == HttpStatusCode.NotFound) {
           setError("root", {
             message: "Tài khoản không tồn tại!",
           });
@@ -106,6 +83,7 @@ const Login: FC = () => {
             <Input
               id="email"
               {...register("email")}
+              defaultValue="huy@gmail.com"
               type="email"
               placeholder="abc@gmail.com"
               autoComplete="email"
@@ -122,6 +100,7 @@ const Login: FC = () => {
             <Input
               id="password"
               {...register("password")}
+              defaultValue="123123"
               type="password"
               autoComplete="new-password"
             />

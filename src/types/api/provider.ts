@@ -1,7 +1,7 @@
 interface Provider {
   providerID: string;
   providerName: string;
-  products?: number;
+  productQuantity?: number;
 }
 
 export type { Provider };

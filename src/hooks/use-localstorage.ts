@@ -1,35 +1,23 @@
+import { Nullable } from "@/utils/declare";
 import { useState } from "react";
 
 const useLocalStorage = <T>(
-  key: string,
-  initValue: T
-): [T, (value: T) => void, () => void] => {
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    try {
-      const prevValue = window.localStorage.getItem(key);
-      return prevValue ? JSON.parse(prevValue) : initValue;
-    } catch {
-      console.debug(`Storage value for key: ${key} is null`);
-      return initValue;
-    }
+  key: string
+): [Nullable<T>, (value: Nullable<T>) => void, () => void] => {
+  const [storedValue, setStoredValue] = useState<Nullable<T>>(() => {
+    const prevValue: Nullable<string> = window.localStorage.getItem(key);
+
+    return prevValue && JSON.parse(prevValue);
   });
 
-  const setToLocal = (value: T) => {
-    try {
-      setStoredValue(value);
-      window.localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-      console.debug(`Storage value for key: ${key} is null`);
-    }
+  const setToLocal = (value: Nullable<T>) => {
+    window.localStorage.setItem(key, JSON.stringify(value));
+    setStoredValue(value);
   };
 
   const removeFromLocal = () => {
-    try {
-      setStoredValue(initValue);
-      window.localStorage.removeItem(key);
-    } catch (error) {
-      console.debug(`Storage value for key: ${key} is null`);
-    }
+    window.localStorage.removeItem(key);
+    setStoredValue(null);
   };
 
   return [storedValue, setToLocal, removeFromLocal];

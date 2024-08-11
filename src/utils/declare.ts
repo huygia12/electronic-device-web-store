@@ -5,4 +5,8 @@ interface Args extends ActionFunctionArgs {
   params: Params<ParamParseKey<string>> | ProductParams;
 }
 
-export type { Args };
+type Optional<T> = T | undefined;
+
+type Nullable<T> = T | null;
+
+export type { Args, Optional, Nullable };

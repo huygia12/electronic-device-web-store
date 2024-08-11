@@ -1,2 +1,4 @@
-export { default as UserContext, UserProvider } from "@/context/user-context";
-export { default as CartContext, CartProvider } from "@/context/cart-context";
+export { default as CartContext } from "@/context/cart-context";
+export * from "@/context/cart-context";
+export { default as AutContext } from "@/context/auth-context";
+export * from "@/context/auth-context";

@@ -2,13 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SaleTag from "../ui/saleTag";
 import React, { HTMLAttributes, useState } from "react";
 import { cn } from "@/lib/utils";
-import {
-  Error,
-  LocalStorageProductItem,
-  ProductDetail,
-  ProductItem,
-} from "@/types/api";
-import { afterDiscount } from "@/utils/product.ts";
+import { CartItem, Error, ProductFullJoin, ProductItem } from "@/types/api";
 import { Button } from "../ui/button";
 import { NavLink } from "react-router-dom";
 import {
@@ -42,15 +36,16 @@ import { toast } from "sonner";
 import { useCartProps } from "@/hooks";
 import { buttonVariants } from "@/utils/constants";
 import SlideShow from "./slide-show";
+import productService from "@/utils/product";
 
 interface CardProductProps extends HTMLAttributes<HTMLDivElement> {
-  product: ProductDetail;
+  product: ProductFullJoin;
 }
 
 const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
   const { itemsInLocal, setItemsInLocal } = useCartProps();
   const [currentItem, setCurrentItem] = useState<ProductItem>(
-    props.product.items[0]
+    props.product.productItems[0]
   );
   const [quantityError, setQuantityError] = useState<Error>({ success: true });
   const [inputQuantity, setInputQuantity] = useState(1);
@@ -71,11 +66,9 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
     }
 
     let checkExisted: boolean = false;
-    const bucket: LocalStorageProductItem[] | undefined = itemsInLocal.map(
-      (i) => i
-    );
+    const bucket: CartItem[] = itemsInLocal.map((i) => i);
 
-    bucket?.map((item) => {
+    bucket.map((item) => {
       if (
         item.itemID === currentItem.itemID &&
         item.productID === props.product.productID
@@ -84,14 +77,26 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
         checkExisted = true;
       }
     });
+
     checkExisted ||
-      bucket?.push({
+      bucket.push({
+        productName: props.product.productName,
+        price: currentItem.price,
+        quantity: inputQuantity,
+        discount: currentItem.discount,
+        productCode: currentItem.productCode,
+        color: currentItem.color,
+        storage: currentItem.storage,
+        thump: currentItem.thump,
         productID: props.product.productID,
         itemID: currentItem.itemID,
-        quantity: inputQuantity,
+        height: props.product.height,
+        length: props.product.length,
+        width: props.product.width,
+        weight: props.product.weight,
       });
     toast.success("Thêm vào giỏ hàng thành công!");
-    bucket && setItemsInLocal(bucket);
+    setItemsInLocal(bucket);
   };
 
   const handleQuantityInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +122,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
         to={"/products/" + props.product.productID}
         unstable_viewTransition
       >
-        <img src={props.product.items[0].thump} alt="machine" />
+        <img src={props.product.productItems[0].thump} alt="machine" />
         <CardHeader className="p-1.5 mt-2">
           <CardTitle className="text-[1.1rem] hover_underline hover_text-primary-foreground">
             {props.product.productName}
@@ -127,20 +132,24 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
       <CardContent className="p-2">
         <div className="flex flex-row flex-wrap items-baseline justify-between">
           <div className="text-[1.3rem] font-extrabold text-primary-foreground truncate ...">
-            {`${afterDiscount(
-              Number(props.product.items[0].price),
-              Number(props.product.items[0].discount)
-            ).toLocaleString()}đ`}
+            {`${productService
+              .afterDiscount(
+                Number(props.product.productItems[0].price),
+                Number(props.product.productItems[0].discount)
+              )
+              .toLocaleString()}đ`}
           </div>
-          {props.product.items[0].discount !== null && (
+          {productService.isDiscount(
+            props.product.productItems[0].discount
+          ) && (
             <del className="text-[0.8rem] text-secondary-foreground">
-              {`${props.product.items[0].price.toLocaleString()}đ`}
+              {`${props.product.productItems[0].price.toLocaleString()}đ`}
             </del>
           )}
         </div>
-        {props.product.items[0].discount !== null && (
+        {props.product.productItems[0].discount && (
           <SaleTag
-            percentage={`-${props.product.items[0].discount}%`}
+            percentage={`-${props.product.productItems[0].discount}%`}
             className="absolute top-0 left-[-1rem]"
           />
         )}
@@ -172,8 +181,14 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
                     className="w-[40rem] mb-16"
                   >
                     <CarouselContent>
-                      {currentItem.images.map((url, index) => {
-                        return <SlideShow src={url} key={index} alt={url} />;
+                      {currentItem.itemImages.map((image, index) => {
+                        return (
+                          <SlideShow
+                            src={image.source}
+                            key={index}
+                            alt={image.imageID}
+                          />
+                        );
                       })}
                     </CarouselContent>
                     <CarouselPrevious className="z-10 top-[13rem] left-0 h-[3rem] w-[3rem] !text-secondary-foreground hover_border-primary" />
@@ -196,7 +211,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
                 <div>
                   <div className="flex justify-between items-baseline mb-12 pb-4 border-b-2 border-dashed border-slate-300">
                     <div className="space-x-4">
-                      <span className="text-3xl font-semibold text-primary-foreground">{`${currentItem ? afterDiscount(currentItem?.price, currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
+                      <span className="text-3xl font-semibold text-primary-foreground">{`${currentItem ? productService.afterDiscount(currentItem?.price, currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
                       <del className="text-slate-500">{`${currentItem ? currentItem?.price.toLocaleString() : 0}đ`}</del>
                     </div>
                     <div className="flex gap-2">
@@ -215,7 +230,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
                     </div>
                     <ScrollArea className="h-44 mb-8">
                       <ul className="width-full grid grid-cols-2 gap-1 mb-10">
-                        {props.product.items.map((item, index) => {
+                        {props.product.productItems.map((item, index) => {
                           return (
                             <li
                               key={index}
@@ -242,10 +257,10 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
                                     htmlFor={index + ""}
                                     className="text-xl font-medium truncate"
                                   >
-                                    {`${afterDiscount(item.price, item.discount ?? 0).toLocaleString()}đ`}
+                                    {`${productService.afterDiscount(item.price, item.discount ?? 0).toLocaleString()}đ`}
                                   </label>
                                 </span>
-                                <span className="truncate">{`${item.storageName} | ${item.colorName}`}</span>
+                                <span className="truncate">{`${item.storage} | ${item.color}`}</span>
                               </span>
                               <img
                                 src={item.thump}

@@ -8,20 +8,20 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { NavLink } from "react-router-dom";
-import { axiosInstance, reqConfig } from "@/services/axios";
 import { toast } from "sonner";
 import { useRef } from "react";
-import { useCurrentUser } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { AdminAccordion } from "@/components/admin";
 import { CounterLabel } from "@/components/user";
 import CustomAvt from "@/components/common/custom-avatar";
 import { navItems } from "@/utils/constants";
+import auth from "@/utils/auth";
+import { useAuth, useCustomNavigate } from "@/hooks";
 
 const AdminHeader = () => {
-  const { clearCurrUser } = useCurrentUser();
-
+  const { navigate } = useCustomNavigate();
+  const { logout } = useAuth();
   const userOptions = useRef([
     {
       name: "Tài Khoản Của Tôi",
@@ -31,10 +31,11 @@ const AdminHeader = () => {
       name: "Đăng Xuất",
       handleClick: async () => {
         try {
-          await axiosInstance.delete("/users/logout", reqConfig);
+          await logout();
 
           toast.success("Đăng xuất thành công!");
-          clearCurrUser();
+          auth.token.removeAccessToken();
+          navigate("/login", { unstable_viewTransition: true });
         } catch (error: unknown) {
           console.error(`Response data: ${error}`);
         }

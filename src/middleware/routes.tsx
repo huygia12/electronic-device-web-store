@@ -12,9 +12,9 @@ import {
   OrderManagement,
   PageNotFound,
   PersonalInvoice,
-  ProductAddition,
+  // ProductAddition,
   ProductDetail,
-  ProductEdittion,
+  // ProductEdittion,
   ProductManagement,
   Products,
   ProviderManagement,
@@ -25,21 +25,27 @@ import {
   UserManagement,
 } from "@/pages";
 import {
-  getAttributes,
-  getCategories,
+  attributeApis,
   getOrders,
-  getProductDetail,
-  getProducts,
-  getProviders,
-  getUsers,
+  productApis,
+  providerApis,
+  userApis,
 } from "@/services/apis";
 import { createBrowserRouter } from "react-router-dom";
 import ProtectedRoute from "./protected-route";
+import { Role } from "@/utils/constants";
+import { AuthProvider } from "@/context";
+import categoryApis from "@/services/apis/category";
+import PreventedRoute from "./prevented-route";
 
 const routes = createBrowserRouter([
   {
     path: "/",
-    element: <UserLayout />,
+    element: (
+      <AuthProvider>
+        <UserLayout />
+      </AuthProvider>
+    ),
     errorElement: <PageNotFound />,
     children: [
       {
@@ -60,7 +66,7 @@ const routes = createBrowserRouter([
           {
             path: ":id",
             id: "product_detail",
-            loader: getProductDetail,
+            loader: productApis.getProductFullJoin,
             element: <ProductDetail />,
           },
         ],
@@ -99,11 +105,19 @@ const routes = createBrowserRouter([
       },
       {
         path: "login",
-        element: <Login />,
+        element: (
+          <PreventedRoute>
+            <Login />
+          </PreventedRoute>
+        ),
       },
       {
         path: "signup",
-        element: <Signup />,
+        element: (
+          <PreventedRoute>
+            <Signup />
+          </PreventedRoute>
+        ),
       },
       {
         path: "unauthorized",
@@ -114,9 +128,11 @@ const routes = createBrowserRouter([
   {
     path: "admin",
     element: (
-      <ProtectedRoute allowedRoles={["ADMIN"]}>
-        <AdminLayout />
-      </ProtectedRoute>
+      <AuthProvider>
+        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+          <AdminLayout />
+        </ProtectedRoute>
+      </AuthProvider>
     ),
     errorElement: <PageNotFound />,
     children: [
@@ -127,13 +143,13 @@ const routes = createBrowserRouter([
       {
         path: "users",
         id: "user_management",
-        loader: getUsers,
+        loader: userApis.getUsers,
         element: <UserManagement />,
       },
       {
         path: "categories",
         id: "category_management",
-        loader: getCategories,
+        loader: categoryApis.getCategories,
         element: <CategoryManagement />,
       },
       {
@@ -153,7 +169,7 @@ const routes = createBrowserRouter([
       {
         path: "providers",
         id: "provider_management",
-        loader: getProviders,
+        loader: providerApis.getProviders,
         element: <ProviderManagement />,
       },
       {
@@ -162,23 +178,23 @@ const routes = createBrowserRouter([
           {
             index: true,
             id: "product_management",
-            loader: getProducts,
+            loader: productApis.getProductsSummary,
             element: <ProductManagement />,
           },
-          {
-            path: ":id",
-            id: "product_edition",
-            loader: getProductDetail,
-            element: <ProductEdittion />,
-          },
-          {
-            path: "add",
-            element: <ProductAddition />,
-          },
+          // {
+          //   path: ":id",
+          //   id: "product_edition",
+          //   loader: productApis.getProductFullJoin,
+          //   element: <ProductEdittion />,
+          // },
+          // {
+          //   path: "add",
+          //   element: <ProductAddition />,
+          // },
           {
             path: "attributes",
             id: "attribute_management",
-            loader: getAttributes,
+            loader: attributeApis.getAttributes,
             element: <AttributeManagement />,
           },
         ],

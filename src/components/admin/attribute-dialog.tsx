@@ -8,13 +8,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { HTMLAttributes, useState } from "react";
-import { AttributeType } from "@/types/api";
+import { Attribute } from "@/types/api";
 import { buttonVariants } from "@/utils/constants";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 
 interface AttibuteDialogProps extends HTMLAttributes<HTMLFormElement> {
-  attribute?: AttributeType;
+  attribute?: Attribute;
   formTitle: string;
   handleDialogAcceptEvent: (name: string) => Promise<void>;
 }

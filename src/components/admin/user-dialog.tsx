@@ -75,7 +75,7 @@ const UserDialog: React.FC<UserDialogProps> = ({ className, ...props }) => {
                 <Input
                   id="phoneNum"
                   type="text"
-                  defaultValue={props.user?.phoneNum ?? ""}
+                  defaultValue={props.user?.phoneNumber ?? ""}
                   placeholder="+84"
                   className="h-full text-xl"
                 />

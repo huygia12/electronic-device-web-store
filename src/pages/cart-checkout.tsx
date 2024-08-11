@@ -8,22 +8,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import {
-  CartItem,
-  District,
-  Product,
-  Province,
-  ServiceRes,
-  ShippingAmountRes,
-  ShippingTimeRes,
-  Ward,
-} from "@/types/api";
+import { District, Province, ServiceRes, Ward } from "@/types/api";
 import { useCartProps } from "@/hooks";
-import {
-  afterDiscount,
-  getTotalAmount,
-  getTotalDiscountAmount,
-} from "@/utils/product";
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
@@ -41,10 +27,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import routes from "../middleware/routes";
 import { ShippingForm, ShippingSchema } from "@/schema";
+import productService from "@/utils/product";
+import { deliveryApis } from "@/services/apis";
+import { Nullable } from "@/utils/declare";
 
 const CartCheckout: FC = () => {
   const { itemsInLocal, removeInvoice, setPhaseID } = useCartProps();
-  const [invoiceProductData, setInvoiceProductData] = useState<CartItem[]>([]);
   const [provinces, setProvinces] = useState<Province[]>();
   const [districts, setDistricts] = useState<District[]>();
   const [wards, setWards] = useState<Ward[]>();
@@ -52,7 +40,7 @@ const CartCheckout: FC = () => {
   const [curDistrictID, setCurDistrictID] = useState("");
   const [curWardID, setCurWardID] = useState("");
   const [serviceID, setServiceID] = useState("");
-  const [shippingFee, setShippingFee] = useState<number>();
+  const [shippingFee, setShippingFee] = useState<Nullable<number>>(null);
   const [shippingTime, setShippingTime] = useState(0);
   const [total, setTotal] = useState(0);
   const {
@@ -67,132 +55,29 @@ const CartCheckout: FC = () => {
   });
 
   useEffect(() => {
-    setPhaseID("2");
-  }, [setPhaseID]);
+    const init = async () => {
+      setPhaseID("2");
 
-  /** TO-DO */
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const productsRes = await axios.get<Product[]>(
-          import.meta.env.VITE_API_URL + "/products"
-        );
+      setTotal(
+        productService.getTotalAmount(itemsInLocal) -
+          productService.getTotalDiscountAmount(itemsInLocal)
+      );
 
-        const bucket: CartItem[] = [];
-        itemsInLocal.forEach((localItem) => {
-          productsRes.data.forEach((product) => {
-            product.items.forEach((item) => {
-              if (
-                item.itemID === localItem.itemID &&
-                product.productID === localItem.productID
-              ) {
-                bucket.push({
-                  id: product.productID,
-                  productName: product.productName,
-                  height: product.height,
-                  weight: product.weight,
-                  len: product.length,
-                  width: product.width,
-                  itemID: item.itemID,
-                  thump: item.thump,
-                  quantity: localItem.quantity,
-                  price: item.price,
-                  productCode: item.productCode,
-                  discount: item.discount ?? 0,
-                  colorName: item.colorName,
-                  storageName: item.storageName,
-                });
-              }
-            });
-          });
-        });
-
-        setTotal(getTotalAmount(bucket) - getTotalDiscountAmount(bucket));
-        setInvoiceProductData(bucket);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
-      }
+      const fetchedProvinces: Province[] = await deliveryApis.getProvinces();
+      setProvinces(fetchedProvinces);
     };
 
-    fetchData();
-  }, [itemsInLocal]);
-
-  useEffect(() => {
-    /** PROVINCE */
-    const fetchData = async () => {
-      try {
-        const provincesRes = await axios.get<{ data: Province[] }>(
-          import.meta.env.VITE_GHN_PROVINCE,
-          {
-            headers: {
-              token: import.meta.env.VITE_GHN_TOKEN,
-            },
-          }
-        );
-
-        setProvinces(provincesRes.data.data);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
-      }
-    };
-
-    fetchData();
-  }, []);
+    init();
+  }, [itemsInLocal, setPhaseID]);
 
   useEffect(() => {
     /** DISTRICT */
     const fetchData = async () => {
-      try {
-        const districtsRes =
-          curProvinceID &&
-          (await axios.post<{ data: District[] }>(
-            import.meta.env.VITE_GHN_DISTRICT,
-            { province_id: Number(curProvinceID) },
-            {
-              headers: {
-                token: import.meta.env.VITE_GHN_TOKEN,
-              },
-            }
-          ));
+      const fetchedDistricts: District[] = await deliveryApis.getDistricts(
+        Number(curProvinceID)
+      );
 
-        // console.log(
-        //   `fetch districts for province(${curProvinceID})`,
-        //   districtsRes
-        // );
-        setDistricts(districtsRes ? districtsRes.data.data : []);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
-      }
+      setDistricts(fetchedDistricts);
     };
 
     fetchData();
@@ -201,66 +86,31 @@ const CartCheckout: FC = () => {
   useEffect(() => {
     /** WARD */
     const fetchData = async () => {
-      try {
-        /** GET WARDS */
-        const wardsRes =
-          curDistrictID &&
-          (await axios.post<{ data: Ward[] }>(
-            import.meta.env.VITE_GHN_WARD,
-            { district_id: Number(curDistrictID) },
-            {
-              headers: {
-                token: import.meta.env.VITE_GHN_TOKEN,
-              },
-            }
-          ));
+      const fetchedWards = await deliveryApis.getWards(Number(curDistrictID));
+      // console.log(`fetch wards for district(${curDistrictID})`, wardsRes);
+      setWards(fetchedWards);
 
-        // console.log(`fetch wards for district(${curDistrictID})`, wardsRes);
-        setWards(wardsRes ? wardsRes.data.data : []);
+      if (fetchedWards.length === 0) return;
 
-        /** GET SHIPPING SERVICE ID */
-        const servicesRes =
-          wardsRes &&
-          (await axios.post<ServiceRes>(
-            import.meta.env.VITE_GHN_SERVICE,
-            {
-              shop_id: Number(import.meta.env.VITE_SHOP_ID),
-              from_district: Number(import.meta.env.VITE_SHOP_DISTRICT_ID),
-              to_district: Number(curDistrictID),
-            },
-            {
-              headers: {
-                token: import.meta.env.VITE_GHN_TOKEN,
-              },
-            }
-          ));
+      /** GET SHIPPING SERVICE ID */
+      const fetchedServices: Nullable<ServiceRes> =
+        await deliveryApis.getServices(Number(curDistrictID));
 
-        let serviceIDValue = "";
-        servicesRes &&
-          servicesRes.data.data.forEach((service) => {
-            if (
-              service.service_type_id ==
-              import.meta.env.VITE_SHOP_SHIPPING_SERVICE
-            ) {
-              serviceIDValue = String(service.service_id);
-            }
-          });
+      if (!fetchedServices) return;
 
-        // console.log(`fetch services`, serviceIDValue);
-        setServiceID(serviceIDValue);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
+      let serviceIDValue = "";
+      fetchedServices &&
+        fetchedServices.data.forEach((service) => {
+          if (
+            service.service_type_id ==
+            import.meta.env.VITE_SHOP_SHIPPING_SERVICE
+          ) {
+            serviceIDValue = String(service.service_id);
           }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
-      }
+        });
+
+      // console.log(`fetch services`, serviceIDValue);
+      setServiceID(serviceIDValue);
     };
 
     fetchData();
@@ -271,35 +121,22 @@ const CartCheckout: FC = () => {
     let fee: number = 0;
 
     if (value) {
-      const promises = invoiceProductData.map(async (item) => {
-        const feeRes = await axios.post<ShippingAmountRes>(
-          import.meta.env.VITE_GHN_SHIPPINGFEE,
-          {
-            from_district_id: Number(import.meta.env.VITE_SHOP_DISTRICT_ID),
-            from_ward_code: import.meta.env.VITE_SHOP_WARD_CODE,
-            service_id: Number(serviceID),
-            to_district_id: Number(curDistrictID),
-            to_ward_code: curWardID,
-            height: item.height,
-            length: item.len,
-            weight: item.weight,
-            width: item.width,
-            insurance_value: afterDiscount(item.price, item.discount),
-          },
-          {
-            headers: {
-              token: import.meta.env.VITE_GHN_TOKEN,
-              shop_id: Number(import.meta.env.VITE_SHOP_ID),
-            },
-          }
-        );
-        return feeRes.data.data.total;
+      const promises = itemsInLocal.map(async (item) => {
+        const itemShippingFee: Nullable<number> =
+          await deliveryApis.getShippingFee(
+            Number(serviceID),
+            Number(curDistrictID),
+            curWardID,
+            item
+          );
+        if (!itemShippingFee) throw new Error();
+        return itemShippingFee;
       });
 
       // Waiting for all the promise to be done before caculate the shippingfee
       Promise.all(promises)
         .then((fees) => {
-          fee = fees.reduce((acc, curr) => acc + curr, 0);
+          fee = fees.reduce((prev, curr) => prev + curr, 0);
           setShippingFee(fee);
           setCurWardID(value);
           setTotal(total + fee);
@@ -322,43 +159,15 @@ const CartCheckout: FC = () => {
         });
 
       /** GET DELIVERY TIME */
-      try {
-        const shippingTimeRes = await axios.post<ShippingTimeRes>(
-          import.meta.env.VITE_GHN_SHIPPINGTIME,
-          {
-            from_district_id: Number(import.meta.env.VITE_SHOP_DISTRICT_ID),
-            from_ward_code: import.meta.env.VITE_SHOP_WARD_CODE,
-            to_district_id: Number(curDistrictID),
-            to_ward_code: value,
-            service_id: Number(serviceID),
-          },
-          {
-            headers: {
-              shop_id: Number(import.meta.env.VITE_SHOP_ID),
-              token: import.meta.env.VITE_GHN_TOKEN,
-            },
-          }
+      const shippingTimeValue: Nullable<number> =
+        await deliveryApis.getDeliveryTime(
+          Number(serviceID),
+          Number(curDistrictID),
+          value
         );
 
-        const shippingTimeValue =
-          shippingTimeRes && shippingTimeRes.data.data.leadtime;
-
-        setShippingTime(shippingTimeValue);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
-      } finally {
-        clearErrors("ward");
-      }
+      shippingTimeValue && setShippingTime(shippingTimeValue);
+      clearErrors("ward");
     }
   };
 
@@ -366,7 +175,7 @@ const CartCheckout: FC = () => {
     setCurDistrictID(value);
     setCurWardID("");
     setValue("ward", "");
-    setShippingFee(undefined);
+    setShippingFee(null);
     clearErrors("district");
   };
 
@@ -376,10 +185,11 @@ const CartCheckout: FC = () => {
     setValue("district", "");
     setCurWardID("");
     setValue("ward", "");
-    setShippingFee(undefined);
+    setShippingFee(null);
     clearErrors("province");
   };
 
+  /** TO-DO */
   const handleShippingFormSubmisstion: SubmitHandler<
     ShippingForm
   > = async () => {
@@ -389,7 +199,7 @@ const CartCheckout: FC = () => {
       await routes.navigate("/", { unstable_viewTransition: true });
     } catch (error) {
       setError("root", {
-        message: "Tài khoản hiện không thể đăng nhập!",
+        message: "Thanh toán thất bại!",
       });
     }
   };
@@ -593,7 +403,8 @@ const CartCheckout: FC = () => {
             <div className="flex justify-between">
               <span>Tổng tiền hàng</span>
               <span>
-                {getTotalAmount(invoiceProductData).toLocaleString() + "đ"}
+                {productService.getTotalAmount(itemsInLocal).toLocaleString() +
+                  "đ"}
               </span>
             </div>
             {shippingFee && (
@@ -607,8 +418,9 @@ const CartCheckout: FC = () => {
             <div className="flex justify-between">
               <span>Tổng tiền giảm giá</span>
               <del>
-                {getTotalDiscountAmount(invoiceProductData).toLocaleString() +
-                  "đ"}
+                {productService
+                  .getTotalDiscountAmount(itemsInLocal)
+                  .toLocaleString() + "đ"}
               </del>
             </div>
             <Separator className="border-dashed" />
@@ -621,7 +433,7 @@ const CartCheckout: FC = () => {
             <Button
               type="submit"
               variant="neutral"
-              disabled={invoiceProductData.length === 0}
+              disabled={itemsInLocal.length === 0}
               className="w-full"
             >
               Hoàn thành đơn hàng

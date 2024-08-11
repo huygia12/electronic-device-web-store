@@ -10,16 +10,14 @@ import { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 import { NavLink } from "react-router-dom";
 import { User } from "lucide-react";
-import { useCurrentUser } from "@/hooks";
 import { LinkItem } from "@/types/component";
+import auth from "@/utils/auth";
 
 interface CustomAvtProps extends HTMLAttributes<HTMLDivElement> {
   options?: LinkItem[];
 }
 
 const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
-  const { currUser } = useCurrentUser();
-
   return (
     <div
       className={cn("flex flex-row items-center space-x-[0.5rem]", className)}
@@ -32,7 +30,7 @@ const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
           >
             <Avatar className="h-[3.5rem] w-[3.5rem] focus-visible_!outline-none ">
               <AvatarImage
-                src={currUser?.avatar ?? "/blankAvt.jpg"}
+                src={auth.getUser()?.avatar || undefined}
                 width={40}
                 height={40}
                 alt="AVT"
@@ -44,7 +42,7 @@ const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        {props.options && currUser && (
+        {props.options && auth.getUser() && (
           <DropdownMenuContent align="center">
             {props.options.map((item, index) => (
               <DropdownMenuItem key={index}>
@@ -65,7 +63,7 @@ const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
         )}
       </DropdownMenu>
       <div className="font-semibold max-w-52 text-[1.2rem] truncate ...">
-        {currUser?.userName}
+        {auth.getUser()?.userName}
       </div>
     </div>
   );

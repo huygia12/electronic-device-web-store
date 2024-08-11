@@ -1,31 +1,27 @@
 import { useLocalStorage } from "@/hooks";
-import { LocalStorageProductItem } from "@/types/api";
+import { CartItem } from "@/types/api";
+import { Optional } from "@/utils/declare";
 import { ReactNode, createContext, useState } from "react";
 
 export interface CartContextProps {
-  itemsInLocal: LocalStorageProductItem[];
-  setItemsInLocal: (value: LocalStorageProductItem[]) => void;
+  itemsInLocal: CartItem[];
+  setItemsInLocal: (value: CartItem[]) => void;
   removeInvoice: () => void;
   phaseID: string;
   setPhaseID: (value: string) => void;
 }
 
-const CartContext = createContext<CartContextProps>({
-  itemsInLocal: [],
-  setItemsInLocal: () => {},
-  removeInvoice: () => {},
-  phaseID: "",
-  setPhaseID: () => {},
-});
+const CartContext = createContext<Optional<CartContextProps>>(undefined);
 
 const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [itemsInLocal, setItemsInLocal, removeInvoice] = useLocalStorage<
-    LocalStorageProductItem[]
-  >("cart", []);
-  const [phaseID, setPhaseID] = useState("1");
+  const [itemsInLocal, setItemsInLocal, removeInvoice] =
+    useLocalStorage<CartItem[]>("cart");
+  const [phaseID, setPhaseID] = useState<string>("1");
+
+  if (!itemsInLocal) setItemsInLocal([]);
 
   const value: CartContextProps = {
-    itemsInLocal,
+    itemsInLocal: itemsInLocal ?? [],
     setItemsInLocal,
     removeInvoice,
     phaseID,

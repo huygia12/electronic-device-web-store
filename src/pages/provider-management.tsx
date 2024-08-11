@@ -11,8 +11,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Provider } from "@/types/api";
-import { axiosInstance, reqConfig } from "@/services/axios";
-import { useCurrentUser } from "@/hooks";
 import axios, { HttpStatusCode } from "axios";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -32,7 +30,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/utils/constants";
 import { Separator } from "@radix-ui/react-select";
-import { getProviders } from "@/services/apis";
+import { providerApis } from "@/services/apis";
 import { ProviderDialog } from "@/components/admin";
 
 const colName: string[] = [
@@ -43,106 +41,80 @@ const colName: string[] = [
 ];
 
 const ProviderManagement = () => {
-  const { currUser } = useCurrentUser();
-  const providersData = useRouteLoaderData("provider_management") as
-    | Provider[]
-    | undefined;
-  const [existingproviders, setExistingProvider] = useState<
-    Provider[] | undefined
-  >(providersData);
+  const providersData = useRouteLoaderData("provider_management") as Provider[];
+  const [providers, setProviders] = useState<Provider[]>(providersData);
   const [selectedProvider, setSelectedProvider] = useState<Provider>();
   const [searchingInput, setSearchingInput] = useState("");
 
   const handleAddProvider = async (name: string) => {
     const processedName: string = name.trim();
     try {
-      await axiosInstance.post(
-        "/providers",
-        {
-          name: processedName,
-        },
-        {
-          headers: {
-            "User-id": currUser?.userID,
-          },
-          ...reqConfig,
-        }
-      );
-
-      const providers = await getProviders();
-      setExistingProvider(providers);
+      await providerApis.addProvider(processedName);
+      const fetchedProviders: Provider[] = await providerApis.getProviders();
+      setProviders(fetchedProviders);
       toast.success("Thêm thành công!");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status == HttpStatusCode.Conflict) {
           toast.error("Thêm thất bại: nhà cung cấp này đã tồn tại!");
-        } else {
-          toast.error("Thêm thất bại!");
+          return;
         }
         console.error(`Response data: ${error.response?.data}`);
         console.error(`Response status: ${error.response?.status})`);
       } else {
         console.error("Unexpected error:", error);
       }
+      toast.error("Thêm thất bại!");
     }
   };
 
   const handleUpdateProvider = async (name: string) => {
+    if (!selectedProvider) return;
     const processedName: string = name.trim();
     try {
-      await axiosInstance.patch(
-        `/providers/${selectedProvider?.providerID}`,
-        {
-          name: processedName,
-        },
-        {
-          headers: {
-            "User-id": currUser?.userID,
-          },
-          ...reqConfig,
-        }
+      await providerApis.updateProvider(
+        selectedProvider.providerID,
+        processedName
       );
-
-      const providers = await getProviders();
-      setExistingProvider(providers);
+      const fetchedProviders: Provider[] = await providerApis.getProviders();
+      setProviders(fetchedProviders);
       setSelectedProvider(undefined);
       toast.success("Thay đổi thành công!");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status == HttpStatusCode.Conflict) {
           toast.error("Thay đổi thất bại: nhà cung cấp này đã tồn tại!");
-        } else {
-          toast.error("Thay đổi thất bại!");
+          return;
         }
         console.error(`Response data: ${error.response?.data}`);
         console.error(`Response status: ${error.response?.status})`);
       } else {
         console.error("Unexpected error:", error);
       }
+      toast.error("Thay đổi thất bại!");
     }
   };
 
   const handleDeleteProvider = async () => {
-    console.log("user id", currUser?.userID);
+    if (!selectedProvider) return;
     try {
-      await axiosInstance.delete(`/providers/${selectedProvider?.providerID}`, {
-        headers: {
-          "User-id": currUser?.userID,
-        },
-        ...reqConfig,
-      });
-      const providers = await getProviders();
-      setExistingProvider(providers);
+      await providerApis.deleteProvider(selectedProvider.providerID);
+      const fetchedProviders: Provider[] = await providerApis.getProviders();
+      setProviders(fetchedProviders);
       setSelectedProvider(undefined);
       toast.success("Thay đổi thành công!");
     } catch (error) {
-      toast.error("Thay đổi thất bại!");
       if (axios.isAxiosError(error)) {
+        if (error.response?.status == HttpStatusCode.Conflict) {
+          toast.error("Thay đổi thất bại: tồn tại sản phẩm liên quan!");
+          return;
+        }
         console.error(`Response data: ${error.response?.data}`);
         console.error(`Response status: ${error.response?.status})`);
       } else {
         console.error("Unexpected error:", error);
       }
+      toast.error("Thay đổi thất bại!");
     }
   };
 
@@ -162,7 +134,7 @@ const ProviderManagement = () => {
       <div className="flex gap-4">
         <Card className="rounded-xl shadow-lg flex-1">
           <CardContent className="flex flex-col p-4">
-            {existingproviders && existingproviders.length !== 0 ? (
+            {providers.length !== 0 ? (
               <ScrollArea className="relative h-[58vh]">
                 <Table>
                   <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white">
@@ -180,7 +152,7 @@ const ProviderManagement = () => {
                     </tr>
                   </TableHeader>
                   <TableBody>
-                    {arrayInReverse(existingproviders)
+                    {arrayInReverse(providers)
                       .filter((provider) =>
                         provider.providerName
                           .toLowerCase()
@@ -207,7 +179,7 @@ const ProviderManagement = () => {
                             {provider.providerName}
                           </TableCell>
                           <TableCell className="text-center text-base">
-                            {provider.products}
+                            {provider.productQuantity || "0"}
                           </TableCell>
                         </TableRow>
                       ))}

@@ -9,7 +9,7 @@ const ProductSchema = z.object({
       .positive({ message: "Không hợp lệ!" })
       .safe({ message: "Không hợp lệ!" })
   ),
-  description: z.string().nullable(),
+  description: z.string().optional(),
   categoryID: z.string().min(1, { message: "Không được bỏ trống!" }),
   providerID: z.string().min(1, { message: "Không được bỏ trống!" }),
   height: z.preprocess(
@@ -49,37 +49,30 @@ const ProductAttributeSchema = z.object({
   ),
 });
 
-const ItemSchema = z
-  .object({
-    thump: z.string().min(1, { message: "String cannot be blank" }),
-    quantity: z
-      .number({ message: "Not a number" })
-      .int({ message: "Not an integer number" })
-      .positive({ message: "Not a positive number" })
-      .finite({ message: "Not a finite number" })
-      .safe({ message: "Not in the int range" }),
-    price: z
-      .number({ message: "Not a number" })
-      .positive({ message: "Not a positive number" })
-      .finite({ message: "Not a finite number" })
-      .safe({ message: "Not in the int range" }),
-    productCode: z.string().min(1, { message: "String cannot be blank" }),
-    colorName: z.string().min(1, { message: "String cannot be blank" }),
-    storageName: z.string(),
-    discount: z
-      .number({ message: "Not a number" })
-      .min(0, { message: "Must greater than 0" })
-      .max(100, { message: "Must less than 100" })
-      .default(0),
-    src: z.array(z.string().min(1, { message: "String cannot be blank" })),
-  })
-  .partial({ storageName: true });
+// const ItemSchema = z.object({
+//   thump: z.string().min(1, { message: "String cannot be blank" }),
+//   quantity: z
+//     .number({ message: "Not a number" })
+//     .int({ message: "Not an integer number" })
+//     .positive({ message: "Not a positive number" })
+//     .finite({ message: "Not a finite number" })
+//     .safe({ message: "Not in the int range" }),
+//   price: z
+//     .number({ message: "Not a number" })
+//     .positive({ message: "Not a positive number" })
+//     .finite({ message: "Not a finite number" })
+//     .safe({ message: "Not in the int range" }),
+//   productCode: z.string().min(1, { message: "String cannot be blank" }),
+//   color: z.string().min(1, { message: "String cannot be blank" }),
+//   storage: z.string().optional(),
+//   discount: z
+//     .number({ message: "Not a number" })
+//     .min(0, { message: "Must greater than 0" })
+//     .max(100, { message: "Must less than 100" })
+//     .default(0),
+//   src: z.array(z.string().min(1, { message: "String cannot be blank" })),
+// });
 
-type ProductInputForm = z.infer<typeof ProductSchema>;
+export type ProductInputFormProps = z.infer<typeof ProductSchema>;
 
-export {
-  ProductSchema,
-  ProductAttributeSchema,
-  ItemSchema,
-  type ProductInputForm,
-};
+export { ProductSchema, ProductAttributeSchema };

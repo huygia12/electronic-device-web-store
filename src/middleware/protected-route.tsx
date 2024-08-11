@@ -1,35 +1,27 @@
-import { useCurrentUser } from "@/hooks";
+import { useCustomNavigate } from "@/hooks";
+import auth from "@/utils/auth";
+import { Role } from "@/utils/constants";
 import { ReactNode } from "react";
-import { Navigate, useLocation } from "react-router-dom";
 
 const ProtectedRoute: React.FC<{
   children: ReactNode;
-  allowedRoles?: string[];
+  allowedRoles?: Role[];
 }> = ({ children, allowedRoles }) => {
-  const { currUser } = useCurrentUser();
-  const location = useLocation();
+  const user = auth.getUser();
+  const { navigate } = useCustomNavigate();
 
   return (
     <>
-      {console.log()}
-      {currUser ? (
+      {user ? (
         !allowedRoles ? (
           children
-        ) : allowedRoles.find((role) => role === currUser.role) ? (
+        ) : allowedRoles.find((role) => role === user.role) ? (
           children
         ) : (
-          <Navigate
-            to="/unauthorized"
-            state={{ from: location, unstable_useViewTransitionState: true }}
-            replace={true}
-          />
+          <>{navigate("/unauthorized", { unstable_viewTransition: true })}</>
         )
       ) : (
-        <Navigate
-          to="/login"
-          state={{ from: location, unstable_useViewTransitionState: true }}
-          replace={true}
-        />
+        <>{navigate("/login", { unstable_viewTransition: true })}</>
       )}
     </>
   );

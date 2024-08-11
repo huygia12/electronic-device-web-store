@@ -186,6 +186,11 @@ const productListHeader: string[] = [
   "Số lượng",
 ];
 
+enum Role {
+  ADMIN = "ADMIN",
+  CLIENT = "CLIENT",
+}
+
 export {
   badgeVariants,
   buttonVariants,
@@ -193,4 +198,5 @@ export {
   phases,
   invoiceListHeader,
   productListHeader,
+  Role,
 };

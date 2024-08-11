@@ -6,21 +6,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import axios from "axios";
 import React, { FC, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  CartItem,
-  Error,
-  LocalStorageProductItem,
-  ProductDetail,
-} from "@/types/api";
-import {
-  afterDiscount,
-  getProductCartIDs,
-  getTotalAmount,
-  getTotalDiscountAmount,
-} from "@/utils/product";
+import { CartItem, Error } from "@/types/api";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Trash2 } from "lucide-react";
 import {
@@ -48,7 +36,7 @@ import { useCartProps } from "@/hooks";
 import { buttonVariants } from "@/utils/constants";
 import routes from "../middleware/routes";
 import { arrayInReverse } from "@/utils/helpers";
-import { axiosInstance, reqConfig } from "@/services/axios";
+import productService from "@/utils/product";
 
 const header = [
   "STT",
@@ -64,7 +52,6 @@ const header = [
 const CartVisting: FC = () => {
   const { itemsInLocal, setItemsInLocal, removeInvoice, setPhaseID } =
     useCartProps();
-  const [invoiceProductData, setInvoiceProductData] = useState<CartItem[]>([]);
   const [quantityErrors, setQuantityErrors] = useState<Error[]>(
     new Array(itemsInLocal.length).fill({ sucess: true })
   );
@@ -72,63 +59,6 @@ const CartVisting: FC = () => {
   useEffect(() => {
     setPhaseID("1");
   }, [setPhaseID]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const productsRes = await axiosInstance.post<{ info: ProductDetail[] }>(
-          `/products/cartitems`,
-          getProductCartIDs(itemsInLocal),
-          reqConfig
-        );
-
-        const bucket: CartItem[] = [];
-        itemsInLocal.forEach((localItem) => {
-          productsRes.data.info.forEach((product) => {
-            product.items.forEach((item) => {
-              if (
-                item.itemID === localItem.itemID &&
-                product.productID === localItem.productID
-              ) {
-                console.log(true);
-                bucket.push({
-                  id: product.productID,
-                  productName: product.productName,
-                  height: product.height,
-                  weight: product.weight,
-                  len: product.length,
-                  width: product.width,
-                  itemID: item.itemID,
-                  thump: item.thump,
-                  quantity: localItem.quantity,
-                  price: item.price,
-                  productCode: item.productCode,
-                  discount: item.discount ?? 0,
-                  colorName: item.colorName,
-                  storageName: item.storageName,
-                });
-              }
-            });
-          });
-        });
-        setInvoiceProductData(bucket);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
-      }
-    };
-
-    fetchData();
-  }, [itemsInLocal]);
 
   const handleNextStepEvent = async (
     e: React.MouseEvent<HTMLButtonElement>
@@ -140,16 +70,19 @@ const CartVisting: FC = () => {
     });
   };
 
-  const handleDeleteProduct = (
+  const handleDeleteCartItem = (
     e: React.MouseEvent<HTMLButtonElement>,
-    productID: string | undefined,
-    itemID: string | undefined
+    deletingProductID: string,
+    deletingItemID: string
   ) => {
     e.preventDefault();
 
-    const bucket: LocalStorageProductItem[] = [];
+    const bucket: CartItem[] = [];
     itemsInLocal.map((item) => {
-      if (item.productID != productID || item.itemID != itemID) {
+      if (
+        item.productID != deletingProductID ||
+        item.itemID != deletingItemID
+      ) {
         bucket.push(item);
       }
     });
@@ -159,13 +92,13 @@ const CartVisting: FC = () => {
   const handleQuantityInput = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
-    productID: string | undefined,
-    itemID: string | undefined
+    productID: string,
+    itemID: string
   ) => {
     e.preventDefault();
 
     const newQuantity = Number(e.target.value);
-    const bucket = quantityErrors.map((element, iter) => {
+    const bucket: Error[] = quantityErrors.map((element, iter) => {
       if (iter === index) {
         if (newQuantity < 1) {
           return {
@@ -173,7 +106,7 @@ const CartVisting: FC = () => {
             message: "Không hợp lệ!",
           };
         } else {
-          const localItems = itemsInLocal.map((item) =>
+          const localItems: CartItem[] = itemsInLocal.map((item) =>
             item.productID === productID && item.itemID === itemID
               ? {
                   ...item,
@@ -181,7 +114,7 @@ const CartVisting: FC = () => {
                 }
               : item
           );
-          localItems && setItemsInLocal(localItems);
+          setItemsInLocal(localItems);
 
           return { success: true };
         }
@@ -195,7 +128,7 @@ const CartVisting: FC = () => {
     <div className="grid grid-cols-4 w-full gap-4">
       {/** CART LIST */}
       <section className="col-span-3 flex flex-col border-2 border-slate-2 rounded-md p-4">
-        {invoiceProductData.length === 0 ? (
+        {itemsInLocal.length === 0 ? (
           <div className="flex flex-col items-center">
             <img width={400} src="/emptyCart.svg" alt="emptyCart" />
             <span className="text-lg font-medium text-slate-500">
@@ -221,74 +154,75 @@ const CartVisting: FC = () => {
                   </tr>
                 </TableHeader>
                 <TableBody>
-                  {arrayInReverse<CartItem>(invoiceProductData).map(
-                    (prod, index) => {
-                      return (
-                        <TableRow key={index} className="">
-                          <TableCell className="text-center text-base">
-                            {index + 1}
-                          </TableCell>
-                          <TableCell className="text-center text-base">
-                            <img
-                              src={prod.thump}
-                              alt={prod.id}
-                              className="max-h-20"
-                            />
-                          </TableCell>
-                          <TableCell className="text-center text-base max-w-[15rem] truncate">
-                            {prod.productName}
-                            <br />
-                            {`${prod.storageName} | ${prod.colorName}`}
-                          </TableCell>
-                          <TableCell className="text-center text-base">
-                            {prod.price.toLocaleString() + "đ"}
-                          </TableCell>
-                          <TableCell className="text-center text-base">
-                            {prod.discount + "%"}
-                          </TableCell>
-                          <TableCell className="text-center text-base">
-                            {afterDiscount(
-                              prod.price,
-                              prod.discount
-                            ).toLocaleString() + "đ"}
-                          </TableCell>
-                          <TableCell className="text-center text-base">
-                            <Input
-                              id="quantity"
-                              type="number"
-                              className="max-w-20 mt-2 mx-auto"
-                              min={1}
-                              onChange={(e) =>
-                                handleQuantityInput(
-                                  e,
-                                  index,
-                                  prod.id,
-                                  prod.itemID
-                                )
-                              }
-                              value={prod.quantity}
-                            />
-                            {quantityErrors[index] &&
-                              !quantityErrors[index].success && (
-                                <div className="text-red-600 mt-2 mx-auto">
-                                  {quantityErrors[index].message}
-                                </div>
-                              )}
-                          </TableCell>
-                          <TableCell className="text-center text-base">
-                            <Button
-                              onClick={(e) =>
-                                handleDeleteProduct(e, prod.id, prod.itemID)
-                              }
-                              variant="negative"
-                            >
-                              <Trash2 />
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    }
-                  )}
+                  {arrayInReverse<CartItem>(itemsInLocal).map((prod, index) => {
+                    return (
+                      <TableRow key={index} className="">
+                        <TableCell className="text-center text-base">
+                          {index + 1}
+                        </TableCell>
+                        <TableCell className="text-center text-base">
+                          <img
+                            src={prod.thump}
+                            alt={prod.productID}
+                            className="max-h-20"
+                          />
+                        </TableCell>
+                        <TableCell className="text-center text-base max-w-[15rem] truncate">
+                          {prod.productName}
+                          <br />
+                          {`${prod.storage} | ${prod.color}`}
+                        </TableCell>
+                        <TableCell className="text-center text-base">
+                          {prod.price.toLocaleString() + "đ"}
+                        </TableCell>
+                        <TableCell className="text-center text-base">
+                          {prod.discount + "%"}
+                        </TableCell>
+                        <TableCell className="text-center text-base">
+                          {productService
+                            .afterDiscount(prod.price, prod.discount)
+                            .toLocaleString() + "đ"}
+                        </TableCell>
+                        <TableCell className="text-center text-base">
+                          <Input
+                            id="quantity"
+                            type="number"
+                            className="max-w-20 mt-2 mx-auto"
+                            min={1}
+                            onChange={(e) =>
+                              handleQuantityInput(
+                                e,
+                                index,
+                                prod.productID,
+                                prod.itemID
+                              )
+                            }
+                            value={prod.quantity}
+                          />
+                          {quantityErrors[index] &&
+                            !quantityErrors[index].success && (
+                              <div className="text-red-600 mt-2 mx-auto">
+                                {quantityErrors[index].message}
+                              </div>
+                            )}
+                        </TableCell>
+                        <TableCell className="text-center text-base">
+                          <Button
+                            onClick={(e) =>
+                              handleDeleteCartItem(
+                                e,
+                                prod.productID,
+                                prod.itemID
+                              )
+                            }
+                            variant="negative"
+                          >
+                            <Trash2 />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </ScrollArea>
@@ -336,14 +270,16 @@ const CartVisting: FC = () => {
             <div className="flex justify-between">
               <span>Tổng tiền hàng</span>
               <span>
-                {getTotalAmount(invoiceProductData).toLocaleString() + "đ"}
+                {productService.getTotalAmount(itemsInLocal).toLocaleString() +
+                  "đ"}
               </span>
             </div>
             <div className="flex justify-between">
               <span>Tổng tiền giảm giá</span>
               <del>
-                {getTotalDiscountAmount(invoiceProductData).toLocaleString() +
-                  "đ"}
+                {productService
+                  .getTotalDiscountAmount(itemsInLocal)
+                  .toLocaleString() + "đ"}
               </del>
             </div>
             <Separator className="border-dashed" />
@@ -351,8 +287,8 @@ const CartVisting: FC = () => {
               <span className="text-primary text-xl">Tổng thanh toán</span>
               <span>
                 {(
-                  getTotalAmount(invoiceProductData) -
-                  getTotalDiscountAmount(invoiceProductData)
+                  productService.getTotalAmount(itemsInLocal) -
+                  productService.getTotalDiscountAmount(itemsInLocal)
                 ).toLocaleString() + "đ"}
               </span>
             </div>
@@ -361,7 +297,7 @@ const CartVisting: FC = () => {
             {/* <NavLink to="/cart/checkout"> */}
             <Button
               variant="neutral"
-              disabled={invoiceProductData.length === 0}
+              disabled={itemsInLocal.length === 0}
               className="ml-auto"
               onClick={async (e) => await handleNextStepEvent(e)}
             >

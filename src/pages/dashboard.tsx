@@ -116,7 +116,7 @@ const Dashboard: FC = () => {
                     <Card key={index} className="mb-4 flex flex-row py-4">
                       <CardHeader className="p-4">
                         <Avatar>
-                          <AvatarImage src={customer.avatar} />
+                          <AvatarImage src={customer.avatar || undefined} />
                           <AvatarFallback>avt</AvatarFallback>
                         </Avatar>
                       </CardHeader>

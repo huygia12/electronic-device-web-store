@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { AttributeType, ProductDetail } from "@/types/api";
-import axios from "axios";
+import { Attribute, ProductFullJoin } from "@/types/api";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -16,47 +15,31 @@ import { MoneyInput, ProductCard } from "@/components/user";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { useSearchParams } from "react-router-dom";
-import { axiosInstance, reqConfig } from "@/services/axios";
-import { getAttributes } from "@/services/apis";
+import { attributeApis, productApis } from "@/services/apis";
+import { Nullable } from "@/utils/declare";
 
 const Products = () => {
   const [searchParams] = useSearchParams();
-  const [productsData, setProductsData] = useState<ProductDetail[]>();
-  const [attributesData, setAttributesData] = useState<AttributeType[]>([]);
+  const [productsData, setProductsData] = useState<ProductFullJoin[]>();
+  const [attributesData, setAttributesData] = useState<Attribute[]>();
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const attributesRes = await getAttributes();
+      const attributesRes = await attributeApis.getAttributes();
 
-        let productRes;
-        if (searchParams.get("categoryID")) {
-          productRes = await axiosInstance.get<{ info: ProductDetail[] }>(
-            `/products?categoryID=${searchParams.get("categoryID")}`,
-            reqConfig
-          );
-        } else if (searchParams.get("providerID")) {
-          productRes = await axiosInstance.get<{ info: ProductDetail[] }>(
-            `/products?providerID=${searchParams.get("providerID")}`,
-            reqConfig
-          );
-        }
-
-        setProductsData(productRes?.data.info);
-        setAttributesData(attributesRes ?? []);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
+      let productRes: ProductFullJoin[] = [];
+      const categoryID: Nullable<string> = searchParams.get("categoryID");
+      const providerID: Nullable<string> = searchParams.get("providerID");
+      if (categoryID) {
+        productRes =
+          await productApis.getProductsFullJoinWithCategoryID(categoryID);
+      } else if (providerID) {
+        productRes =
+          await productApis.getProductsFullJoinWithProviderID(providerID);
       }
+
+      setProductsData(productRes);
+      setAttributesData(attributesRes ?? []);
     };
 
     fetchData();
@@ -77,7 +60,7 @@ const Products = () => {
                 </h5>
                 <Separator className="border-1 border-slate-400" />
                 <RadioGroup className="pl-4 space-y-2">
-                  {attr.options?.map((option, childIndex) => {
+                  {attr.attributeOptions?.map((option, childIndex) => {
                     return (
                       <div
                         key={childIndex}
