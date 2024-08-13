@@ -17,10 +17,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import routes from "../middleware/routes";
 import BannerImg from "@/components/user/banner-image";
 import {
   CollectionHeader,
+  ProductCard,
   ProductCollection,
   SlideShow,
 } from "@/components/user";
@@ -28,6 +28,8 @@ import CardProduct from "@/components/user/product-card";
 import { LAPTOP_ID, PHONE_ID, slides } from "./data";
 import { productApis, providerApis } from "@/services/apis";
 import categoryApis from "@/services/apis/category";
+import { CardSkeleton, LinesSkeleton } from "@/components/common/skeleton";
+import { useCustomNavigate } from "@/hooks";
 
 const Homepage: FC = () => {
   const [providersData, setProvidersData] = useState<Provider[]>();
@@ -37,6 +39,7 @@ const Homepage: FC = () => {
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: true })
   );
+  const { navigate } = useCustomNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,7 +84,7 @@ const Homepage: FC = () => {
           </h1>
           <Select
             onValueChange={async (e) => {
-              await routes.navigate(`products?providerID=${e}`, {
+              navigate(`products?providerID=${e}`, {
                 unstable_viewTransition: true,
               });
             }}
@@ -99,26 +102,27 @@ const Homepage: FC = () => {
               })}
             </SelectContent>
           </Select>
-          <ul>
-            {categoriesData?.map((cate, index) => {
-              return (
-                <li
-                  onClick={async () => {
-                    await routes.navigate(
-                      `products?categoryID=${cate.categoryID}`,
-                      {
+          {categoriesData ? (
+            <ul>
+              {categoriesData.map((cate, index) => {
+                return (
+                  <li
+                    onClick={async () => {
+                      await navigate(`products?categoryID=${cate.categoryID}`, {
                         unstable_viewTransition: true,
-                      }
-                    );
-                  }}
-                  key={index}
-                  className="w-full font-medium p-3 pl-8 cursor-pointer hover_bg-slate-200 hover_font-semibold hover_border-l-8 hover_border-l-theme-softer truncate"
-                >
-                  {cate.categoryName}
-                </li>
-              );
-            })}
-          </ul>
+                      });
+                    }}
+                    key={index}
+                    className="w-full font-medium p-3 pl-8 cursor-pointer hover_bg-slate-200 hover_font-semibold hover_border-l-8 hover_border-l-theme-softer truncate"
+                  >
+                    {cate.categoryName}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <LinesSkeleton quantity={5} />
+          )}
         </form>
         <div className="grid grid-cols-3 gap-3 w-5/6">
           <Carousel
@@ -179,36 +183,38 @@ const Homepage: FC = () => {
         </div>
       </section> */}
       <section className="w-full my-16 space-y-20">
-        {laptopsData && (
-          <div>
-            <CollectionHeader title="LAPTOP"></CollectionHeader>
-            <ProductCollection>
-              {laptopsData.map((product, index) => (
-                <CarouselItem key={index} className="basis-1/5">
-                  <CardProduct
-                    product={product}
-                    className="shadow-none"
-                  ></CardProduct>
-                </CarouselItem>
-              ))}
-            </ProductCollection>
-          </div>
-        )}
-        {phonesData && (
-          <div>
-            <CollectionHeader title="ĐIỆN THOẠI"></CollectionHeader>
-            <ProductCollection>
-              {phonesData.map((product, index) => (
-                <CarouselItem key={index} className="basis-1/5">
-                  <CardProduct
-                    product={product}
-                    className="shadow-none"
-                  ></CardProduct>
-                </CarouselItem>
-              ))}
-            </ProductCollection>
-          </div>
-        )}
+        <div>
+          <CollectionHeader title="LAPTOP" />
+          <ProductCollection>
+            {laptopsData
+              ? laptopsData.map((product, index) => (
+                  <CarouselItem key={index} className="basis-1/5">
+                    <CardProduct product={product} className="shadow-none" />
+                  </CarouselItem>
+                ))
+              : Array.from({ length: 5 }).map((_, index) => (
+                  <CarouselItem key={index} className="basis-1/5">
+                    <CardSkeleton />
+                  </CarouselItem>
+                ))}
+          </ProductCollection>
+        </div>
+        <div>
+          <CollectionHeader title="ĐIỆN THOẠI" />
+          <ProductCollection>
+            {phonesData
+              ? phonesData.map((product, index) => (
+                  <CarouselItem key={index} className="basis-1/5">
+                    <ProductCard product={product} className="shadow-none" />
+                  </CarouselItem>
+                ))
+              : Array.from({ length: 5 }).map((_, index) => (
+                  <CarouselItem key={index} className="basis-1/5">
+                    <CardSkeleton />
+                  </CarouselItem>
+                ))}
+          </ProductCollection>
+        </div>
       </section>
     </main>
   );

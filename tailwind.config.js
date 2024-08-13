@@ -82,8 +82,8 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       width: {
-        myLayout: "75%",
-        adminLayout: "90%",
+        myLayout: "90rem",
+        adminLayout: "110rem",
       },
       boxShadow: {
         general:

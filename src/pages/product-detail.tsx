@@ -70,7 +70,8 @@ const ProductDetailPage: FC = () => {
     }
 
     let checkExisted: boolean = false;
-    const bucket: CartItem[] = itemsInLocal;
+    const bucket: CartItem[] = itemsInLocal.map((i) => i);
+
     bucket.map((item) => {
       if (
         item.itemID === currentItem.itemID &&
@@ -80,23 +81,15 @@ const ProductDetailPage: FC = () => {
         checkExisted = true;
       }
     });
+
     checkExisted ||
-      bucket.push({
-        productName: productData.productName,
-        price: currentItem.price,
-        quantity: inputQuantity,
-        discount: currentItem.discount,
-        productCode: currentItem.productCode,
-        color: currentItem.color,
-        storage: currentItem.storage,
-        thump: currentItem.thump,
-        productID: productData.productID,
-        itemID: currentItem.itemID,
-        height: productData.height,
-        length: productData.length,
-        width: productData.width,
-        weight: productData.weight,
-      });
+      bucket.push(
+        productService.convertProductToCartItem(
+          productData,
+          currentItem,
+          inputQuantity
+        )
+      );
     toast.success("Thêm vào giỏ hàng thành công!");
     setItemsInLocal(bucket);
   };

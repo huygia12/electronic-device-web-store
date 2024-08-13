@@ -43,8 +43,8 @@ const ProductCollection: React.FC<HTMLAttributes<HTMLDivElement>> = ({
       <CarouselContent className="px-2 pb-6 pt-4">
         {props.children}
       </CarouselContent>
-      <CarouselPrevious className=" top-[14rem] left-[0rem] h-[8rem] w-5 bg-primary rounded-r-sm hover_border-red-500" />
-      <CarouselNext className="top-[14rem] right-0 h-[8rem] w-5 bg-primary rounded-s-sm hover_border-red-500" />
+      <CarouselPrevious className=" top-[18rem] left-[0rem] h-[8rem] w-5 bg-primary rounded-r-sm hover_border-red-500" />
+      <CarouselNext className="top-[18rem] right-0 h-[8rem] w-5 bg-primary rounded-s-sm hover_border-red-500" />
     </Carousel>
   );
 };

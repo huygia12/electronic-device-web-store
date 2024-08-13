@@ -187,10 +187,10 @@ const routes = createBrowserRouter([
           //   loader: productApis.getProductFullJoin,
           //   element: <ProductEdittion />,
           // },
-          // {
-          //   path: "add",
-          //   element: <ProductAddition />,
-          // },
+          {
+            path: "add",
+            element: <ProductAddition />,
+          },
           {
             path: "attributes",
             id: "attribute_management",

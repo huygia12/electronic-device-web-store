@@ -39,7 +39,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     runMiddleware();
-  }, [location.pathname]);
+  }, []);
 
   const login = async (data: LoginFormProps, goBack: boolean = true) => {
     const from: Optional<string> = location.state?.from;

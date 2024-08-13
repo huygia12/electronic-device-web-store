@@ -1,6 +1,7 @@
 import React, { HTMLAttributes } from "react";
 import { NavLink } from "react-router-dom";
 import { CarouselItem } from "../ui/carousel";
+import CustomImage from "../common/custom-image";
 
 interface SlideShowProps extends HTMLAttributes<HTMLDivElement> {
   src: string;
@@ -10,9 +11,9 @@ interface SlideShowProps extends HTMLAttributes<HTMLDivElement> {
 
 const SlideShow: React.FC<SlideShowProps> = ({ className, ...props }) => {
   return (
-    <CarouselItem className="">
+    <CarouselItem className={className}>
       <NavLink to={props.link ?? "#"} unstable_viewTransition>
-        <img
+        <CustomImage
           src={props.src}
           alt={props.alt}
           className="h-[27rem] w-max object-fill rounded-xl mx-auto"

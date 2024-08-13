@@ -191,6 +191,13 @@ enum Role {
   CLIENT = "CLIENT",
 }
 
+enum Sort {
+  ASC = "ascending",
+  DES = "decending",
+  ATOZ = "atoz",
+  ZTOA = "ztoa",
+}
+
 export {
   badgeVariants,
   buttonVariants,
@@ -199,4 +206,5 @@ export {
   invoiceListHeader,
   productListHeader,
   Role,
+  Sort,
 };

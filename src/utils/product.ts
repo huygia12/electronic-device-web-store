@@ -1,10 +1,17 @@
 import { deleteImageFromFireBase } from "@/services/apis";
-import { CartItem, ProductFullJoin, Review } from "@/types/api";
-import { Nullable } from "./declare";
+import {
+  Attribute,
+  AttributeOption,
+  CartItem,
+  ProductFullJoin,
+  ProductItem,
+  Review,
+} from "@/types/api";
+import { Nullable, Optional } from "./declare";
 
 const productService = {
   isDiscount: (discount: Nullable<number>): boolean => {
-    return discount !== null && discount !== 0;
+    return discount !== null && discount > 0;
   },
   afterDiscount: (price: number, discount: Nullable<number>): number => {
     if (!discount) return price;
@@ -171,6 +178,93 @@ const productService = {
         await deleteImageFromFireBase(imageUrl);
       })
     );
+  },
+  convertProductToCartItem: (
+    product: ProductFullJoin,
+    item: ProductItem,
+    quantity: number
+  ) => {
+    return {
+      productName: product.productName,
+      price: item.price,
+      quantity: quantity,
+      discount: item.discount,
+      productCode: item.productCode,
+      color: item.color,
+      storage: item.storage,
+      thump: item.thump,
+      productID: product.productID,
+      itemID: item.itemID,
+      height: product.height,
+      length: product.length,
+      width: product.width,
+      weight: product.weight,
+    };
+  },
+  getAttributesOutOfProduct: (products: ProductFullJoin[]): Attribute[] => {
+    const attributes = products.reduce<Attribute[]>((prev, curr) => {
+      curr.productAttributes.map((item) => {
+        const attributeHolder: Optional<Attribute> = prev.find(
+          (attribute) => attribute.typeID === item.attributeOption.typeID
+        );
+        const optionHolder: Optional<AttributeOption> =
+          attributeHolder?.attributeOptions.find(
+            (option) => option.optionID === item.attributeOption.optionID
+          );
+        if (attributeHolder) {
+          !optionHolder &&
+            attributeHolder.attributeOptions.push({
+              typeID: item.attributeOption.typeID,
+              optionID: item.attributeOption.optionID,
+              optionValue: item.attributeOption.optionValue,
+            });
+        } else {
+          prev.push({
+            typeID: item.attributeOption.typeID,
+            typeValue: item.attributeOption.attributeType.typeValue,
+            attributeOptions: [
+              {
+                typeID: item.attributeOption.typeID,
+                optionID: item.attributeOption.optionID,
+                optionValue: item.attributeOption.optionValue,
+              },
+            ],
+          });
+        }
+      });
+
+      return prev;
+    }, []);
+
+    return attributes;
+  },
+  isContainAllRequiredAttributeOptions: (
+    product: ProductFullJoin,
+    attribute: AttributeOption[]
+  ) => {
+    const productOptions: string[] = product.productAttributes.reduce<string[]>(
+      (prev, curr) => {
+        prev.push(curr.attributeOption.optionID);
+        return prev;
+      },
+      []
+    );
+    const attributeOptions: string[] = attribute.reduce<string[]>(
+      (prev, curr) => {
+        prev.push(curr.optionID);
+        return prev;
+      },
+      []
+    );
+
+    const attributeSet = new Set(productOptions);
+    for (const option of attributeOptions) {
+      if (!attributeSet.has(option)) {
+        return false;
+      }
+    }
+
+    return true;
   },
 };
 
