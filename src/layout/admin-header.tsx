@@ -9,39 +9,19 @@ import {
 } from "@/components/ui/sheet";
 import { NavLink } from "react-router-dom";
 import { toast } from "sonner";
-import { useRef } from "react";
+import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { AdminAccordion } from "@/components/admin";
-import { CounterLabel } from "@/components/avatar-placeholder.tsx";
-import CustomAvt from "@/components/common/custom-avatar";
+import { CounterLabel } from "@/components/user";
 import { navItems } from "@/utils/constants";
 import auth from "@/utils/auth";
 import { useAuth, useCustomNavigate } from "@/hooks";
+import { DropMenuLinkItem, DropdownAvatar } from "@/components/common";
 
-const AdminHeader = () => {
+const AdminHeader: FC = () => {
   const { navigate } = useCustomNavigate();
   const { logout } = useAuth();
-  const userOptions = useRef([
-    {
-      name: "Tài Khoản Của Tôi",
-      src: "/profile",
-    },
-    {
-      name: "Đăng Xuất",
-      handleClick: async () => {
-        try {
-          await logout();
-
-          toast.success("Đăng xuất thành công!");
-          auth.token.removeAccessToken();
-          navigate("/login", { unstable_viewTransition: true });
-        } catch (error: unknown) {
-          console.error(`Response data: ${error}`);
-        }
-      },
-    },
-  ]);
 
   return (
     <div className="w-full py-3 flex flex-col sticky top-0 z-50 bg-theme shadow-xl items-center">
@@ -99,7 +79,32 @@ const AdminHeader = () => {
               className="left-[-0.9rem] top-[-1.1rem]"
             />
           </div>
-          <CustomAvt className="ml-10" options={userOptions.current} />
+          <DropdownAvatar className="ml-10">
+            <DropMenuLinkItem
+              item={{
+                name: "Tài Khoản Của Tôi",
+                src: "/user-profile",
+                visible: true,
+              }}
+            />
+            <DropMenuLinkItem
+              item={{
+                name: "Đăng Xuất",
+                visible: true,
+                handleClick: async () => {
+                  try {
+                    await logout();
+
+                    toast.success("Đăng xuất thành công!");
+                    auth.token.removeAccessToken();
+                    navigate("/login", { unstable_viewTransition: true });
+                  } catch (error: unknown) {
+                    console.error(`Response data: ${error}`);
+                  }
+                },
+              }}
+            />
+          </DropdownAvatar>
         </div>
       </div>
     </div>

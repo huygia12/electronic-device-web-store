@@ -38,8 +38,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useRouteLoaderData } from "react-router-dom";
 import { toast } from "sonner";
 import { useCartProps } from "@/hooks";
-import { SlideShow } from "@/components/avatar-placeholder.tsx";
 import productService from "@/utils/product";
+import { SlideShow } from "@/components/user";
 
 const ProductDetailPage: FC = () => {
   const { itemsInLocal, setItemsInLocal } = useCartProps();

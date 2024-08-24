@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { District, Province, ServiceRes, Ward } from "@/types/api";
-import { useAuth, useCartProps } from "@/hooks";
+import { useCartProps } from "@/hooks";
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
@@ -24,10 +24,11 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ShippingForm, ShippingSchema } from "@/schema";
 import productService from "@/utils/product";
 import { deliveryApis, orderApis } from "@/services/apis";
 import { Nullable } from "@/utils/declare";
+import { ShippingForm, ShippingSchema } from "@/utils/schema";
+import useCurrentUser from "@/hooks/use-current-user";
 
 const CartCheckout: FC = () => {
   const { itemsInLocal, setPhaseID } = useCartProps();
@@ -38,7 +39,7 @@ const CartCheckout: FC = () => {
   const [shippingFee, setShippingFee] = useState<Nullable<number>>(null);
   const [shippingTime, setShippingTime] = useState(0);
   const [total, setTotal] = useState(0);
-  const { currentUser } = useAuth();
+  const { currentUser } = useCurrentUser();
 
   const {
     register,

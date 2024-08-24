@@ -1,4 +1,4 @@
-import { ProductAttributesFormProps } from "@/schema";
+import { ProductAttributesFormProps } from "@/utils/schema";
 import { Attribute, AttributeOption } from "@/types/api";
 import { Optional } from "./declare";
 

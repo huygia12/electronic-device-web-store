@@ -1,5 +1,5 @@
 import { Role } from "@/utils/constants";
-import { Nullable } from "@/utils/declare";
+import { Nullable, Optional } from "@/utils/declare";
 
 interface User {
   userID: string;
@@ -13,12 +13,12 @@ interface User {
   updateAt: Date;
 }
 
-// interface UserSummary {
-//   userName: string;
-//   userID: string;
-//   avatar: string | null;
-//   role: string;
-// }
+interface UserUpdate {
+  userName: string;
+  email: string;
+  phoneNumber: Optional<string>;
+  avatar: Optional<string>;
+}
 
 interface AuthUser {
   userID: string;
@@ -29,4 +29,4 @@ interface AuthUser {
   exp: string;
 }
 
-export type { User, AuthUser };
+export type { User, AuthUser, UserUpdate };

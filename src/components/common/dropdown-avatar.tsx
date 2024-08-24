@@ -1,24 +1,22 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
-import { NavLink } from "react-router-dom";
 import { User } from "lucide-react";
-import { LinkItem } from "@/types/component";
-import { useAuth } from "@/hooks";
+import useCurrentUser from "@/hooks/use-current-user";
 
-interface CustomAvtProps extends HTMLAttributes<HTMLDivElement> {
-  options?: LinkItem[];
-}
+interface DropdownAvatarProps extends HTMLAttributes<HTMLDivElement> {}
 
-const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
-  const { currentUser } = useAuth();
+const DropdownAvatar: React.FC<DropdownAvatarProps> = ({
+  className,
+  ...props
+}) => {
+  const { currentUser } = useCurrentUser();
 
   return (
     <div
@@ -28,7 +26,7 @@ const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
-            className="overflow-hidden rounded-full h-14 w-14 hover_!ring-2"
+            className="overflow-hidden rounded-full h-14 w-14 focus-visible_outline-none"
           >
             <Avatar className="h-[3.5rem] w-[3.5rem] focus-visible_!outline-none ">
               <AvatarImage
@@ -44,23 +42,9 @@ const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        {props.options && currentUser && (
+        {currentUser && (
           <DropdownMenuContent align="center">
-            {props.options.map((item, index) => (
-              <DropdownMenuItem key={index}>
-                {item.src ? (
-                  <NavLink
-                    to={item.src}
-                    onClick={item.handleClick}
-                    unstable_viewTransition={true}
-                  >
-                    {item.name}
-                  </NavLink>
-                ) : (
-                  <button onClick={item.handleClick}>{item.name}</button>
-                )}
-              </DropdownMenuItem>
-            ))}
+            {props.children}
           </DropdownMenuContent>
         )}
       </DropdownMenu>
@@ -71,4 +55,4 @@ const CustomAvt: React.FC<CustomAvtProps> = ({ className, ...props }) => {
   );
 };
 
-export default CustomAvt;
+export default DropdownAvatar;

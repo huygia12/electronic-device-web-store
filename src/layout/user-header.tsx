@@ -5,11 +5,13 @@ import { NavLink } from "react-router-dom";
 import { TfiHeadphoneAlt } from "react-icons/tfi";
 import { PackageSearch, Search } from "lucide-react";
 import { useAuth, useCartProps, useCustomNavigate } from "@/hooks";
-import { useRef } from "react";
 import { toast } from "sonner";
-import CustomAvt from "@/components/common/custom-avatar";
 import auth from "@/utils/auth";
 import { AvatarPlaceholder, CounterLabel } from "@/components/user";
+import { Role } from "@/utils/constants";
+import { DropMenuLinkItem, DropdownAvatar } from "@/components/common";
+import { FC } from "react";
+import useCurrentUser from "@/hooks/use-current-user";
 
 const navComponents: { title: string; path: string }[] = [
   { title: "Trang Chủ", path: "/" },
@@ -17,31 +19,11 @@ const navComponents: { title: string; path: string }[] = [
   { title: "Liên Hệ", path: "#footer" },
 ];
 
-const AppClientHeader = () => {
+const AppClientHeader: FC = () => {
   const { itemsInLocal } = useCartProps();
   const { navigate } = useCustomNavigate();
-  const { logout, currentUser } = useAuth();
-
-  const userOptions = useRef([
-    {
-      name: "Tài Khoản Của Tôi",
-      src: "/profile",
-    },
-    {
-      name: "Đăng Xuất",
-      handleClick: async () => {
-        try {
-          await logout();
-
-          toast.success("Đăng xuất thành công!");
-          auth.token.removeAccessToken();
-          navigate("/login", { unstable_viewTransition: true });
-        } catch (error: unknown) {
-          console.error(`Response data: ${error}`);
-        }
-      },
-    },
-  ]);
+  const { logout } = useAuth();
+  const { currentUser } = useCurrentUser();
 
   return (
     <header className="w-full flex flex-col sticky top-0 z-50 shadow-xl">
@@ -67,6 +49,7 @@ const AppClientHeader = () => {
           </span>
         </div>
       </div>
+
       <div className="bg-theme h-[5rem] shadow-md flex justify-center ">
         <div className="w-myLayout items-center grid grid-cols-5">
           <NavLink to="/" className="mr-20" unstable_viewTransition>
@@ -110,7 +93,38 @@ const AppClientHeader = () => {
             </div>
           </div>
           {currentUser ? (
-            <CustomAvt className="ml-10" options={userOptions.current} />
+            <DropdownAvatar className="ml-10">
+              <DropMenuLinkItem
+                item={{
+                  name: "Tài Khoản Của Tôi",
+                  src: `/user/${currentUser.userID}`,
+                  visible: true,
+                }}
+              />
+              <DropMenuLinkItem
+                item={{
+                  name: "Admin page",
+                  src: "/admin",
+                  visible: currentUser?.role === Role.ADMIN ? true : false,
+                }}
+              />
+              <DropMenuLinkItem
+                item={{
+                  name: "Đăng Xuất",
+                  visible: true,
+                  handleClick: async () => {
+                    try {
+                      await logout();
+                      toast.success("Đăng xuất thành công!");
+                      auth.token.removeAccessToken();
+                      navigate("/login", { unstable_viewTransition: true });
+                    } catch (error: unknown) {
+                      console.error(`Response data: ${error}`);
+                    }
+                  },
+                }}
+              />
+            </DropdownAvatar>
           ) : (
             <AvatarPlaceholder />
           )}

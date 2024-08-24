@@ -22,3 +22,4 @@ export { default as Statis } from "@/pages/statis";
 export { default as StoreManagement } from "@/pages/store-management";
 export { default as Unauthorized } from "@/pages/unauthorized";
 export { default as UserManagement } from "@/pages/user-management";
+export { default as EditProfile } from "@/pages/edit-profile";

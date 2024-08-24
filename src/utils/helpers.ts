@@ -1,3 +1,5 @@
+import { Optional } from "./declare";
+
 /**
  *
  * @param {T} arr
@@ -8,4 +10,14 @@ const arrayInReverse = <T>(arr: T[]): T[] => {
   return temp;
 };
 
-export { arrayInReverse };
+const getImageUrl = (file: File): Optional<string> => {
+  let url: Optional<string>;
+  try {
+    url = URL.createObjectURL(file);
+  } catch {
+    console.warn("failed to create url from file");
+  }
+  return url;
+};
+
+export { arrayInReverse, getImageUrl };

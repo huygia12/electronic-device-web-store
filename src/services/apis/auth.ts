@@ -1,7 +1,7 @@
 import { Optional } from "@/utils/declare";
 import axios, { AxiosResponse } from "axios";
 import { axiosInstanceWithoutAuthorize, reqConfig } from "@/services/axios";
-import { LoginFormProps } from "@/schema";
+import { LoginFormProps } from "@/utils/schema";
 
 const authApis = {
   refreshToken: async (): Promise<Optional<string>> => {

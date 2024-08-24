@@ -3,12 +3,6 @@ import { ProductAttribute } from "./attribute";
 import { Category } from "./category";
 import { Provider } from "./provider";
 
-type ProductParams = {
-  id: string;
-  categoryID: string;
-  providerID: string;
-};
-
 interface ItemImage {
   imageID: string;
   source: string;
@@ -94,23 +88,11 @@ interface ItemInputProps {
   itemImages: Nullable<File[]>;
 }
 
-// interface ProductItemUpdate {
-//   thump: File | string | null;
-//   quantity: number | null;
-//   price: number | null;
-//   productCode: string | null;
-//   discount: number | null;
-//   colorName: string | null;
-//   storageName: string | null;
-//   images: File[] | string[] | null;
-// }
-
 export type {
   ProductFullJoin,
   ProductSummary,
   ProductAttribute,
   ProductItem,
-  ProductParams,
   ItemInputProps,
   ProductInsertPayload,
 };

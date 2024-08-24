@@ -1,5 +1,4 @@
-export * from "@/services/apis/firebase";
-export * from "@/services/apis/cart";
+export { default as firebaseApis } from "@/services/apis/firebase";
 export { default as attributeApis } from "@/services/apis/attribute";
 export { default as productApis } from "@/services/apis/product";
 export { default as providerApis } from "@/services/apis/provider";
@@ -8,4 +7,4 @@ export { default as deliveryApis } from "@/services/apis/delivery";
 export { default as authApis } from "@/services/apis/auth";
 export { default as userApis } from "@/services/apis/user";
 export { default as orderApis } from "@/services/apis/order";
-export * from "@/services/apis/user";
+export * from "@/services/apis/cart";

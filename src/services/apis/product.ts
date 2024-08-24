@@ -6,7 +6,7 @@ import {
 } from "../axios";
 import { Args, Nullable } from "@/utils/declare";
 import { ProductFullJoin, ProductSummary } from "@/types/api";
-import { ProductInputFormProps } from "@/schema";
+import { ProductInputFormProps } from "@/utils/schema";
 import productService from "@/utils/product";
 
 const productApis = {
@@ -14,7 +14,7 @@ const productApis = {
     try {
       const res = await axiosInstanceWithoutAuthorize.get<{
         info: ProductSummary[];
-      }>("/products", reqConfig);
+      }>(`/products?detail=1`, reqConfig);
 
       return res.data.info;
     } catch (error) {

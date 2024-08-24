@@ -1,5 +1,5 @@
 import { SchemaResponse } from "@/utils/constants";
-import { z } from "zod";
+import z, { ZodString } from "zod";
 
 const positiveSafeFloat = (errorMessage: string = SchemaResponse.INVALID) =>
   z.preprocess(
@@ -17,13 +17,10 @@ const positiveSafeInteger = (errorMessage: string = SchemaResponse.INVALID) =>
     .positive({ message: errorMessage })
     .safe({ message: errorMessage });
 
-const notBlankString = () =>
-  z
-    .string()
-    .trim()
-    .refine((value) => value !== "", {
-      message: SchemaResponse.REQUIRED,
-    });
+const notBlankString = (validate: ZodString = z.string()) =>
+  validate.trim().refine((value) => value !== "", {
+    message: SchemaResponse.REQUIRED,
+  });
 
 const validateFiles = () =>
   z
@@ -41,15 +38,16 @@ const validateFiles = () =>
       )
     );
 
-const validateFile = () =>
+const validateOptionalFile = () =>
   z
-    .instanceof(File)
+    .instanceof(FileList)
     .refine(
-      (file) => ["image/jpeg", "image/jpg"].includes(file.type),
+      (file) =>
+        file[0] ? ["image/jpeg", "image/jpg"].includes(file[0].type) : true,
       SchemaResponse.IMAGE_FILE_INVALID
     )
     .refine(
-      (file) => file.size <= 5 * 1024 * 1024,
+      (file) => (file[0] ? file[0].size <= 5 * 1024 * 1024 : true),
       SchemaResponse.IMAGE_FILE_OVER_FLOW
     );
 
@@ -58,10 +56,40 @@ const inputFormPreprocess = (schema: z.ZodTypeAny) =>
     .preprocess((value) => (value === null ? undefined : value), schema)
     .nullable();
 
+const UserSchema = z.object({
+  userName: notBlankString(),
+  avatar: inputFormPreprocess(validateOptionalFile()).optional(),
+  phoneNumber: z
+    .string()
+    .refine((value) => {
+      if (value.length > 0) {
+        if (value.length > 10) return false;
+        return /^[0-9]+$/.test(value);
+      }
+      return true;
+    }, SchemaResponse.PHONE_INVALID)
+    .optional(),
+  email: z.string().email({ message: SchemaResponse.EMAIL_INVALID }),
+});
+
+const LoginSchema = z.object({
+  email: z.string().email({ message: SchemaResponse.EMAIL_INVALID }),
+  password: z.string().min(6, { message: SchemaResponse.PASSWORD_INVALID }),
+});
+
+const SignupSchema = z.object({
+  userName: notBlankString(),
+  email: z.string().email({ message: SchemaResponse.EMAIL_INVALID }),
+  password: z.string().min(6, { message: SchemaResponse.PASSWORD_INVALID }),
+  retypePassword: z
+    .string()
+    .min(6, { message: SchemaResponse.PASSWORD_INVALID }),
+});
+
 const ProductItemsSchema = z
   .array(
     z.object({
-      thump: inputFormPreprocess(validateFile()),
+      thump: inputFormPreprocess(validateOptionalFile()),
       quantity: inputFormPreprocess(positiveSafeInteger()),
       price: inputFormPreprocess(positiveSafeInteger()),
       productCode: notBlankString(),
@@ -105,6 +133,30 @@ const ProductSchema = z.object({
   productItems: ProductItemsSchema,
 });
 
+const ShippingSchema = z.object({
+  email: z.string().email({ message: "Email không đúng định dạng!" }),
+  phoneNumber: z
+    .string()
+    .regex(new RegExp("^[0-9]+$"), { message: "Số diện thoại không hợp lệ!" }),
+  province: z.string().min(1, { message: "Chưa chọn tỉnh/thành phố!" }),
+  district: z.string().min(1, { message: "Chưa chọn quận/huyện!" }),
+  ward: z.string().min(1, { message: "Chưa chọn huyện/xã!" }),
+  detailAddress: z.string().optional(),
+  note: z.string().optional(),
+});
+
+const AttributeTypeSchema = z.object({
+  typeValue: z.string().min(1, { message: "String cannot be blank" }),
+});
+
+export type ShippingForm = z.infer<typeof ShippingSchema>;
+
+export type SignupFormProps = z.infer<typeof SignupSchema>;
+
+export type LoginFormProps = z.infer<typeof LoginSchema>;
+
+export type UserFormProps = z.infer<typeof UserSchema>;
+
 export type ProductInputFormProps = z.infer<typeof ProductSchema>;
 
 export type ProductItemsFormProps = z.infer<typeof ProductItemsSchema>;
@@ -113,4 +165,11 @@ export type ProductAttributesFormProps = z.infer<
   typeof ProductAttributesSchema
 >;
 
-export { ProductSchema, ProductItemsSchema, ProductAttributesSchema };
+export {
+  UserSchema,
+  LoginSchema,
+  SignupSchema,
+  ShippingSchema,
+  AttributeTypeSchema,
+  ProductSchema,
+};

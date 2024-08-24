@@ -205,6 +205,9 @@ enum SchemaResponse {
   IMAGE_FILE_OVER_FLOW = "File ảnh phải dưới 5MB!",
   MUST_BETWEEN_0_AND_100 = "Chỉ có thể trong khoảng 0-100!",
   AT_LEAST_ONE_PRODUCT = "Phải nhập ít nhất 1 sản phẩm!",
+  EMAIL_INVALID = "Email không đúng định dạng!",
+  PASSWORD_INVALID = "Mật khẩu chứa tối thiểu 6 kí tự!",
+  PHONE_INVALID = "SDT không hợp lệ!",
 }
 
 export {

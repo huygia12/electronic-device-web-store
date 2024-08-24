@@ -1,4 +1,5 @@
-import { useAuth, useCustomNavigate } from "@/hooks";
+import { useCustomNavigate } from "@/hooks";
+import useCurrentUser from "@/hooks/use-current-user";
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 
@@ -6,7 +7,7 @@ const PreventedRoute: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
   const { location } = useCustomNavigate();
-  const { currentUser } = useAuth();
+  const { currentUser } = useCurrentUser();
 
   return (
     <>

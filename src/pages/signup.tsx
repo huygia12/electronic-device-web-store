@@ -16,7 +16,7 @@ import { FC, useState } from "react";
 import routes from "../middleware/routes";
 import axios, { HttpStatusCode } from "axios";
 import { LoadingSpinner } from "@/components/effect";
-import { SignupFormProps, SignupSchema } from "@/schema";
+import { SignupFormProps, SignupSchema } from "@/utils/schema";
 import { userApis } from "@/services/apis";
 
 const Signup: FC = () => {

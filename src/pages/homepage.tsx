@@ -17,14 +17,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import BannerImg from "@/components/avatar-placeholder.tsx/banner-image";
 import {
+  BannerImage,
   CollectionHeader,
   ProductCard,
   ProductCollection,
   SlideShow,
-} from "@/components/avatar-placeholder.tsx";
-import CardProduct from "@/components/avatar-placeholder.tsx/product-card";
+} from "@/components/user";
+import CardProduct from "@/components/user/product-card";
 import { LAPTOP_ID, PHONE_ID, slides } from "./data";
 import { productApis, providerApis } from "@/services/apis";
 import categoryApis from "@/services/apis/category";
@@ -146,11 +146,11 @@ const Homepage: FC = () => {
             <CarouselPrevious className="z-10 top-[50%] left-[1rem] bg-transparent h-[3rem] w-[3rem]" />
             <CarouselNext className="z-10 top-[50%] right-[1rem] bg-transparent h-[3rem] w-[3rem]" />
           </Carousel>
-          <BannerImg src="/banner1.jpg" alt="banner1" link="/products" />
-          <BannerImg src="/banner2.jpg" alt="banner2" link="/products" />
-          <BannerImg src="/banner3.jpg" alt="banner3" link="/products" />
-          <BannerImg src="/banner4.jpg" alt="banner4" link="/products" />
-          <BannerImg src="/banner5.jpg" alt="banner5" link="/products" />
+          <BannerImage src="/banner1.jpg" alt="banner1" link="/products" />
+          <BannerImage src="/banner2.jpg" alt="banner2" link="/products" />
+          <BannerImage src="/banner3.jpg" alt="banner3" link="/products" />
+          <BannerImage src="/banner4.jpg" alt="banner4" link="/products" />
+          <BannerImage src="/banner5.jpg" alt="banner5" link="/products" />
         </div>
       </section>
       {/* <section className="bg-theme-softer rounded-xl">

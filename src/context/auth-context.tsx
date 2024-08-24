@@ -1,17 +1,16 @@
-import { ReactNode, createContext, useLayoutEffect, useState } from "react";
+import { ReactNode, createContext, useLayoutEffect } from "react";
 import { Nullable, Optional } from "@/utils/declare";
 import useCustomNavigate from "@/hooks/use-custom-navigate";
 import { AxiosResponse, HttpStatusCode } from "axios";
-import { LoginFormProps } from "@/schema";
+import { LoginFormProps } from "@/utils/schema";
 import { authApis } from "@/services/apis";
 import auth from "@/utils/auth";
-import { AuthUser } from "@/types/api";
 import { Role } from "@/utils/constants";
+import useCurrentUser from "@/hooks/use-current-user";
 
 interface AuthContextProps {
   login: (data: LoginFormProps, goBack?: boolean) => Promise<void>;
   logout: () => Promise<void>;
-  currentUser: Nullable<AuthUser>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -19,7 +18,7 @@ const blackList: string[] = ["/login", "/signup"];
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { navigate, location } = useCustomNavigate();
-  const [currentUser, setCurrentUser] = useState<Nullable<AuthUser>>(null);
+  const { currentUser, setCurrentUser, updateCurrentUser } = useCurrentUser();
 
   useLayoutEffect(() => {
     const checkAccessToken = async (): Promise<boolean> => {
@@ -31,6 +30,8 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           return false;
         }
         auth.token.setAccessToken(newAccessToken);
+
+        await updateCurrentUser();
       }
 
       return true;
@@ -38,7 +39,6 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const runMiddleware = async () => {
       await checkAccessToken();
-      setCurrentUser(auth.getUser());
     };
 
     runMiddleware();
@@ -50,13 +50,9 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const accessToken = await authApis.login(data);
     auth.token.setAccessToken(accessToken);
 
-    const userDecoded: Nullable<AuthUser> = auth.getUser();
-
-    if (!userDecoded) throw new Error(`UserDecoded is ${userDecoded}`);
-
-    setCurrentUser(userDecoded);
+    await updateCurrentUser();
     navigate(
-      goBack && from ? from : userDecoded.role === Role.ADMIN ? "/admin" : "/"
+      goBack && from ? from : currentUser?.role === Role.ADMIN ? "/admin" : "/"
     );
   };
 
@@ -64,12 +60,13 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const res: AxiosResponse = await authApis.logout();
     if (res.status === HttpStatusCode.Ok) {
       window.sessionStorage.clear();
+      setCurrentUser(null);
       navigate("/login");
     }
   };
 
   return (
-    <AuthContext.Provider value={{ login, logout, currentUser }}>
+    <AuthContext.Provider value={{ login, logout }}>
       {children}
     </AuthContext.Provider>
   );

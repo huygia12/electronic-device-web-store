@@ -35,7 +35,7 @@ import {
   ProductInputFormProps,
   ProductItemsFormProps,
   ProductSchema,
-} from "@/schema";
+} from "@/utils/schema";
 import { LoadingSpinner } from "@/components/effect";
 import categoryApis from "@/services/apis/category";
 import { attributeApis, productApis, providerApis } from "@/services/apis";

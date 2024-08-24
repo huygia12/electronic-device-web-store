@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 import { Minus } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { MoneyInput, ProductCard } from "@/components/avatar-placeholder.tsx";
+import { MoneyInput, ProductCard } from "@/components/user";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { useSearchParams } from "react-router-dom";

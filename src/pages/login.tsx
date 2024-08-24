@@ -14,7 +14,7 @@ import { NavLink } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { HttpStatusCode } from "axios";
 import { LoadingSpinner } from "@/components/effect";
-import { LoginFormProps, LoginSchema } from "@/schema";
+import { LoginFormProps, LoginSchema } from "@/utils/schema";
 import { FC } from "react";
 import { useAuth } from "@/hooks";
 

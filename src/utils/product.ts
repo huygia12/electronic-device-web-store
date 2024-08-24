@@ -7,7 +7,7 @@ import {
   Review,
 } from "@/types/api";
 import { Nullable, Optional } from "./declare";
-import { ProductItemsFormProps } from "@/schema";
+import { ProductItemsFormProps } from "@/utils/schema";
 
 const productService = {
   getDiscount: (discount: Nullable<number>): number => {

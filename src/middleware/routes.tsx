@@ -5,6 +5,7 @@ import {
   CartVisiting,
   CategoryManagement,
   Dashboard,
+  EditProfile,
   HomePage,
   Intro,
   InvoiceLookup,
@@ -73,14 +74,29 @@ const routes = createBrowserRouter([
         ],
       },
       {
-        path: "orders",
-        id: "my_invoices",
-        // loader: loader.getOrders,
-        element: (
-          <ProtectedRoute>
-            <PersonalInvoice />
-          </ProtectedRoute>
-        ),
+        path: "user",
+        children: [
+          {
+            path: "orders",
+            id: "user_invoices",
+            // loader: loader.getOrders,
+            element: (
+              <ProtectedRoute>
+                <PersonalInvoice />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: ":id",
+            id: "user_profile",
+            loader: userApis.getUser,
+            element: (
+              <ProtectedRoute>
+                <EditProfile />
+              </ProtectedRoute>
+            ),
+          },
+        ],
       },
       {
         path: "cart",

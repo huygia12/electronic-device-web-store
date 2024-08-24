@@ -4,8 +4,8 @@ import { Outlet } from "react-router-dom";
 import { Toaster } from "sonner";
 import { ScrollToTop } from "@/components/effect";
 import { MailRegisterSection, UserHeader, AppFooter } from ".";
-import { ZaloButton } from "@/components/avatar-placeholder.tsx";
 import ScrollToTopButton from "@/components/effect/scroll-to-top-button";
+import ZaloButton from "@/components/user/zalo-button";
 
 const UserLayout: React.FC = () => {
   return (
