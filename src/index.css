@@ -75,3 +75,45 @@ html {
 input[type="number"]::-webkit-inner-spin-button {
   opacity: 1;
 }
+
+@keyframes zoom {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+@keyframes lucidgenzalo {
+  0% {
+    transform: rotate(-25deg);
+  }
+  50% {
+    transform: rotate(25deg);
+  }
+}
+
+.fcta-zalo-nen-nut::before,
+.fcta-zalo-nen-nut::after {
+  content: "";
+  position: absolute;
+  border: 1px solid #0068ff;
+  background: rgba(0, 104, 255, 0.5);
+  z-index: -1;
+  left: -20px;
+  right: -20px;
+  top: -20px;
+  bottom: -20px;
+  border-radius: 50%;
+  animation: zoom 1.9s linear infinite;
+}
+
+.fcta-zalo-nen-nut::after {
+  animation-delay: 0.4s;
+}

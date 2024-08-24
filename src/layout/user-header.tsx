@@ -7,9 +7,9 @@ import { PackageSearch, Search } from "lucide-react";
 import { useAuth, useCartProps, useCustomNavigate } from "@/hooks";
 import { useRef } from "react";
 import { toast } from "sonner";
-import { CounterLabel } from "@/components/user";
 import CustomAvt from "@/components/common/custom-avatar";
 import auth from "@/utils/auth";
+import { AvatarPlaceholder, CounterLabel } from "@/components/user";
 
 const navComponents: { title: string; path: string }[] = [
   { title: "Trang Chủ", path: "/" },
@@ -20,7 +20,7 @@ const navComponents: { title: string; path: string }[] = [
 const AppClientHeader = () => {
   const { itemsInLocal } = useCartProps();
   const { navigate } = useCustomNavigate();
-  const { logout } = useAuth();
+  const { logout, currentUser } = useAuth();
 
   const userOptions = useRef([
     {
@@ -90,7 +90,7 @@ const AppClientHeader = () => {
                 <FiShoppingBag size={40} />
                 <CounterLabel counter={itemsInLocal.length} />
               </NavLink>
-              {auth.getUser() && (
+              {currentUser && (
                 <NavLink
                   to="orders"
                   className="relative"
@@ -109,26 +109,10 @@ const AppClientHeader = () => {
               </NavLink>
             </div>
           </div>
-          {auth.getUser() ? (
+          {currentUser ? (
             <CustomAvt className="ml-10" options={userOptions.current} />
           ) : (
-            <div className="space-x-2 text-[1.1rem] flex justify-end">
-              <NavLink
-                className="hover_text-primary-foreground hover_font-semibold"
-                to="/login"
-                unstable_viewTransition={true}
-              >
-                Đăng nhập
-              </NavLink>
-              <span>/</span>
-              <NavLink
-                className="hover_text-primary-foreground hover_font-semibold"
-                to="/signup"
-                unstable_viewTransition={true}
-              >
-                Đăng ký
-              </NavLink>
-            </div>
+            <AvatarPlaceholder />
           )}
         </div>
       </div>

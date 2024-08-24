@@ -14,9 +14,16 @@ const insertImageToFireBase = async (file: File, folder: string) => {
   return await getDownloadURL(imageUrl);
 };
 
-const deleteImageFromFireBase = async (fileUrl: string) => {
+const deleteImageInFireBase = async (fileUrl: string) => {
   const imageUrl: StorageReference = ref(imageDB, fileUrl);
   await deleteObject(imageUrl);
 };
+const deleteImagesInFireBase = async (imageUrls: string[]) => {
+  await Promise.all(
+    imageUrls.map(async (imageUrl) => {
+      await deleteImageInFireBase(imageUrl);
+    })
+  );
+};
 
-export { insertImageToFireBase, deleteImageFromFireBase };
+export { insertImageToFireBase, deleteImagesInFireBase };

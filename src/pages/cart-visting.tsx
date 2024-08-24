@@ -37,6 +37,7 @@ import { buttonVariants } from "@/utils/constants";
 import routes from "../middleware/routes";
 import { arrayInReverse } from "@/utils/helpers";
 import productService from "@/utils/product";
+import { NavLink } from "react-router-dom";
 
 const header = [
   "STT",
@@ -167,16 +168,21 @@ const CartVisting: FC = () => {
                             className="max-h-20"
                           />
                         </TableCell>
-                        <TableCell className="text-center text-base max-w-[15rem] truncate">
-                          {prod.productName}
-                          <br />
-                          {`${prod.storage} | ${prod.color}`}
+                        <TableCell className="text-center text-base max-w-[15rem] truncate hover_underline hover_text-primary">
+                          <NavLink
+                            to={"/products/" + prod.productID}
+                            unstable_viewTransition
+                          >
+                            {prod.productName}
+                            <br />
+                            {`${prod.storage} | ${prod.color}`}
+                          </NavLink>
                         </TableCell>
                         <TableCell className="text-center text-base">
                           {prod.price.toLocaleString() + "đ"}
                         </TableCell>
                         <TableCell className="text-center text-base">
-                          {prod.discount + "%"}
+                          {productService.getDiscount(prod.discount) + "%"}
                         </TableCell>
                         <TableCell className="text-center text-base">
                           {productService

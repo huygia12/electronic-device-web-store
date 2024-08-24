@@ -17,14 +17,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import BannerImg from "@/components/user/banner-image";
+import BannerImg from "@/components/avatar-placeholder.tsx/banner-image";
 import {
   CollectionHeader,
   ProductCard,
   ProductCollection,
   SlideShow,
-} from "@/components/user";
-import CardProduct from "@/components/user/product-card";
+} from "@/components/avatar-placeholder.tsx";
+import CardProduct from "@/components/avatar-placeholder.tsx/product-card";
 import { LAPTOP_ID, PHONE_ID, slides } from "./data";
 import { productApis, providerApis } from "@/services/apis";
 import categoryApis from "@/services/apis/category";
@@ -192,7 +192,7 @@ const Homepage: FC = () => {
                     <CardProduct product={product} className="shadow-none" />
                   </CarouselItem>
                 ))
-              : Array.from({ length: 5 }).map((_, index) => (
+              : Array.from({ length: 20 }).map((_, index) => (
                   <CarouselItem key={index} className="basis-1/5">
                     <CardSkeleton />
                   </CarouselItem>
@@ -208,7 +208,7 @@ const Homepage: FC = () => {
                     <ProductCard product={product} className="shadow-none" />
                   </CarouselItem>
                 ))
-              : Array.from({ length: 5 }).map((_, index) => (
+              : Array.from({ length: 20 }).map((_, index) => (
                   <CarouselItem key={index} className="basis-1/5">
                     <CardSkeleton />
                   </CarouselItem>

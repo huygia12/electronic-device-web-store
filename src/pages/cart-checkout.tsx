@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { District, Province, ServiceRes, Ward } from "@/types/api";
-import { useCartProps } from "@/hooks";
+import { useAuth, useCartProps } from "@/hooks";
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
@@ -24,35 +24,36 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import routes from "../middleware/routes";
 import { ShippingForm, ShippingSchema } from "@/schema";
 import productService from "@/utils/product";
-import { deliveryApis } from "@/services/apis";
+import { deliveryApis, orderApis } from "@/services/apis";
 import { Nullable } from "@/utils/declare";
 
 const CartCheckout: FC = () => {
-  const { itemsInLocal, removeInvoice, setPhaseID } = useCartProps();
+  const { itemsInLocal, setPhaseID } = useCartProps();
   const [provinces, setProvinces] = useState<Province[]>();
   const [districts, setDistricts] = useState<District[]>();
   const [wards, setWards] = useState<Ward[]>();
-  const [curProvinceID, setCurProvinceID] = useState("");
-  const [curDistrictID, setCurDistrictID] = useState("");
-  const [curWardID, setCurWardID] = useState("");
   const [serviceID, setServiceID] = useState("");
   const [shippingFee, setShippingFee] = useState<Nullable<number>>(null);
   const [shippingTime, setShippingTime] = useState(0);
   const [total, setTotal] = useState(0);
+  const { currentUser } = useAuth();
+
   const {
     register,
     handleSubmit,
     setValue,
     clearErrors,
     setError,
+    watch,
     formState: { errors },
   } = useForm<ShippingForm>({
     resolver: zodResolver(ShippingSchema),
   });
+
+  const province = watch("province");
+  const district = watch("district");
 
   useEffect(() => {
     const init = async () => {
@@ -74,19 +75,19 @@ const CartCheckout: FC = () => {
     /** DISTRICT */
     const fetchData = async () => {
       const fetchedDistricts: District[] = await deliveryApis.getDistricts(
-        Number(curProvinceID)
+        Number(province)
       );
 
       setDistricts(fetchedDistricts);
     };
 
-    fetchData();
-  }, [curProvinceID]);
+    province && fetchData();
+  }, [province]);
 
   useEffect(() => {
     /** WARD */
     const fetchData = async () => {
-      const fetchedWards = await deliveryApis.getWards(Number(curDistrictID));
+      const fetchedWards = await deliveryApis.getWards(Number(district));
       // console.log(`fetch wards for district(${curDistrictID})`, wardsRes);
       setWards(fetchedWards);
 
@@ -94,7 +95,7 @@ const CartCheckout: FC = () => {
 
       /** GET SHIPPING SERVICE ID */
       const fetchedServices: Nullable<ServiceRes> =
-        await deliveryApis.getServices(Number(curDistrictID));
+        await deliveryApis.getServices(Number(district));
 
       if (!fetchedServices) return;
 
@@ -113,11 +114,12 @@ const CartCheckout: FC = () => {
       setServiceID(serviceIDValue);
     };
 
-    fetchData();
-  }, [curDistrictID]);
+    district && fetchData();
+  }, [district]);
 
   const handleWardChange = async (value: string) => {
     /** CACULATE TOTAL SHIPPING FEE */
+    setValue("ward", value);
     let fee: number = 0;
 
     if (value) {
@@ -125,8 +127,8 @@ const CartCheckout: FC = () => {
         const itemShippingFee: Nullable<number> =
           await deliveryApis.getShippingFee(
             Number(serviceID),
-            Number(curDistrictID),
-            curWardID,
+            Number(district),
+            watch("ward"),
             item
           );
         if (!itemShippingFee) throw new Error();
@@ -138,7 +140,6 @@ const CartCheckout: FC = () => {
         .then((fees) => {
           fee = fees.reduce((prev, curr) => prev + curr, 0);
           setShippingFee(fee);
-          setCurWardID(value);
           setTotal(total + fee);
         })
         .catch((error) => {
@@ -162,7 +163,7 @@ const CartCheckout: FC = () => {
       const shippingTimeValue: Nullable<number> =
         await deliveryApis.getDeliveryTime(
           Number(serviceID),
-          Number(curDistrictID),
+          Number(district),
           value
         );
 
@@ -172,18 +173,15 @@ const CartCheckout: FC = () => {
   };
 
   const handleDistrictChange = (value: string) => {
-    setCurDistrictID(value);
-    setCurWardID("");
+    setValue("district", value);
     setValue("ward", "");
     setShippingFee(null);
     clearErrors("district");
   };
 
   const handleProvinceChange = (value: string) => {
-    setCurProvinceID(value);
-    setCurDistrictID("");
+    setValue("province", value);
     setValue("district", "");
-    setCurWardID("");
     setValue("ward", "");
     setShippingFee(null);
     clearErrors("province");
@@ -193,11 +191,14 @@ const CartCheckout: FC = () => {
   const handleShippingFormSubmisstion: SubmitHandler<
     ShippingForm
   > = async () => {
-    try {
-      toast.success("Thanh toán thành công!");
-      removeInvoice();
-      await routes.navigate("/", { unstable_viewTransition: true });
-    } catch (error) {
+    const paymentUrl: Nullable<string> = await orderApis.makeOrder();
+
+    console.log("url: ", paymentUrl);
+    if (paymentUrl) {
+      window.open(paymentUrl, "_blank", "noopener,noreferrer");
+      // toast.success("Thanh toán thành công!");
+      // removeInvoice();
+    } else {
       setError("root", {
         message: "Thanh toán thất bại!",
       });
@@ -223,6 +224,7 @@ const CartCheckout: FC = () => {
             id="name"
             type="text"
             disabled={true}
+            value={currentUser?.userName}
             placeholder="abc"
             className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
           />
@@ -267,12 +269,9 @@ const CartCheckout: FC = () => {
             Tỉnh/Thành phố
             <span className="text-red-600 ">*</span>
           </Label>
-          <Select
-            // value={curProvinceID}
-            onValueChange={(value) => handleProvinceChange(value)}
-          >
+          <Select onValueChange={(value) => handleProvinceChange(value)}>
             <SelectTrigger
-              value={curProvinceID}
+              value={province}
               {...register("province")}
               className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
             >
@@ -302,12 +301,9 @@ const CartCheckout: FC = () => {
             Quận/Huyện
             <span className="text-red-600 ">*</span>
           </Label>
-          <Select
-            // value={curDistrictID}
-            onValueChange={(value) => handleDistrictChange(value)}
-          >
+          <Select onValueChange={(value) => handleDistrictChange(value)}>
             <SelectTrigger
-              value={curDistrictID}
+              value={district}
               {...register("district")}
               className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
             >
@@ -337,12 +333,9 @@ const CartCheckout: FC = () => {
             Phường/Xã
             <span className="text-red-600 ">*</span>
           </Label>
-          <Select
-            // value={curWardID}
-            onValueChange={(value) => handleWardChange(value)}
-          >
+          <Select onValueChange={(value) => handleWardChange(value)}>
             <SelectTrigger
-              value={curWardID}
+              value={district}
               {...register("ward")}
               className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
             >

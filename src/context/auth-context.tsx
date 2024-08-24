@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useLayoutEffect } from "react";
+import { ReactNode, createContext, useLayoutEffect, useState } from "react";
 import { Nullable, Optional } from "@/utils/declare";
 import useCustomNavigate from "@/hooks/use-custom-navigate";
 import { AxiosResponse, HttpStatusCode } from "axios";
@@ -11,6 +11,7 @@ import { Role } from "@/utils/constants";
 interface AuthContextProps {
   login: (data: LoginFormProps, goBack?: boolean) => Promise<void>;
   logout: () => Promise<void>;
+  currentUser: Nullable<AuthUser>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -18,6 +19,7 @@ const blackList: string[] = ["/login", "/signup"];
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { navigate, location } = useCustomNavigate();
+  const [currentUser, setCurrentUser] = useState<Nullable<AuthUser>>(null);
 
   useLayoutEffect(() => {
     const checkAccessToken = async (): Promise<boolean> => {
@@ -36,6 +38,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const runMiddleware = async () => {
       await checkAccessToken();
+      setCurrentUser(auth.getUser());
     };
 
     runMiddleware();
@@ -48,8 +51,10 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     auth.token.setAccessToken(accessToken);
 
     const userDecoded: Nullable<AuthUser> = auth.getUser();
+
     if (!userDecoded) throw new Error(`UserDecoded is ${userDecoded}`);
 
+    setCurrentUser(userDecoded);
     navigate(
       goBack && from ? from : userDecoded.role === Role.ADMIN ? "/admin" : "/"
     );
@@ -64,7 +69,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ login, logout }}>
+    <AuthContext.Provider value={{ login, logout, currentUser }}>
       {children}
     </AuthContext.Provider>
   );

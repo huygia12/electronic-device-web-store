@@ -14,7 +14,7 @@ import productService from "@/utils/product";
 const deliveryApis = {
   getProvinces: async (): Promise<Province[]> => {
     try {
-      const response = await axios.get<{ info: Province[] }>(
+      const response = await axios.get<{ data: Province[] }>(
         import.meta.env.VITE_GHN_PROVINCE,
         {
           headers: {
@@ -23,7 +23,7 @@ const deliveryApis = {
         }
       );
 
-      return response.data.info;
+      return response.data.data;
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         // AxiosError-specific handling
@@ -41,7 +41,7 @@ const deliveryApis = {
   },
   getDistricts: async (provinceID: number): Promise<District[]> => {
     try {
-      const response = await axios.post<{ info: District[] }>(
+      const response = await axios.post<{ data: District[] }>(
         import.meta.env.VITE_GHN_DISTRICT,
         { province_id: provinceID },
         {
@@ -51,7 +51,7 @@ const deliveryApis = {
         }
       );
 
-      return response.data.info;
+      return response.data.data;
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         // AxiosError-specific handling
@@ -69,7 +69,7 @@ const deliveryApis = {
   },
   getWards: async (districtID: number): Promise<Ward[]> => {
     try {
-      const response = await axios.post<{ info: Ward[] }>(
+      const response = await axios.post<{ data: Ward[] }>(
         import.meta.env.VITE_GHN_WARD,
         { district_id: Number(districtID) },
         {
@@ -79,7 +79,7 @@ const deliveryApis = {
         }
       );
 
-      return response.data.info;
+      return response.data.data;
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         // AxiosError-specific handling
@@ -142,10 +142,10 @@ const deliveryApis = {
           service_id: serviceID,
           to_district_id: districtID,
           to_ward_code: wardID,
-          height: item.height,
-          length: item.length,
-          weight: item.weight,
-          width: item.width,
+          height: Math.ceil(item.height),
+          length: Math.ceil(item.length),
+          weight: Math.ceil(item.weight),
+          width: Math.ceil(item.width),
           insurance_value: productService.afterDiscount(
             item.price,
             item.discount

@@ -1,78 +1,116 @@
+import { SchemaResponse } from "@/utils/constants";
 import { z } from "zod";
 
+const positiveSafeFloat = (errorMessage: string = SchemaResponse.INVALID) =>
+  z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z
+      .number({ message: errorMessage })
+      .positive({ message: errorMessage })
+      .safe({ message: errorMessage })
+  );
+
+const positiveSafeInteger = (errorMessage: string = SchemaResponse.INVALID) =>
+  z
+    .number({ message: errorMessage })
+    .int({ message: errorMessage })
+    .positive({ message: errorMessage })
+    .safe({ message: errorMessage });
+
+const notBlankString = () =>
+  z
+    .string()
+    .trim()
+    .refine((value) => value !== "", {
+      message: SchemaResponse.REQUIRED,
+    });
+
+const validateFiles = () =>
+  z
+    .array(z.instanceof(File))
+    .refine((files) =>
+      files.every(
+        (file) => ["image/jpeg", "image/png", "image/jpg"].includes(file.type),
+        SchemaResponse.IMAGE_FILE_INVALID
+      )
+    )
+    .refine((files) =>
+      files.every(
+        (file) => file.size <= 5 * 1024 * 1024,
+        SchemaResponse.IMAGE_FILE_OVER_FLOW
+      )
+    );
+
+const validateFile = () =>
+  z
+    .instanceof(File)
+    .refine(
+      (file) => ["image/jpeg", "image/jpg"].includes(file.type),
+      SchemaResponse.IMAGE_FILE_INVALID
+    )
+    .refine(
+      (file) => file.size <= 5 * 1024 * 1024,
+      SchemaResponse.IMAGE_FILE_OVER_FLOW
+    );
+
+const inputFormPreprocess = (schema: z.ZodTypeAny) =>
+  z
+    .preprocess((value) => (value === null ? undefined : value), schema)
+    .nullable();
+
+const ProductItemsSchema = z
+  .array(
+    z.object({
+      thump: inputFormPreprocess(validateFile()),
+      quantity: inputFormPreprocess(positiveSafeInteger()),
+      price: inputFormPreprocess(positiveSafeInteger()),
+      productCode: notBlankString(),
+      discount: z.preprocess(
+        (a) => parseFloat(z.string().parse(a)),
+        z
+          .number({ message: SchemaResponse.INVALID })
+          .min(0, { message: SchemaResponse.MUST_BETWEEN_0_AND_100 })
+          .max(100, { message: SchemaResponse.MUST_BETWEEN_0_AND_100 })
+          .default(0)
+      ),
+      color: notBlankString(),
+      storage: z.string().optional(),
+      itemImages: inputFormPreprocess(validateFiles()),
+    })
+  )
+  .refine((value) => {
+    value.length > 0;
+  }, SchemaResponse.AT_LEAST_ONE_PRODUCT);
+
+const ProductAttributesSchema = z.array(
+  z.object({
+    typeID: notBlankString(),
+    optionID: notBlankString(),
+    optionValue: z.string(),
+    typeValue: z.string(),
+  })
+);
+
 const ProductSchema = z.object({
-  productName: z.string().min(1, { message: "Không được bỏ trống!" }),
-  warranty: z.preprocess(
-    (a) => parseFloat(z.string().parse(a)),
-    z
-      .number({ message: "Không hợp lệ!" })
-      .positive({ message: "Không hợp lệ!" })
-      .safe({ message: "Không hợp lệ!" })
-  ),
-  description: z.string().optional(),
-  categoryID: z.string().min(1, { message: "Không được bỏ trống!" }),
-  providerID: z.string().min(1, { message: "Không được bỏ trống!" }),
-  height: z.preprocess(
-    (a) => parseFloat(z.string().parse(a)),
-    z
-      .number({ message: "Không hợp lệ!" })
-      .positive({ message: "Không hợp lệ!" })
-      .safe({ message: "Không hợp lệ!" })
-  ),
-  length: z.preprocess(
-    (a) => parseFloat(z.string().parse(a)),
-    z
-      .number({ message: "Không hợp lệ!" })
-      .positive({ message: "Không hợp lệ!" })
-      .safe({ message: "Không hợp lệ!" })
-  ),
-  width: z.preprocess(
-    (a) => parseFloat(z.string().parse(a)),
-    z
-      .number({ message: "Không hợp lệ!" })
-      .positive({ message: "Không hợp lệ!" })
-      .safe({ message: "Không hợp lệ!" })
-  ),
-  weight: z.preprocess(
-    (a) => parseFloat(z.string().parse(a)),
-    z
-      .number({ message: "Không hợp lệ!" })
-      .positive({ message: "Không hợp lệ!" })
-      .safe({ message: "Không hợp lệ!" })
-  ),
+  productName: notBlankString(),
+  description: z.string().trim().optional(),
+  length: positiveSafeFloat(),
+  width: positiveSafeFloat(),
+  height: positiveSafeFloat(),
+  weight: positiveSafeFloat(),
+  warranty: positiveSafeFloat(),
+  categoryID: notBlankString(),
+  providerID: notBlankString(),
+  productAttributes: ProductAttributesSchema.optional(),
+  productItems: ProductItemsSchema,
 });
-
-const ProductAttributeSchema = z.object({
-  typeID: z.string().min(1, { message: "String cannot be blank" }),
-  attributeValue: z.array(
-    z.string().min(1, { message: "String cannot be blank" })
-  ),
-});
-
-// const ItemSchema = z.object({
-//   thump: z.string().min(1, { message: "String cannot be blank" }),
-//   quantity: z
-//     .number({ message: "Not a number" })
-//     .int({ message: "Not an integer number" })
-//     .positive({ message: "Not a positive number" })
-//     .finite({ message: "Not a finite number" })
-//     .safe({ message: "Not in the int range" }),
-//   price: z
-//     .number({ message: "Not a number" })
-//     .positive({ message: "Not a positive number" })
-//     .finite({ message: "Not a finite number" })
-//     .safe({ message: "Not in the int range" }),
-//   productCode: z.string().min(1, { message: "String cannot be blank" }),
-//   color: z.string().min(1, { message: "String cannot be blank" }),
-//   storage: z.string().optional(),
-//   discount: z
-//     .number({ message: "Not a number" })
-//     .min(0, { message: "Must greater than 0" })
-//     .max(100, { message: "Must less than 100" })
-//     .default(0),
-//   src: z.array(z.string().min(1, { message: "String cannot be blank" })),
-// });
 
 export type ProductInputFormProps = z.infer<typeof ProductSchema>;
 
-export { ProductSchema, ProductAttributeSchema };
+export type ProductItemsFormProps = z.infer<typeof ProductItemsSchema>;
+
+export type ProductAttributesFormProps = z.infer<
+  typeof ProductAttributesSchema
+>;
+
+export { ProductSchema, ProductItemsSchema, ProductAttributesSchema };

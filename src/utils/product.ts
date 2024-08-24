@@ -1,4 +1,3 @@
-import { deleteImageFromFireBase } from "@/services/apis";
 import {
   Attribute,
   AttributeOption,
@@ -8,8 +7,12 @@ import {
   Review,
 } from "@/types/api";
 import { Nullable, Optional } from "./declare";
+import { ProductItemsFormProps } from "@/schema";
 
 const productService = {
+  getDiscount: (discount: Nullable<number>): number => {
+    return discount ?? 0;
+  },
   isDiscount: (discount: Nullable<number>): boolean => {
     return discount !== null && discount > 0;
   },
@@ -26,7 +29,7 @@ const productService = {
   getTotalDiscountAmount: (items: CartItem[]): number => {
     return items.reduce(
       (prev, cur) =>
-        prev + cur.price * ((cur.discount || 100) / 100) * cur.quantity,
+        prev + cur.price * ((cur.discount || 0) / 100) * cur.quantity,
       0
     );
   },
@@ -89,95 +92,6 @@ const productService = {
     }
 
     return `${min}-${max}`;
-  },
-  // const getImgsUrl = (rawUrls: Promise<string>[]) => {
-  //   const bucket: string[] = [];
-  //   for (const item in rawUrls) {
-  //     bucket.push(item);
-  //   }
-  //   console.log(bucket);
-  //   return bucket;
-  // };
-  // getItemList: async (
-  //   rawItems: ProductItem[]
-  // ): Promise<ProductItemInsertPayload[]> => {
-  //   const items: ProductItemInsertPayload[] = [];
-  //   for (const item of rawItems) {
-  //     const rawImgUrls =
-  //       item.images &&
-  //       (await Promise.all(
-  //         item.images.map(async (file) => {
-  //           return await insertImageToFireBase(file, "products");
-  //         })
-  //       ));
-
-  //     const rawThumpUrl =
-  //       item.thump && (await insertImageToFireBase(item.thump, "products"));
-
-  //     if (rawThumpUrl) {
-  //       const thumpUrl = await Promise.resolve(rawThumpUrl);
-  //       if (rawImgUrls) {
-  //         console.log("true");
-  //         items.push({
-  //           thump: thumpUrl,
-  //           quantity: item.quantity,
-  //           price: item.price,
-  //           productCode: item.productCode && item.productCode.trim(),
-  //           discount: item.discount,
-  //           colorName: item.colorName && item.colorName.trim(),
-  //           storageName: item.storageName && item.storageName.trim(),
-  //           images: rawImgUrls,
-  //         });
-  //       }
-  //     }
-  //   }
-  //   return items;
-  // },
-  // getItemsUpdatePayload: async (
-  //   rawItems: ProductItemUpdate[]
-  // ): Promise<ProductItemInsertPayload[]> => {
-  //   const items: ProductItemInsertPayload[] = [];
-  //   for (const item of rawItems) {
-  //     const rawImgUrls =
-  //       item.images &&
-  //       (await Promise.all(
-  //         item.images.map(async (file) => {
-  //           return file instanceof File
-  //             ? await insertImageToFireBase(file, "products")
-  //             : file;
-  //         })
-  //       ));
-
-  //     const rawThumpUrl =
-  //       item.thump instanceof File
-  //         ? await insertImageToFireBase(item.thump, "products")
-  //         : item.thump;
-
-  //     if (rawThumpUrl) {
-  //       const thumpUrl = await Promise.resolve(rawThumpUrl);
-  //       if (rawImgUrls) {
-  //         console.log("true");
-  //         items.push({
-  //           thump: thumpUrl,
-  //           quantity: item.quantity,
-  //           price: item.price,
-  //           productCode: item.productCode && item.productCode.trim(),
-  //           discount: item.discount,
-  //           colorName: item.colorName && item.colorName.trim(),
-  //           storageName: item.storageName && item.storageName.trim(),
-  //           images: rawImgUrls,
-  //         });
-  //       }
-  //     }
-  //   }
-  //   return items;
-  // },
-  clearImagesInFB: async (imageUrls: string[]) => {
-    await Promise.all(
-      imageUrls.map(async (imageUrl) => {
-        await deleteImageFromFireBase(imageUrl);
-      })
-    );
   },
   convertProductToCartItem: (
     product: ProductFullJoin,
@@ -265,6 +179,31 @@ const productService = {
     }
 
     return true;
+  },
+  retrieveImageUrl: (image: unknown): string => {
+    if (typeof image === "string") {
+      return image;
+    } else if (image instanceof File) {
+      return URL.createObjectURL(image);
+    }
+    throw new Error("Invalid image!");
+  },
+  getProductItemsAfterUploadImages: (productItems: ProductItemsFormProps) => {
+    const items = [];
+    for (const item of productItems) {
+      items.push({
+        thump: "/black-thump.jpg",
+        quantity: item.quantity,
+        price: item.price,
+        productCode: item.productCode,
+        discount: item.discount,
+        color: item.color,
+        storage: item.storage,
+        itemImages: item.itemImages.map(() => "/black-thump.jpg"),
+      });
+    }
+
+    return items;
   },
 };
 

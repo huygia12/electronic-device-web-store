@@ -6,3 +6,4 @@ export * from "@/components/user/product-collection";
 export { default as SlideShow } from "@/components/user/slide-show";
 export { default as RatingPoint } from "@/components/user/rating-point";
 export { default as ProductDialog } from "@/components/user/product-dialog";
+export { default as AvatarPlaceholder } from "@/components/user/avatar-placeholder";

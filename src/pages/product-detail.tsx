@@ -38,7 +38,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useRouteLoaderData } from "react-router-dom";
 import { toast } from "sonner";
 import { useCartProps } from "@/hooks";
-import { SlideShow } from "@/components/user";
+import { SlideShow } from "@/components/avatar-placeholder.tsx";
 import productService from "@/utils/product";
 
 const ProductDetailPage: FC = () => {
@@ -137,7 +137,7 @@ const ProductDetailPage: FC = () => {
                 plugins={[plugin.current]}
                 onMouseEnter={plugin.current.stop}
                 onMouseLeave={plugin.current.play}
-                className="w-[40rem] mb-16"
+                className="w-[40rem] min-h-[25rem] mb-16"
               >
                 <CarouselContent>
                   {currentItem.itemImages.map((image, index) => {

@@ -13,7 +13,7 @@ import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { AdminAccordion } from "@/components/admin";
-import { CounterLabel } from "@/components/user";
+import { CounterLabel } from "@/components/avatar-placeholder.tsx";
 import CustomAvt from "@/components/common/custom-avatar";
 import { navItems } from "@/utils/constants";
 import auth from "@/utils/auth";

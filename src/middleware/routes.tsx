@@ -26,7 +26,7 @@ import {
 } from "@/pages";
 import {
   attributeApis,
-  getOrders,
+  orderApis,
   productApis,
   providerApis,
   userApis,
@@ -37,6 +37,7 @@ import { Role } from "@/utils/constants";
 import { AuthProvider } from "@/context";
 import categoryApis from "@/services/apis/category";
 import PreventedRoute from "./prevented-route";
+import ProductAddition from "@/pages/product-addition";
 
 const routes = createBrowserRouter([
   {
@@ -155,7 +156,7 @@ const routes = createBrowserRouter([
       {
         path: "orders",
         id: "invoice_management",
-        loader: getOrders,
+        loader: orderApis.getOrders,
         element: <OrderManagement />,
       },
       {
