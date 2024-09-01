@@ -8,6 +8,7 @@ import {
 } from "@/types/api";
 import { Nullable, Optional } from "./declare";
 import { ProductItemsFormProps } from "@/utils/schema";
+import { firebaseApis } from "@/services/apis";
 
 const productService = {
   getDiscount: (discount: Nullable<number>): number => {
@@ -188,18 +189,29 @@ const productService = {
     }
     throw new Error("Invalid image!");
   },
-  getProductItemsAfterUploadImages: (productItems: ProductItemsFormProps) => {
+  getProductItemsAfterUploadImages: async (
+    productItems: ProductItemsFormProps
+  ) => {
     const items = [];
     for (const item of productItems) {
+      const thump: string[] = await firebaseApis.insertImagesToFireBase(
+        item.thump,
+        `test/thump`
+      );
+      const productImages: string[] = await firebaseApis.insertImagesToFireBase(
+        item.itemImages,
+        `test`
+      );
+
       items.push({
-        thump: "/black-thump.jpg",
+        thump: thump[0],
         quantity: item.quantity,
         price: item.price,
         productCode: item.productCode,
         discount: item.discount,
         color: item.color,
         storage: item.storage,
-        itemImages: item.itemImages.map(() => "/black-thump.jpg"),
+        itemImages: productImages,
       });
     }
 

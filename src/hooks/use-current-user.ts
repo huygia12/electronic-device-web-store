@@ -7,7 +7,9 @@ const useCurrentUser = (): CurrentUserContextProps => {
   const currentUserContext = useContext(CurrentUserContext);
 
   if (!currentUserContext) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error(
+      "useCurrentUser must be used within an CurrentUserProvider"
+    );
   }
 
   return currentUserContext;

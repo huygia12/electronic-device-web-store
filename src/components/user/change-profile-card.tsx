@@ -45,7 +45,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
       let avatar: Optional<string>;
       if (data.avatar[0]) {
         currentUser?.avatar &&
-          (await firebaseApis.deleteImagesInFireBase([currentUser.avatar]));
+          (await firebaseApis.deleteImagesInFireBase([currentUser?.avatar]));
         avatar = (
           await firebaseApis.insertImagesToFireBase(
             data.avatar,

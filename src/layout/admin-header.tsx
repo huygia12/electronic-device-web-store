@@ -15,13 +15,12 @@ import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { AdminAccordion } from "@/components/admin";
 import { CounterLabel } from "@/components/user";
 import { navItems } from "@/utils/constants";
-import auth from "@/utils/auth";
-import { useAuth, useCustomNavigate } from "@/hooks";
+import { useAuth, useCurrentUser } from "@/hooks";
 import { DropMenuLinkItem, DropdownAvatar } from "@/components/common";
 
 const AdminHeader: FC = () => {
-  const { navigate } = useCustomNavigate();
   const { logout } = useAuth();
+  const { currentUser } = useCurrentUser();
 
   return (
     <div className="w-full py-3 flex flex-col sticky top-0 z-50 bg-theme shadow-xl items-center">
@@ -83,7 +82,14 @@ const AdminHeader: FC = () => {
             <DropMenuLinkItem
               item={{
                 name: "Tài Khoản Của Tôi",
-                src: "/user-profile",
+                src: `/user/${currentUser?.userID}`,
+                visible: true,
+              }}
+            />
+            <DropMenuLinkItem
+              item={{
+                name: "Trang chủ",
+                src: `/`,
                 visible: true,
               }}
             />
@@ -92,15 +98,11 @@ const AdminHeader: FC = () => {
                 name: "Đăng Xuất",
                 visible: true,
                 handleClick: async () => {
-                  try {
-                    await logout();
-
-                    toast.success("Đăng xuất thành công!");
-                    auth.token.removeAccessToken();
-                    navigate("/login", { unstable_viewTransition: true });
-                  } catch (error: unknown) {
-                    console.error(`Response data: ${error}`);
-                  }
+                  const promise = logout();
+                  toast.promise(promise, {
+                    loading: "Đăng xuất...",
+                    success: "Đăng xuất thành công!",
+                  });
                 },
               }}
             />

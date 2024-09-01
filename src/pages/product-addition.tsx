@@ -44,6 +44,7 @@ import attributeService from "@/utils/attribute";
 import { Optional } from "@/utils/declare";
 import { toast } from "sonner";
 import { useCustomNavigate } from "@/hooks";
+import ImageOverView from "@/components/common/image-overview";
 
 const ProductAddition: FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -53,7 +54,6 @@ const ProductAddition: FC = () => {
 
   const [selectComponentKey, setSelectComponentKey] = useState<number>(1);
   const [itemQuantity, setItemQuantity] = useState<number>(1);
-  const [open, setOpen] = useState(false);
   const [selectedAttribute, setSelectedAttribute] = useState<Attribute>();
 
   const {
@@ -61,6 +61,7 @@ const ProductAddition: FC = () => {
     register,
     handleSubmit,
     setValue,
+    clearErrors,
     watch,
     formState: { errors, isSubmitting },
   } = useForm<ProductInputFormProps>({
@@ -81,7 +82,7 @@ const ProductAddition: FC = () => {
     watch("productItems") || [];
   const productAttributesAddition: ProductAttributesFormProps =
     watch("productAttributes") || [];
-  console.log(productItemsAddition);
+
   useEffect(() => {
     const fetchData = async () => {
       const categories = await categoryApis.getCategories();
@@ -139,25 +140,26 @@ const ProductAddition: FC = () => {
     attributeController.remove(index);
   };
 
-  const handleSelectAttribute = (attribute: Attribute) => {
+  const handleSelectAttributeType = (attribute: Attribute) => {
     setSelectedAttribute(
       attribute.typeID === selectedAttribute?.typeID ? undefined : attribute
     );
-    setOpen(false);
   };
 
   const handleFormSubmission: SubmitHandler<ProductInputFormProps> = async (
     data
   ) => {
-    const response: boolean = await productApis.addProduct(data);
-    if (response) {
-      toast.success("Thêm sản phẩm thành công!");
-      navigate("/admin/products", {
-        unstable_viewTransition: true,
-      });
-    } else {
-      toast.error("Thêm sản phẩm thất bại!");
-    }
+    const response = productApis.addProduct(data);
+    toast.promise(response, {
+      loading: "Đang xử lý...",
+      success: () => {
+        navigate("/admin/products", {
+          unstable_viewTransition: true,
+        });
+        return "Thêm thành công!";
+      },
+      error: "Thêm thất bại!",
+    });
   };
 
   return (
@@ -188,11 +190,12 @@ const ProductAddition: FC = () => {
             </div>
             {/** GURANTEE TIME SPAN */}
             <div className="space-y-2">
-              <Label className="text-lg font-extrabold">
+              <Label htmlFor="gurantee" className="text-lg font-extrabold">
                 Thời hạn bảo hành(tháng)
                 <span className="text-red-600 ">*</span>
               </Label>
               <Input
+                id="gurantee"
                 autoComplete={"off"}
                 {...register("warranty")}
                 type="number"
@@ -209,12 +212,19 @@ const ProductAddition: FC = () => {
                 Danh mục
                 <span className="text-red-600 ">*</span>
               </Label>
-              <Select onValueChange={(value) => setValue("categoryID", value)}>
+              <Select
+                onValueChange={(value) => {
+                  setValue("categoryID", value);
+                  clearErrors("categoryID");
+                }}
+              >
                 <SelectTrigger
+                  id="category"
+                  value={watch("categoryID")}
                   {...register("categoryID")}
                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                 >
-                  <SelectValue id="category" className="p-0" />
+                  <SelectValue className="p-0" />
                 </SelectTrigger>
                 {errors.categoryID && (
                   <div className="text-red-600">
@@ -242,13 +252,19 @@ const ProductAddition: FC = () => {
                 Nhà phân phối
                 <span className="text-red-600 ">*</span>
               </Label>
-              <Select onValueChange={(value) => setValue("providerID", value)}>
+              <Select
+                onValueChange={(value) => {
+                  setValue("providerID", value);
+                  clearErrors("providerID");
+                }}
+              >
                 <SelectTrigger
+                  id="provider"
                   value={watch("providerID")}
                   {...register("providerID")}
                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                 >
-                  <SelectValue id="provider" className="p-0" />
+                  <SelectValue className="p-0" />
                 </SelectTrigger>
                 {errors.providerID && (
                   <div className="text-red-600">
@@ -341,21 +357,25 @@ const ProductAddition: FC = () => {
                 )}
               </div>
             </div>
+            {/** ATTRIBUTES SELECTION */}
             <div className="col-span-3 grid grid-cols-2 gap-4">
-              {/** ATTRIBUTES */}
+              {/** ATTRIBUTE TYPES */}
               <div className="space-y-2 flex flex-col">
-                <Label htmlFor="atr" className="text-lg font-extrabold">
+                <Label
+                  htmlFor="attributeTypes"
+                  className="text-lg font-extrabold"
+                >
                   Thể loại
                 </Label>
-                <Popover open={open} onOpenChange={() => setOpen(!open)}>
+                <Popover>
                   <PopoverTrigger
+                    id="attributeTypes"
                     asChild
                     className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                   >
                     <Button
                       variant="normal"
                       role="combobox"
-                      // aria-expanded={open}
                       className="justify-between focus_!ring-2"
                     >
                       {selectedAttribute
@@ -385,7 +405,7 @@ const ProductAddition: FC = () => {
                                 key={index}
                                 value={attribute.typeValue}
                                 onSelect={() =>
-                                  handleSelectAttribute(attribute)
+                                  handleSelectAttributeType(attribute)
                                 }
                                 className="text-lg cursor-pointer"
                               >
@@ -407,17 +427,23 @@ const ProductAddition: FC = () => {
                   </PopoverContent>
                 </Popover>
               </div>
-              {/** OPTIONS */}
+              {/** ATTRIBUTE OPTIONS */}
               <div className="space-y-2">
-                <Label htmlFor="option" className="text-lg font-extrabold">
+                <Label
+                  htmlFor="attributeOptions"
+                  className="text-lg font-extrabold"
+                >
                   Giá trị
                 </Label>
                 <Select
                   key={selectComponentKey}
                   onValueChange={(value) => handleAddProductAttribute(value)}
                 >
-                  <SelectTrigger className="border-2 border-stone-400 text-lg min-h-12 focus_border-none">
-                    <SelectValue id="option" placeholder="Chọn giá trị" />
+                  <SelectTrigger
+                    id="attributeOptions"
+                    className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                  >
+                    <SelectValue placeholder="Chọn giá trị" />
                   </SelectTrigger>
                   <SelectContent className="cursor-pointer">
                     {selectedAttribute &&
@@ -497,15 +523,26 @@ const ProductAddition: FC = () => {
                     id={`thump-${parentIndex}`}
                     accept="image/*"
                   />
-                  {productItemsAddition[parentIndex]?.thump &&
-                    productItemsAddition[parentIndex].thump[0] && (
+                  {errors.productItems?.[parentIndex]?.thump && (
+                    <div className="text-red-600 pt-2">
+                      {`${errors.productItems?.[parentIndex]?.thump?.message}`}
+                    </div>
+                  )}
+                  {productItemsAddition[parentIndex]?.thump?.[0] && (
+                    <ImageOverView
+                      src={productService.retrieveImageUrl(
+                        productItemsAddition[parentIndex].thump[0]
+                      )}
+                      alt={`thump-${parentIndex}`}
+                    >
                       <img
                         src={productService.retrieveImageUrl(
                           productItemsAddition[parentIndex].thump[0]
                         )}
-                        className="max-w-40 object-cover rounded-md border-stone-300 border-2"
+                        className="cursor-pointer max-w-40 object-cover rounded-md border-stone-300 border-2"
                       />
-                    )}
+                    </ImageOverView>
+                  )}
                 </div>
                 <div className="overflow-auto flex flex-col gap-2">
                   <Label
@@ -524,22 +561,27 @@ const ProductAddition: FC = () => {
                     multiple
                     accept="image/*"
                   />
-                  {/* {errors.productItems?.[parentIndex]?.thump?.[0] && (
+                  {errors.productItems?.[parentIndex]?.itemImages && (
                     <div className="text-red-600 pt-2">
-                      {`${errors.productItems?.[parentIndex]?.thump?.message}`}
+                      {`${errors.productItems?.[parentIndex]?.itemImages?.message}`}
                     </div>
-                  )} */}
+                  )}
                   {productItemsAddition[parentIndex]?.itemImages && (
                     <div className="overflow-auto flex flex-row gap-2 ">
                       {Array.from(
                         productItemsAddition[parentIndex].itemImages
-                      ).map((element, index) => {
+                      ).map((image, index) => {
                         return (
-                          <img
+                          <ImageOverView
                             key={index}
-                            src={productService.retrieveImageUrl(element)}
-                            className="max-w-40 object-cover rounded-md border-stone-300 border-2"
-                          />
+                            src={productService.retrieveImageUrl(image)}
+                            alt={`productimage-${index}`}
+                          >
+                            <img
+                              src={productService.retrieveImageUrl(image)}
+                              className="max-w-40 object-cover rounded-md border-stone-300 border-2"
+                            />
+                          </ImageOverView>
                         );
                       })}
                     </div>
@@ -613,7 +655,7 @@ const ProductAddition: FC = () => {
                     />
                     {errors.productItems?.[parentIndex]?.productCode && (
                       <div className="text-red-600 pt-2">
-                        {`${errors.productItems?.[parentIndex]?.quantity?.message}`}
+                        {`${errors.productItems?.[parentIndex]?.productCode?.message}`}
                       </div>
                     )}
                   </div>
@@ -640,7 +682,7 @@ const ProductAddition: FC = () => {
                     />
                     {errors.productItems?.[parentIndex]?.discount && (
                       <div className="text-red-600 pt-2">
-                        {`${errors.productItems?.[parentIndex]?.quantity?.message}`}
+                        {`${errors.productItems?.[parentIndex]?.discount?.message}`}
                       </div>
                     )}
                   </div>

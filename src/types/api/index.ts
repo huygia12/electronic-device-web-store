@@ -9,3 +9,4 @@ export * from "@/types/api/provider";
 export * from "@/types/api/review";
 export * from "@/types/api/user";
 export * from "@/types/api/shipping";
+export * from "@/types/api/statistic";

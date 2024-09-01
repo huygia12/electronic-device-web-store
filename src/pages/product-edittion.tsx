@@ -1,855 +1,798 @@
-// import Badge from "@/components/ui/badge";
-// import { Button } from "@/components/ui/button";
-// import {
-//   Command,
-//   CommandEmpty,
-//   CommandGroup,
-//   CommandInput,
-//   CommandItem,
-//   CommandList,
-// } from "@/components/ui/command";
-// import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
-// import {
-//   Popover,
-//   PopoverContent,
-//   PopoverTrigger,
-// } from "@/components/ui/popover";
-// import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// import { Textarea } from "@/components/ui/textarea";
-// import {
-//   AttributeOption,
-//   AttributeType,
-//   Category,
-//   ProductAttribute,
-//   ProductDetail,
-//   ProductInsertPayload,
-//   ProductItemInsertPayload,
-//   ProductItemUpdate,
-//   Provider,
-// } from "@/types/api";
-// import { cn } from "@/lib/utils";
-// import { Check, ChevronsUpDown, Plus, Trash2, X } from "lucide-react";
-// import { useEffect, useState } from "react";
-// import { SubmitHandler, useForm } from "react-hook-form";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { axiosInstance, reqConfig } from "@/services/axios";
-// import routes from "../middleware/routes";
-// import axios from "axios";
-// import { toast } from "sonner";
-// import { getItemsUpdatePayload, getProductAttribute } from "@/utils/product";
-// import { useCurrentUser } from "@/hooks";
-// import { useRouteLoaderData } from "react-router-dom";
-// import { ProductInputForm, ProductSchema } from "@/schema";
-// import { getAttributes, getCategories, getProviders } from "@/services/apis";
-// import { LoadingSpinner } from "@/components/effect";
+import Badge from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Attribute,
+  AttributeOption,
+  Category,
+  ProductFullJoin,
+  Provider,
+} from "@/types/api";
+import { cn } from "@/lib/utils";
+import { Check, ChevronsUpDown, Plus, Trash2, X } from "lucide-react";
+import { FC, useEffect, useState } from "react";
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  ProductAttributesFormProps,
+  ProductInputFormProps,
+  ProductItemsFormProps,
+  ProductSchema,
+} from "@/utils/schema";
+import { LoadingSpinner } from "@/components/effect";
+import categoryApis from "@/services/apis/category";
+import { attributeApis, productApis, providerApis } from "@/services/apis";
+import productService from "@/utils/product";
+import attributeService from "@/utils/attribute";
+import { Optional } from "@/utils/declare";
+import { toast } from "sonner";
+import { useCustomNavigate } from "@/hooks";
+import ImageOverView from "@/components/common/image-overview";
+import { useRouteLoaderData } from "react-router-dom";
 
-// const ProductEdittion = () => {
-//   const edittingProduct = useRouteLoaderData(
-//     "product_edition"
-//   ) as ProductDetail;
-//   const [categories, setCategories] = useState<Category[]>([]);
-//   const [providers, setProviders] = useState<Provider[]>([]);
-//   const [attributes, setAttributes] = useState<AttributeType[]>([]);
-//   const [open, setOpen] = useState(false);
-//   const { currUser } = useCurrentUser();
-//   //Internal selection
-//   const [items, setItems] = useState<ProductItemUpdate[]>(
-//     edittingProduct.items
-//   );
-//   const [attrAdditionBucket, setAttrAdditionBucket] = useState<
-//     ProductAttribute[]
-//   >([]);
-//   const [selectedAttrType, setSelectedAttrType] = useState<AttributeType>();
-//   const [selectedProvider, setSelectedProvider] = useState<string>(
-//     edittingProduct.providerID ?? ""
-//   );
-//   const [selectedCategory, setSelectedCategory] = useState<string>(
-//     edittingProduct.categoryID ?? ""
-//   );
-//   const {
-//     register,
-//     handleSubmit,
-//     setError,
-//     formState: { errors, isSubmitting },
-//   } = useForm<ProductInputForm>({
-//     resolver: zodResolver(ProductSchema),
-//   });
+const ProductEdittion: FC = () => {
+  const product = useRouteLoaderData("product_edition") as ProductFullJoin;
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [providers, setProviders] = useState<Provider[]>([]);
+  const [attributes, setAttributes] = useState<Attribute[]>([]);
+  const { navigate } = useCustomNavigate();
 
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       const categoriesData = await getCategories();
-//       const providersData = await getProviders();
-//       const attributesData = await getAttributes();
+  const [selectComponentKey, setSelectComponentKey] = useState<number>(1);
+  const [itemQuantity, setItemQuantity] = useState<number>(1);
+  const [selectedAttribute, setSelectedAttribute] = useState<Attribute>();
 
-//       //init attribute
-//       setAttrAdditionBucket(
-//         getProductAttribute(edittingProduct, attributesData)
-//       );
-//       setCategories(categoriesData ?? []);
-//       setProviders(providersData ?? []);
-//       setAttributes(attributesData ?? []);
-//     };
+  const {
+    control,
+    register,
+    handleSubmit,
+    setValue,
+    clearErrors,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<ProductInputFormProps>({
+    resolver: zodResolver(ProductSchema),
+  });
 
-//     fetchData();
-//   }, [edittingProduct]);
+  const itemController = useFieldArray({
+    control,
+    name: "productItems",
+  });
 
-//   const handleAddThump = (
-//     event: React.ChangeEvent<HTMLInputElement>,
-//     index: number
-//   ) => {
-//     event.preventDefault();
+  const attributeController = useFieldArray({
+    control,
+    name: "productAttributes",
+  });
 
-//     const itemBucket: ProductItemUpdate[] = items.map((item, iter) => {
-//       if (iter === index) {
-//         return {
-//           ...item,
-//           thump: event.target.files ? event.target.files[0] : null,
-//         };
-//       }
-//       return item;
-//     });
-//     setItems(itemBucket);
-//   };
+  const productItemsAddition: ProductItemsFormProps =
+    watch("productItems") || [];
+  const productAttributesAddition: ProductAttributesFormProps =
+    watch("productAttributes") || [];
 
-//   const handleAddImgs = (
-//     event: React.ChangeEvent<HTMLInputElement>,
-//     index: number
-//   ) => {
-//     event.preventDefault();
+  useEffect(() => {
+    const fetchData = async () => {
+      const categories = await categoryApis.getCategories();
+      const providers = await providerApis.getProviders();
+      const attributes = await attributeApis.getAttributes();
 
-//     const itemBucket: ProductItemUpdate[] = items.map((item, iter) => {
-//       if (iter === index) {
-//         return {
-//           ...item,
-//           images: event.target.files ? [...event.target.files] : null,
-//         };
-//       }
-//       return item;
-//     });
-//     setItems(itemBucket);
-//   };
+      setCategories(categories);
+      setProviders(providers);
+      setAttributes(attributes);
+    };
 
-//   const handleAddItem = (event: React.MouseEvent<HTMLButtonElement>) => {
-//     event.preventDefault();
-//     setItems([
-//       ...items,
-//       {
-//         thump: null,
-//         quantity: null,
-//         price: null,
-//         productCode: null,
-//         discount: null,
-//         colorName: null,
-//         storageName: null,
-//         images: null,
-//       },
-//     ]);
-//   };
+    fetchData();
+  }, []);
 
-//   const handleDelItem = (e: React.MouseEvent<HTMLButtonElement>) => {
-//     e.preventDefault();
-//     const itemsLen = items.length;
-//     const itemBucket: ProductItemUpdate[] =
-//       itemsLen <= 2 ? [items[0]] : [...items].slice(0, itemsLen - 1);
+  const handleAddItem = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
 
-//     setItems(itemBucket);
-//   };
+    itemController.append({
+      thump: null,
+      quantity: null,
+      price: null,
+      productCode: "",
+      discount: 0,
+      color: "",
+      storage: "",
+      itemImages: null,
+    });
+    setItemQuantity(itemQuantity + 1);
+  };
 
-//   const findAttribute = (id: string | undefined): AttributeType | undefined => {
-//     return id ? attributes.find((value) => value.typeID === id) : undefined;
-//   };
+  const handleDeleteItem = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    itemController.remove(itemQuantity - 1);
+    setItemQuantity(itemQuantity - 1);
+  };
 
-//   const handleOptionSelection = (optionID: string) => {
-//     const selectedOption: AttributeOption | undefined =
-//       selectedAttrType?.options.find((attr) => attr.optionID === optionID);
+  const handleAddProductAttribute = (optionID: string) => {
+    const option: Optional<AttributeOption> =
+      selectedAttribute &&
+      attributeService.findAttributeOption(selectedAttribute, optionID);
 
-//     if (selectedOption && selectedAttrType) {
-//       const bucket: ProductAttribute[] = [
-//         ...attrAdditionBucket,
-//         {
-//           typeID: selectedAttrType.typeID,
-//           typeValue: selectedAttrType.typeValue,
-//           optionID: selectedOption.optionID,
-//           optionName: selectedOption.optionValue,
-//         },
-//       ];
-//       setAttrAdditionBucket(bucket);
-//     }
-//   };
+    if (option) {
+      attributeController.append({
+        typeID: selectedAttribute!.typeID,
+        optionID: optionID,
+        optionValue: option.optionValue,
+        typeValue: selectedAttribute!.typeValue,
+      });
+    }
+    setSelectComponentKey(selectComponentKey === 1 ? 2 : 1);
+    setSelectedAttribute(undefined);
+  };
 
-//   const handleDeleteAttribute = (attribute: ProductAttribute) => {
-//     const bucket = attrAdditionBucket.filter(
-//       (attr) =>
-//         attr.typeID !== attribute.typeID || attr.optionID !== attribute.optionID
-//     );
-//     setAttrAdditionBucket(bucket);
-//   };
+  const handleDeleteProductAttribute = (index: number) => {
+    attributeController.remove(index);
+  };
 
-//   const getAvailableAttributeType = (): AttributeType[] => {
-//     return attributes.filter(
-//       (attr) =>
-//         attrAdditionBucket.find(
-//           (productAttr) => productAttr.typeID === attr.typeID
-//         ) === undefined
-//     );
-//   };
+  const handleSelectAttributeType = (attribute: Attribute) => {
+    setSelectedAttribute(
+      attribute.typeID === selectedAttribute?.typeID ? undefined : attribute
+    );
+  };
 
-//   const handleFormSubmission: SubmitHandler<ProductInputForm> = async (
-//     data
-//   ) => {
-//     let valid = true;
-//     items.forEach((item) => {
-//       if (
-//         !item.price ||
-//         !item.productCode ||
-//         !item.colorName ||
-//         !item.quantity ||
-//         item.price.toString().length === 0 ||
-//         item.productCode.length === 0 ||
-//         item.colorName.length === 0 ||
-//         item.quantity.toString().length === 0
-//       ) {
-//         setError("root", {
-//           message:
-//             "Vui lòng điền đầy đủ và hợp lệ thông tin của các trường bất buộc!",
-//         });
-//         valid = false;
-//         return;
-//       }
-//       if (item.thump === null || item.images === null) {
-//         setError("root", { message: "Một số sản phẩm thiếu ảnh!" });
-//         valid = false;
-//         return;
-//       }
-//     });
-//     if (!valid) return;
+  const handleFormSubmission: SubmitHandler<ProductInputFormProps> = async (
+    data
+  ) => {
+    const response: boolean = await productApis.addProduct(data);
+    if (response) {
+      toast.success("Thêm sản phẩm thành công!");
+      navigate("/admin/products", {
+        unstable_viewTransition: true,
+      });
+    } else {
+      toast.error("Thêm sản phẩm thất bại!");
+    }
+  };
 
-//     try {
-//       const productItems: ProductItemInsertPayload[] =
-//         await getItemsUpdatePayload(items);
-//       const productPayload: ProductInsertPayload = {
-//         productName: data.productName,
-//         description: data.description,
-//         length: data.length,
-//         width: data.width,
-//         height: data.height,
-//         weight: data.weight,
-//         warranty: data.warranty,
-//         categoryID: selectedCategory as string,
-//         providerID: selectedProvider as string,
-//         options: attrAdditionBucket.reduce<string[]>((prev, curr) => {
-//           prev.push(curr.optionID);
-//           return prev;
-//         }, []),
-//         productItems: [...productItems],
-//       };
+  return (
+    <>
+      <h1 className="text-4xl font-extrabold mt-8 mb-10">Sửa sản phẩm</h1>
+      <form onSubmit={handleSubmit(handleFormSubmission)}>
+        {/** PRODUCT */}
+        <div className="grid grid-cols-2 gap-8 mb-8">
+          {/** LEFT */}
+          <div className="grid gap-4 grid-cols-3">
+            {/** PRODUCT NAME */}
+            <div className="space-y-2 col-span-3">
+              <Label htmlFor="name" className="text-lg font-extrabold">
+                Tên sản phẩm
+                <span className="text-red-600 ">*</span>
+              </Label>
+              <Input
+                id="name"
+                type="text"
+                autoComplete={"off"}
+                defaultValue={product.productName}
+                {...register("productName")}
+                placeholder="abc"
+                className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+              />
+              {errors.productName && (
+                <div className="text-red-600">{errors.productName.message}</div>
+              )}
+            </div>
+            {/** GURANTEE TIME SPAN */}
+            <div className="space-y-2">
+              <Label htmlFor="gurantee" className="text-lg font-extrabold">
+                Thời hạn bảo hành(tháng)
+                <span className="text-red-600 ">*</span>
+              </Label>
+              <Input
+                id="gurantee"
+                autoComplete={"off"}
+                {...register("warranty")}
+                type="number"
+                min={0}
+                defaultValue={product.warranty}
+                className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+              />
+              {errors.warranty && (
+                <div className="text-red-600">{errors.warranty.message}</div>
+              )}
+            </div>
+            {/** CATEGORY */}
+            <div className="space-y-2">
+              <Label htmlFor="category" className="text-lg font-extrabold">
+                Danh mục
+                <span className="text-red-600 ">*</span>
+              </Label>
+              <Select
+                onValueChange={(value) => {
+                  setValue("categoryID", value);
+                  clearErrors("categoryID");
+                }}
+              >
+                <SelectTrigger
+                  id="category"
+                  value={watch("categoryID")}
+                  {...register("categoryID")}
+                  defaultValue={product.category.categoryID}
+                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                >
+                  <SelectValue className="p-0" />
+                </SelectTrigger>
+                {errors.categoryID && (
+                  <div className="text-red-600">
+                    {errors.categoryID.message}
+                  </div>
+                )}
+                <SelectContent>
+                  {categories.map((cate, index) => {
+                    return (
+                      <SelectItem
+                        key={index}
+                        value={cate.categoryID}
+                        className="max-w-[30rem] truncate"
+                      >
+                        {cate.categoryName}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            </div>
+            {/** PROVIDER */}
+            <div className="space-y-2">
+              <Label htmlFor="provider" className="text-lg font-extrabold">
+                Nhà phân phối
+                <span className="text-red-600 ">*</span>
+              </Label>
+              <Select
+                onValueChange={(value) => {
+                  setValue("providerID", value);
+                  clearErrors("providerID");
+                }}
+              >
+                <SelectTrigger
+                  id="provider"
+                  value={watch("providerID")}
+                  {...register("providerID")}
+                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                >
+                  <SelectValue className="p-0" />
+                </SelectTrigger>
+                {errors.providerID && (
+                  <div className="text-red-600">
+                    {errors.providerID.message}
+                  </div>
+                )}
+                <SelectContent className="">
+                  {providers.map((provider, index) => {
+                    return (
+                      <SelectItem
+                        key={index}
+                        value={provider.providerID}
+                        className="max-w-[30rem] truncate"
+                      >
+                        {provider.providerName}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            </div>
+            {/** SIZE */}
+            <div className="col-span-3 grid grid-cols-4 gap-4">
+              {/** LENGTH */}
+              <div className="space-y-2">
+                <Label htmlFor="length" className="text-lg font-extrabold">
+                  Dài(cm)
+                  <span className="text-red-600 ">*</span>
+                </Label>
+                <Input
+                  id="length"
+                  autoComplete={"off"}
+                  {...register("length")}
+                  min={0}
+                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                />
+                {errors.length && (
+                  <div className="text-red-600">{errors.length.message}</div>
+                )}
+              </div>
+              {/** WIDTH */}
+              <div className="space-y-2">
+                <Label htmlFor="width" className="text-lg font-extrabold">
+                  Rộng(cm)
+                  <span className="text-red-600 ">*</span>
+                </Label>
+                <Input
+                  id="width"
+                  autoComplete={"off"}
+                  {...register("width")}
+                  min={0}
+                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                />
+                {errors.width && (
+                  <div className="text-red-600">{errors.width.message}</div>
+                )}
+              </div>
+              {/** HEIGHT */}
+              <div className="space-y-2">
+                <Label htmlFor="height" className="text-lg font-extrabold">
+                  Cao(cm)
+                  <span className="text-red-600 ">*</span>
+                </Label>
+                <Input
+                  id="height"
+                  autoComplete={"off"}
+                  {...register("height")}
+                  min={0}
+                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                />
+                {errors.height && (
+                  <div className="text-red-600">{errors.height.message}</div>
+                )}
+              </div>
+              {/** WEIGHT */}
+              <div className="space-y-2">
+                <Label htmlFor="weight" className="text-lg font-extrabold">
+                  Nặng(gram)
+                  <span className="text-red-600 ">*</span>
+                </Label>
+                <Input
+                  id="weight"
+                  autoComplete={"off"}
+                  {...register("weight")}
+                  min={0}
+                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                />
+                {errors.weight && (
+                  <div className="text-red-600">{errors.weight.message}</div>
+                )}
+              </div>
+            </div>
+            {/** ATTRIBUTES SELECTION */}
+            <div className="col-span-3 grid grid-cols-2 gap-4">
+              {/** ATTRIBUTE TYPES */}
+              <div className="space-y-2 flex flex-col">
+                <Label
+                  htmlFor="attributeTypes"
+                  className="text-lg font-extrabold"
+                >
+                  Thể loại
+                </Label>
+                <Popover>
+                  <PopoverTrigger
+                    id="attributeTypes"
+                    asChild
+                    className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                  >
+                    <Button
+                      variant="normal"
+                      role="combobox"
+                      className="justify-between focus_!ring-2"
+                    >
+                      {selectedAttribute
+                        ? selectedAttribute.typeValue
+                        : "Chọn thể loại..."}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-max p-0 cursor-pointer">
+                    <Command>
+                      <CommandInput
+                        placeholder="Tìm thể loại..."
+                        className="text-lg"
+                      />
+                      <CommandList>
+                        <CommandEmpty className="text-stone-500 text-center p-4">
+                          Không tìm thấy.
+                        </CommandEmpty>
+                        <CommandGroup>
+                          {attributeService
+                            .getAvailableAttributes(
+                              attributes,
+                              productAttributesAddition
+                            )
+                            .map((attribute, index) => (
+                              <CommandItem
+                                key={index}
+                                value={attribute.typeValue}
+                                onSelect={() =>
+                                  handleSelectAttributeType(attribute)
+                                }
+                                className="text-lg cursor-pointer"
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    selectedAttribute?.typeID ===
+                                      attribute.typeID
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {attribute.typeValue}
+                              </CommandItem>
+                            ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </div>
+              {/** ATTRIBUTE OPTIONS */}
+              <div className="space-y-2">
+                <Label
+                  htmlFor="attributeOptions"
+                  className="text-lg font-extrabold"
+                >
+                  Giá trị
+                </Label>
+                <Select
+                  key={selectComponentKey}
+                  onValueChange={(value) => handleAddProductAttribute(value)}
+                >
+                  <SelectTrigger
+                    id="attributeOptions"
+                    className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                  >
+                    <SelectValue placeholder="Chọn giá trị" />
+                  </SelectTrigger>
+                  <SelectContent className="cursor-pointer">
+                    {selectedAttribute &&
+                      attributeService
+                        .getAvailableAttributeOptions(
+                          selectedAttribute,
+                          productAttributesAddition
+                        )
+                        .map((option, index) => {
+                          return (
+                            <SelectItem
+                              key={index}
+                              value={option.optionID}
+                              className="max-w-[30rem] cursor-pointer truncate"
+                            >
+                              {option.optionValue}
+                            </SelectItem>
+                          );
+                        })}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            {/** PRODUCT ATTRIBUTES */}
+            <ScrollArea className="col-span-3">
+              <div className="flex py-6 space-x-2">
+                {productAttributesAddition?.map((productAttribute, index) => (
+                  <Badge
+                    variant="outline"
+                    key={index}
+                    className="w-max text-base bg-secondary text-secondary-foreground"
+                  >
+                    <span>{`${productAttribute.typeValue} : ${productAttribute.optionValue}`}</span>
+                    <X
+                      className="ml-2 hover_text-primary cursor-pointer"
+                      onClick={() => handleDeleteProductAttribute(index)}
+                    />
+                  </Badge>
+                ))}
+              </div>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+          </div>
+          {/** RIGHT */}
+          <div className="space-y-2 mb-10">
+            <Label htmlFor="desc" className="text-lg font-extrabold">
+              Mô tả
+            </Label>
+            <Textarea
+              id="desc"
+              {...register("description")}
+              placeholder="...abc"
+              className="border-2 border-stone-400 text-lg min-h-12 focus_border-none h-full"
+            />
+          </div>
+        </div>
 
-//       //update product
-//       await axiosInstance.patch(
-//         `/products/${edittingProduct.productID}`,
-//         productPayload,
-//         {
-//           headers: {
-//             "User-id": currUser?.userID,
-//           },
-//           ...reqConfig,
-//         }
-//       );
+        {/** ITEMS */}
+        <ul className="mb-8">
+          {Array.from({ length: itemQuantity }).map((_, parentIndex) => {
+            return (
+              <li
+                key={parentIndex}
+                className="grid grid-cols-2 gap-8 border-stone-200 border-2 rounded-xl p-5 mt-10"
+              >
+                <div className="flex flex-col gap-2">
+                  <Label
+                    htmlFor={`thump-${parentIndex}`}
+                    className="text-lg font-extrabold"
+                  >
+                    Ảnh tiêu đề
+                    <span className="text-red-600 ">*</span>
+                  </Label>
+                  <Input
+                    {...register(`productItems.${parentIndex}.thump` as const)}
+                    type="file"
+                    id={`thump-${parentIndex}`}
+                    accept="image/*"
+                  />
+                  {errors.productItems?.[parentIndex]?.thump && (
+                    <div className="text-red-600 pt-2">
+                      {`${errors.productItems?.[parentIndex]?.thump?.message}`}
+                    </div>
+                  )}
+                  {productItemsAddition[parentIndex]?.thump?.[0] && (
+                    <ImageOverView
+                      src={productService.retrieveImageUrl(
+                        productItemsAddition[parentIndex].thump[0]
+                      )}
+                      alt={`thump-${parentIndex}`}
+                    >
+                      <img
+                        src={productService.retrieveImageUrl(
+                          productItemsAddition[parentIndex].thump[0]
+                        )}
+                        className="cursor-pointer max-w-40 object-cover rounded-md border-stone-300 border-2"
+                      />
+                    </ImageOverView>
+                  )}
+                </div>
+                <div className="overflow-auto flex flex-col gap-2">
+                  <Label
+                    htmlFor={`product-imgs-${parentIndex}`}
+                    className="text-lg font-extrabold"
+                  >
+                    Ảnh sản phẩm
+                    <span className="text-red-600 ">*</span>
+                  </Label>
+                  <Input
+                    {...register(
+                      `productItems.${parentIndex}.itemImages` as const
+                    )}
+                    type="file"
+                    id={`product-imgs-${parentIndex}`}
+                    multiple
+                    accept="image/*"
+                  />
+                  {errors.productItems?.[parentIndex]?.itemImages && (
+                    <div className="text-red-600 pt-2">
+                      {`${errors.productItems?.[parentIndex]?.itemImages?.message}`}
+                    </div>
+                  )}
+                  {productItemsAddition[parentIndex]?.itemImages && (
+                    <div className="overflow-auto flex flex-row gap-2 ">
+                      {Array.from(
+                        productItemsAddition[parentIndex].itemImages
+                      ).map((image, index) => {
+                        return (
+                          <ImageOverView
+                            key={index}
+                            src={productService.retrieveImageUrl(image)}
+                            alt={`productimage-${index}`}
+                          >
+                            <img
+                              src={productService.retrieveImageUrl(image)}
+                              className="max-w-40 object-cover rounded-md border-stone-300 border-2"
+                            />
+                          </ImageOverView>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor={`price-${parentIndex}`}
+                      className="text-lg font-extrabold"
+                    >
+                      Giá tiền(VNĐ)
+                      <span className="text-red-600 ">*</span>
+                    </Label>
+                    <Input
+                      {...register(
+                        `productItems.${parentIndex}.price` as const
+                      )}
+                      id={`price-${parentIndex}`}
+                      type="number"
+                      autoComplete={"off"}
+                      className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                    />
+                    {errors.productItems?.[parentIndex]?.price && (
+                      <div className="text-red-600 pt-2">
+                        {`${errors.productItems?.[parentIndex]?.price?.message}`}
+                      </div>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor={`quantity-${parentIndex}`}
+                      className="text-lg font-extrabold"
+                    >
+                      Số lượng
+                      <span className="text-red-600 ">*</span>
+                    </Label>
+                    <Input
+                      {...register(
+                        `productItems.${parentIndex}.quantity` as const
+                      )}
+                      min={1}
+                      max={1000000000}
+                      id={`quantity-${parentIndex}`}
+                      type="number"
+                      autoComplete={"off"}
+                      className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                    />
+                    {errors.productItems?.[parentIndex]?.quantity && (
+                      <div className="text-red-600 pt-2">
+                        {`${errors.productItems?.[parentIndex]?.quantity?.message}`}
+                      </div>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor={`code-${parentIndex}`}
+                      className="text-lg font-extrabold"
+                    >
+                      Mã sản phẩm
+                      <span className="text-red-600 ">*</span>
+                    </Label>
+                    <Input
+                      {...register(
+                        `productItems.${parentIndex}.productCode` as const
+                      )}
+                      id={`code-${parentIndex}`}
+                      type="text"
+                      autoComplete={"off"}
+                      className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                    />
+                    {errors.productItems?.[parentIndex]?.productCode && (
+                      <div className="text-red-600 pt-2">
+                        {`${errors.productItems?.[parentIndex]?.productCode?.message}`}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor={`discount-${parentIndex}`}
+                      className="text-lg font-extrabold"
+                    >
+                      Giảm giá(%)
+                    </Label>
+                    <Input
+                      {...register(
+                        `productItems.${parentIndex}.discount` as const
+                      )}
+                      id={`discount-${parentIndex}`}
+                      max={100}
+                      min={0}
+                      defaultValue={0}
+                      type="number"
+                      autoComplete={"off"}
+                      className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                    />
+                    {errors.productItems?.[parentIndex]?.discount && (
+                      <div className="text-red-600 pt-2">
+                        {`${errors.productItems?.[parentIndex]?.discount?.message}`}
+                      </div>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor={`color-${parentIndex}`}
+                      className="text-lg font-extrabold"
+                    >
+                      Màu
+                      <span className="text-red-600 ">*</span>
+                    </Label>
+                    <Input
+                      {...register(
+                        `productItems.${parentIndex}.color` as const
+                      )}
+                      id={`color-${parentIndex}`}
+                      type="text"
+                      autoComplete={"off"}
+                      className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                    />
+                    {errors.productItems?.[parentIndex]?.color && (
+                      <div className="text-red-600 pt-2">
+                        {`${errors.productItems?.[parentIndex]?.color?.message}`}
+                      </div>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor={`capacity-${parentIndex}`}
+                      className="text-lg font-extrabold"
+                    >
+                      Dung lượng
+                    </Label>
+                    <Input
+                      {...register(
+                        `productItems.${parentIndex}.storage` as const
+                      )}
+                      id={`capacity-${parentIndex}`}
+                      type="text"
+                      autoComplete={"off"}
+                      className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                    />
+                    {errors.productItems?.[parentIndex]?.storage && (
+                      <div className="text-red-600 pt-2">
+                        {`${errors.productItems?.[parentIndex]?.storage?.message}`}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
 
-//       toast.success("Sửa sản phẩm thành công!");
-//       await routes.navigate("/admin/products", {
-//         unstable_viewTransition: true,
-//         replace: true,
-//       });
-//     } catch (error) {
-//       if (axios.isAxiosError(error)) {
-//         toast.error("Sửa sản phẩm thất bại!");
-//         // Handle error response if available
-//         console.error(`Response data: ${error.response?.data}`);
-//         console.error(`Response status: ${error.response?.status})`);
-//       } else {
-//         console.error("Unexpected error:", error);
-//       }
-//     }
-//   };
+        {/** BUTTONS */}
+        <div className="flex justify-between">
+          <span className="space-x-4 flex">
+            <Button
+              variant="positive"
+              className="text-xl"
+              onClick={(e) => handleAddItem(e)}
+            >
+              Thêm
+              <Plus />
+            </Button>
+            <Button
+              variant="negative"
+              className={cn(
+                "text-xl hidden",
+                productItemsAddition.length > 1 && "flex"
+              )}
+              onClick={(e) => handleDeleteItem(e)}
+            >
+              Xóa
+              <Trash2 />
+            </Button>
+          </span>
+          <span className="space-x-4 flex items-center">
+            {errors.root && (
+              <div className="text-red-600">{errors.root?.message}</div>
+            )}
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              variant="neutral"
+              className="text-xl"
+            >
+              {!isSubmitting ? (
+                <>
+                  Sửa sản phẩm
+                  <Plus />
+                </>
+              ) : (
+                <LoadingSpinner size={26} className="text-white" />
+              )}
+            </Button>
+          </span>
+        </div>
+      </form>
+    </>
+  );
+};
 
-//   return (
-//     <>
-//       <h1 className="text-4xl font-extrabold mt-8 mb-10">Sửa sản phẩm</h1>
-//       <form onSubmit={handleSubmit(handleFormSubmission)}>
-//         {/** PRODUCT */}
-//         <div className="grid grid-cols-2 gap-8 mb-8">
-//           {/** LEFT */}
-//           <div className="grid gap-4 grid-cols-3">
-//             {/** PRODUCT NAME */}
-//             <div className="space-y-2 col-span-3">
-//               <Label htmlFor="name" className="text-lg font-extrabold">
-//                 Tên sản phẩm
-//                 <span className="text-red-600 ">*</span>
-//               </Label>
-//               <Input
-//                 id="name"
-//                 type="text"
-//                 autoComplete={"off"}
-//                 defaultValue={edittingProduct.productName}
-//                 {...register("productName")}
-//                 placeholder="abc"
-//                 className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//               />
-//               {errors.productName && (
-//                 <div className="text-red-600">{errors.productName.message}</div>
-//               )}
-//             </div>
-//             {/** GURANTEE TIME SPAN */}
-//             <div className="space-y-2">
-//               <Label className="text-lg font-extrabold">
-//                 Thời hạn bảo hành(tháng)
-//                 <span className="text-red-600 ">*</span>
-//               </Label>
-//               <Input
-//                 autoComplete={"off"}
-//                 defaultValue={edittingProduct.warranty}
-//                 {...register("warranty")}
-//                 min={0}
-//                 className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//               />
-//               {errors.warranty && (
-//                 <div className="text-red-600">{errors.warranty.message}</div>
-//               )}
-//             </div>
-//             {/** CATEGORY */}
-//             <div className="space-y-2">
-//               <Label htmlFor="category" className="text-lg font-extrabold">
-//                 Danh mục
-//                 <span className="text-red-600 ">*</span>
-//               </Label>
-//               <Select
-//                 defaultValue={selectedCategory}
-//                 onValueChange={(value) => setSelectedCategory(value)}
-//               >
-//                 <SelectTrigger
-//                   value={selectedCategory}
-//                   {...register("categoryID")}
-//                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//                 >
-//                   <SelectValue id="category" className="p-0" />
-//                 </SelectTrigger>
-//                 {errors.categoryID && (
-//                   <div className="text-red-600">
-//                     {errors.categoryID.message}
-//                   </div>
-//                 )}
-//                 <SelectContent>
-//                   {categories.map((cate, index) => {
-//                     return (
-//                       <SelectItem
-//                         key={index}
-//                         value={cate.categoryID}
-//                         className="max-w-[30rem] truncate"
-//                       >
-//                         {cate.categoryName}
-//                       </SelectItem>
-//                     );
-//                   })}
-//                 </SelectContent>
-//               </Select>
-//             </div>
-//             {/** PROVIDER */}
-//             <div className="space-y-2">
-//               <Label htmlFor="provider" className="text-lg font-extrabold">
-//                 Nhà phân phối
-//                 <span className="text-red-600 ">*</span>
-//               </Label>
-//               <Select
-//                 defaultValue={selectedProvider}
-//                 onValueChange={(value) => setSelectedProvider(value)}
-//               >
-//                 <SelectTrigger
-//                   value={selectedProvider}
-//                   {...register("providerID")}
-//                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//                 >
-//                   <SelectValue id="provider" className="p-0" />
-//                 </SelectTrigger>
-//                 {errors.providerID && (
-//                   <div className="text-red-600">
-//                     {errors.providerID.message}
-//                   </div>
-//                 )}
-//                 <SelectContent className="">
-//                   {providers.map((provider, index) => {
-//                     return (
-//                       <SelectItem
-//                         key={index}
-//                         value={provider.providerID}
-//                         className="max-w-[30rem] truncate"
-//                       >
-//                         {provider.providerName}
-//                       </SelectItem>
-//                     );
-//                   })}
-//                 </SelectContent>
-//               </Select>
-//             </div>
-//             {/** SIZE */}
-//             <div className="col-span-3 grid grid-cols-4 gap-4">
-//               {/** LENGTH */}
-//               <div className="space-y-2">
-//                 <Label htmlFor="length" className="text-lg font-extrabold">
-//                   Dài(cm)
-//                   <span className="text-red-600 ">*</span>
-//                 </Label>
-//                 <Input
-//                   id="length"
-//                   autoComplete={"off"}
-//                   defaultValue={edittingProduct.length}
-//                   {...register("length")}
-//                   min={0}
-//                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//                 />
-//                 {errors.length && (
-//                   <div className="text-red-600">{errors.length.message}</div>
-//                 )}
-//               </div>
-//               {/** WIDTH */}
-//               <div className="space-y-2">
-//                 <Label htmlFor="width" className="text-lg font-extrabold">
-//                   Rộng(cm)
-//                   <span className="text-red-600 ">*</span>
-//                 </Label>
-//                 <Input
-//                   id="width"
-//                   autoComplete={"off"}
-//                   defaultValue={edittingProduct.width}
-//                   {...register("width")}
-//                   min={0}
-//                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//                 />
-//                 {errors.width && (
-//                   <div className="text-red-600">{errors.width.message}</div>
-//                 )}
-//               </div>
-//               {/** HEIGHT */}
-//               <div className="space-y-2">
-//                 <Label htmlFor="height" className="text-lg font-extrabold">
-//                   Cao(cm)
-//                   <span className="text-red-600 ">*</span>
-//                 </Label>
-//                 <Input
-//                   id="height"
-//                   autoComplete={"off"}
-//                   defaultValue={edittingProduct.height}
-//                   {...register("height")}
-//                   min={0}
-//                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//                 />
-//                 {errors.height && (
-//                   <div className="text-red-600">{errors.height.message}</div>
-//                 )}
-//               </div>
-//               {/** WEIGHT */}
-//               <div className="space-y-2">
-//                 <Label htmlFor="weight" className="text-lg font-extrabold">
-//                   Nặng(gram)
-//                   <span className="text-red-600 ">*</span>
-//                 </Label>
-//                 <Input
-//                   id="weight"
-//                   autoComplete={"off"}
-//                   defaultValue={edittingProduct.weight}
-//                   {...register("weight")}
-//                   min={0}
-//                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//                 />
-//                 {errors.weight && (
-//                   <div className="text-red-600">{errors.weight.message}</div>
-//                 )}
-//               </div>
-//             </div>
-//             <div className="col-span-3 grid grid-cols-2 gap-4">
-//               {/** ATTRIBUTES */}
-//               <div className="space-y-2 flex flex-col">
-//                 <Label htmlFor="atr" className="text-lg font-extrabold">
-//                   Thể loại
-//                 </Label>
-//                 <Popover open={open} onOpenChange={() => setOpen(!open)}>
-//                   <PopoverTrigger
-//                     asChild
-//                     className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//                   >
-//                     <Button
-//                       variant="normal"
-//                       role="combobox"
-//                       // aria-expanded={open}
-//                       className="justify-between focus_!ring-2"
-//                     >
-//                       {selectedAttrType
-//                         ? selectedAttrType.typeValue
-//                         : "Chọn thể loại..."}
-//                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-//                     </Button>
-//                   </PopoverTrigger>
-//                   <PopoverContent className="w-max p-0">
-//                     <Command>
-//                       <CommandInput
-//                         placeholder="Tìm thể loại..."
-//                         className="text-lg"
-//                       />
-//                       <CommandList>
-//                         <CommandEmpty className="text-stone-500 text-center p-4">
-//                           Không tìm thấy.
-//                         </CommandEmpty>
-//                         <CommandGroup>
-//                           {getAvailableAttributeType().map((attr, index) => (
-//                             <CommandItem
-//                               key={index}
-//                               value={attr.typeValue}
-//                               onSelect={() => {
-//                                 setSelectedAttrType(
-//                                   attr.typeID === selectedAttrType?.typeID
-//                                     ? undefined
-//                                     : attr
-//                                 );
-//                                 // setSelectedOptionID(undefined);
-//                                 setOpen(false);
-//                               }}
-//                               className="text-lg"
-//                             >
-//                               <Check
-//                                 className={cn(
-//                                   "mr-2 h-4 w-4",
-//                                   selectedAttrType?.typeID === attr.typeID
-//                                     ? "opacity-100"
-//                                     : "opacity-0"
-//                                 )}
-//                               />
-//                               {attr.typeValue}
-//                             </CommandItem>
-//                           ))}
-//                         </CommandGroup>
-//                       </CommandList>
-//                     </Command>
-//                   </PopoverContent>
-//                 </Popover>
-//               </div>
-//               {/** OPTIONS */}
-//               <div className="space-y-2">
-//                 <Label htmlFor="option" className="text-lg font-extrabold">
-//                   Giá trị
-//                 </Label>
-//                 <Select onValueChange={(value) => handleOptionSelection(value)}>
-//                   <SelectTrigger className="border-2 border-stone-400 text-lg min-h-12 focus_border-none">
-//                     <SelectValue id="option" className="p-0" />
-//                   </SelectTrigger>
-//                   <SelectContent className="">
-//                     {findAttribute(selectedAttrType?.typeID)?.options.map(
-//                       (option, index) => {
-//                         return (
-//                           <SelectItem
-//                             key={index}
-//                             value={option.optionID}
-//                             className="max-w-[30rem] truncate"
-//                           >
-//                             {option.optionValue}
-//                           </SelectItem>
-//                         );
-//                       }
-//                     )}
-//                   </SelectContent>
-//                 </Select>
-//               </div>
-//             </div>
-//             {/** PRODUCT ATTRIBUTES */}
-//             <ScrollArea className="col-span-3">
-//               <div className="flex py-6 space-x-2">
-//                 {attrAdditionBucket.map((attr, index) => (
-//                   <Badge
-//                     variant="outline"
-//                     key={index}
-//                     className="w-max text-base bg-secondary text-secondary-foreground"
-//                   >
-//                     <span>{`${attr.typeValue} : ${attr.optionName}`}</span>
-//                     <X
-//                       className="ml-2 hover_text-primary cursor-pointer"
-//                       onClick={() => handleDeleteAttribute(attr)}
-//                     />
-//                   </Badge>
-//                 ))}
-//               </div>
-//               <ScrollBar orientation="horizontal" />
-//             </ScrollArea>
-//           </div>
-//           {/** RIGHT */}
-//           <div className="space-y-2 mb-10">
-//             <Label htmlFor="desc" className="text-lg font-extrabold">
-//               Mô tả
-//             </Label>
-//             <Textarea
-//               id="desc"
-//               {...register("description")}
-//               defaultValue={edittingProduct.description ?? ""}
-//               placeholder="...abc"
-//               className="border-2 border-stone-400 text-lg min-h-12 focus_border-none h-full"
-//             />
-//           </div>
-//         </div>
-
-//         {/** ITEMS */}
-//         <ul className="mb-8">
-//           {items.map((item, parentIndex) => {
-//             return (
-//               <li
-//                 key={parentIndex}
-//                 className="grid grid-cols-2 gap-8 border-stone-200 border-2 rounded-xl p-5 mt-10"
-//               >
-//                 <div className="flex flex-col gap-2">
-//                   <Label
-//                     htmlFor={`thump-${parentIndex}`}
-//                     className="text-lg font-extrabold"
-//                   >
-//                     Ảnh tiêu đề
-//                     <span className="text-red-600 ">*</span>
-//                   </Label>
-//                   <Input
-//                     type="file"
-//                     id={`thump-${parentIndex}`}
-//                     accept="image/*"
-//                     onChange={(e) => handleAddThump(e, parentIndex)}
-//                   />
-//                   {item.thump && (
-//                     <img
-//                       src={
-//                         item.thump instanceof File
-//                           ? URL.createObjectURL(item.thump)
-//                           : item.thump
-//                       }
-//                       className="max-w-40 object-cover rounded-md border-stone-300 border-2"
-//                     />
-//                   )}
-//                 </div>
-//                 <div className="overflow-auto flex flex-col gap-2">
-//                   <Label
-//                     htmlFor={`product-imgs-${parentIndex}`}
-//                     className="text-lg font-extrabold"
-//                   >
-//                     Ảnh sản phẩm
-//                     <span className="text-red-600 ">*</span>
-//                   </Label>
-//                   <Input
-//                     type="file"
-//                     id={`product-imgs-${parentIndex}`}
-//                     multiple
-//                     accept="image/*"
-//                     onChange={(e) => handleAddImgs(e, parentIndex)}
-//                   />
-//                   {item.images && (
-//                     <div className="overflow-auto flex flex-row gap-2 ">
-//                       {item.images.map((element, index) => {
-//                         return (
-//                           <img
-//                             key={index}
-//                             src={
-//                               element instanceof File
-//                                 ? URL.createObjectURL(element)
-//                                 : element
-//                             }
-//                             className="max-w-40 object-cover rounded-md border-stone-300 border-2"
-//                           />
-//                         );
-//                       })}
-//                     </div>
-//                   )}
-//                 </div>
-//                 <div className="grid grid-cols-3 gap-4">
-//                   <div className="space-y-2">
-//                     <Label
-//                       htmlFor={`price-${parentIndex}`}
-//                       className="text-lg font-extrabold"
-//                     >
-//                       Giá tiền(VNĐ)
-//                       <span className="text-red-600 ">*</span>
-//                     </Label>
-//                     <Input
-//                       id={`price-${parentIndex}`}
-//                       type="number"
-//                       autoComplete={"off"}
-//                       defaultValue={
-//                         edittingProduct.items[parentIndex]?.price ?? 0
-//                       }
-//                       onChange={(e) => {
-//                         items[parentIndex].price = parseInt(e.target.value);
-//                       }}
-//                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//                     />
-//                   </div>
-//                   <div className="space-y-2">
-//                     <Label
-//                       htmlFor={`quantity-${parentIndex}`}
-//                       className="text-lg font-extrabold"
-//                     >
-//                       Số lượng
-//                       <span className="text-red-600 ">*</span>
-//                     </Label>
-//                     <Input
-//                       min={1}
-//                       max={1000000000}
-//                       id={`quantity-${parentIndex}`}
-//                       type="number"
-//                       autoComplete={"off"}
-//                       defaultValue={
-//                         edittingProduct.items[parentIndex]?.quantity ?? 1
-//                       }
-//                       onChange={(e) => {
-//                         items[parentIndex].quantity = parseInt(e.target.value);
-//                       }}
-//                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//                     />
-//                   </div>
-//                   <div className="space-y-2">
-//                     <Label
-//                       htmlFor={`code-${parentIndex}`}
-//                       className="text-lg font-extrabold"
-//                     >
-//                       Mã sản phẩm
-//                       <span className="text-red-600 ">*</span>
-//                     </Label>
-//                     <Input
-//                       id={`code-${parentIndex}`}
-//                       type="text"
-//                       autoComplete={"off"}
-//                       defaultValue={
-//                         edittingProduct.items[parentIndex]?.productCode ?? null
-//                       }
-//                       onChange={(e) => {
-//                         items[parentIndex].productCode = e.target.value;
-//                       }}
-//                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//                     />
-//                   </div>
-//                 </div>
-//                 <div className="grid grid-cols-3 gap-4">
-//                   <div className="space-y-2">
-//                     <Label
-//                       htmlFor={`discount-${parentIndex}`}
-//                       className="text-lg font-extrabold"
-//                     >
-//                       Giảm giá(%)
-//                     </Label>
-//                     <Input
-//                       id={`discount-${parentIndex}`}
-//                       max={100}
-//                       min={0}
-//                       type="number"
-//                       autoComplete={"off"}
-//                       defaultValue={
-//                         edittingProduct.items[parentIndex]?.discount ?? 0
-//                       }
-//                       onChange={(e) => {
-//                         items[parentIndex].discount = parseFloat(
-//                           e.target.value
-//                         );
-//                       }}
-//                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//                     />
-//                   </div>
-//                   <div className="space-y-2">
-//                     <Label
-//                       htmlFor={`color-${parentIndex}`}
-//                       className="text-lg font-extrabold"
-//                     >
-//                       Màu
-//                       <span className="text-red-600 ">*</span>
-//                     </Label>
-//                     <Input
-//                       id={`color-${parentIndex}`}
-//                       type="text"
-//                       autoComplete={"off"}
-//                       defaultValue={
-//                         edittingProduct.items[parentIndex]?.colorName ?? null
-//                       }
-//                       onChange={(e) => {
-//                         items[parentIndex].colorName = e.target.value;
-//                       }}
-//                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//                     />
-//                   </div>
-//                   <div className="space-y-2">
-//                     <Label
-//                       htmlFor={`capacity-${parentIndex}`}
-//                       className="text-lg font-extrabold"
-//                     >
-//                       Dung lượng
-//                     </Label>
-//                     <Input
-//                       id={`capacity-${parentIndex}`}
-//                       type="text"
-//                       autoComplete={"off"}
-//                       defaultValue={
-//                         edittingProduct.items[parentIndex]?.storageName ?? ""
-//                       }
-//                       onChange={(e) => {
-//                         items[parentIndex].storageName = e.target.value;
-//                       }}
-//                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
-//                     />
-//                   </div>
-//                 </div>
-//               </li>
-//             );
-//           })}
-//         </ul>
-
-//         {/** BUTTONS */}
-//         <div className="flex justify-between">
-//           <span className="space-x-4">
-//             <Button
-//               variant="positive"
-//               className="text-xl"
-//               onClick={(e) => handleAddItem(e)}
-//             >
-//               Thêm
-//               <Plus />
-//             </Button>
-//             {items.length > 1 && (
-//               <Button
-//                 variant="negative"
-//                 className="text-xl"
-//                 onClick={(e) => handleDelItem(e)}
-//               >
-//                 Xóa
-//                 <Trash2 />
-//               </Button>
-//             )}
-//           </span>
-//           <span className="space-x-4 flex items-center">
-//             {errors.root && (
-//               <div className="text-red-600">{errors.root?.message}</div>
-//             )}
-//             <Button
-//               type="submit"
-//               disabled={isSubmitting}
-//               variant="neutral"
-//               className="text-xl"
-//             >
-//               {!isSubmitting ? (
-//                 <>Lưu thay đổi</>
-//               ) : (
-//                 <LoadingSpinner size={26} className="text-white" />
-//               )}
-//             </Button>
-//           </span>
-//         </div>
-//       </form>
-//     </>
-//   );
-// };
-
-// export default ProductEdittion;
+export default ProductEdittion;

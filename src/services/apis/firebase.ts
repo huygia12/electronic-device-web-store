@@ -20,7 +20,7 @@ const insertImagesToFireBase = async (
 ): Promise<string[]> => {
   const fileUrls: string[] = [];
   await Promise.all(
-    Array({ length: FileList.length }).map(async (_, index) => {
+    Array.from(files).map(async (_, index) => {
       const url = await insertImageToFireBase(files[index], folder);
       fileUrls.push(url);
     })

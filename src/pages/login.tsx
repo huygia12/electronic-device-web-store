@@ -75,8 +75,8 @@ const Login: FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-8">
-          <div className="grid gap-2">
-            <Label htmlFor="email" className="font-extrabold">
+          <div className="grid gap-2 ">
+            <Label htmlFor="email" className="font-extrabold text-lg">
               Email
               <span className="text-red-600 ">*</span>
             </Label>
@@ -87,13 +87,14 @@ const Login: FC = () => {
               type="email"
               placeholder="abc@gmail.com"
               autoComplete="email"
+              className="text-lg"
             />
             {errors.email && (
               <div className="text-red-600">{errors.email.message}</div>
             )}
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="password" className="font-extrabold">
+            <Label htmlFor="password" className="font-extrabold text-lg">
               Mật khẩu
               <span className="text-red-600 ">*</span>
             </Label>
@@ -103,13 +104,14 @@ const Login: FC = () => {
               defaultValue="123123"
               type="password"
               autoComplete="new-password"
+              className="text-lg"
             />
             {errors.password && (
               <div className="text-red-600">{errors.password.message}</div>
             )}
             <NavLink
               to="/login"
-              className="text-sm underline hover_text-blue-500 self-end"
+              className="text-lg underline hover_text-blue-500 self-end"
             >
               Quên mật khẩu
             </NavLink>
@@ -120,7 +122,7 @@ const Login: FC = () => {
             type="submit"
             disabled={isSubmitting}
             variant="neutral"
-            className="w-full"
+            className="w-full text-lg"
           >
             {!isSubmitting ? (
               "Đăng nhập"
@@ -131,7 +133,7 @@ const Login: FC = () => {
           {errors.root && (
             <div className="text-red-600 mt-4">{errors.root.message}</div>
           )}
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-4 text-center text-lg">
             Bạn đã có tài khoản? &nbsp;
             <NavLink to="/signup" className="underline hover_text-primary">
               Đăng ký

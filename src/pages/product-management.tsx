@@ -30,13 +30,13 @@ import {
   Tooltip,
 } from "@/components/ui/tooltip";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { buttonVariants } from "@/utils/constants";
 import { arrayInReverse } from "@/utils/helpers";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import axios from "axios";
 import { productApis } from "@/services/apis";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const colName: string[] = [
   "STT",
@@ -48,36 +48,36 @@ const colName: string[] = [
   "BẢO HÀNH",
 ];
 
-const ProductManagement = () => {
+const ProductManagement: FC = () => {
   const productsData = useRouteLoaderData(
     "product_management"
   ) as ProductSummary[];
-  const [productsSummary, setProductSummaryList] =
+  const [productsSummary, setProductsSummary] =
     useState<ProductSummary[]>(productsData);
   const [selectedProduct, setSelectedProduct] = useState<ProductSummary>();
   const [searchingInput, setSearchingInput] = useState("");
+  const [deepCleanProductID, setDeepCleanProductID] = useState<string>();
 
   const handleDeleteProduct = async () => {
     if (!selectedProduct) return;
-    try {
-      await productApis.deleteProduct(selectedProduct.productID);
-      const productSummaryList: ProductSummary[] =
-        await productApis.getProductsSummary();
-
-      setProductSummaryList(productSummaryList);
-      setSelectedProduct(undefined);
-      toast.success("Thay đổi thành công!");
-    } catch (error) {
-      toast.error("Thay đổi thất bại!");
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.error(`Response data: ${error.response.data}`);
-          console.error(`Response status: ${error.response.status})`);
-        }
-      } else {
-        console.error("Unexpected error:", error);
-      }
-    }
+    const response = productApis.deleteProduct(
+      selectedProduct.productID,
+      deepCleanProductID === selectedProduct.productID
+    );
+    toast.promise(response, {
+      loading: "Đang xử lý...",
+      success: () => {
+        setProductsSummary(
+          productsSummary.filter(
+            (product) => product.productID !== selectedProduct.productID
+          )
+        );
+        setSelectedProduct(undefined);
+        setDeepCleanProductID(undefined);
+        return "Xóa thành công!";
+      },
+      error: "Xóa thất bại!",
+    });
   };
 
   return (
@@ -202,6 +202,7 @@ const ProductManagement = () => {
                     <SquarePen />
                   </Button>
                 </NavLink>
+
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="negative">
@@ -216,6 +217,27 @@ const ProductManagement = () => {
                         hoàn tác.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
+                    <div className="items-top flex space-x-2">
+                      <Checkbox
+                        id="deep-clean-checkbox"
+                        className="!text-white"
+                        onClick={() =>
+                          setDeepCleanProductID(selectedProduct.productID)
+                        }
+                      />
+                      <div className="grid gap-1.5 leading-none">
+                        <label
+                          htmlFor="deep-clean-checkbox"
+                          className="text-sm font-medium leading-none peer-disabled_cursor-not-allowed peer-disabled_opacity-70"
+                        >
+                          Dọn dẹp sâu
+                        </label>
+                        <p className="text-sm text-muted-foreground">
+                          lịch sử giao dịch sẽ không hiển thị được ảnh sản phẩm
+                          nữa.
+                        </p>
+                      </div>
+                    </div>
                     <AlertDialogFooter>
                       <AlertDialogAction
                         onClick={() => handleDeleteProduct()}

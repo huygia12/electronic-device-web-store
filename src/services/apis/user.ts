@@ -1,21 +1,23 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { axiosInstance } from "../axios";
 import { User, UserUpdate } from "@/types/api";
 import { SignupFormProps } from "@/utils/schema";
 import { Args, Nullable } from "@/utils/declare";
 
 const userApis = {
-  signup: async (data: SignupFormProps) => {
-    const response = await axios.post(
+  signup: async (data: SignupFormProps): Promise<string> => {
+    const response = await axios.post<{ info: { userID: string } }>(
       `${import.meta.env.VITE_API_URL}/users/signup`,
       {
         userName: data.userName.trim(),
         email: data.email.trim(),
         password: data.password.trim(),
+        avatar: data.avatar,
+        phoneNumber: data.phoneNumber,
       }
     );
 
-    return response;
+    return response.data.info.userID;
   },
   getUser: async (args: Args | string): Promise<Nullable<User>> => {
     let userID: string;
@@ -50,9 +52,20 @@ const userApis = {
     );
     return res.data.info;
   },
-  getUsers: async (): Promise<User[]> => {
+  updateUserAvatar: async (userID: string, avatar: string): Promise<User> => {
+    const res = await axiosInstance.put<{ info: User }>(`/users/${userID}`, {
+      avatar: avatar,
+    });
+    return res.data.info;
+  },
+  getUsers: async (params: { recently?: boolean }): Promise<User[]> => {
+    let queryUrl: string = "/users";
+    if (params.recently === true) {
+      queryUrl = `/users?recently=${params.recently}`;
+    }
+
     try {
-      const res = await axiosInstance.get<{ info: User[] }>("/users");
+      const res = await axiosInstance.get<{ info: User[] }>(queryUrl);
       return res.data.info;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -68,6 +81,10 @@ const userApis = {
       }
       return [];
     }
+  },
+  deleteUser: async (userID: string): Promise<AxiosResponse> => {
+    const res = await axiosInstance.delete(`/users/${userID}`);
+    return res;
   },
 };
 

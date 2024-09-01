@@ -13,9 +13,9 @@ import {
   OrderManagement,
   PageNotFound,
   PersonalInvoice,
-  // ProductAddition,
+  ProductAddition,
   ProductDetail,
-  // ProductEdittion,
+  ProductEdittion,
   ProductManagement,
   Products,
   ProviderManagement,
@@ -27,9 +27,10 @@ import {
 } from "@/pages";
 import {
   attributeApis,
-  orderApis,
+  invoiceApis,
   productApis,
   providerApis,
+  statisticApis,
   userApis,
 } from "@/services/apis";
 import { createBrowserRouter } from "react-router-dom";
@@ -38,7 +39,6 @@ import { Role } from "@/utils/constants";
 import { AuthProvider } from "@/context";
 import categoryApis from "@/services/apis/category";
 import PreventedRoute from "./prevented-route";
-import ProductAddition from "@/pages/product-addition";
 
 const routes = createBrowserRouter([
   {
@@ -155,6 +155,8 @@ const routes = createBrowserRouter([
     children: [
       {
         index: true,
+        id: "dash_board",
+        loader: statisticApis.getStatistic,
         element: <Dashboard />,
       },
       {
@@ -170,9 +172,9 @@ const routes = createBrowserRouter([
         element: <CategoryManagement />,
       },
       {
-        path: "orders",
+        path: "invoices",
         id: "invoice_management",
-        loader: orderApis.getOrders,
+        loader: invoiceApis.getInvoices,
         element: <OrderManagement />,
       },
       {
@@ -198,12 +200,12 @@ const routes = createBrowserRouter([
             loader: productApis.getProductsSummary,
             element: <ProductManagement />,
           },
-          // {
-          //   path: ":id",
-          //   id: "product_edition",
-          //   loader: productApis.getProductFullJoin,
-          //   element: <ProductEdittion />,
-          // },
+          {
+            path: ":id",
+            id: "product_edition",
+            loader: productApis.getProductFullJoin,
+            element: <ProductEdittion />,
+          },
           {
             path: "add",
             element: <ProductAddition />,

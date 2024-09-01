@@ -8,6 +8,7 @@ import { Args, Nullable } from "@/utils/declare";
 import { ProductFullJoin, ProductSummary } from "@/types/api";
 import { ProductInputFormProps } from "@/utils/schema";
 import productService from "@/utils/product";
+import { firebaseApis } from ".";
 
 const productApis = {
   getProductsSummary: async (): Promise<ProductSummary[]> => {
@@ -103,16 +104,67 @@ const productApis = {
       return null;
     }
   },
-  deleteProduct: async (productID: string) => {
-    //TODO: need to delete images in database
-    const res = await axiosInstance.delete(`/products/${productID}`, reqConfig);
-    return res;
+  deleteProduct: async (
+    productID: string,
+    deepClean?: boolean
+  ): Promise<boolean> => {
+    try {
+      const getResponse = await axiosInstanceWithoutAuthorize.get<{
+        info: ProductFullJoin;
+      }>(`/products/${productID}`, reqConfig);
+
+      await axiosInstance.delete(`/products/${productID}`, reqConfig);
+
+      if (deepClean) {
+        firebaseApis.deleteImagesInFireBase(
+          getResponse.data.info.productItems.map((item) => item.thump)
+        );
+      }
+      getResponse.data.info.productItems.forEach((item) => {
+        firebaseApis.deleteImagesInFireBase(
+          item.itemImages.map((imageObject) => imageObject.source)
+        );
+      });
+      return true;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          console.error(`Response data: ${error.response.data}`);
+          console.error(`Response status: ${error.response.status})`);
+        }
+      } else {
+        console.error("Unexpected error:", error);
+      }
+      return false;
+    }
   },
   addProduct: async (product: ProductInputFormProps): Promise<boolean> => {
+    let productPayload;
     try {
-      const productPayload = {
+      let options = product.productAttributes?.reduce<string[]>(
+        (prev, curr) => {
+          prev.push(curr.optionID);
+          return prev;
+        },
+        []
+      );
+
+      if (options) {
+        if (options.length <= 0) {
+          options = undefined;
+        }
+      }
+      const productItems =
+        await productService.getProductItemsAfterUploadImages(
+          product.productItems
+        );
+
+      productPayload = {
         productName: product.productName,
-        description: product.description,
+        description:
+          product.description?.length && product.description.length > 0
+            ? product.description
+            : undefined,
         length: product.length,
         width: product.width,
         height: product.height,
@@ -120,15 +172,9 @@ const productApis = {
         warranty: product.warranty,
         categoryID: product.categoryID,
         providerID: product.providerID,
-        options: product.productAttributes?.reduce<string[]>((prev, curr) => {
-          prev.push(curr.optionID);
-          return prev;
-        }, []),
-        productItems: productService.getProductItemsAfterUploadImages(
-          product.productItems
-        ),
+        options: options,
+        productItems: productItems,
       };
-      console.log("product ", productPayload);
 
       //post new product
       await axiosInstance.post("/products", productPayload, reqConfig);
@@ -140,6 +186,13 @@ const productApis = {
         console.error(`Response status: ${error.response?.status})`);
       } else {
         console.error("Unexpected error:", error);
+      }
+
+      if (productPayload) {
+        productPayload.productItems.forEach((item) => {
+          //delete images if add product fail
+          firebaseApis.deleteImagesInFireBase([item.thump, ...item.itemImages]);
+        });
       }
       return false;
     }

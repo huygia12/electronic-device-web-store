@@ -4,9 +4,8 @@ import { FiShoppingBag } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import { TfiHeadphoneAlt } from "react-icons/tfi";
 import { PackageSearch, Search } from "lucide-react";
-import { useAuth, useCartProps, useCustomNavigate } from "@/hooks";
+import { useAuth, useCartProps } from "@/hooks";
 import { toast } from "sonner";
-import auth from "@/utils/auth";
 import { AvatarPlaceholder, CounterLabel } from "@/components/user";
 import { Role } from "@/utils/constants";
 import { DropMenuLinkItem, DropdownAvatar } from "@/components/common";
@@ -21,7 +20,6 @@ const navComponents: { title: string; path: string }[] = [
 
 const AppClientHeader: FC = () => {
   const { itemsInLocal } = useCartProps();
-  const { navigate } = useCustomNavigate();
   const { logout } = useAuth();
   const { currentUser } = useCurrentUser();
 
@@ -113,14 +111,11 @@ const AppClientHeader: FC = () => {
                   name: "Đăng Xuất",
                   visible: true,
                   handleClick: async () => {
-                    try {
-                      await logout();
-                      toast.success("Đăng xuất thành công!");
-                      auth.token.removeAccessToken();
-                      navigate("/login", { unstable_viewTransition: true });
-                    } catch (error: unknown) {
-                      console.error(`Response data: ${error}`);
-                    }
+                    const promise = logout();
+                    toast.promise(promise, {
+                      loading: "Đăng xuất...",
+                      success: "Đăng xuất thành công!",
+                    });
                   },
                 }}
               />

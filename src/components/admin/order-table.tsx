@@ -6,16 +6,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Invoice } from "@/types/api";
+import { InvoiceFullJoin } from "@/types/api";
 import { HTMLAttributes } from "react";
 import { Button } from "../ui/button";
 import { Check, Eye, X } from "lucide-react";
 import Badge from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "../ui/scroll-area";
+import invoiceService from "@/utils/invoice";
 
 interface OrderTableProps extends HTMLAttributes<HTMLDivElement> {
-  orders: Invoice[];
+  orders: InvoiceFullJoin[];
 }
 
 const colName: string[] = [
@@ -47,7 +48,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
           </tr>
         </TableHeader>
         <TableBody>
-          {props.orders?.map((invoice, index) => (
+          {props.orders.map((invoice, index) => (
             <TableRow key={index}>
               <TableCell className="text-center text-base">
                 {invoice.userName}
@@ -58,8 +59,8 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
               <TableCell className="text-center text-base">
                 {`${invoice.createdAt}`}
               </TableCell>
-              <TableCell className="text-center text-base">{`${invoice.products.length} sản phẩm`}</TableCell>
-              <TableCell className="text-center text-base">{`${invoice.products.reduce((prev, cur) => prev + cur.price, 0)}đ`}</TableCell>
+              <TableCell className="text-center text-base">{`${invoice.invoiceProducts.length} sản phẩm`}</TableCell>
+              <TableCell className="text-center text-base">{`${invoiceService.getTotalBill(invoice)}đ`}</TableCell>
               <TableCell className="text-center">
                 <Badge className="bg-blue-500 text-white hover_bg-blue-500">
                   {invoice.status}

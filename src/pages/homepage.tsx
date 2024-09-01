@@ -107,8 +107,8 @@ const Homepage: FC = () => {
               {categoriesData.map((cate, index) => {
                 return (
                   <li
-                    onClick={async () => {
-                      await navigate(`products?categoryID=${cate.categoryID}`, {
+                    onClick={() => {
+                      navigate(`products?categoryID=${cate.categoryID}`, {
                         unstable_viewTransition: true,
                       });
                     }}

@@ -29,6 +29,8 @@ const Signup: FC = () => {
     resolver: zodResolver(SignupSchema),
   });
   const [passwordVisibility, setPasswordvisibility] = useState(false);
+  const [retypePasswordVisibility, setRetypePasswordvisibility] =
+    useState(false);
 
   const handleSignupFormSubmission: SubmitHandler<SignupFormProps> = async (
     data
@@ -89,7 +91,7 @@ const Signup: FC = () => {
         <CardContent>
           <div className="grid gap-8">
             <div className="grid gap-2">
-              <Label htmlFor="first-name" className="font-extrabold">
+              <Label htmlFor="first-name" className="font-extrabold text-lg">
                 Họ và tên
                 <span className="text-red-600 ">*</span>
               </Label>
@@ -98,13 +100,14 @@ const Signup: FC = () => {
                 id="first-name"
                 autoComplete="username"
                 placeholder="Nguyễn Văn A"
+                className="text-lg"
               />
               {errors.userName && (
                 <div className="text-red-600">{errors.userName.message}</div>
               )}
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="email" className="font-extrabold">
+              <Label htmlFor="email" className="font-extrabold text-lg">
                 Email
                 <span className="text-red-600 ">*</span>
               </Label>
@@ -114,6 +117,7 @@ const Signup: FC = () => {
                 type="email"
                 autoComplete="email"
                 placeholder="abc@gmail.com"
+                className="text-lg"
               />
               {errors.email && (
                 <div className="text-red-600">{errors.email.message}</div>
@@ -122,7 +126,7 @@ const Signup: FC = () => {
             <div>
               <div className="flex gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="password" className="font-extrabold">
+                  <Label htmlFor="password" className="font-extrabold text-lg">
                     Mật khẩu
                     <span className="text-red-600 ">*</span>
                   </Label>
@@ -133,7 +137,7 @@ const Signup: FC = () => {
                       type={passwordVisibility ? "text" : "password"}
                       autoComplete="new-password"
                       onKeyDown={(e) => handleEnterKeyEvent(e)}
-                      className="pr-10"
+                      className="pr-10 text-lg"
                     />
                     <button
                       className="cursor-pointer absolute right-2 top-2"
@@ -142,7 +146,7 @@ const Signup: FC = () => {
                         setPasswordvisibility(!passwordVisibility);
                       }}
                     >
-                      {!passwordVisibility ? (
+                      {passwordVisibility ? (
                         <Eye size={20} />
                       ) : (
                         <EyeOff size={20} />
@@ -151,17 +155,36 @@ const Signup: FC = () => {
                   </span>
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="retypePassword" className="font-extrabold">
+                  <Label
+                    htmlFor="retypePassword"
+                    className="font-extrabold text-lg"
+                  >
                     Nhập lại mật khẩu
                     <span className="text-red-600 ">*</span>
                   </Label>
-                  <Input
-                    {...register("retypePassword")}
-                    id="retypePassword"
-                    type="password"
-                    autoComplete="new-password"
-                    onKeyDown={(e) => handleEnterKeyEvent(e)}
-                  />
+                  <span className="relative">
+                    <Input
+                      {...register("retypePassword")}
+                      id="retypePassword"
+                      type={retypePasswordVisibility ? "text" : "password"}
+                      autoComplete="new-password"
+                      onKeyDown={(e) => handleEnterKeyEvent(e)}
+                      className="text-lg"
+                    />
+                    <button
+                      className="cursor-pointer absolute right-2 top-2"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setRetypePasswordvisibility(!retypePasswordVisibility);
+                      }}
+                    >
+                      {retypePasswordVisibility ? (
+                        <Eye size={20} />
+                      ) : (
+                        <EyeOff size={20} />
+                      )}
+                    </button>
+                  </span>
                 </div>
               </div>
               {errors.password && (
@@ -175,7 +198,7 @@ const Signup: FC = () => {
                 type="submit"
                 disabled={isSubmitting}
                 variant="neutral"
-                className="w-full"
+                className="w-full text-lg"
               >
                 {!isSubmitting ? (
                   "Tạo tài khoản"
@@ -190,7 +213,7 @@ const Signup: FC = () => {
               )}
             </div>
           </div>
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-4 text-center text-lg">
             Bạn đã có tài khoản? &nbsp;
             <NavLink to="/login" className="underline hover_text-primary">
               Đăng nhập

@@ -3,7 +3,7 @@ import z, { ZodString } from "zod";
 
 const positiveSafeFloat = (errorMessage: string = SchemaResponse.INVALID) =>
   z.preprocess(
-    (a) => parseFloat(z.string().parse(a)),
+    (value) => parseFloat(z.string().parse(value)),
     z
       .number({ message: errorMessage })
       .positive({ message: errorMessage })
@@ -11,11 +11,14 @@ const positiveSafeFloat = (errorMessage: string = SchemaResponse.INVALID) =>
   );
 
 const positiveSafeInteger = (errorMessage: string = SchemaResponse.INVALID) =>
-  z
-    .number({ message: errorMessage })
-    .int({ message: errorMessage })
-    .positive({ message: errorMessage })
-    .safe({ message: errorMessage });
+  z.preprocess(
+    (value) => parseInt(z.string().parse(value)),
+    z
+      .number({ message: errorMessage })
+      .int({ message: errorMessage })
+      .positive({ message: errorMessage })
+      .safe({ message: errorMessage })
+  );
 
 const notBlankString = (validate: ZodString = z.string()) =>
   validate.trim().refine((value) => value !== "", {
@@ -24,30 +27,40 @@ const notBlankString = (validate: ZodString = z.string()) =>
 
 const validateFiles = () =>
   z
-    .array(z.instanceof(File))
-    .refine((files) =>
-      files.every(
-        (file) => ["image/jpeg", "image/png", "image/jpg"].includes(file.type),
-        SchemaResponse.IMAGE_FILE_INVALID
-      )
-    )
-    .refine((files) =>
-      files.every(
-        (file) => file.size <= 5 * 1024 * 1024,
-        SchemaResponse.IMAGE_FILE_OVER_FLOW
-      )
-    );
+    .instanceof(FileList)
+    .refine((files) => files.length > 0, SchemaResponse.AT_LEAST_ONE_IMAGE)
+    .refine((files) => {
+      let checkImageExtension = true;
+      Array.from(files).forEach((file) => {
+        if (!file.type.includes("image")) {
+          checkImageExtension = false;
+        }
+      });
+      return checkImageExtension;
+    }, SchemaResponse.IMAGE_FILE_INVALID)
+    .refine((files) => {
+      let checkImageSize = true;
+      Array.from(files).forEach((file) => {
+        if (file.size >= 5 * 1024 * 1024) {
+          checkImageSize = false;
+        }
+      });
+      return checkImageSize;
+    }, SchemaResponse.IMAGE_FILE_OVER_FLOW);
 
-const validateOptionalFile = () =>
+const validateFile = (optional: boolean = false) =>
   z
     .instanceof(FileList)
     .refine(
-      (file) =>
-        file[0] ? ["image/jpeg", "image/jpg"].includes(file[0].type) : true,
+      (files) => optional || files.length > 0,
+      SchemaResponse.AT_LEAST_ONE_IMAGE
+    )
+    .refine(
+      (files) => (files[0] ? files[0].type.includes("image") : true),
       SchemaResponse.IMAGE_FILE_INVALID
     )
     .refine(
-      (file) => (file[0] ? file[0].size <= 5 * 1024 * 1024 : true),
+      (files) => (files[0] ? files[0].size <= 5 * 1024 * 1024 : true),
       SchemaResponse.IMAGE_FILE_OVER_FLOW
     );
 
@@ -58,7 +71,7 @@ const inputFormPreprocess = (schema: z.ZodTypeAny) =>
 
 const UserSchema = z.object({
   userName: notBlankString(),
-  avatar: inputFormPreprocess(validateOptionalFile()).optional(),
+  avatar: inputFormPreprocess(validateFile(true)).optional(),
   phoneNumber: z
     .string()
     .refine((value) => {
@@ -84,12 +97,23 @@ const SignupSchema = z.object({
   retypePassword: z
     .string()
     .min(6, { message: SchemaResponse.PASSWORD_INVALID }),
+  avatar: inputFormPreprocess(validateFile()).optional(),
+  phoneNumber: z
+    .string()
+    .refine((value) => {
+      if (value.length > 0) {
+        if (value.length > 10) return false;
+        return /^[0-9]+$/.test(value);
+      }
+      return true;
+    }, SchemaResponse.PHONE_INVALID)
+    .optional(),
 });
 
 const ProductItemsSchema = z
   .array(
     z.object({
-      thump: inputFormPreprocess(validateOptionalFile()),
+      thump: inputFormPreprocess(validateFile()),
       quantity: inputFormPreprocess(positiveSafeInteger()),
       price: inputFormPreprocess(positiveSafeInteger()),
       productCode: notBlankString(),
@@ -106,9 +130,7 @@ const ProductItemsSchema = z
       itemImages: inputFormPreprocess(validateFiles()),
     })
   )
-  .refine((value) => {
-    value.length > 0;
-  }, SchemaResponse.AT_LEAST_ONE_PRODUCT);
+  .refine((value) => value.length > 0, SchemaResponse.AT_LEAST_ONE_PRODUCT);
 
 const ProductAttributesSchema = z.array(
   z.object({

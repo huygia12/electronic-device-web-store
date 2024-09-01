@@ -9,12 +9,14 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Invoice } from "@/types/api";
+import { InvoiceFullJoin } from "@/types/api";
 import { FC } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 
 const OrderManagement: FC = () => {
-  const invoiceData = useRouteLoaderData("invoice_management") as Invoice[];
+  const invoiceData = useRouteLoaderData(
+    "invoice_management"
+  ) as InvoiceFullJoin[];
 
   return (
     <>

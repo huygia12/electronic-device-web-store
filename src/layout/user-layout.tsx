@@ -1,26 +1,31 @@
 import { CartProvider } from "@/context";
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigation } from "react-router-dom";
 import { Toaster } from "sonner";
-import { ScrollToTop } from "@/components/effect";
+import {
+  ScrollToTop,
+  ScrollToTopButton,
+  TopBarProgress,
+} from "@/components/effect";
 import { MailRegisterSection, UserHeader, AppFooter } from ".";
-import ScrollToTopButton from "@/components/effect/scroll-to-top-button";
-import ZaloButton from "@/components/user/zalo-button";
+import { ZaloButton } from "@/components/user";
 
 const UserLayout: React.FC = () => {
+  const navigation = useNavigation();
+
   return (
     <CartProvider>
       <ScrollToTop />
       <UserHeader />
       <main className="flex justify-center w-full py-10 min-h-[70vh]">
         <div className="w-myLayout">
-          <Outlet />
+          {navigation.state === "loading" ? <TopBarProgress /> : <Outlet />}
         </div>
       </main>
       <MailRegisterSection />
       <AppFooter />
       <ZaloButton />
-      <ScrollToTopButton className="" />
+      <ScrollToTopButton />
       <Toaster richColors />
     </CartProvider>
   );

@@ -7,4 +7,6 @@ export { default as deliveryApis } from "@/services/apis/delivery";
 export { default as authApis } from "@/services/apis/auth";
 export { default as userApis } from "@/services/apis/user";
 export { default as orderApis } from "@/services/apis/order";
+export { default as statisticApis } from "@/services/apis/statistic";
+export { default as invoiceApis } from "@/services/apis/invoice";
 export * from "@/services/apis/cart";

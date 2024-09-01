@@ -1,7 +1,6 @@
 import { ReactNode, createContext, useLayoutEffect } from "react";
 import { Nullable, Optional } from "@/utils/declare";
 import useCustomNavigate from "@/hooks/use-custom-navigate";
-import { AxiosResponse, HttpStatusCode } from "axios";
 import { LoginFormProps } from "@/utils/schema";
 import { authApis } from "@/services/apis";
 import auth from "@/utils/auth";
@@ -17,7 +16,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 const blackList: string[] = ["/login", "/signup"];
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { navigate, location } = useCustomNavigate();
+  const { location, navigate } = useCustomNavigate();
   const { currentUser, setCurrentUser, updateCurrentUser } = useCurrentUser();
 
   useLayoutEffect(() => {
@@ -51,23 +50,33 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     auth.token.setAccessToken(accessToken);
 
     await updateCurrentUser();
+    console.log("from", from);
     navigate(
-      goBack && from ? from : currentUser?.role === Role.ADMIN ? "/admin" : "/"
+      goBack && from
+        ? from === "/logout"
+          ? "/"
+          : from
+        : currentUser?.role === Role.ADMIN
+          ? "/admin"
+          : "/"
     );
   };
 
   const logout = async () => {
-    const res: AxiosResponse = await authApis.logout();
-    if (res.status === HttpStatusCode.Ok) {
-      window.sessionStorage.clear();
+    try {
+      await authApis.logout();
+    } catch (error) {
+      console.error(`Response data: ${error}`);
+    } finally {
+      auth.token.removeAccessToken();
       setCurrentUser(null);
-      navigate("/login");
+      navigate("/login", { state: { from: "/logout" } });
     }
   };
 
   return (
     <AuthContext.Provider value={{ login, logout }}>
-      {children}
+      {currentUser !== undefined && children}
     </AuthContext.Provider>
   );
 };

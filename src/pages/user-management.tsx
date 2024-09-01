@@ -20,11 +20,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { UserDialog } from "@/components/admin";
+import { AddUserDialog } from "@/components/admin";
 import { User } from "@/types/api";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { FC, useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
+import axios from "axios";
+import { toast } from "sonner";
+import { userApis } from "@/services/apis";
+import UpdateUserDialog from "@/components/admin/update-user-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { buttonVariants } from "@/utils/constants";
+import { formatDateTime } from "@/utils/helpers";
 
 const colName: string[] = [
   "STT",
@@ -38,24 +55,53 @@ const colName: string[] = [
 ];
 
 const UserManagement: FC = () => {
-  const usersData = useRouteLoaderData("user_management") as User[];
-  const [existingUsers, setExistUsers] = useState(usersData);
+  const users = useRouteLoaderData("user_management") as User[];
+  const [existingUsers, setExistUsers] = useState(users);
 
-  const deleteUser = (userID: string) => {
-    const temp = existingUsers.filter((user) => user.userID !== userID);
-    setExistUsers(temp);
+  const handleDeleteUser = async (userID: string) => {
+    try {
+      await userApis.deleteUser(userID);
+
+      setExistUsers(
+        existingUsers.filter((userHolder) => userHolder.userID !== userID)
+      );
+      toast.success("Xóa thành công!");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(`Response data: ${error.response?.data}`);
+        console.error(`Response status: ${error.response?.status})`);
+      } else {
+        console.error("Unexpected error:", error);
+      }
+      toast.error("Xóa thất bại!");
+    }
+  };
+
+  const handleUpdateUser = (user: User) => {
+    setExistUsers(
+      existingUsers.map((userHolder) => {
+        if (userHolder.userID === user.userID) {
+          return user;
+        }
+        return userHolder;
+      })
+    );
+  };
+
+  const handleAddUser = (user: User) => {
+    setExistUsers([...existingUsers, user]);
   };
 
   return (
     <>
       <Card className="rounded-2xl shadow-lg my-8">
         <CardContent className="flex justify-between p-6">
-          <UserDialog formTitle="Thêm khách hàng mới">
+          <AddUserDialog handleAddUser={handleAddUser}>
             <Button variant="positive" className="text-xl">
               Thêm khách hàng mới
               <Plus />
             </Button>
-          </UserDialog>
+          </AddUserDialog>
 
           <div className="relative flex-1 md_grow-0 h-[2.5rem]">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -106,7 +152,7 @@ const UserManagement: FC = () => {
                       {user.phoneNumber}
                     </TableCell>
                     <TableCell className="text-center text-base">
-                      {`${user.createdAt}`}
+                      {`${formatDateTime(`${user.createdAt}`)}`}
                     </TableCell>
                     <TableCell className="text-center text-base">
                       {user.email}
@@ -118,20 +164,45 @@ const UserManagement: FC = () => {
                       colSpan={3}
                       className="flex items-center justify-center space-x-2"
                     >
-                      <UserDialog
-                        formTitle="Sửa thông tin khách hàng"
+                      <UpdateUserDialog
                         user={user}
+                        handleUpdateUser={handleUpdateUser}
                       >
                         <Button variant="neutral">
                           <SquarePen />
                         </Button>
-                      </UserDialog>
-                      <Button
-                        variant="negative"
-                        onClick={() => user.userID && deleteUser(user.userID)}
-                      >
-                        <Trash2 />
-                      </Button>
+                      </UpdateUserDialog>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="negative">
+                            <Trash2 />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Bạn muốn xóa?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Người dùng sẽ không bị xóa hoàn toàn nhưng hành
+                              động này hiện không thể hoàn tác.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogAction
+                              onClick={() =>
+                                user.userID && handleDeleteUser(user.userID)
+                              }
+                              className={buttonVariants({
+                                variant: "negative",
+                              })}
+                            >
+                              Xóa
+                            </AlertDialogAction>
+                            <AlertDialogCancel className="mt-0">
+                              Hủy
+                            </AlertDialogCancel>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </TableCell>
                   </TableRow>
                 ))}

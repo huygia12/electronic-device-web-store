@@ -5,7 +5,7 @@ import auth from "@/utils/auth";
 import { AuthUser, User } from "@/types/api";
 
 interface CurrentUserContextProps {
-  currentUser: Nullable<User>;
+  currentUser: User | undefined | null;
   setCurrentUser: (user: Nullable<User>) => void;
   updateCurrentUser: () => Promise<void>;
 }
@@ -17,7 +17,9 @@ const CurrentUserContext = createContext<CurrentUserContextProps | undefined>(
 const CurrentUserProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [currentUser, setCurrentUser] = useState<Nullable<User>>(null);
+  const [currentUser, setCurrentUser] = useState<User | null | undefined>(
+    undefined
+  );
 
   const updateCurrentUser = async () => {
     const userHolder: Nullable<AuthUser> = auth.getUser();
