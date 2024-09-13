@@ -1,4 +1,5 @@
-import CurrentUserContext, {
+import {
+  CurrentUserContext,
   CurrentUserContextProps,
 } from "@/context/current-user-context";
 import { useContext } from "react";

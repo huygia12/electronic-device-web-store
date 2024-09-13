@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useState } from "react";
 import { Nullable } from "@/utils/declare";
 import { userApis } from "@/services/apis";
 import auth from "@/utils/auth";
@@ -14,6 +14,10 @@ const CurrentUserContext = createContext<CurrentUserContextProps | undefined>(
   undefined
 );
 
+/**
+ * Only enables user view pages when currentUser is not undefined.
+ * Should be used in app.ts file.
+ */
 const CurrentUserProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
@@ -23,15 +27,16 @@ const CurrentUserProvider: React.FC<{ children: ReactNode }> = ({
 
   const updateCurrentUser = async () => {
     const userHolder: Nullable<AuthUser> = auth.getUser();
+    let user: Nullable<User> = null;
     if (userHolder) {
-      const user = await userApis.getUser(userHolder.userID);
-      setCurrentUser(user);
+      user = await userApis.getUser(userHolder.userID);
     }
+    setCurrentUser(user);
   };
 
-  useEffect(() => {
-    updateCurrentUser();
-  }, []);
+  // useEffect(() => {
+  //   updateCurrentUser();
+  // }, []);
 
   return (
     <CurrentUserContext.Provider
@@ -42,5 +47,8 @@ const CurrentUserProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-export { CurrentUserProvider, type CurrentUserContextProps };
-export default CurrentUserContext;
+export {
+  CurrentUserProvider,
+  CurrentUserContext,
+  type CurrentUserContextProps,
+};

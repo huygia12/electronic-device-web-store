@@ -210,6 +210,11 @@ enum Sort {
   ZTOA = "ztoa",
 }
 
+enum SocketNamespace {
+  COMMENT = "/comment",
+  NOTIFICATION = "/notification",
+}
+
 enum SchemaResponse {
   REQUIRED = "Không được bỏ trống!",
   INVALID = "Không hợp lệ!",
@@ -221,6 +226,7 @@ enum SchemaResponse {
   EMAIL_INVALID = "Email không đúng định dạng!",
   PASSWORD_INVALID = "Mật khẩu chứa tối thiểu 6 kí tự!",
   PHONE_INVALID = "SDT không hợp lệ!",
+  RATING_INVALID = "Vui lòng chọn số sao đánh giá!",
 }
 
 export {
@@ -235,4 +241,5 @@ export {
   PaymentMethod,
   Sort,
   SchemaResponse,
+  SocketNamespace,
 };

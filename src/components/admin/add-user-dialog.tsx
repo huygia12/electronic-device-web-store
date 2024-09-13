@@ -65,7 +65,7 @@ const AddUserDialog: React.FC<UserDialogProps> = ({ className, ...props }) => {
         avatar = (
           await firebaseApis.insertImagesToFireBase(
             data.avatar,
-            `/user/${userID}`
+            `/users/${userID}`
           )
         )[0];
       }

@@ -82,7 +82,7 @@ const AdminHeader: FC = () => {
             <DropMenuLinkItem
               item={{
                 name: "Tài Khoản Của Tôi",
-                src: `/user/${currentUser?.userID}`,
+                src: `/users/${currentUser?.userID}`,
                 visible: true,
               }}
             />

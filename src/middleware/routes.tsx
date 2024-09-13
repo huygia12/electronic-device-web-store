@@ -38,7 +38,8 @@ import ProtectedRoute from "./protected-route";
 import { Role } from "@/utils/constants";
 import { AuthProvider } from "@/context";
 import categoryApis from "@/services/apis/category";
-import PreventedRoute from "./prevented-route";
+import PreventLoginUserRoute from "./prevent-login-user-route";
+import { Args } from "@/utils/declare";
 
 const routes = createBrowserRouter([
   {
@@ -74,7 +75,7 @@ const routes = createBrowserRouter([
         ],
       },
       {
-        path: "user",
+        path: "users",
         children: [
           {
             path: "orders",
@@ -123,17 +124,17 @@ const routes = createBrowserRouter([
       {
         path: "login",
         element: (
-          <PreventedRoute>
+          <PreventLoginUserRoute>
             <Login />
-          </PreventedRoute>
+          </PreventLoginUserRoute>
         ),
       },
       {
         path: "signup",
         element: (
-          <PreventedRoute>
+          <PreventLoginUserRoute>
             <Signup />
-          </PreventedRoute>
+          </PreventLoginUserRoute>
         ),
       },
       {
@@ -203,7 +204,11 @@ const routes = createBrowserRouter([
           {
             path: ":id",
             id: "product_edition",
-            loader: productApis.getProductFullJoin,
+            loader: async (params: Args) => {
+              return productApis.getProductFullJoin({
+                ...params,
+              });
+            },
             element: <ProductEdittion />,
           },
           {

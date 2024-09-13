@@ -33,18 +33,18 @@ import {
 } from "@/types/api";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown, Plus, Trash2, X } from "lucide-react";
-import { FC, useEffect, useState } from "react";
+import { FC, useLayoutEffect, useState } from "react";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ProductAttributesFormProps,
-  ProductInputFormProps,
-  ProductItemsFormProps,
-  ProductSchema,
+  ProductItemsUpdateFormProps,
+  ProductUpdateFormProps,
+  ProductUpdateSchema,
 } from "@/utils/schema";
 import { LoadingSpinner } from "@/components/effect";
 import categoryApis from "@/services/apis/category";
-import { attributeApis, productApis, providerApis } from "@/services/apis";
+import { attributeApis, providerApis } from "@/services/apis";
 import productService from "@/utils/product";
 import attributeService from "@/utils/attribute";
 import { Optional } from "@/utils/declare";
@@ -72,8 +72,8 @@ const ProductEdittion: FC = () => {
     clearErrors,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<ProductInputFormProps>({
-    resolver: zodResolver(ProductSchema),
+  } = useForm<ProductUpdateFormProps>({
+    resolver: zodResolver(ProductUpdateSchema),
   });
 
   const itemController = useFieldArray({
@@ -86,12 +86,12 @@ const ProductEdittion: FC = () => {
     name: "productAttributes",
   });
 
-  const productItemsAddition: ProductItemsFormProps =
+  const productItemsAddition: ProductItemsUpdateFormProps =
     watch("productItems") || [];
   const productAttributesAddition: ProductAttributesFormProps =
     watch("productAttributes") || [];
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetchData = async () => {
       const categories = await categoryApis.getCategories();
       const providers = await providerApis.getProviders();
@@ -100,6 +100,42 @@ const ProductEdittion: FC = () => {
       setCategories(categories);
       setProviders(providers);
       setAttributes(attributes);
+      setItemQuantity(product.productItems.length);
+
+      setValue(
+        "productAttributes",
+        product.productAttributes.reduce<ProductAttributesFormProps>(
+          (prev, curr) => {
+            return [
+              ...prev,
+              {
+                typeID: curr.attributeOption.typeID,
+                optionID: curr.attributeOption.optionID,
+                optionValue: curr.attributeOption.optionValue,
+                typeValue: curr.attributeOption.attributeType.typeValue,
+              },
+            ];
+          },
+          []
+        )
+      );
+      setValue("categoryID", product.category.categoryID);
+      setValue("providerID", product.provider.providerID);
+      setValue(
+        "productItems",
+        product.productItems.map((item) => {
+          return {
+            thump: item.thump,
+            quantity: item.quantity,
+            price: item.price,
+            productCode: item.productCode,
+            discount: item.discount,
+            color: item.color,
+            storage: item.storage,
+            itemImages: item.itemImages.map((itemImage) => itemImage.source),
+          };
+        })
+      );
     };
 
     fetchData();
@@ -154,19 +190,49 @@ const ProductEdittion: FC = () => {
     );
   };
 
-  const handleFormSubmission: SubmitHandler<ProductInputFormProps> = async (
+  const getThumpOfNthItem = (index: number): string => {
+    const edittedThump = productItemsAddition[index]?.thump;
+
+    if (edittedThump instanceof FileList && edittedThump.length > 0) {
+      return productService.retrieveImageUrl(edittedThump[0]);
+    }
+
+    return product.productItems[index].thump;
+  };
+
+  const getProductItemsOfNthItem = (index: number): string[] => {
+    const edittedProductImages = productItemsAddition[index]?.itemImages;
+
+    if (
+      edittedProductImages instanceof FileList &&
+      edittedProductImages.length > 0
+    ) {
+      return Array.from(edittedProductImages).map((productImage) =>
+        productService.retrieveImageUrl(productImage)
+      );
+    }
+
+    return product.productItems[index].itemImages.map(
+      (productImage) => productImage.source
+    );
+  };
+
+  const handleFormSubmission: SubmitHandler<ProductUpdateFormProps> = async (
     data
   ) => {
-    const response: boolean = await productApis.addProduct(data);
+    // const response: boolean = await productApis.updateProduct(data);
+    const response = true;
     if (response) {
-      toast.success("Thêm sản phẩm thành công!");
+      toast.success("Thay đổi thành công!");
       navigate("/admin/products", {
         unstable_viewTransition: true,
       });
     } else {
-      toast.error("Thêm sản phẩm thất bại!");
+      toast.error("Thay đổi thất bại!");
     }
   };
+
+  console.log(errors);
 
   return (
     <>
@@ -221,6 +287,7 @@ const ProductEdittion: FC = () => {
                 <span className="text-red-600 ">*</span>
               </Label>
               <Select
+                value={watch("categoryID") || product.category.categoryID}
                 onValueChange={(value) => {
                   setValue("categoryID", value);
                   clearErrors("categoryID");
@@ -262,6 +329,7 @@ const ProductEdittion: FC = () => {
                 <span className="text-red-600 ">*</span>
               </Label>
               <Select
+                value={watch("providerID") || product.provider.providerID}
                 onValueChange={(value) => {
                   setValue("providerID", value);
                   clearErrors("providerID");
@@ -306,6 +374,7 @@ const ProductEdittion: FC = () => {
                 <Input
                   id="length"
                   autoComplete={"off"}
+                  defaultValue={product.length}
                   {...register("length")}
                   min={0}
                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
@@ -323,6 +392,7 @@ const ProductEdittion: FC = () => {
                 <Input
                   id="width"
                   autoComplete={"off"}
+                  defaultValue={product.width}
                   {...register("width")}
                   min={0}
                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
@@ -340,6 +410,7 @@ const ProductEdittion: FC = () => {
                 <Input
                   id="height"
                   autoComplete={"off"}
+                  defaultValue={product.height}
                   {...register("height")}
                   min={0}
                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
@@ -357,6 +428,7 @@ const ProductEdittion: FC = () => {
                 <Input
                   id="weight"
                   autoComplete={"off"}
+                  defaultValue={product.weight}
                   {...register("weight")}
                   min={0}
                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
@@ -504,6 +576,7 @@ const ProductEdittion: FC = () => {
             <Textarea
               id="desc"
               {...register("description")}
+              defaultValue={watch("description")}
               placeholder="...abc"
               className="border-2 border-stone-400 text-lg min-h-12 focus_border-none h-full"
             />
@@ -537,21 +610,17 @@ const ProductEdittion: FC = () => {
                       {`${errors.productItems?.[parentIndex]?.thump?.message}`}
                     </div>
                   )}
-                  {productItemsAddition[parentIndex]?.thump?.[0] && (
+                  {
                     <ImageOverView
-                      src={productService.retrieveImageUrl(
-                        productItemsAddition[parentIndex].thump[0]
-                      )}
+                      src={getThumpOfNthItem(parentIndex)}
                       alt={`thump-${parentIndex}`}
                     >
                       <img
-                        src={productService.retrieveImageUrl(
-                          productItemsAddition[parentIndex].thump[0]
-                        )}
+                        src={getThumpOfNthItem(parentIndex)}
                         className="cursor-pointer max-w-40 object-cover rounded-md border-stone-300 border-2"
                       />
                     </ImageOverView>
-                  )}
+                  }
                 </div>
                 <div className="overflow-auto flex flex-col gap-2">
                   <Label
@@ -575,26 +644,26 @@ const ProductEdittion: FC = () => {
                       {`${errors.productItems?.[parentIndex]?.itemImages?.message}`}
                     </div>
                   )}
-                  {productItemsAddition[parentIndex]?.itemImages && (
+                  {
                     <div className="overflow-auto flex flex-row gap-2 ">
-                      {Array.from(
-                        productItemsAddition[parentIndex].itemImages
-                      ).map((image, index) => {
-                        return (
-                          <ImageOverView
-                            key={index}
-                            src={productService.retrieveImageUrl(image)}
-                            alt={`productimage-${index}`}
-                          >
-                            <img
-                              src={productService.retrieveImageUrl(image)}
-                              className="max-w-40 object-cover rounded-md border-stone-300 border-2"
-                            />
-                          </ImageOverView>
-                        );
-                      })}
+                      {getProductItemsOfNthItem(parentIndex).map(
+                        (image, index) => {
+                          return (
+                            <ImageOverView
+                              key={index}
+                              src={image}
+                              alt={`productimage-${index}`}
+                            >
+                              <img
+                                src={image}
+                                className="max-w-40 object-cover rounded-md border-stone-300 border-2"
+                              />
+                            </ImageOverView>
+                          );
+                        }
+                      )}
                     </div>
-                  )}
+                  }
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
@@ -611,6 +680,7 @@ const ProductEdittion: FC = () => {
                       )}
                       id={`price-${parentIndex}`}
                       type="number"
+                      defaultValue={`${product.productItems[parentIndex].price}`}
                       autoComplete={"off"}
                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                     />
@@ -636,6 +706,7 @@ const ProductEdittion: FC = () => {
                       max={1000000000}
                       id={`quantity-${parentIndex}`}
                       type="number"
+                      defaultValue={`${product.productItems[parentIndex].quantity}`}
                       autoComplete={"off"}
                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                     />
@@ -659,6 +730,9 @@ const ProductEdittion: FC = () => {
                       )}
                       id={`code-${parentIndex}`}
                       type="text"
+                      defaultValue={
+                        product.productItems[parentIndex].productCode
+                      }
                       autoComplete={"off"}
                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                     />
@@ -684,8 +758,10 @@ const ProductEdittion: FC = () => {
                       id={`discount-${parentIndex}`}
                       max={100}
                       min={0}
-                      defaultValue={0}
                       type="number"
+                      defaultValue={
+                        product.productItems[parentIndex].discount || 0
+                      }
                       autoComplete={"off"}
                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                     />
@@ -709,6 +785,7 @@ const ProductEdittion: FC = () => {
                       )}
                       id={`color-${parentIndex}`}
                       type="text"
+                      defaultValue={product.productItems[parentIndex].color}
                       autoComplete={"off"}
                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                     />
@@ -731,6 +808,9 @@ const ProductEdittion: FC = () => {
                       )}
                       id={`capacity-${parentIndex}`}
                       type="text"
+                      defaultValue={
+                        product.productItems[parentIndex].storage || ""
+                      }
                       autoComplete={"off"}
                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                     />

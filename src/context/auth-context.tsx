@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useLayoutEffect } from "react";
+import { ReactNode, createContext, useLayoutEffect, useRef } from "react";
 import { Nullable, Optional } from "@/utils/declare";
 import useCustomNavigate from "@/hooks/use-custom-navigate";
 import { LoginFormProps } from "@/utils/schema";
@@ -13,24 +13,22 @@ interface AuthContextProps {
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
-const blackList: string[] = ["/login", "/signup"];
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { location, navigate } = useCustomNavigate();
   const { currentUser, setCurrentUser, updateCurrentUser } = useCurrentUser();
+  const middlewareChecked = useRef<boolean>(false);
 
   useLayoutEffect(() => {
     const checkAccessToken = async (): Promise<boolean> => {
       const accessToken: Nullable<string> = auth.token.getAccessToken();
 
-      if (!accessToken && !blackList.includes(location.pathname)) {
+      if (!accessToken) {
         const newAccessToken: Optional<string> = await authApis.refreshToken();
         if (!newAccessToken) {
           return false;
         }
         auth.token.setAccessToken(newAccessToken);
-
-        await updateCurrentUser();
       }
 
       return true;
@@ -38,9 +36,14 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const runMiddleware = async () => {
       await checkAccessToken();
+
+      //After: Update the user after get a new AT in sessionStorage
+      await updateCurrentUser();
     };
 
-    runMiddleware();
+    // only checking middlewares once when app is initialized
+    !middlewareChecked.current && runMiddleware();
+    middlewareChecked.current = true;
   }, []);
 
   const login = async (data: LoginFormProps, goBack: boolean = true) => {
@@ -50,7 +53,6 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     auth.token.setAccessToken(accessToken);
 
     await updateCurrentUser();
-    console.log("from", from);
     navigate(
       goBack && from
         ? from === "/logout"

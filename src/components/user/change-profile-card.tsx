@@ -49,7 +49,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
         avatar = (
           await firebaseApis.insertImagesToFireBase(
             data.avatar,
-            `/user/${currentUser!.userID}`
+            `/users/${currentUser!.userID}`
           )
         )[0];
       }

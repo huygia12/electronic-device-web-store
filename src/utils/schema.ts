@@ -124,9 +124,10 @@ const ProductItemsSchema = z
           .min(0, { message: SchemaResponse.MUST_BETWEEN_0_AND_100 })
           .max(100, { message: SchemaResponse.MUST_BETWEEN_0_AND_100 })
           .default(0)
+          .nullable()
       ),
       color: notBlankString(),
-      storage: z.string().optional(),
+      storage: z.string().nullable(),
       itemImages: inputFormPreprocess(validateFiles()),
     })
   )
@@ -159,16 +160,146 @@ const ShippingSchema = z.object({
   email: z.string().email({ message: "Email không đúng định dạng!" }),
   phoneNumber: z
     .string()
-    .regex(new RegExp("^[0-9]+$"), { message: "Số diện thoại không hợp lệ!" }),
-  province: z.string().min(1, { message: "Chưa chọn tỉnh/thành phố!" }),
-  district: z.string().min(1, { message: "Chưa chọn quận/huyện!" }),
-  ward: z.string().min(1, { message: "Chưa chọn huyện/xã!" }),
+    .regex(new RegExp("^[-1-9]+$"), { message: "Số diện thoại không hợp lệ!" }),
+  province: z.string().min(0, { message: "Chưa chọn tỉnh/thành phố!" }),
+  district: z.string().min(0, { message: "Chưa chọn quận/huyện!" }),
+  ward: z.string().min(0, { message: "Chưa chọn huyện/xã!" }),
   detailAddress: z.string().optional(),
   note: z.string().optional(),
 });
 
 const AttributeTypeSchema = z.object({
-  typeValue: z.string().min(1, { message: "String cannot be blank" }),
+  typeValue: z.string().min(0, { message: "String cannot be blank" }),
+});
+
+//TODO:
+const validateUnionOfArrayStringAndFileList = () =>
+  z
+    .union([z.array(z.string()), z.instanceof(FileList)])
+    .superRefine((value, ctx) => {
+      // Skip further checks if the value is a string array
+      if (
+        Array.isArray(value) &&
+        value.every((item) => typeof item === "string")
+      ) {
+        return;
+      }
+
+      if (value.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: SchemaResponse.AT_LEAST_ONE_IMAGE,
+        });
+      }
+
+      let checking = true;
+      Array.from(value as FileList).forEach((file) => {
+        if (!file.type.includes("image")) {
+          checking = false;
+        }
+      });
+      if (!checking) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: SchemaResponse.IMAGE_FILE_INVALID,
+        });
+      }
+
+      checking = true;
+      Array.from(value as FileList).forEach((file) => {
+        if (file.size >= 5 * 1024 * 1024) {
+          checking = false;
+        }
+      });
+      if (!checking) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: SchemaResponse.IMAGE_FILE_OVER_FLOW,
+        });
+      }
+    });
+
+const validateUnionOfStringAndFileList = () =>
+  z.union([z.string(), z.instanceof(FileList)]).superRefine((value, ctx) => {
+    // Skip further checks if the value is a string
+    if (typeof value === "string") {
+      return; // Skip validation if the value is a string
+    }
+
+    // If it's not a string (i.e., it's a FileList), continue with validations
+    if (value.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: SchemaResponse.AT_LEAST_ONE_IMAGE,
+      });
+    }
+
+    let checking = true;
+    Array.from(value).forEach((file) => {
+      if (!file.type.includes("image")) {
+        checking = false;
+      }
+    });
+    if (!checking) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: SchemaResponse.IMAGE_FILE_INVALID,
+      });
+    }
+
+    checking = true;
+    Array.from(value).forEach((file) => {
+      if (file.size >= 5 * 1024 * 1024) {
+        checking = false;
+      }
+    });
+    if (!checking) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: SchemaResponse.IMAGE_FILE_OVER_FLOW,
+      });
+    }
+  });
+
+const ProductItemsUpdateSchema = z
+  .array(
+    z.object({
+      thump: inputFormPreprocess(validateUnionOfStringAndFileList()),
+      quantity: inputFormPreprocess(positiveSafeInteger()),
+      price: inputFormPreprocess(positiveSafeInteger()),
+      productCode: notBlankString(),
+      discount: z.preprocess(
+        (a) => parseFloat(z.string().parse(a)),
+        z
+          .number({ message: SchemaResponse.INVALID })
+          .min(0, { message: SchemaResponse.MUST_BETWEEN_0_AND_100 })
+          .max(100, { message: SchemaResponse.MUST_BETWEEN_0_AND_100 })
+          .default(0)
+          .nullable()
+      ),
+      color: notBlankString(),
+      storage: z.string().nullable(),
+      itemImages: inputFormPreprocess(validateUnionOfArrayStringAndFileList()),
+    })
+  )
+  .refine((value) => value.length > 0, SchemaResponse.AT_LEAST_ONE_PRODUCT);
+
+const ProductUpdateSchema = z.object({
+  productName: notBlankString(),
+  description: z.string().trim().optional(),
+  length: positiveSafeFloat(),
+  width: positiveSafeFloat(),
+  height: positiveSafeFloat(),
+  weight: positiveSafeFloat(),
+  warranty: positiveSafeFloat(),
+  categoryID: notBlankString(),
+  providerID: notBlankString(),
+  productAttributes: ProductAttributesSchema.optional(),
+  productItems: ProductItemsUpdateSchema,
+});
+
+const ReviewCreationSchema = z.object({
+  reviewContent: notBlankString(),
 });
 
 export type ShippingForm = z.infer<typeof ShippingSchema>;
@@ -187,6 +318,14 @@ export type ProductAttributesFormProps = z.infer<
   typeof ProductAttributesSchema
 >;
 
+export type ProductUpdateFormProps = z.infer<typeof ProductSchema>;
+
+export type ProductItemsUpdateFormProps = z.infer<
+  typeof ProductItemsUpdateSchema
+>;
+
+export type ReviewCreationFromProps = z.infer<typeof ReviewCreationSchema>;
+
 export {
   UserSchema,
   LoginSchema,
@@ -194,4 +333,6 @@ export {
   ShippingSchema,
   AttributeTypeSchema,
   ProductSchema,
+  ProductUpdateSchema,
+  ReviewCreationSchema,
 };

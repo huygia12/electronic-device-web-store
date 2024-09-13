@@ -87,7 +87,7 @@ const productApis = {
     try {
       const res = await axiosInstanceWithoutAuthorize.get<{
         info: ProductFullJoin;
-      }>("/products/" + params.id, reqConfig);
+      }>(`/products/${params.id}`, reqConfig);
       return res.data.info;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -139,6 +139,65 @@ const productApis = {
     }
   },
   addProduct: async (product: ProductInputFormProps): Promise<boolean> => {
+    let productPayload;
+    try {
+      let options = product.productAttributes?.reduce<string[]>(
+        (prev, curr) => {
+          prev.push(curr.optionID);
+          return prev;
+        },
+        []
+      );
+
+      if (options) {
+        if (options.length <= 0) {
+          options = undefined;
+        }
+      }
+      const productItems =
+        await productService.getProductItemsAfterUploadImages(
+          product.productItems
+        );
+
+      productPayload = {
+        productName: product.productName,
+        description:
+          product.description?.length && product.description.length > 0
+            ? product.description
+            : undefined,
+        length: product.length,
+        width: product.width,
+        height: product.height,
+        weight: product.weight,
+        warranty: product.warranty,
+        categoryID: product.categoryID,
+        providerID: product.providerID,
+        options: options,
+        productItems: productItems,
+      };
+
+      //post new product
+      await axiosInstance.post("/products", productPayload, reqConfig);
+      return true;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Handle error response if available
+        console.error(`Response data: ${error.response?.data}`);
+        console.error(`Response status: ${error.response?.status})`);
+      } else {
+        console.error("Unexpected error:", error);
+      }
+
+      if (productPayload) {
+        productPayload.productItems.forEach((item) => {
+          //delete images if add product fail
+          firebaseApis.deleteImagesInFireBase([item.thump, ...item.itemImages]);
+        });
+      }
+      return false;
+    }
+  },
+  updateProduct: async (product: ProductInputFormProps): Promise<boolean> => {
     let productPayload;
     try {
       let options = product.productAttributes?.reduce<string[]>(

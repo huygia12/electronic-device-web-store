@@ -14,7 +14,7 @@ const auth = {
   },
   getUser: function (): Nullable<AuthUser> {
     try {
-      const rawToken: Nullable<string> =
+      const rawToken: string | null | undefined =
         window.sessionStorage.getItem("access_token");
       if (!rawToken) return null;
 

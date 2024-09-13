@@ -34,7 +34,11 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
         unstable_viewTransition
       >
         <div className="h-[15rem] mb-10z">
-          <CustomImage src={currentItem.thump} alt={currentItem.itemID} />
+          <CustomImage
+            src={currentItem.thump}
+            alt={currentItem.itemID}
+            className="h-[16rem] m-auto"
+          />
         </div>
         <CardHeader className="p-1.5 mt-2">
           <CardTitle className="text-[1rem] hover_underline hover_text-primary-foreground">

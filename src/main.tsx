@@ -2,12 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { CurrentUserProvider } from "./context/current-user-context.tsx";
+import { CurrentUserProvider, SocketProvider } from "./context";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <CurrentUserProvider>
-      <App />
+      <SocketProvider>
+        <App />
+      </SocketProvider>
     </CurrentUserProvider>
   </React.StrictMode>
 );
