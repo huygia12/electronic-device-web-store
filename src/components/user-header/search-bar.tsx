@@ -1,7 +1,7 @@
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { FC, HTMLAttributes, useEffect, useRef, useState } from "react";
-import { LoadingSpinner } from "../effect";
+import { LoadingSpinner } from "@/components/effect";
 import { Optional } from "@/utils/declare";
 import { productService } from "@/services";
 import { ProductSummary } from "@/types/api";
@@ -16,20 +16,11 @@ const SearchBar: FC<HTMLAttributes<HTMLFormElement>> = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const getProducts = async () => {
-      const products: ProductSummary[] =
-        await productService.apis.getProductsSummary(undefined, 10);
-
-      setProducts(products);
-    };
-
-    getProducts();
-
     //Close products search results if click outside of the search bar
     document.addEventListener("mousedown", handleSearchInputBlur);
-    return () => {
+
+    return () =>
       document.removeEventListener("mousedown", handleSearchInputBlur);
-    };
   }, []);
 
   useEffect(() => {
