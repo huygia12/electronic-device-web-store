@@ -58,7 +58,6 @@ const ProductDetailPage: FC = () => {
               return review;
             });
           } else {
-            console.log(`create new review `, payload.review);
             newReviewList = [payload.review, ...prevReviews];
             setReviewDisplay((prevReviewDisplay) => prevReviewDisplay + 1);
           }

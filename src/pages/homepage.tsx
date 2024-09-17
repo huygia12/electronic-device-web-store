@@ -62,7 +62,6 @@ const Homepage: FC = () => {
         setProvidersData(providersRes);
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
-          console.log("error");
           console.error("Axios error:", error.message);
           if (error.response) {
             console.error("Response data:", error.response.data);

@@ -95,7 +95,6 @@ const Products: FC = () => {
       }
 
       if (selectedOptions.length > 0) {
-        console.log("filter by selected options");
         productsHolder = productsHolder?.filter((product) =>
           productService.isContainAllRequiredAttributeOptions(
             product,

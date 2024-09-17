@@ -83,10 +83,7 @@ const SearchBar: FC<HTMLAttributes<HTMLFormElement>> = () => {
         productsVisibility &&
         !typing &&
         (products.length > 0 ? (
-          <ul
-            onFocus={() => console.log(`children clicked`)}
-            className="absolute flex flex-wrap gap-2 mt-4 bg-white opacity-95 rounded-lg px-2 py-2 shadow-general"
-          >
+          <ul className="absolute flex flex-wrap gap-2 mt-4 bg-white opacity-95 rounded-lg px-2 py-2 shadow-general">
             {products.map((product) => (
               <li
                 key={product.productID}

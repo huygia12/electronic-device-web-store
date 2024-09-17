@@ -161,7 +161,6 @@ const ProductAddition: FC = () => {
     });
   };
 
-  console.log(errors);
   return (
     <>
       <h1 className="text-4xl font-extrabold mt-8 mb-10">Thêm sản phẩm</h1>

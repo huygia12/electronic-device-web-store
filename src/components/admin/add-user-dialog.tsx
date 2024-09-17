@@ -50,7 +50,6 @@ const AddUserDialog: React.FC<UserDialogProps> = ({ className, ...props }) => {
       });
       return;
     }
-    console.log("pass password");
     try {
       const userID = await userService.apis.signup({
         userName: data.userName,
@@ -93,8 +92,6 @@ const AddUserDialog: React.FC<UserDialogProps> = ({ className, ...props }) => {
       toast.error("Cập nhật thất bại!");
     }
   };
-
-  console.log("error: ", errors);
 
   return (
     <form>

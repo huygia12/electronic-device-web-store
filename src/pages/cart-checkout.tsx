@@ -91,7 +91,6 @@ const CartCheckout: FC = () => {
       const fetchedWards = await deliveryService.apis.getWards(
         Number(district)
       );
-      // console.log(`fetch wards for district(${curDistrictID})`, wardsRes);
       setWards(fetchedWards);
 
       if (fetchedWards.length === 0) return;
@@ -113,7 +112,6 @@ const CartCheckout: FC = () => {
           }
         });
 
-      // console.log(`fetch services`, serviceIDValue);
       setServiceID(serviceIDValue);
     };
 
