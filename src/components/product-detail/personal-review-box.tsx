@@ -3,8 +3,8 @@ import {
   ProductFullJoin,
   ReviewFullJoin,
   ReviewFullJoinChild,
-} from "@/types/api";
-import { SocketEmitError } from "@/types/api/socket";
+} from "@/types/model";
+import { SocketEmitError } from "@/types/socket";
 import { Nullable, Optional } from "@/utils/declare";
 import { ReviewCreationFromProps, ReviewCreationSchema } from "@/utils/schema";
 import { zodResolver } from "@hookform/resolvers/zod";

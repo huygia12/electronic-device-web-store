@@ -1,7 +1,7 @@
 import { ChangePasswordCard } from "@/components/user";
 import ChangeProfileCard from "@/components/user/change-profile-card";
 import { useCurrentUser } from "@/hooks";
-import { User } from "@/types/api";
+import { User } from "@/types/model";
 import { FC, useLayoutEffect } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 

@@ -14,7 +14,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { InvoiceFullJoin, Statistic, User } from "@/types/api";
+import { InvoiceFullJoin, Statistic, User } from "@/types/model";
 import OrderTable from "@/components/admin/order-table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -35,8 +35,8 @@ import {
   getNumberGapString,
   getRatioString,
 } from "@/utils/helpers";
-import { invoiceApis, userApis } from "@/services/apis";
-import { InvoiceStatus } from "@/utils/constants";
+import { invoiceService, userService } from "@/services";
+import { InvoiceStatus } from "@/types/enum";
 
 const ORDERS_LINK = "/admin/invoices";
 
@@ -78,11 +78,15 @@ const Dashboard: FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const invoices: InvoiceFullJoin[] = await invoiceApis.getInvoices({
-        status: InvoiceStatus.NEW,
-        limit: 5,
+      const invoices: InvoiceFullJoin[] = await invoiceService.apis.getInvoices(
+        {
+          status: InvoiceStatus.NEW,
+          limit: 5,
+        }
+      );
+      const usersRes: User[] = await userService.apis.getUsers({
+        recently: true,
       });
-      const usersRes: User[] = await userApis.getUsers({ recently: true });
 
       setCustomersData(usersRes);
       setInvoicesData(invoices);

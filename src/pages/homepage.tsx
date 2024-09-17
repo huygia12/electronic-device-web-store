@@ -8,7 +8,7 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import React, { FC, useEffect, useState } from "react";
 import axios from "axios";
-import { Category, ProductFullJoin, Provider } from "@/types/api";
+import { Category, ProductFullJoin, Provider } from "@/types/model";
 import { SwatchBook } from "lucide-react";
 import {
   Select,
@@ -26,8 +26,8 @@ import {
 } from "@/components/user";
 import CardProduct from "@/components/user/product-card";
 import { LAPTOP_ID, PHONE_ID, slides } from "./data";
-import { productApis, providerApis } from "@/services/apis";
-import categoryApis from "@/services/apis/category";
+import { productService, providerService } from "@/services";
+import categoryService from "@/services/category";
 import { CardSkeleton, LinesSkeleton } from "@/components/common/skeleton";
 import { useCustomNavigate } from "@/hooks";
 
@@ -44,13 +44,17 @@ const Homepage: FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const categoriesRes: Category[] = await categoryApis.getCategories();
-        const providersRes: Provider[] = await providerApis.getProviders();
+        const categoriesRes: Category[] =
+          await categoryService.apis.getCategories();
+        const providersRes: Provider[] =
+          await providerService.apis.getProviders();
 
         const phonesDataRes: ProductFullJoin[] =
-          await productApis.getProductsFullJoinWithCategoryID(PHONE_ID);
+          await productService.apis.getProductsFullJoinWithCategoryID(PHONE_ID);
         const laptopsDataRes: ProductFullJoin[] =
-          await productApis.getProductsFullJoinWithCategoryID(LAPTOP_ID);
+          await productService.apis.getProductsFullJoinWithCategoryID(
+            LAPTOP_ID
+          );
 
         setPhonesData(phonesDataRes);
         setLaptopsData(laptopsDataRes);

@@ -1,5 +1,5 @@
 import { useLocalStorage } from "@/hooks";
-import { CartItem } from "@/types/api";
+import { CartItem } from "@/types/model";
 import { Optional } from "@/utils/declare";
 import { ReactNode, createContext, useState } from "react";
 

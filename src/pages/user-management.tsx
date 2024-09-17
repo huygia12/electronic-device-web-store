@@ -21,13 +21,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { AddUserDialog } from "@/components/admin";
-import { User } from "@/types/api";
+import { User } from "@/types/model";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { FC, useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
-import { userApis } from "@/services/apis";
+import { userService } from "@/services";
 import UpdateUserDialog from "@/components/admin/update-user-dialog";
 import {
   AlertDialog,
@@ -60,7 +60,7 @@ const UserManagement: FC = () => {
 
   const handleDeleteUser = async (userID: string) => {
     try {
-      await userApis.deleteUser(userID);
+      await userService.apis.deleteUser(userID);
 
       setExistUsers(
         existingUsers.filter((userHolder) => userHolder.userID !== userID)

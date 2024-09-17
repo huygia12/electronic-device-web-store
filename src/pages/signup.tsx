@@ -17,7 +17,7 @@ import routes from "../middleware/routes";
 import axios, { HttpStatusCode } from "axios";
 import { LoadingSpinner } from "@/components/effect";
 import { SignupFormProps, SignupSchema } from "@/utils/schema";
-import { userApis } from "@/services/apis";
+import { userService } from "@/services";
 
 const Signup: FC = () => {
   const {
@@ -43,7 +43,7 @@ const Signup: FC = () => {
         return;
       }
 
-      await userApis.signup(data);
+      await userService.apis.signup(data);
 
       await routes.navigate("/login", { unstable_viewTransition: true });
     } catch (error) {

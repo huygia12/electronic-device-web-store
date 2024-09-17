@@ -26,18 +26,18 @@ import {
   UserManagement,
 } from "@/pages";
 import {
-  attributeApis,
-  invoiceApis,
-  productApis,
-  providerApis,
-  statisticApis,
-  userApis,
-} from "@/services/apis";
+  attributeService,
+  invoiceService,
+  productService,
+  providerService,
+  statisticService,
+  userService,
+} from "@/services";
 import { createBrowserRouter } from "react-router-dom";
 import ProtectedRoute from "./protected-route";
-import { Role } from "@/utils/constants";
+import { Role } from "@/types/enum";
 import { AuthProvider } from "@/context";
-import categoryApis from "@/services/apis/category";
+import categoryService from "@/services/category";
 import PreventLoginUserRoute from "./prevent-login-user-route";
 import { Args } from "@/utils/declare";
 
@@ -69,7 +69,7 @@ const routes = createBrowserRouter([
           {
             path: ":id",
             id: "product_detail",
-            loader: productApis.getProductFullJoin,
+            loader: productService.apis.getProductFullJoin,
             element: <ProductDetail />,
           },
         ],
@@ -90,7 +90,7 @@ const routes = createBrowserRouter([
           {
             path: ":id",
             id: "user_profile",
-            loader: userApis.getUser,
+            loader: userService.apis.getUser,
             element: (
               <ProtectedRoute>
                 <EditProfile />
@@ -157,25 +157,25 @@ const routes = createBrowserRouter([
       {
         index: true,
         id: "dash_board",
-        loader: statisticApis.getStatistic,
+        loader: statisticService.apis.getStatistic,
         element: <Dashboard />,
       },
       {
         path: "users",
         id: "user_management",
-        loader: userApis.getUsers,
+        loader: userService.apis.getUsers,
         element: <UserManagement />,
       },
       {
         path: "categories",
         id: "category_management",
-        loader: categoryApis.getCategories,
+        loader: categoryService.apis.getCategories,
         element: <CategoryManagement />,
       },
       {
         path: "invoices",
         id: "invoice_management",
-        loader: invoiceApis.getInvoices,
+        loader: invoiceService.apis.getInvoices,
         element: <OrderManagement />,
       },
       {
@@ -189,7 +189,7 @@ const routes = createBrowserRouter([
       {
         path: "providers",
         id: "provider_management",
-        loader: providerApis.getProviders,
+        loader: providerService.apis.getProviders,
         element: <ProviderManagement />,
       },
       {
@@ -198,14 +198,16 @@ const routes = createBrowserRouter([
           {
             index: true,
             id: "product_management",
-            loader: productApis.getProductsSummary,
+            loader: async () => {
+              return await productService.apis.getProductsSummary();
+            },
             element: <ProductManagement />,
           },
           {
             path: ":id",
             id: "product_edition",
             loader: async (params: Args) => {
-              return productApis.getProductFullJoin({
+              return await productService.apis.getProductFullJoin({
                 ...params,
               });
             },
@@ -218,7 +220,7 @@ const routes = createBrowserRouter([
           {
             path: "attributes",
             id: "attribute_management",
-            loader: attributeApis.getAttributes,
+            loader: attributeService.apis.getAttributes,
             element: <AttributeManagement />,
           },
         ],

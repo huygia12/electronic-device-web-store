@@ -25,13 +25,15 @@ import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
 import { buttonVariants } from "@/utils/constants";
 import SlideShow from "./slide-show";
-import productService from "@/utils/product";
-import { CartItem, Error, ProductFullJoin, ProductItem } from "@/types/api";
+import { productService } from "@/services";
+import { CartItem, ProductFullJoin, ProductItem } from "@/types/model";
+import { Error } from "@/types/error";
 import { HTMLAttributes, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useCartProps } from "@/hooks";
 import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
+import { applyDiscount } from "@/utils/helpers";
 
 interface ProductDialogProps extends HTMLAttributes<HTMLDivElement> {
   product: ProductFullJoin;
@@ -153,7 +155,7 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
           <div>
             <div className="flex justify-between items-baseline mb-12 pb-4 border-b-2 border-dashed border-slate-300">
               <div className="space-x-4">
-                <span className="text-3xl font-semibold text-primary-foreground">{`${currentItem ? productService.afterDiscount(currentItem?.price, currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
+                <span className="text-3xl font-semibold text-primary-foreground">{`${currentItem ? applyDiscount(currentItem?.price, currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
                 <del className="text-slate-500">{`${currentItem ? currentItem?.price.toLocaleString() : 0}đ`}</del>
               </div>
               <div className="flex gap-2">
@@ -196,7 +198,7 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
                               htmlFor={index + ""}
                               className="text-xl font-medium truncate"
                             >
-                              {`${productService.afterDiscount(item.price, item.discount ?? 0).toLocaleString()}đ`}
+                              {`${applyDiscount(item.price, item.discount ?? 0).toLocaleString()}đ`}
                             </label>
                           </span>
                           <span className="truncate">{`${item.storage} | ${item.color}`}</span>

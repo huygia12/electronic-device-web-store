@@ -1,7 +1,7 @@
-import { ClientEvents, ServerEvents } from "@/types/api/socket";
+import { ClientEvents, ServerEvents } from "@/types/socket";
 import { createContext, useEffect, ReactNode, useState } from "react";
 import { Socket } from "socket.io-client";
-import { commentSocketInstance } from "@/utils/socket";
+import { commentSocketInstance } from "@/config";
 
 interface SocketContextProps {
   commentSocket: Socket<ServerEvents, ClientEvents> | undefined;

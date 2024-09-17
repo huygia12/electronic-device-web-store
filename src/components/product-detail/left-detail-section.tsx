@@ -8,7 +8,7 @@ import { SlideShow } from "@/components/user";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { FC, HTMLAttributes, useRef } from "react";
 import Autoplay from "embla-carousel-autoplay";
-import { ProductFullJoin, ProductItem } from "@/types/api";
+import { ProductFullJoin, ProductItem } from "@/types/model";
 import { BadgeCheck, Truck } from "lucide-react";
 
 interface LeftProductDetailSectionProps

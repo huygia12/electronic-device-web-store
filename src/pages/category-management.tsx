@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Category } from "@/types/api";
+import { Category } from "@/types/model";
 import { arrayInReverse } from "@/utils/helpers";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { FC, useState } from "react";
@@ -31,7 +31,7 @@ import { toast } from "sonner";
 import axios, { HttpStatusCode } from "axios";
 import { buttonVariants } from "@/utils/constants";
 import { Separator } from "@/components/ui/separator";
-import categoryApis from "@/services/apis/category";
+import categoryService from "@/services/category";
 
 const colName: string[] = ["STT", "MÃ DANH MỤC", "TÊN DANH MỤC", "SỐ SẢN PHẨM"];
 
@@ -46,8 +46,9 @@ const CategoryManagement: FC = () => {
   const handleAddCategory = async (name: string) => {
     const processedName: string = name.trim();
     try {
-      await categoryApis.addCategory(processedName);
-      const fetchedCategories: Category[] = await categoryApis.getCategories();
+      await categoryService.apis.addCategory(processedName);
+      const fetchedCategories: Category[] =
+        await categoryService.apis.getCategories();
       setCategories(fetchedCategories);
       toast.success("Thêm thành công!");
     } catch (error) {
@@ -69,11 +70,12 @@ const CategoryManagement: FC = () => {
     if (!selectedCategory) return;
     const processedName: string = name.trim();
     try {
-      await categoryApis.updateCategory(
+      await categoryService.apis.updateCategory(
         selectedCategory.categoryID,
         processedName
       );
-      const fetchedCategories: Category[] = await categoryApis.getCategories();
+      const fetchedCategories: Category[] =
+        await categoryService.apis.getCategories();
       setCategories(fetchedCategories);
       setSelectedCategory(undefined);
       toast.success("Thay đổi thành công!");
@@ -95,8 +97,9 @@ const CategoryManagement: FC = () => {
   const handleDeleteCategory = async () => {
     if (!selectedCategory) return;
     try {
-      await categoryApis.deleteCategory(selectedCategory.categoryID);
-      const fetchedCategories: Category[] = await categoryApis.getCategories();
+      await categoryService.apis.deleteCategory(selectedCategory.categoryID);
+      const fetchedCategories: Category[] =
+        await categoryService.apis.getCategories();
       setCategories(fetchedCategories);
       setSelectedCategory(undefined);
       toast.success("Thay đổi thành công!");

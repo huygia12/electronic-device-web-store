@@ -5,7 +5,7 @@ import {
   useLayoutEffect,
   useState,
 } from "react";
-import { Attribute, AttributeOption, ProductFullJoin } from "@/types/api";
+import { Attribute, AttributeOption, ProductFullJoin } from "@/types/model";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -21,12 +21,12 @@ import { MoneyInput, ProductCard } from "@/components/user";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { useSearchParams } from "react-router-dom";
-import { productApis } from "@/services/apis";
+import { productService } from "@/services";
 import { Nullable, Optional } from "@/utils/declare";
 import { CardSkeleton } from "@/components/common";
 import { cn } from "@/lib/utils";
-import productService from "@/utils/product";
-import { Sort } from "@/utils/constants";
+import { Sort } from "@/types/enum";
+import { applyDiscount, isDiscount } from "@/utils/helpers";
 
 const Products: FC = () => {
   const [searchParams] = useSearchParams();
@@ -45,10 +45,14 @@ const Products: FC = () => {
       const providerID: Nullable<string> = searchParams.get("providerID");
       if (categoryID) {
         productRes =
-          await productApis.getProductsFullJoinWithCategoryID(categoryID);
+          await productService.apis.getProductsFullJoinWithCategoryID(
+            categoryID
+          );
       } else if (providerID) {
         productRes =
-          await productApis.getProductsFullJoinWithProviderID(providerID);
+          await productService.apis.getProductsFullJoinWithProviderID(
+            providerID
+          );
       }
 
       setProductsData(productRes);
@@ -65,32 +69,20 @@ const Products: FC = () => {
 
       if (isSale) {
         productsHolder = productsHolder?.filter((product) =>
-          productService.isDiscount(product.productItems[0].discount)
+          isDiscount(product.productItems[0].discount)
         );
       }
       if (sortValue === Sort.DES) {
         productsHolder?.sort(
           (a, b) =>
-            productService.afterDiscount(
-              b.productItems[0].price,
-              b.productItems[0].discount
-            ) -
-            productService.afterDiscount(
-              a.productItems[0].price,
-              a.productItems[0].discount
-            )
+            applyDiscount(b.productItems[0].price, b.productItems[0].discount) -
+            applyDiscount(a.productItems[0].price, a.productItems[0].discount)
         );
       } else if (sortValue === Sort.ASC) {
         productsHolder?.sort(
           (a, b) =>
-            productService.afterDiscount(
-              a.productItems[0].price,
-              a.productItems[0].discount
-            ) -
-            productService.afterDiscount(
-              b.productItems[0].price,
-              b.productItems[0].discount
-            )
+            applyDiscount(a.productItems[0].price, a.productItems[0].discount) -
+            applyDiscount(b.productItems[0].price, b.productItems[0].discount)
         );
       } else if (sortValue === Sort.ATOZ) {
         productsHolder?.sort((a, b) =>

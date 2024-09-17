@@ -1,8 +1,8 @@
 import { ReactNode, createContext, useState } from "react";
 import { Nullable } from "@/utils/declare";
-import { userApis } from "@/services/apis";
+import { userService } from "@/services";
 import auth from "@/utils/auth";
-import { AuthUser, User } from "@/types/api";
+import { AuthUser, User } from "@/types/model";
 
 interface CurrentUserContextProps {
   currentUser: User | undefined | null;
@@ -29,7 +29,7 @@ const CurrentUserProvider: React.FC<{ children: ReactNode }> = ({
     const userHolder: Nullable<AuthUser> = auth.getUser();
     let user: Nullable<User> = null;
     if (userHolder) {
-      user = await userApis.getUser(userHolder.userID);
+      user = await userService.apis.getUser(userHolder.userID);
     }
     setCurrentUser(user);
   };

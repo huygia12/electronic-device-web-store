@@ -1,5 +1,5 @@
 import useCurrentUser from "@/hooks/use-current-user";
-import { Role } from "@/utils/constants";
+import { Role } from "@/types/enum";
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 

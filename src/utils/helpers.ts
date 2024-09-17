@@ -1,4 +1,4 @@
-import { Optional } from "./declare";
+import { Nullable, Optional } from "./declare";
 
 /**
  *
@@ -60,6 +60,28 @@ const getNumberGapString = (num1: number, num2: number): string => {
   return num1 < num2 ? `- ${gap}%` : `+ ${gap}%`;
 };
 
+const retrieveImageUrl = (image: unknown): string => {
+  if (typeof image === "string") {
+    return image;
+  } else if (image instanceof File) {
+    return URL.createObjectURL(image);
+  }
+  throw new Error("Invalid image!");
+};
+
+const getDiscount = (discount: Nullable<number>): number => {
+  return discount ?? 0;
+};
+
+const isDiscount = (discount: Nullable<number>): boolean => {
+  return discount !== null && discount > 0;
+};
+
+const applyDiscount = (price: number, discount: Nullable<number>): number => {
+  if (!discount) return price;
+  return price * (1 - discount / 100);
+};
+
 export {
   arrayInReverse,
   getImageUrl,
@@ -68,4 +90,8 @@ export {
   getNumberGapString,
   getDayOfMonthString,
   getDateString,
+  retrieveImageUrl,
+  getDiscount,
+  isDiscount,
+  applyDiscount,
 };

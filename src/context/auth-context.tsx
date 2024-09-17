@@ -2,9 +2,9 @@ import { ReactNode, createContext, useLayoutEffect, useRef } from "react";
 import { Nullable, Optional } from "@/utils/declare";
 import useCustomNavigate from "@/hooks/use-custom-navigate";
 import { LoginFormProps } from "@/utils/schema";
-import { authApis } from "@/services/apis";
+import { authService } from "@/services";
 import auth from "@/utils/auth";
-import { Role } from "@/utils/constants";
+import { Role } from "@/types/enum";
 import useCurrentUser from "@/hooks/use-current-user";
 
 interface AuthContextProps {
@@ -24,7 +24,8 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       const accessToken: Nullable<string> = auth.token.getAccessToken();
 
       if (!accessToken) {
-        const newAccessToken: Optional<string> = await authApis.refreshToken();
+        const newAccessToken: Optional<string> =
+          await authService.apis.refreshToken();
         if (!newAccessToken) {
           return false;
         }
@@ -49,7 +50,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const login = async (data: LoginFormProps, goBack: boolean = true) => {
     const from: Optional<string> = location.state?.from;
 
-    const accessToken = await authApis.login(data);
+    const accessToken = await authService.apis.login(data);
     auth.token.setAccessToken(accessToken);
 
     await updateCurrentUser();
@@ -66,7 +67,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const logout = async () => {
     try {
-      await authApis.logout();
+      await authService.apis.logout();
     } catch (error) {
       console.error(`Response data: ${error}`);
     } finally {

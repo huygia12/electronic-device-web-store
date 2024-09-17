@@ -1,4 +1,4 @@
-import { ReviewFullJoin, ReviewFullJoinChild } from "@/types/api";
+import { ReviewFullJoin, ReviewFullJoinChild } from "@/types/model";
 import { FC, HTMLAttributes, MutableRefObject } from "react";
 import { Comment } from "../common";
 

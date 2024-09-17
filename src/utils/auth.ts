@@ -1,6 +1,6 @@
-import { AuthUser } from "@/types/api";
-import { Nullable } from "@/utils/declare";
+import { AuthUser } from "@/types/model";
 import { jwtDecode } from "jwt-decode";
+import { Nullable } from "./declare";
 
 const TOKEN_NAME: string = "access_token";
 

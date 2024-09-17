@@ -1,16 +1,16 @@
-import { Input } from "@/components/ui/input";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { FiShoppingBag } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import { TfiHeadphoneAlt } from "react-icons/tfi";
-import { PackageSearch, Search } from "lucide-react";
+import { PackageSearch } from "lucide-react";
 import { useAuth, useCartProps } from "@/hooks";
 import { toast } from "sonner";
 import { AvatarPlaceholder, CounterLabel } from "@/components/user";
-import { Role } from "@/utils/constants";
+import { Role } from "@/types/enum";
 import { DropMenuLinkItem, DropdownAvatar } from "@/components/common";
 import { FC } from "react";
 import useCurrentUser from "@/hooks/use-current-user";
+import SearchBar from "@/components/user-header/search-bar";
 
 const navComponents: { title: string; path: string }[] = [
   { title: "Trang Chủ", path: "/" },
@@ -54,14 +54,8 @@ const AppClientHeader: FC = () => {
             <img src="/logo.svg.png" alt="logo" className="h-12" />
           </NavLink>
           <div className="col-span-3 grid grid-cols-3 items-center">
-            <div className="w-full col-span-2 relative flex-1 md_grow-0 h-[2.7rem]">
-              <Search className="absolute left-2.5 top-3.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Tìm kiếm..."
-                className="h-full text-xl w-full rounded-2xl bg-background pl-8"
-              />
-            </div>
+            <SearchBar />
+
             <div className="flex flex-row items-center space-x-[2rem] ml-20">
               <NavLink
                 to="/cart/view"

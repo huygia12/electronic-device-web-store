@@ -11,12 +11,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { UserFormProps, UserSchema } from "@/utils/schema";
-import { User } from "@/types/api";
+import { User } from "@/types/model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { FC, HTMLAttributes } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { firebaseApis, userApis } from "@/services/apis";
+import { firebaseService, userService } from "@/services";
 import { toast } from "sonner";
 import { LoadingSpinner } from "../effect";
 import { Optional } from "@/utils/declare";
@@ -45,16 +45,18 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
       let avatar: Optional<string>;
       if (data.avatar[0]) {
         currentUser?.avatar &&
-          (await firebaseApis.deleteImagesInFireBase([currentUser?.avatar]));
+          (await firebaseService.apis.deleteImagesInFireBase([
+            currentUser?.avatar,
+          ]));
         avatar = (
-          await firebaseApis.insertImagesToFireBase(
+          await firebaseService.apis.insertImagesToFireBase(
             data.avatar,
             `/users/${currentUser!.userID}`
           )
         )[0];
       }
 
-      const updatedUserInfor: User = await userApis.updateUser(
+      const updatedUserInfor: User = await userService.apis.updateUser(
         currentUser!.userID,
         {
           userName: data.userName,

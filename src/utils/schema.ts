@@ -1,4 +1,4 @@
-import { SchemaResponse } from "@/utils/constants";
+import { SchemaResponse } from "@/types/enum";
 import z, { ZodString } from "zod";
 
 const positiveSafeFloat = (errorMessage: string = SchemaResponse.INVALID) =>
@@ -302,6 +302,10 @@ const ReviewCreationSchema = z.object({
   reviewContent: notBlankString(),
 });
 
+const ProductSearchingSchema = z.object({
+  productName: z.string().nullable(),
+});
+
 export type ShippingForm = z.infer<typeof ShippingSchema>;
 
 export type SignupFormProps = z.infer<typeof SignupSchema>;
@@ -326,6 +330,8 @@ export type ProductItemsUpdateFormProps = z.infer<
 
 export type ReviewCreationFromProps = z.infer<typeof ReviewCreationSchema>;
 
+export type ProductSearchingFormProps = z.infer<typeof ProductSearchingSchema>;
+
 export {
   UserSchema,
   LoginSchema,
@@ -335,4 +341,5 @@ export {
   ProductSchema,
   ProductUpdateSchema,
   ReviewCreationSchema,
+  ProductSearchingSchema,
 };

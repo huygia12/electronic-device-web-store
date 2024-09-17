@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Provider } from "@/types/api";
+import { Provider } from "@/types/model";
 import axios, { HttpStatusCode } from "axios";
 import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/utils/constants";
 import { Separator } from "@radix-ui/react-select";
-import { providerApis } from "@/services/apis";
+import { providerService } from "@/services";
 import { ProviderDialog } from "@/components/admin";
 
 const colName: string[] = [
@@ -49,8 +49,9 @@ const ProviderManagement = () => {
   const handleAddProvider = async (name: string) => {
     const processedName: string = name.trim();
     try {
-      await providerApis.addProvider(processedName);
-      const fetchedProviders: Provider[] = await providerApis.getProviders();
+      await providerService.apis.addProvider(processedName);
+      const fetchedProviders: Provider[] =
+        await providerService.apis.getProviders();
       setProviders(fetchedProviders);
       toast.success("Thêm thành công!");
     } catch (error) {
@@ -72,11 +73,12 @@ const ProviderManagement = () => {
     if (!selectedProvider) return;
     const processedName: string = name.trim();
     try {
-      await providerApis.updateProvider(
+      await providerService.apis.updateProvider(
         selectedProvider.providerID,
         processedName
       );
-      const fetchedProviders: Provider[] = await providerApis.getProviders();
+      const fetchedProviders: Provider[] =
+        await providerService.apis.getProviders();
       setProviders(fetchedProviders);
       setSelectedProvider(undefined);
       toast.success("Thay đổi thành công!");
@@ -98,8 +100,9 @@ const ProviderManagement = () => {
   const handleDeleteProvider = async () => {
     if (!selectedProvider) return;
     try {
-      await providerApis.deleteProvider(selectedProvider.providerID);
-      const fetchedProviders: Provider[] = await providerApis.getProviders();
+      await providerService.apis.deleteProvider(selectedProvider.providerID);
+      const fetchedProviders: Provider[] =
+        await providerService.apis.getProviders();
       setProviders(fetchedProviders);
       setSelectedProvider(undefined);
       toast.success("Thay đổi thành công!");

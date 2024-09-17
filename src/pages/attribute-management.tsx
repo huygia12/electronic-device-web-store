@@ -29,9 +29,9 @@ import { toast } from "sonner";
 import axios, { HttpStatusCode } from "axios";
 import { Separator } from "@/components/ui/separator";
 import { arrayInReverse } from "@/utils/helpers";
-import { AttributeOption, Attribute } from "@/types/api";
+import { AttributeOption, Attribute } from "@/types/model";
 import { AttributeDialog, OptionDialog } from "@/components/admin";
-import { attributeApis } from "@/services/apis";
+import { attributeService } from "@/services";
 
 const typeColsName: string[] = ["STT", "THUỘC TÍNH"];
 
@@ -50,7 +50,7 @@ const AttributeManagement: FC = () => {
   const handleAddAttributeType = async (name: string) => {
     const processedName: string = name.trim();
     try {
-      await attributeApis.addAttributeType(processedName);
+      await attributeService.apis.addAttributeType(processedName);
       await resetAttributesAfterAttributeProcessing();
       toast.success("Thêm thành công!");
     } catch (error) {
@@ -72,7 +72,7 @@ const AttributeManagement: FC = () => {
     if (!selectedAttribute) return;
     const processedName: string = name.trim();
     try {
-      await attributeApis.updateAttributeType(
+      await attributeService.apis.updateAttributeType(
         selectedAttribute.typeID,
         processedName
       );
@@ -98,7 +98,7 @@ const AttributeManagement: FC = () => {
   const handleDeleteAttributeType = async () => {
     if (!selectedAttribute) return;
     try {
-      await attributeApis.deleteAttribute(selectedAttribute.typeID);
+      await attributeService.apis.deleteAttribute(selectedAttribute.typeID);
       await resetAttributesAfterAttributeProcessing();
       toast.success("Thay đổi thành công!");
     } catch (error) {
@@ -118,7 +118,7 @@ const AttributeManagement: FC = () => {
     if (!selectedAttribute) return;
     const processedName: string = name.trim();
     try {
-      await attributeApis.addAttributeOption(
+      await attributeService.apis.addAttributeOption(
         selectedAttribute.typeID,
         processedName
       );
@@ -143,7 +143,7 @@ const AttributeManagement: FC = () => {
     if (!selectedAttributeOption || !selectedAttribute) return;
     const processedName: string = name.trim();
     try {
-      await attributeApis.updateAttributeOption(
+      await attributeService.apis.updateAttributeOption(
         selectedAttributeOption.optionID,
         selectedAttribute.typeID,
         processedName
@@ -170,7 +170,7 @@ const AttributeManagement: FC = () => {
   const handleDeleteAttributeOption = async () => {
     if (!selectedAttributeOption || !selectedAttribute) return;
     try {
-      await attributeApis.deleteAttributeOption(
+      await attributeService.apis.deleteAttributeOption(
         selectedAttributeOption.typeID,
         selectedAttributeOption.optionID
       );
@@ -190,7 +190,8 @@ const AttributeManagement: FC = () => {
   };
 
   const resetAttributesAfterOptionProcessing = async () => {
-    const fetchedAttributes: Attribute[] = await attributeApis.getAttributes();
+    const fetchedAttributes: Attribute[] =
+      await attributeService.apis.getAttributes();
     setAttributes(fetchedAttributes);
     setSelectedAttribute(
       fetchedAttributes.find(
@@ -201,7 +202,8 @@ const AttributeManagement: FC = () => {
   };
 
   const resetAttributesAfterAttributeProcessing = async () => {
-    const fetchedAttributes: Attribute[] = await attributeApis.getAttributes();
+    const fetchedAttributes: Attribute[] =
+      await attributeService.apis.getAttributes();
     setAttributes(fetchedAttributes);
     setSelectedAttribute(undefined);
     setSelectedAttributeOption(undefined);

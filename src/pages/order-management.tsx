@@ -9,7 +9,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { InvoiceFullJoin } from "@/types/api";
+import { InvoiceFullJoin } from "@/types/model";
 import { FC } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 

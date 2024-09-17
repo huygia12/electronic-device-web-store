@@ -1,14 +1,16 @@
-import { CartItem, Error, ProductFullJoin, ProductItem } from "@/types/api";
+import { CartItem, ProductFullJoin, ProductItem } from "@/types/model";
+import { Error } from "@/types/error";
 import { FC, HTMLAttributes, useState } from "react";
 import { Label } from "../ui/label";
 import { cn } from "@/lib/utils";
 import { CircleCheck, CircleX, Coins, ShoppingBasket } from "lucide-react";
-import productService from "@/utils/product";
+import { productService } from "@/services";
 import { Input } from "../ui/input";
 import { useCartProps } from "@/hooks";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
+import { applyDiscount } from "@/utils/helpers";
 
 interface RightProductDetailSectionProps
   extends HTMLAttributes<HTMLHeadElement> {
@@ -81,7 +83,7 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
     <section>
       <div className="flex justify-between items-baseline mb-12 pb-4 border-b-2 border-dashed border-slate-300">
         <div className="space-x-4">
-          <span className="text-3xl font-semibold text-primary-foreground">{`${props.currentItem ? productService.afterDiscount(props.currentItem.price, props.currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
+          <span className="text-3xl font-semibold text-primary-foreground">{`${props.currentItem ? applyDiscount(props.currentItem.price, props.currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
           <del className="text-slate-500">{`${props.currentItem ? props.currentItem?.price.toLocaleString() : 0}đ`}</del>
         </div>
         <div className="flex gap-2">
@@ -123,7 +125,7 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
                       htmlFor={index + ""}
                       className="text-xl font-medium truncate"
                     >
-                      {`${productService.afterDiscount(item.price, item.discount).toLocaleString()}đ`}
+                      {`${applyDiscount(item.price, item.discount).toLocaleString()}đ`}
                     </label>
                   </span>
                   <span className="truncate">{`${item.storage} | ${item.color}`}</span>

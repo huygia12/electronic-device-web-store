@@ -6,14 +6,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { InvoiceFullJoin } from "@/types/api";
+import { InvoiceFullJoin } from "@/types/model";
 import { HTMLAttributes } from "react";
 import { Button } from "../ui/button";
 import { Check, Eye, X } from "lucide-react";
 import Badge from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "../ui/scroll-area";
-import invoiceService from "@/utils/invoice";
+import { invoiceService } from "@/services";
 
 interface OrderTableProps extends HTMLAttributes<HTMLDivElement> {
   orders: InvoiceFullJoin[];

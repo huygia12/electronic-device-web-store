@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { HTMLAttributes, useState } from "react";
-import { Attribute } from "@/types/api";
+import { Attribute } from "@/types/model";
 import { buttonVariants } from "@/utils/constants";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";

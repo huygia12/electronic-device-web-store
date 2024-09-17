@@ -4,7 +4,7 @@ import {
   ReviewFullJoin,
   ReviewFullJoinChild,
   Review,
-} from "@/types/api";
+} from "@/types/model";
 import { FC, useEffect, useRef, useState } from "react";
 import {
   Accordion,
@@ -19,9 +19,8 @@ import LeftProductDetailSection from "@/components/product-detail/left-detail-se
 import RightProductDetailSection from "@/components/product-detail/right-detail-section";
 import PersonalReviewBox from "@/components/product-detail/personal-review-box";
 import { useSocket } from "@/hooks";
-import reviewApis from "@/services/apis/review";
+import { reviewService } from "@/services";
 import { Optional } from "@/utils/declare";
-import reviewService from "@/utils/review";
 
 const ProductDetailPage: FC = () => {
   const product = useRouteLoaderData("product_detail") as ProductFullJoin;
@@ -37,57 +36,67 @@ const ProductDetailPage: FC = () => {
   useEffect(() => {
     const setup = async () => {
       commentSocket?.emit(`product:join`, { productID: product.productID });
-      const reviewResponse = await reviewApis.getReviews(product.productID);
+      const reviewResponse = await reviewService.apis.getReviews(
+        product.productID
+      );
 
       setReviews(reviewResponse);
       setReviewDisplay(reviewResponse.length > 5 ? 5 : reviewResponse.length);
     };
 
     setup();
-    return () => {
-      commentSocket?.emit(`product:leave`, { productID: product.productID });
-    };
-  }, []);
 
-  useEffect(() => {
-    commentSocket?.on(
-      "review:create",
-      (payload: { review: ReviewFullJoin }) => {
-        if (payload.review.productID === product.productID) {
-          let newReviewList: ReviewFullJoin[] = [];
+    const handleReviewCreate = (payload: { review: ReviewFullJoin }) => {
+      if (payload.review.productID === product.productID) {
+        setReviews((prevReviews) => {
+          let newReviewList: ReviewFullJoin[];
           if (payload.review.parentID) {
-            newReviewList = reviews.map((review) => {
+            newReviewList = prevReviews.map((review) => {
               if (review.reviewID === payload.review.parentID) {
                 review.childrenReview.push(payload.review);
               }
               return review;
             });
           } else {
-            newReviewList = [payload.review, ...reviews];
-            setReviewDisplay(reviewDisplay + 1);
+            console.log(`create new review `, payload.review);
+            newReviewList = [payload.review, ...prevReviews];
+            setReviewDisplay((prevReviewDisplay) => prevReviewDisplay + 1);
           }
-          setReviews(newReviewList);
-        }
+          return newReviewList;
+        });
       }
-    );
+    };
 
-    commentSocket?.on("review:delete", (payload: { review: Review }) => {
+    const handleReviewDelete = (payload: { review: Review }) => {
       if (payload.review.productID === product.productID) {
-        let newReviewList: ReviewFullJoin[] = [];
-        if (!payload.review.parentID) {
-          newReviewList = reviewService.deleteReview(reviews, payload.review);
-          setReviewDisplay(reviewDisplay - 1);
-        } else {
-          newReviewList = reviewService.deleteReviewChild(
-            reviews,
-            payload.review
-          );
-        }
-
-        setReviews(newReviewList);
+        setReviews((prevReviews) => {
+          let newReviewList: ReviewFullJoin[];
+          if (payload.review.parentID) {
+            newReviewList = reviewService.deleteReviewChild(
+              prevReviews,
+              payload.review
+            );
+          } else {
+            newReviewList = reviewService.deleteReview(
+              prevReviews,
+              payload.review
+            );
+            setReviewDisplay((prevReviewDisplay) => prevReviewDisplay - 1);
+          }
+          return newReviewList;
+        });
       }
-    });
-  }, [reviews]);
+    };
+
+    commentSocket?.on("review:create", handleReviewCreate);
+    commentSocket?.on("review:delete", handleReviewDelete);
+
+    return () => {
+      commentSocket?.emit(`product:leave`, { productID: product.productID });
+      commentSocket?.off("review:create", handleReviewCreate);
+      commentSocket?.off("review:delete", handleReviewDelete);
+    };
+  }, []);
 
   const handleReplyToComment = (
     review: ReviewFullJoin | ReviewFullJoinChild | undefined

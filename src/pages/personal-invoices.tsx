@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Invoice } from "@/types/api";
+import { Invoice } from "@/types/model";
 import { FC, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Badge from "@/components/ui/badge";
@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { invoiceListHeader, productListHeader } from "@/utils/constants";
-import productService from "@/utils/product";
+import { applyDiscount } from "@/utils/helpers";
 
 const PersonalInvoices: FC = () => {
   // const invoiceData = useRouteLoaderData("my_invoices") as Invoice[];
@@ -169,12 +169,10 @@ const PersonalInvoices: FC = () => {
                                               {prod.discount + "%"}
                                             </TableCell>
                                             <TableCell className="text-center text-base">
-                                              {productService
-                                                .afterDiscount(
-                                                  prod.price,
-                                                  prod.discount
-                                                )
-                                                .toLocaleString() + "đ"}
+                                              {applyDiscount(
+                                                prod.price,
+                                                prod.discount
+                                              ).toLocaleString() + "đ"}
                                             </TableCell>
                                             <TableCell className="text-center text-base">
                                               {prod.quantity}

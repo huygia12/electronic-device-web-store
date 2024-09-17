@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Invoice } from "@/types/api";
+import { Invoice } from "@/types/model";
 import { FC, useState } from "react";
 
 const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {

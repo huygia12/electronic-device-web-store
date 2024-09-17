@@ -8,7 +8,8 @@ import {
 } from "@/components/ui/table";
 import React, { FC, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CartItem, Error } from "@/types/api";
+import { CartItem } from "@/types/model";
+import { Error } from "@/types/error";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Trash2 } from "lucide-react";
 import {
@@ -35,8 +36,8 @@ import { cn } from "@/lib/utils";
 import { useCartProps } from "@/hooks";
 import { buttonVariants } from "@/utils/constants";
 import routes from "../middleware/routes";
-import { arrayInReverse } from "@/utils/helpers";
-import productService from "@/utils/product";
+import { applyDiscount, arrayInReverse, getDiscount } from "@/utils/helpers";
+import { cartService } from "@/services";
 import { NavLink } from "react-router-dom";
 
 const header = [
@@ -182,12 +183,13 @@ const CartVisting: FC = () => {
                           {prod.price.toLocaleString() + "đ"}
                         </TableCell>
                         <TableCell className="text-center text-base">
-                          {productService.getDiscount(prod.discount) + "%"}
+                          {getDiscount(prod.discount) + "%"}
                         </TableCell>
                         <TableCell className="text-center text-base">
-                          {productService
-                            .afterDiscount(prod.price, prod.discount)
-                            .toLocaleString() + "đ"}
+                          {applyDiscount(
+                            prod.price,
+                            prod.discount
+                          ).toLocaleString() + "đ"}
                         </TableCell>
                         <TableCell className="text-center text-base">
                           <Input
@@ -276,14 +278,14 @@ const CartVisting: FC = () => {
             <div className="flex justify-between">
               <span>Tổng tiền hàng</span>
               <span>
-                {productService.getTotalAmount(itemsInLocal).toLocaleString() +
+                {cartService.getTotalAmount(itemsInLocal).toLocaleString() +
                   "đ"}
               </span>
             </div>
             <div className="flex justify-between">
               <span>Tổng tiền giảm giá</span>
               <del>
-                {productService
+                {cartService
                   .getTotalDiscountAmount(itemsInLocal)
                   .toLocaleString() + "đ"}
               </del>
@@ -293,8 +295,8 @@ const CartVisting: FC = () => {
               <span className="text-primary text-xl">Tổng thanh toán</span>
               <span>
                 {(
-                  productService.getTotalAmount(itemsInLocal) -
-                  productService.getTotalDiscountAmount(itemsInLocal)
+                  cartService.getTotalAmount(itemsInLocal) -
+                  cartService.getTotalDiscountAmount(itemsInLocal)
                 ).toLocaleString() + "đ"}
               </span>
             </div>

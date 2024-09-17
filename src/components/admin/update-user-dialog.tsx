@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { User } from "@/types/api";
+import { User } from "@/types/model";
 import { buttonVariants } from "@/utils/constants";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Label } from "../ui/label";
@@ -15,7 +15,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserFormProps, UserSchema } from "@/utils/schema";
 import { Optional } from "@/utils/declare";
-import { firebaseApis, userApis } from "@/services/apis";
+import { firebaseService, userService } from "@/services";
 import { toast } from "sonner";
 import axios from "axios";
 import { cn } from "@/lib/utils";
@@ -50,16 +50,18 @@ const UpdateUserDialog: React.FC<UserDialogProps> = ({
       let avatar: Optional<string>;
       if (data.avatar[0]) {
         props.user?.avatar &&
-          (await firebaseApis.deleteImagesInFireBase([props.user.avatar]));
+          (await firebaseService.apis.deleteImagesInFireBase([
+            props.user.avatar,
+          ]));
         avatar = (
-          await firebaseApis.insertImagesToFireBase(
+          await firebaseService.apis.insertImagesToFireBase(
             data.avatar,
             `/users/${props.user!.userID}`
           )
         )[0];
       }
 
-      const updatedUserInfor: User = await userApis.updateUser(
+      const updatedUserInfor: User = await userService.apis.updateUser(
         props.user!.userID,
         {
           userName: data.userName,

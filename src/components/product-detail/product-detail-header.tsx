@@ -1,4 +1,4 @@
-import { ProductFullJoin, ProductItem } from "@/types/api";
+import { ProductFullJoin, ProductItem } from "@/types/model";
 import { FC, HTMLAttributes } from "react";
 
 interface ProductDetailHeaderProps extends HTMLAttributes<HTMLHeadElement> {

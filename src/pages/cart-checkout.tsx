@@ -24,8 +24,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import productService from "@/utils/product";
-import { deliveryApis, orderApis } from "@/services/apis";
+import { cartService } from "@/services";
+import { deliveryService, orderService } from "@/services";
 import { Nullable } from "@/utils/declare";
 import { ShippingForm, ShippingSchema } from "@/utils/schema";
 import useCurrentUser from "@/hooks/use-current-user";
@@ -61,11 +61,12 @@ const CartCheckout: FC = () => {
       setPhaseID("2");
 
       setTotal(
-        productService.getTotalAmount(itemsInLocal) -
-          productService.getTotalDiscountAmount(itemsInLocal)
+        cartService.getTotalAmount(itemsInLocal) -
+          cartService.getTotalDiscountAmount(itemsInLocal)
       );
 
-      const fetchedProvinces: Province[] = await deliveryApis.getProvinces();
+      const fetchedProvinces: Province[] =
+        await deliveryService.apis.getProvinces();
       setProvinces(fetchedProvinces);
     };
 
@@ -75,9 +76,8 @@ const CartCheckout: FC = () => {
   useEffect(() => {
     /** DISTRICT */
     const fetchData = async () => {
-      const fetchedDistricts: District[] = await deliveryApis.getDistricts(
-        Number(province)
-      );
+      const fetchedDistricts: District[] =
+        await deliveryService.apis.getDistricts(Number(province));
 
       setDistricts(fetchedDistricts);
     };
@@ -88,7 +88,9 @@ const CartCheckout: FC = () => {
   useEffect(() => {
     /** WARD */
     const fetchData = async () => {
-      const fetchedWards = await deliveryApis.getWards(Number(district));
+      const fetchedWards = await deliveryService.apis.getWards(
+        Number(district)
+      );
       // console.log(`fetch wards for district(${curDistrictID})`, wardsRes);
       setWards(fetchedWards);
 
@@ -96,7 +98,7 @@ const CartCheckout: FC = () => {
 
       /** GET SHIPPING SERVICE ID */
       const fetchedServices: Nullable<ServiceRes> =
-        await deliveryApis.getServices(Number(district));
+        await deliveryService.apis.getServices(Number(district));
 
       if (!fetchedServices) return;
 
@@ -126,7 +128,7 @@ const CartCheckout: FC = () => {
     if (value) {
       const promises = itemsInLocal.map(async (item) => {
         const itemShippingFee: Nullable<number> =
-          await deliveryApis.getShippingFee(
+          await deliveryService.apis.getShippingFee(
             Number(serviceID),
             Number(district),
             watch("ward"),
@@ -162,7 +164,7 @@ const CartCheckout: FC = () => {
 
       /** GET DELIVERY TIME */
       const shippingTimeValue: Nullable<number> =
-        await deliveryApis.getDeliveryTime(
+        await deliveryService.apis.getDeliveryTime(
           Number(serviceID),
           Number(district),
           value
@@ -192,7 +194,7 @@ const CartCheckout: FC = () => {
   const handleShippingFormSubmisstion: SubmitHandler<
     ShippingForm
   > = async () => {
-    const paymentUrl: Nullable<string> = await orderApis.makeOrder();
+    const paymentUrl: Nullable<string> = await orderService.apis.makeOrder();
 
     console.log("url: ", paymentUrl);
     if (paymentUrl) {
@@ -397,7 +399,7 @@ const CartCheckout: FC = () => {
             <div className="flex justify-between">
               <span>Tổng tiền hàng</span>
               <span>
-                {productService.getTotalAmount(itemsInLocal).toLocaleString() +
+                {cartService.getTotalAmount(itemsInLocal).toLocaleString() +
                   "đ"}
               </span>
             </div>
@@ -412,7 +414,7 @@ const CartCheckout: FC = () => {
             <div className="flex justify-between">
               <span>Tổng tiền giảm giá</span>
               <del>
-                {productService
+                {cartService
                   .getTotalDiscountAmount(itemsInLocal)
                   .toLocaleString() + "đ"}
               </del>

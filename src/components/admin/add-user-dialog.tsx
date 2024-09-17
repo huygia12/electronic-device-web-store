@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { User } from "@/types/api";
+import { User } from "@/types/model";
 import { buttonVariants } from "@/utils/constants";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Label } from "../ui/label";
@@ -15,7 +15,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignupFormProps, SignupSchema } from "@/utils/schema";
 import { Optional } from "@/utils/declare";
-import { firebaseApis, userApis } from "@/services/apis";
+import { firebaseService, userService } from "@/services";
 import { toast } from "sonner";
 import axios from "axios";
 import { cn } from "@/lib/utils";
@@ -52,7 +52,7 @@ const AddUserDialog: React.FC<UserDialogProps> = ({ className, ...props }) => {
     }
     console.log("pass password");
     try {
-      const userID = await userApis.signup({
+      const userID = await userService.apis.signup({
         userName: data.userName,
         email: data.email,
         password: data.password,
@@ -63,7 +63,7 @@ const AddUserDialog: React.FC<UserDialogProps> = ({ className, ...props }) => {
       let avatar: Optional<string>;
       if (data.avatar[0]) {
         avatar = (
-          await firebaseApis.insertImagesToFireBase(
+          await firebaseService.apis.insertImagesToFireBase(
             data.avatar,
             `/users/${userID}`
           )
@@ -71,7 +71,7 @@ const AddUserDialog: React.FC<UserDialogProps> = ({ className, ...props }) => {
       }
 
       if (avatar) {
-        const newUser: Optional<User> = await userApis.updateUserAvatar(
+        const newUser: Optional<User> = await userService.apis.updateUserAvatar(
           userID,
           avatar
         );

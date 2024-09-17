@@ -35,7 +35,7 @@ import { buttonVariants } from "@/utils/constants";
 import { arrayInReverse } from "@/utils/helpers";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { productApis } from "@/services/apis";
+import { productService } from "@/services";
 import { Checkbox } from "@/components/ui/checkbox";
 
 const colName: string[] = [
@@ -60,7 +60,7 @@ const ProductManagement: FC = () => {
 
   const handleDeleteProduct = async () => {
     if (!selectedProduct) return;
-    const response = productApis.deleteProduct(
+    const response = productService.apis.deleteProduct(
       selectedProduct.productID,
       deepCleanProductID === selectedProduct.productID
     );

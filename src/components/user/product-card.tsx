@@ -2,15 +2,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SaleTag from "../ui/saleTag";
 import React, { HTMLAttributes, useMemo } from "react";
 import { cn } from "@/lib/utils";
-import { ProductFullJoin, ProductItem } from "@/types/api";
+import { ProductFullJoin, ProductItem } from "@/types/model";
 import { Button } from "../ui/button";
 import { NavLink } from "react-router-dom";
 import { Coins, ShoppingBasket } from "lucide-react";
-import productService from "@/utils/product";
 import { ProductDialog } from ".";
 import CardTag from "../ui/cardTag";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { CustomImage } from "../common";
+import { applyDiscount, isDiscount } from "@/utils/helpers";
 
 interface CardProductProps extends HTMLAttributes<HTMLDivElement> {
   product: ProductFullJoin;
@@ -64,11 +64,12 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
         </ScrollArea>
         <div className="flex flex-row flex-wrap items-baseline justify-between">
           <div className="text-[1.3rem] font-extrabold text-primary-foreground truncate ...">
-            {`${productService
-              .afterDiscount(currentItem.price, currentItem.discount)
-              .toLocaleString()}đ`}
+            {`${applyDiscount(
+              currentItem.price,
+              currentItem.discount
+            ).toLocaleString()}đ`}
           </div>
-          {productService.isDiscount(currentItem.discount) && (
+          {isDiscount(currentItem.discount) && (
             <del className="text-[0.8rem] text-secondary-foreground">
               {`${currentItem.price.toLocaleString()}đ`}
             </del>

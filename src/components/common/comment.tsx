@@ -3,13 +3,13 @@ import { User } from "lucide-react";
 import { StarRating } from "../common";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FC, HTMLAttributes, MutableRefObject } from "react";
-import { ReviewFullJoin, ReviewFullJoinChild } from "@/types/api";
+import { ReviewFullJoin, ReviewFullJoinChild } from "@/types/model";
 import { useCurrentUser } from "@/hooks";
 import { useSocket } from "@/hooks";
 import { Optional } from "@/utils/declare";
-import { SocketEmitError } from "@/types/api/socket";
+import { SocketEmitError } from "@/types/socket";
 import { toast } from "sonner";
-import { Role } from "@/utils/constants";
+import { Role } from "@/types/enum";
 
 interface CommentProps extends HTMLAttributes<HTMLDivElement> {
   index?: number;
@@ -42,7 +42,6 @@ const Comment: FC<CommentProps> = ({ ...props }) => {
     if (props.fillInRef?.current) {
       props.fillInRef.current.scrollIntoView({ behavior: "smooth" });
     }
-    console.log(`replyToComment `, props.fillInRef);
     props.setReplyToComment(props.review);
   };
 

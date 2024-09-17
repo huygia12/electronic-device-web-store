@@ -10,7 +10,7 @@ import {
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { HTMLAttributes, useState } from "react";
-import { Provider } from "@/types/api";
+import { Provider } from "@/types/model";
 import { buttonVariants } from "@/utils/constants";
 
 interface ProviderDialogProps extends HTMLAttributes<HTMLFormElement> {

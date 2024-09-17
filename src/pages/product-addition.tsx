@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Attribute, AttributeOption, Category, Provider } from "@/types/api";
+import { Attribute, AttributeOption, Category, Provider } from "@/types/model";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown, Plus, Trash2, X } from "lucide-react";
 import { FC, useEffect, useState } from "react";
@@ -37,14 +37,13 @@ import {
   ProductSchema,
 } from "@/utils/schema";
 import { LoadingSpinner } from "@/components/effect";
-import categoryApis from "@/services/apis/category";
-import { attributeApis, productApis, providerApis } from "@/services/apis";
-import productService from "@/utils/product";
-import attributeService from "@/utils/attribute";
+import categoryService from "@/services/category";
+import { attributeService, productService, providerService } from "@/services";
 import { Optional } from "@/utils/declare";
 import { toast } from "sonner";
 import { useCustomNavigate } from "@/hooks";
 import ImageOverView from "@/components/common/image-overview";
+import { retrieveImageUrl } from "@/utils/helpers";
 
 const ProductAddition: FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -85,9 +84,9 @@ const ProductAddition: FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const categories = await categoryApis.getCategories();
-      const providers = await providerApis.getProviders();
-      const attributes = await attributeApis.getAttributes();
+      const categories = await categoryService.apis.getCategories();
+      const providers = await providerService.apis.getProviders();
+      const attributes = await attributeService.apis.getAttributes();
 
       setCategories(categories);
       setProviders(providers);
@@ -149,7 +148,7 @@ const ProductAddition: FC = () => {
   const handleFormSubmission: SubmitHandler<ProductInputFormProps> = async (
     data
   ) => {
-    const response = productApis.addProduct(data);
+    const response = productService.apis.addProduct(data);
     toast.promise(response, {
       loading: "Đang xử lý...",
       success: () => {
@@ -531,13 +530,13 @@ const ProductAddition: FC = () => {
                   )}
                   {productItemsAddition[parentIndex]?.thump?.[0] && (
                     <ImageOverView
-                      src={productService.retrieveImageUrl(
+                      src={retrieveImageUrl(
                         productItemsAddition[parentIndex].thump[0]
                       )}
                       alt={`thump-${parentIndex}`}
                     >
                       <img
-                        src={productService.retrieveImageUrl(
+                        src={retrieveImageUrl(
                           productItemsAddition[parentIndex].thump[0]
                         )}
                         className="cursor-pointer max-w-40 object-cover rounded-md border-stone-300 border-2"
@@ -575,11 +574,11 @@ const ProductAddition: FC = () => {
                         return (
                           <ImageOverView
                             key={index}
-                            src={productService.retrieveImageUrl(image)}
+                            src={retrieveImageUrl(image)}
                             alt={`productimage-${index}`}
                           >
                             <img
-                              src={productService.retrieveImageUrl(image)}
+                              src={retrieveImageUrl(image)}
                               className="max-w-40 object-cover rounded-md border-stone-300 border-2"
                             />
                           </ImageOverView>

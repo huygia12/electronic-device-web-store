@@ -30,7 +30,7 @@ import {
   Category,
   ProductFullJoin,
   Provider,
-} from "@/types/api";
+} from "@/types/model";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown, Plus, Trash2, X } from "lucide-react";
 import { FC, useLayoutEffect, useState } from "react";
@@ -43,15 +43,14 @@ import {
   ProductUpdateSchema,
 } from "@/utils/schema";
 import { LoadingSpinner } from "@/components/effect";
-import categoryApis from "@/services/apis/category";
-import { attributeApis, providerApis } from "@/services/apis";
-import productService from "@/utils/product";
-import attributeService from "@/utils/attribute";
+import categoryService from "@/services/category";
+import { attributeService, providerService } from "@/services";
 import { Optional } from "@/utils/declare";
 import { toast } from "sonner";
 import { useCustomNavigate } from "@/hooks";
 import ImageOverView from "@/components/common/image-overview";
 import { useRouteLoaderData } from "react-router-dom";
+import { retrieveImageUrl } from "@/utils/helpers";
 
 const ProductEdittion: FC = () => {
   const product = useRouteLoaderData("product_edition") as ProductFullJoin;
@@ -93,9 +92,9 @@ const ProductEdittion: FC = () => {
 
   useLayoutEffect(() => {
     const fetchData = async () => {
-      const categories = await categoryApis.getCategories();
-      const providers = await providerApis.getProviders();
-      const attributes = await attributeApis.getAttributes();
+      const categories = await categoryService.apis.getCategories();
+      const providers = await providerService.apis.getProviders();
+      const attributes = await attributeService.apis.getAttributes();
 
       setCategories(categories);
       setProviders(providers);
@@ -194,7 +193,7 @@ const ProductEdittion: FC = () => {
     const edittedThump = productItemsAddition[index]?.thump;
 
     if (edittedThump instanceof FileList && edittedThump.length > 0) {
-      return productService.retrieveImageUrl(edittedThump[0]);
+      return retrieveImageUrl(edittedThump[0]);
     }
 
     return product.productItems[index].thump;
@@ -208,7 +207,7 @@ const ProductEdittion: FC = () => {
       edittedProductImages.length > 0
     ) {
       return Array.from(edittedProductImages).map((productImage) =>
-        productService.retrieveImageUrl(productImage)
+        retrieveImageUrl(productImage)
       );
     }
 
@@ -220,7 +219,7 @@ const ProductEdittion: FC = () => {
   const handleFormSubmission: SubmitHandler<ProductUpdateFormProps> = async (
     data
   ) => {
-    // const response: boolean = await productApis.updateProduct(data);
+    // const response: boolean = await productService.apis.updateProduct(data);
     const response = true;
     if (response) {
       toast.success("Thay đổi thành công!");
