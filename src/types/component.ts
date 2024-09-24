@@ -1,3 +1,4 @@
+import { Nullable, Optional } from "@/utils/declare";
 import { LucideIcon } from "lucide-react";
 
 //Purchase phases
@@ -28,4 +29,10 @@ export interface AdminNavSubItem {
   name: string;
   url: string;
   icon: LucideIcon;
+}
+
+//Store
+export interface Banner {
+  newBanner: Optional<File | null>;
+  prevBanner: Nullable<string>;
 }

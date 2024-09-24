@@ -13,11 +13,13 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useRouteLoaderData } from "react-router-dom";
-import ReviewList from "@/components/product-detail/review-list";
-import ProductDetailHeader from "@/components/product-detail/product-detail-header";
-import LeftProductDetailSection from "@/components/product-detail/left-detail-section";
-import RightProductDetailSection from "@/components/product-detail/right-detail-section";
-import PersonalReviewBox from "@/components/product-detail/personal-review-box";
+import {
+  ReviewList,
+  ProductDetailHeader,
+  LeftDetailSection,
+  RightDetailSection,
+  PersonalReviewBox,
+} from "@/components/product-detail";
 import { useSocket } from "@/hooks";
 import { reviewService } from "@/services";
 import { Optional } from "@/utils/declare";
@@ -117,12 +119,9 @@ const ProductDetailPage: FC = () => {
         <ProductDetailHeader product={product} currentItem={currentItem} />
 
         <div className="grid grid-cols-2 gap-10 mb-10">
-          <LeftProductDetailSection
-            product={product}
-            currentItem={currentItem}
-          />
+          <LeftDetailSection product={product} currentItem={currentItem} />
 
-          <RightProductDetailSection
+          <RightDetailSection
             product={product}
             currentItem={currentItem}
             setCurrentItem={setCurrentItem}

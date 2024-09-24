@@ -31,6 +31,7 @@ import {
   productService,
   providerService,
   statisticService,
+  storeService,
   userService,
 } from "@/services";
 import { createBrowserRouter } from "react-router-dom";
@@ -44,6 +45,8 @@ import { Args } from "@/utils/declare";
 const routes = createBrowserRouter([
   {
     path: "/",
+    id: "userlayout",
+    loader: storeService.apis.getStore,
     element: (
       <AuthProvider>
         <UserLayout />
@@ -184,6 +187,8 @@ const routes = createBrowserRouter([
       },
       {
         path: "store",
+        id: "store_management",
+        loader: storeService.apis.getStore,
         element: <StoreManagement />,
       },
       {

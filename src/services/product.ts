@@ -51,7 +51,7 @@ const productService = {
       try {
         const res = await axiosInstanceWithoutAuthorize.get<{
           info: ProductFullJoin[];
-        }>(`/products?categoryID=${categoryID}`, reqConfig);
+        }>(`/products?detail=true&categoryID=${categoryID}`, reqConfig);
 
         return res.data.info;
       } catch (error) {
@@ -75,7 +75,7 @@ const productService = {
       try {
         const res = await axiosInstanceWithoutAuthorize.get<{
           info: ProductFullJoin[];
-        }>(`/products?providerID=${providerID}`, reqConfig);
+        }>(`/products?detail=true&providerID=${providerID}`, reqConfig);
 
         return res.data.info;
       } catch (error) {

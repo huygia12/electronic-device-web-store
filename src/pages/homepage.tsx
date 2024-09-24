@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import React, { FC, useEffect, useState } from "react";
-import axios from "axios";
 import { Category, ProductFullJoin, Provider } from "@/types/model";
 import { SwatchBook } from "lucide-react";
 import {
@@ -43,35 +42,20 @@ const Homepage: FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const categoriesRes: Category[] =
-          await categoryService.apis.getCategories();
-        const providersRes: Provider[] =
-          await providerService.apis.getProviders();
+      const categoriesRes: Category[] =
+        await categoryService.apis.getCategories();
+      const providersRes: Provider[] =
+        await providerService.apis.getProviders();
 
-        const phonesDataRes: ProductFullJoin[] =
-          await productService.apis.getProductsFullJoinWithCategoryID(PHONE_ID);
-        const laptopsDataRes: ProductFullJoin[] =
-          await productService.apis.getProductsFullJoinWithCategoryID(
-            LAPTOP_ID
-          );
+      const phonesDataRes: ProductFullJoin[] =
+        await productService.apis.getProductsFullJoinWithCategoryID(PHONE_ID);
+      const laptopsDataRes: ProductFullJoin[] =
+        await productService.apis.getProductsFullJoinWithCategoryID(LAPTOP_ID);
 
-        setPhonesData(phonesDataRes);
-        setLaptopsData(laptopsDataRes);
-        setCategoriesData(categoriesRes);
-        setProvidersData(providersRes);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
-      }
+      setPhonesData(phonesDataRes);
+      setLaptopsData(laptopsDataRes);
+      setCategoriesData(categoriesRes);
+      setProvidersData(providersRes);
     };
 
     fetchData();

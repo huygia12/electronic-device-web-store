@@ -40,6 +40,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 const colName: string[] = [
   "STT",
+  "ẢNH SẢN PHẨM",
   "TÊN SẢN PHẨM",
   "KÍCH THƯỚC(dài/rộng/cao)",
   "KHỐI LƯỢNG",
@@ -81,7 +82,7 @@ const ProductManagement: FC = () => {
   };
 
   return (
-    <section>
+    <>
       {/**Search */}
       <div className="relative h-[3rem] mt-8 mb-4">
         <Search className="absolute left-4 top-3 h-6 w-6 text-muted-foreground" />
@@ -134,6 +135,13 @@ const ProductManagement: FC = () => {
                         >
                           <TableCell className="text-center text-base">
                             {index + 1}
+                          </TableCell>
+                          <TableCell>
+                            <img
+                              src={product.productItems[0].thump}
+                              alt={product.productName}
+                              className="w-12 h-12 mx-auto rounded-md object-cover"
+                            />
                           </TableCell>
                           <TableCell className="text-center text-base">
                             <TooltipProvider>
@@ -263,7 +271,7 @@ const ProductManagement: FC = () => {
           </CardContent>
         </Card>
       </div>
-    </section>
+    </>
   );
 };
 

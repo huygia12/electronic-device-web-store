@@ -96,3 +96,11 @@ export interface UserUpdate {
   phoneNumber: Optional<string>;
   avatar: Optional<string>;
 }
+
+//Slide
+export interface SlideCreation {
+  file: File;
+  url: string;
+  ref: Nullable<string>;
+  index: number;
+}

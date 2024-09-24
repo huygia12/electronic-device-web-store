@@ -11,3 +11,4 @@ export { default as providerService } from "@/services/provider";
 export { default as reviewService } from "@/services/review";
 export { default as statisticService } from "@/services/statistic";
 export { default as userService } from "@/services/user";
+export { default as storeService } from "@/services/store";

@@ -211,3 +211,27 @@ export interface AuthUser {
   role: Role;
   exp: string;
 }
+
+//Store
+export interface Slide {
+  slideID: string;
+  url: string;
+  ref: Nullable<string>;
+  storeID: string;
+  index: number;
+}
+
+export interface Store {
+  storeID: string;
+  storeName: string;
+  description: Nullable<string>;
+  address: Nullable<string>;
+  phoneNumber: Nullable<string>;
+  email: Nullable<string>;
+  leftBanner: Nullable<string>;
+  rightBanner: Nullable<string>;
+}
+
+export type StoreFullJoin = Store & {
+  slideShows: Slide[];
+};
