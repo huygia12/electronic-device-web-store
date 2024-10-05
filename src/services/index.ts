@@ -5,7 +5,6 @@ export { default as categoriesService } from "@/services/category";
 export { default as deliveryService } from "@/services/delivery";
 export { default as firebaseService } from "@/services/firebase";
 export { default as invoiceService } from "@/services/invoice";
-export { default as orderService } from "@/services/order";
 export { default as productService } from "@/services/product";
 export { default as providerService } from "@/services/provider";
 export { default as reviewService } from "@/services/review";

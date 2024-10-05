@@ -1,7 +1,8 @@
-import { InvoiceFullJoin } from "@/types/model";
+import { CartItem, InvoiceFullJoin } from "@/types/model";
 import { axiosInstance, reqConfig } from "@/config/axios-config";
 import axios from "axios";
 import { InvoiceStatus } from "@/types/enum";
+import { OrderInsertion, ProductOrderInsertion } from "@/types/api";
 
 const invoiceService = {
   apis: {
@@ -47,6 +48,17 @@ const invoiceService = {
         return [];
       }
     },
+    createOrder: async (
+      orderPayload: OrderInsertion
+    ): Promise<InvoiceFullJoin> => {
+      const res = await axiosInstance.post<{ info: InvoiceFullJoin }>(
+        "/invoices",
+        orderPayload,
+        reqConfig
+      );
+
+      return res.data.info;
+    },
   },
   getTotalBill: (invoice: InvoiceFullJoin): number => {
     return invoice.invoiceProducts.reduce(
@@ -54,6 +66,15 @@ const invoiceService = {
         total + item.quantity * (1 - (item.discount || 0)) * item.price,
       0
     );
+  },
+  getProductOrderInsertion: (
+    cartItems: CartItem[]
+  ): ProductOrderInsertion[] => {
+    return cartItems.map((item) => ({
+      productID: item.productID,
+      itemID: item.itemID,
+      quantity: item.quantity,
+    }));
   },
 };
 

@@ -104,3 +104,24 @@ export interface SlideCreation {
   ref: Nullable<string>;
   index: number;
 }
+
+//Invoice
+export interface OrderInsertion {
+  district: string;
+  ward: string;
+  province: string;
+  phoneNumber: string;
+  detailAddress: string;
+  email: string;
+  userID: string;
+  note?: string;
+  shippingFee: number;
+  shippingTime: number;
+  invoiceProducts: ProductOrderInsertion[];
+}
+
+export interface ProductOrderInsertion {
+  productID: string;
+  itemID: string;
+  quantity: number;
+}

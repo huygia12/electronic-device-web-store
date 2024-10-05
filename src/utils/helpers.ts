@@ -82,6 +82,10 @@ const applyDiscount = (price: number, discount: Nullable<number>): number => {
   return price * (1 - discount / 100);
 };
 
+const convertMiliSecToDays = (miliSec: number): number => {
+  return Math.round(miliSec / (1000 * 60 * 60 * 24));
+};
+
 export {
   arrayInReverse,
   getImageUrl,
@@ -94,4 +98,5 @@ export {
   getDiscount,
   isDiscount,
   applyDiscount,
+  convertMiliSecToDays,
 };

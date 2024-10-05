@@ -1,6 +1,8 @@
 import { SchemaResponse } from "@/types/enum";
 import z, { ZodString } from "zod";
 
+const phoneNumberRegex = new RegExp("^[0-9]+$");
+
 const positiveSafeFloat = (errorMessage: string = SchemaResponse.INVALID) =>
   z.preprocess(
     (value) => parseFloat(z.string().parse(value)),
@@ -77,7 +79,7 @@ const UserSchema = z.object({
     .refine((value) => {
       if (value.length > 0) {
         if (value.length > 10) return false;
-        return /^[0-9]+$/.test(value);
+        return phoneNumberRegex.test(value);
       }
       return true;
     }, SchemaResponse.PHONE_INVALID)
@@ -103,7 +105,7 @@ const SignupSchema = z.object({
     .refine((value) => {
       if (value.length > 0) {
         if (value.length > 10) return false;
-        return /^[0-9]+$/.test(value);
+        return phoneNumberRegex.test(value);
       }
       return true;
     }, SchemaResponse.PHONE_INVALID)
@@ -160,11 +162,11 @@ const ShippingSchema = z.object({
   email: z.string().email({ message: "Email không đúng định dạng!" }),
   phoneNumber: z
     .string()
-    .regex(new RegExp("^[-1-9]+$"), { message: "Số diện thoại không hợp lệ!" }),
+    .regex(phoneNumberRegex, { message: "Số diện thoại không hợp lệ!" }),
   province: z.string().min(0, { message: "Chưa chọn tỉnh/thành phố!" }),
   district: z.string().min(0, { message: "Chưa chọn quận/huyện!" }),
   ward: z.string().min(0, { message: "Chưa chọn huyện/xã!" }),
-  detailAddress: z.string().optional(),
+  detailAddress: z.string({ message: "Chưa điền địa chỉ cụ thể!" }),
   note: z.string().optional(),
 });
 
