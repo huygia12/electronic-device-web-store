@@ -28,8 +28,8 @@ const providerService = {
         return [];
       }
     },
-    addProvider: async (name: string) => {
-      const response = await axiosInstance.post(
+    addProvider: async (name: string): Promise<Provider> => {
+      const response = await axiosInstance.post<{ info: Provider }>(
         "/providers",
         {
           providerName: name,
@@ -37,10 +37,13 @@ const providerService = {
         reqConfig
       );
 
-      return response;
+      return response.data.info;
     },
-    updateProvider: async (providerID: string, newName: string) => {
-      const response = await axiosInstance.put(
+    updateProvider: async (
+      providerID: string,
+      newName: string
+    ): Promise<Provider> => {
+      const response = await axiosInstance.put<{ info: Provider }>(
         `/providers/${providerID}`,
         {
           providerName: newName,
@@ -48,7 +51,7 @@ const providerService = {
         reqConfig
       );
 
-      return response;
+      return response.data.info;
     },
     deleteProvider: async (providerID: string) => {
       const response = await axiosInstance.delete(
@@ -58,6 +61,23 @@ const providerService = {
 
       return response;
     },
+  },
+  getSearchingResult: (text: string, providers: Provider[]) => {
+    return providers.filter((provider) =>
+      provider.providerName.toLowerCase().includes(text.toLowerCase())
+    );
+  },
+  addProvider: (provider: Provider, providers: Provider[]): Provider[] => {
+    return [provider, ...providers];
+  },
+  updateProvider: (provider: Provider, providers: Provider[]): Provider[] => {
+    return [
+      provider,
+      ...providers.filter((e) => e.providerID !== provider.providerID),
+    ];
+  },
+  deleteProvider: (provider: Provider, providers: Provider[]): Provider[] => {
+    return [...providers.filter((e) => e.providerID !== provider.providerID)];
   },
 };
 

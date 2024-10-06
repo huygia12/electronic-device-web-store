@@ -99,7 +99,7 @@ const navItems: AdminNavItem[] = [
     children: [],
   },
   {
-    name: "Quản lý nhà phân phối",
+    name: "Quản lý nhãn hàng",
     url: "/admin/providers",
     icon: Factory,
     hasChild: false,

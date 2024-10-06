@@ -2,7 +2,7 @@ import { ProductSummary } from "@/types/api";
 import { useRouteLoaderData } from "react-router-dom";
 import { FC, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { categoriesService, productService, providerService } from "@/services";
+import { categoryService, productService, providerService } from "@/services";
 import {
   HeaderBar,
   ProductTable,
@@ -38,7 +38,7 @@ const ProductManagement: FC = () => {
 
   useEffect(() => {
     const setup = async () => {
-      const categoriesRes = await categoriesService.apis.getCategories();
+      const categoriesRes = await categoryService.apis.getCategories();
       const providersRes = await providerService.apis.getProviders();
 
       setCategories(categoriesRes);

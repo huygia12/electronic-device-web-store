@@ -7,23 +7,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { HTMLAttributes, useState } from "react";
-import { Category } from "@/types/model";
-import { buttonVariants } from "@/utils/constants";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { HTMLAttributes, useState } from "react";
+import { Provider } from "@/types/model";
+import { buttonVariants } from "@/utils/constants";
 
-interface CategoryDialogProps extends HTMLAttributes<HTMLFormElement> {
-  category?: Category;
-  formTitle: string;
-  handleDialogAcceptEvent: (name: string) => Promise<void>;
+interface ProviderDialogProps extends HTMLAttributes<HTMLFormElement> {
+  provider?: Provider;
+  dialogTitle: string;
+  handleDialogAcceptEvent: (name: string) => void;
 }
 
-const CategoryDialog: React.FC<CategoryDialogProps> = ({
+const ProviderDialog: React.FC<ProviderDialogProps> = ({
   className,
   ...props
 }) => {
-  const [name, setName] = useState<string>(props.category?.categoryName ?? "");
+  const [name, setName] = useState<string>(props.provider?.providerName ?? "");
   const [isDisable, setIsDisable] = useState(true);
 
   const handleInputEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +37,7 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
   };
 
   const resetInputValue = () => {
-    setName(props.category?.categoryName ?? "");
+    setName(props.provider?.providerName ?? "");
   };
 
   return (
@@ -48,11 +48,11 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{props.formTitle}</DialogTitle>
+            <DialogTitle>{props.dialogTitle}</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-5 items-center gap-10">
             <Label htmlFor="name" className="col-span-2 text-right text-lg">
-              Danh mục
+              Nhà phân phối
             </Label>
             <Input
               type="text"
@@ -84,4 +84,4 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
   );
 };
 
-export default CategoryDialog;
+export default ProviderDialog;

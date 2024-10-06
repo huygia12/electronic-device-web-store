@@ -28,8 +28,8 @@ const categoryService = {
         return [];
       }
     },
-    addCategory: async (name: string) => {
-      const response = await axiosInstance.post(
+    addCategory: async (name: string): Promise<Category> => {
+      const response = await axiosInstance.post<{ info: Category }>(
         "/categories",
         {
           categoryName: name,
@@ -37,10 +37,13 @@ const categoryService = {
         reqConfig
       );
 
-      return response;
+      return response.data.info;
     },
-    updateCategory: async (categoryID: string, newName: string) => {
-      const response = await axiosInstance.put(
+    updateCategory: async (
+      categoryID: string,
+      newName: string
+    ): Promise<Category> => {
+      const response = await axiosInstance.put<{ info: Category }>(
         `/categories/${categoryID}`,
         {
           categoryName: newName,
@@ -48,7 +51,7 @@ const categoryService = {
         reqConfig
       );
 
-      return response;
+      return response.data.info;
     },
     deleteCategory: async (categoryID: string) => {
       const response = await axiosInstance.delete(
@@ -58,6 +61,23 @@ const categoryService = {
 
       return response;
     },
+  },
+  getSearchingResult: (text: string, categories: Category[]) => {
+    return categories.filter((category) =>
+      category.categoryName.toLowerCase().includes(text.toLowerCase())
+    );
+  },
+  addCategory: (category: Category, categories: Category[]): Category[] => {
+    return [category, ...categories];
+  },
+  updateCategory: (category: Category, categories: Category[]): Category[] => {
+    return [
+      category,
+      ...categories.filter((e) => e.categoryID !== category.categoryID),
+    ];
+  },
+  deleteCategory: (category: Category, categories: Category[]): Category[] => {
+    return [...categories.filter((e) => e.categoryID !== category.categoryID)];
   },
 };
 

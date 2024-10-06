@@ -1,7 +1,7 @@
 export { default as attributeService } from "@/services/attribute";
 export { default as authService } from "@/services/auth";
 export { default as cartService } from "@/services/cart";
-export { default as categoriesService } from "@/services/category";
+export { default as categoryService } from "@/services/category";
 export { default as deliveryService } from "@/services/delivery";
 export { default as firebaseService } from "@/services/firebase";
 export { default as invoiceService } from "@/services/invoice";
