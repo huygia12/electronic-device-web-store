@@ -13,13 +13,11 @@ import { FC, HTMLAttributes } from "react";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Optional } from "@/utils/declare";
-import { attributeService } from "@/services";
 
 const typeColsName: string[] = ["STT", "THUỘC TÍNH"];
 
 interface AttributeTypeTableProps extends HTMLAttributes<HTMLDivElement> {
   attributes: Attribute[];
-  searchText: string;
   selectedAttribute: Optional<Attribute>;
   handleSelectAttribute: (attribute: Attribute) => void;
 }
@@ -58,26 +56,24 @@ const AttributeTypeTable: FC<AttributeTypeTableProps> = ({ ...props }) => {
               </tr>
             </TableHeader>
             <TableBody>
-              {attributeService
-                .getSearchingResult(props.searchText, props.attributes)
-                .map((attr, index) => (
-                  <TableRow
-                    onClick={() => props.handleSelectAttribute(attr)}
-                    key={index}
-                    className={cn(
-                      "cursor-pointer",
-                      props.selectedAttribute?.typeID === attr.typeID &&
-                        "bg-theme-softer"
-                    )}
-                  >
-                    <TableCell className="text-center text-base">
-                      {index + 1}
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      {attr.typeValue}
-                    </TableCell>
-                  </TableRow>
-                ))}
+              {props.attributes.map((attr, index) => (
+                <TableRow
+                  onClick={() => props.handleSelectAttribute(attr)}
+                  key={index}
+                  className={cn(
+                    "cursor-pointer",
+                    props.selectedAttribute?.typeID === attr.typeID &&
+                      "bg-theme-softer"
+                  )}
+                >
+                  <TableCell className="text-center text-base">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell className="text-center text-base">
+                    {attr.typeValue}
+                  </TableCell>
+                </TableRow>
+              ))}
               <tr>
                 <td>
                   <Separator />

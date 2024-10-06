@@ -7,10 +7,10 @@ import { attributeService } from "@/services";
 import {
   AttributeOptionTable,
   AttributeTypeTable,
-  SearchBox,
 } from "@/components/attribute-mananagement";
 import AttributeTypeTools from "@/components/attribute-mananagement/attribute-type-tools";
 import AttributeOptionTools from "@/components/attribute-mananagement/attribute-option-tools";
+import { SearchBox } from "@/components/common";
 
 const AttributeManagement: FC = () => {
   const initData = useRouteLoaderData("attribute_management") as Attribute[];
@@ -190,43 +190,47 @@ const AttributeManagement: FC = () => {
   };
 
   return (
-    <div className=" grid grid-cols-5 gap-4">
-      <SearchBox handleSearching={handleSearching} />
+    <div>
+      <SearchBox setSearchText={handleSearching} />
 
-      {/** ATTRIBUTE TYPE */}
-      <div className="col-span-3 flex gap-4">
-        <AttributeTypeTools
-          selectedAttribute={selectedAttribute}
-          handleAddAttributeType={handleAddAttributeType}
-          handleUpdateAttributeType={handleUpdateAttributeType}
-          handleDeleteAttributeType={handleDeleteAttributeType}
-        />
+      <div className="grid grid-cols-5 gap-4">
+        {/** ATTRIBUTE TYPE */}
+        <div className="col-span-3 flex gap-4">
+          <AttributeTypeTools
+            selectedAttribute={selectedAttribute}
+            handleAddAttributeType={handleAddAttributeType}
+            handleUpdateAttributeType={handleUpdateAttributeType}
+            handleDeleteAttributeType={handleDeleteAttributeType}
+          />
 
-        <AttributeTypeTable
-          className="flex-1"
-          searchText={searchText}
-          attributes={attributes}
-          selectedAttribute={selectedAttribute}
-          handleSelectAttribute={handleSelectAttribute}
-        />
-      </div>
+          <AttributeTypeTable
+            className="flex-1"
+            attributes={attributeService.getSearchingResult(
+              searchText,
+              attributes
+            )}
+            selectedAttribute={selectedAttribute}
+            handleSelectAttribute={handleSelectAttribute}
+          />
+        </div>
 
-      {/** ATTRIBUTE OPTION */}
-      <div className="col-span-2 flex gap-4">
-        <AttributeOptionTable
-          attributes={attributes}
-          selectedAttribute={selectedAttribute}
-          selectedAttributeOption={selectedAttributeOption}
-          setSelectedAttributeOption={setSelectedAttributeOption}
-        />
+        {/** ATTRIBUTE OPTION */}
+        <div className="col-span-2 flex gap-4">
+          <AttributeOptionTable
+            attributes={attributes}
+            selectedAttribute={selectedAttribute}
+            selectedAttributeOption={selectedAttributeOption}
+            setSelectedAttributeOption={setSelectedAttributeOption}
+          />
 
-        <AttributeOptionTools
-          selectedAttribute={selectedAttribute}
-          selectedAttributeOption={selectedAttributeOption}
-          handleAddAttributeOption={handleAddAttributeOption}
-          handleUpdateAttributeOption={handleUpdateAttributeOption}
-          handleDeleteAttributeOption={handleDeleteAttributeOption}
-        />
+          <AttributeOptionTools
+            selectedAttribute={selectedAttribute}
+            selectedAttributeOption={selectedAttributeOption}
+            handleAddAttributeOption={handleAddAttributeOption}
+            handleUpdateAttributeOption={handleUpdateAttributeOption}
+            handleDeleteAttributeOption={handleDeleteAttributeOption}
+          />
+        </div>
       </div>
     </div>
   );
