@@ -8,22 +8,22 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { HTMLAttributes, useState } from "react";
+import { Attribute } from "@/types/model";
+import { buttonVariants } from "@/utils/constants";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { AttributeOption } from "@/types/model";
-import { buttonVariants } from "@/utils/constants";
 
 interface AttibuteDialogProps extends HTMLAttributes<HTMLFormElement> {
-  option?: AttributeOption;
-  formTitle: string;
-  handleDialogAcceptEvent: (name: string) => Promise<void>;
+  attribute?: Attribute;
+  dialogTitle: string;
+  handleDialogAcceptEvent: (name: string) => void;
 }
 
-const OptionDialog: React.FC<AttibuteDialogProps> = ({
+const AttributeDialog: React.FC<AttibuteDialogProps> = ({
   className,
   ...props
 }) => {
-  const [name, setName] = useState<string>(props.option?.optionID ?? "");
+  const [name, setName] = useState<string>(props.attribute?.typeValue ?? "");
   const [isDisable, setIsDisable] = useState(true);
 
   const handleInputEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +37,7 @@ const OptionDialog: React.FC<AttibuteDialogProps> = ({
   };
 
   const resetInputValue = () => {
-    setName(props.option?.optionValue ?? "");
+    setName(props.attribute?.typeValue ?? "");
   };
 
   return (
@@ -48,16 +48,16 @@ const OptionDialog: React.FC<AttibuteDialogProps> = ({
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{props.formTitle}</DialogTitle>
+            <DialogTitle>{props.dialogTitle}</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right text-lg">
-              Giá trị
+              Thuộc tính
             </Label>
             <Input
               id="name"
-              value={name}
               type="text"
+              value={name}
               autoComplete="off"
               onChange={(e) => handleInputEvent(e)}
               className="col-span-3"
@@ -84,4 +84,4 @@ const OptionDialog: React.FC<AttibuteDialogProps> = ({
   );
 };
 
-export default OptionDialog;
+export default AttributeDialog;

@@ -31,62 +31,65 @@ const attributeService = {
         return [];
       }
     },
-    addAttributeType: async (name: string): Promise<AxiosResponse> => {
-      const response = await axiosInstance.post(
+    addAttributeType: async (name: string): Promise<Attribute> => {
+      const response = await axiosInstance.post<{ info: Attribute }>(
         "/attributes",
         {
           typeValue: name,
         },
         reqConfig
       );
-      return response;
+      return response.data.info;
     },
     updateAttributeType: async (
       typeID: string,
       newName: string
-    ): Promise<AxiosResponse> => {
-      const response = await axiosInstance.put(
+    ): Promise<Attribute> => {
+      const response = await axiosInstance.put<{ info: Attribute }>(
         `/attributes/${typeID}`,
         {
           typeValue: newName,
         },
         reqConfig
       );
-      return response;
+
+      return response.data.info;
     },
-    deleteAttribute: async (typeID: string): Promise<AxiosResponse> => {
+    deleteAttributeType: async (typeID: string): Promise<AxiosResponse> => {
       const response = await axiosInstance.delete(
         `/attributes/${typeID}`,
         reqConfig
       );
+
       return response;
     },
     addAttributeOption: async (
       typeID: string,
       option: string
-    ): Promise<AxiosResponse> => {
-      const response = await axiosInstance.post(
+    ): Promise<AttributeOption> => {
+      const response = await axiosInstance.post<{ info: AttributeOption }>(
         `/attributes/${typeID}/options`,
         {
           optionValue: option,
         },
         reqConfig
       );
-      return response;
+
+      return response.data.info;
     },
     updateAttributeOption: async (
       optionID: string,
-      newName: string,
-      typeID: string
-    ): Promise<AxiosResponse> => {
-      const response = await axiosInstance.put(
+      typeID: string,
+      newName: string
+    ): Promise<AttributeOption> => {
+      const response = await axiosInstance.put<{ info: AttributeOption }>(
         `/attributes/${typeID}/options/${optionID}`,
         {
           optionValue: newName,
         },
         reqConfig
       );
-      return response;
+      return response.data.info;
     },
     deleteAttributeOption: async (typeID: string, optionID: string) => {
       const response = await axiosInstance.delete(
@@ -138,6 +141,83 @@ const attributeService = {
   },
   findFirstAttributeOption: (attribute: Attribute) => {
     return attribute.attributeOptions[0];
+  },
+  addAttributeType: (
+    attributeType: Attribute,
+    attributes: Attribute[]
+  ): Attribute[] => {
+    return [attributeType, ...attributes];
+  },
+  addAttributeOption: (
+    option: AttributeOption,
+    attributes: Attribute[]
+  ): Attribute[] => {
+    const attribute = attributes.find(
+      (attribute) => attribute.typeID === option.typeID
+    );
+
+    return attributes.map((attr) => {
+      if (attribute!.typeID === option.typeID) {
+        return {
+          ...attr,
+          attributeOptions: [option, ...attr.attributeOptions],
+        };
+      } else {
+        return attr;
+      }
+    });
+  },
+  updateAttributeOption: (
+    option: AttributeOption,
+    attributes: Attribute[]
+  ): Attribute[] => {
+    const attribute = attributes.find(
+      (attribute) => attribute.typeID === option.typeID
+    );
+
+    return attributes.map((attr) => {
+      if (attribute!.typeID === option.typeID) {
+        return {
+          ...attr,
+          attributeOptions: [
+            option,
+            ...attr.attributeOptions.filter(
+              (e) => e.optionID !== option.optionID
+            ),
+          ],
+        };
+      } else {
+        return attr;
+      }
+    });
+  },
+  deleteAttributeOption: (
+    option: AttributeOption,
+    attributes: Attribute[]
+  ): Attribute[] => {
+    const attribute = attributes.find(
+      (attribute) => attribute.typeID === option.typeID
+    );
+
+    return attributes.map((attr) => {
+      if (attribute!.typeID === option.typeID) {
+        return {
+          ...attr,
+          attributeOptions: [
+            ...attr.attributeOptions.filter(
+              (e) => e.optionID !== option.optionID
+            ),
+          ],
+        };
+      } else {
+        return attr;
+      }
+    });
+  },
+  getSearchingResult: (text: string, attributes: Attribute[]): Attribute[] => {
+    return attributes.filter((attr) =>
+      attr.typeValue.toLowerCase().includes(text.toLowerCase())
+    );
   },
 };
 
