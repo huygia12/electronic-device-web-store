@@ -10,71 +10,31 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Switch } from "@/components/ui/switch";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { AddUserDialog } from "@/components/admin";
 import { User } from "@/types/model";
-import { Plus, Search, SquarePen, Trash2 } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { FC, useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
-import axios from "axios";
 import { toast } from "sonner";
 import { userService } from "@/services";
-import UpdateUserDialog from "@/components/admin/update-user-dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { buttonVariants } from "@/utils/constants";
-import { formatDateTime } from "@/utils/helpers";
-
-const colName: string[] = [
-  "STT",
-  "ID KHÁCH HÀNG",
-  "TÊN",
-  "SỐ LIÊN LẠC",
-  "NGÀY ĐĂNG KÝ",
-  "EMAIL",
-  "KHÓA NGƯỜI DÙNG",
-  "THAO TÁC",
-];
+import { UserTable } from "@/components/user-management";
 
 const UserManagement: FC = () => {
   const users = useRouteLoaderData("user_management") as User[];
   const [existingUsers, setExistUsers] = useState(users);
 
   const handleDeleteUser = async (userID: string) => {
-    try {
-      await userService.apis.deleteUser(userID);
-
-      setExistUsers(
-        existingUsers.filter((userHolder) => userHolder.userID !== userID)
-      );
-      toast.success("Xóa thành công!");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error(`Response data: ${error.response?.data}`);
-        console.error(`Response status: ${error.response?.status})`);
-      } else {
-        console.error("Unexpected error:", error);
-      }
-      toast.error("Xóa thất bại!");
-    }
+    const deleteUser = userService.apis.deleteUser(userID);
+    toast.promise(deleteUser, {
+      loading: "Đang xử lý...",
+      success: () => {
+        setExistUsers(
+          existingUsers.filter((userHolder) => userHolder.userID !== userID)
+        );
+        return "Xóa thành công!";
+      },
+      error: "Xóa thất bại!",
+    });
   };
 
   const handleUpdateUser = (user: User) => {
@@ -120,95 +80,11 @@ const UserManagement: FC = () => {
           <CardTitle className="text-8">Danh sách khách hàng</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col px-6 pb-4">
-          <ScrollArea className=" relavtive h-[58vh]">
-            <Table>
-              <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
-                <tr>
-                  {colName.map((item, key) => {
-                    return (
-                      <TableHead
-                        key={key}
-                        className=" text-center text-black font-extrabold text-[1rem]"
-                      >
-                        {item}
-                      </TableHead>
-                    );
-                  })}
-                </tr>
-              </TableHeader>
-              <TableBody>
-                {existingUsers.map((user, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="text-center text-base">
-                      {index + 1}
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      {user.userID}
-                    </TableCell>
-                    <TableCell className="text-center  text-base">
-                      {user.userName}
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      {user.phoneNumber}
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      {`${formatDateTime(`${user.createdAt}`)}`}
-                    </TableCell>
-                    <TableCell className="text-center text-base">
-                      {user.email}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Switch />
-                    </TableCell>
-                    <TableCell
-                      colSpan={3}
-                      className="flex items-center justify-center space-x-2"
-                    >
-                      <UpdateUserDialog
-                        user={user}
-                        handleUpdateUser={handleUpdateUser}
-                      >
-                        <Button variant="neutral">
-                          <SquarePen />
-                        </Button>
-                      </UpdateUserDialog>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant="negative">
-                            <Trash2 />
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Bạn muốn xóa?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Người dùng sẽ không bị xóa hoàn toàn nhưng hành
-                              động này hiện không thể hoàn tác.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogAction
-                              onClick={() =>
-                                user.userID && handleDeleteUser(user.userID)
-                              }
-                              className={buttonVariants({
-                                variant: "negative",
-                              })}
-                            >
-                              Xóa
-                            </AlertDialogAction>
-                            <AlertDialogCancel className="mt-0">
-                              Hủy
-                            </AlertDialogCancel>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </ScrollArea>
+          <UserTable
+            users={users}
+            handleDeleteUser={handleDeleteUser}
+            hadnleEditUser={handleUpdateUser}
+          />
         </CardContent>
       </Card>
 

@@ -13,36 +13,28 @@ import firebaseService from "./firebase";
 
 const productService = {
   apis: {
-    getProductsSummary: async (
-      productName?: string,
-      limit?: number
-    ): Promise<ProductSummary[]> => {
-      let path: string = `/products?detail=1`;
-      if (productName) {
-        path = `${path}&productName=${productName}`;
-      }
-      if (limit) {
-        path = `${path}&limit=${limit}`;
-      }
+    getProductsSummary: async (params: {
+      searching?: string;
+      categoryID?: string;
+      providerID?: string;
+      currentPage?: number;
+    }): Promise<{ products: ProductSummary[]; totalProducts: number }> => {
+      let path: string = `/products?`;
+      params.searching && (path = `${path}&searching=${params.searching}`);
+      params.providerID && (path = `${path}&providerID=${params.providerID}`);
+      params.categoryID && (path = `${path}&categoryID=${params.categoryID}`);
+      params.currentPage &&
+        (path = `${path}&currentPage=${params.currentPage}`);
+
       try {
         const res = await axiosInstanceWithoutAuthorize.get<{
-          info: ProductSummary[];
+          info: { products: ProductSummary[]; totalProducts: number };
         }>(path, reqConfig);
 
         return res.data.info;
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
-        return [];
+        console.error("Unexpected error: ", error);
+        return { products: [], totalProducts: 0 };
       }
     },
     getProductsFullJoinWithCategoryID: async (
@@ -50,22 +42,12 @@ const productService = {
     ): Promise<ProductFullJoin[]> => {
       try {
         const res = await axiosInstanceWithoutAuthorize.get<{
-          info: ProductFullJoin[];
+          info: { products: ProductFullJoin[] };
         }>(`/products?detail=true&categoryID=${categoryID}`, reqConfig);
 
-        return res.data.info;
+        return res.data.info.products;
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
+        console.error("Unexpected error: ", error);
         return [];
       }
     },
@@ -74,22 +56,12 @@ const productService = {
     ): Promise<ProductFullJoin[]> => {
       try {
         const res = await axiosInstanceWithoutAuthorize.get<{
-          info: ProductFullJoin[];
+          info: { products: ProductFullJoin[] };
         }>(`/products?detail=true&providerID=${providerID}`, reqConfig);
 
-        return res.data.info;
+        return res.data.info.products;
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
+        console.error("Unexpected error: ", error);
         return [];
       }
     },

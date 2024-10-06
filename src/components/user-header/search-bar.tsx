@@ -11,7 +11,7 @@ const SearchBar: FC<HTMLAttributes<HTMLFormElement>> = () => {
   const [searchQuery, setSearchQuery] = useState<Optional<string>>();
   const [products, setProducts] = useState<Optional<ProductSummary[]>>();
   const { navigate } = useCustomNavigate();
-  const [productsVisibility, setProductVisibility] = useState(false);
+  const [productsVisibility, setProductsVisibility] = useState(false);
   const [typing, setTyping] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -25,13 +25,13 @@ const SearchBar: FC<HTMLAttributes<HTMLFormElement>> = () => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
-      const products: ProductSummary[] =
-        await productService.apis.getProductsSummary(searchQuery, 10);
+      const res: { products: ProductSummary[] } =
+        await productService.apis.getProductsSummary({});
 
-      setProducts(products);
+      setProducts(res.products);
       setTyping(false);
       if (searchQuery) {
-        setProductVisibility(true);
+        setProductsVisibility(true);
       }
     }, 2000);
 
@@ -42,7 +42,7 @@ const SearchBar: FC<HTMLAttributes<HTMLFormElement>> = () => {
     navigate("/products/" + productID, {
       unstable_viewTransition: true,
     });
-    setProductVisibility(false);
+    setProductsVisibility(false);
   };
 
   const handleSearchInputBlur = (event: MouseEvent) => {
@@ -50,7 +50,7 @@ const SearchBar: FC<HTMLAttributes<HTMLFormElement>> = () => {
       wrapperRef.current &&
       !wrapperRef.current.contains(event.target as Node)
     ) {
-      setProductVisibility(false);
+      setProductsVisibility(false);
     }
   };
 
@@ -69,7 +69,7 @@ const SearchBar: FC<HTMLAttributes<HTMLFormElement>> = () => {
       <Search className="absolute left-2.5 top-3.5 h-4 w-4 text-muted-foreground" />
       <Input
         placeholder="Tìm kiếm..."
-        onFocus={() => setProductVisibility(true)}
+        onFocus={() => setProductsVisibility(true)}
         onChange={(e) => handleSearchInputChange(e)}
         className="h-full text-xl w-full rounded-2xl bg-background pl-8"
       />

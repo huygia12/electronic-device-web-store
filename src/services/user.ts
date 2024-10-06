@@ -4,6 +4,7 @@ import { UserUpdate } from "@/types/api";
 import { User } from "@/types/model";
 import { SignupFormProps } from "@/utils/schema";
 import { Args, Nullable } from "@/utils/declare";
+import { Role } from "@/types/enum";
 
 const userService = {
   apis: {
@@ -88,6 +89,9 @@ const userService = {
       const res = await axiosInstance.delete(`/users/${userID}`);
       return res;
     },
+  },
+  getRoleToDisplay: (role: Role) => {
+    return role === Role.ADMIN ? "Admin" : "Khách hàng";
   },
 };
 

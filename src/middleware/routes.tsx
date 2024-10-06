@@ -203,9 +203,7 @@ const routes = createBrowserRouter([
           {
             index: true,
             id: "product_management",
-            loader: async () => {
-              return await productService.apis.getProductsSummary();
-            },
+            loader: productService.apis.getProductsSummary,
             element: <ProductManagement />,
           },
           {

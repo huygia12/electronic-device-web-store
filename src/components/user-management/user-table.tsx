@@ -26,14 +26,16 @@ import { buttonVariants } from "@/utils/constants";
 import { formatDateTime } from "@/utils/helpers";
 import { User } from "@/types/model";
 import { Button } from "@/components/ui/button";
+import Badge from "../ui/badge";
+import { userService } from "@/services";
 
 const colName: string[] = [
   "STT",
-  "ID KHÁCH HÀNG",
   "TÊN",
   "SỐ LIÊN LẠC",
   "NGÀY ĐĂNG KÝ",
   "EMAIL",
+  "VAI TRÒ",
   "KHÓA NGƯỜI DÙNG",
   "THAO TÁC",
 ];
@@ -68,9 +70,6 @@ const UserTable: FC<UserTableProps> = ({ ...props }) => {
               <TableCell className="text-center text-base">
                 {index + 1}
               </TableCell>
-              <TableCell className="text-center text-base">
-                {user.userID}
-              </TableCell>
               <TableCell className="text-center  text-base">
                 {user.userName}
               </TableCell>
@@ -82,6 +81,11 @@ const UserTable: FC<UserTableProps> = ({ ...props }) => {
               </TableCell>
               <TableCell className="text-center text-base">
                 {user.email}
+              </TableCell>
+              <TableCell className="text-center text-base">
+                <Badge className="bg-blue-500 text-white text-base h-8 hover_!bg-blue-500">
+                  {userService.getRoleToDisplay(user.role)}
+                </Badge>
               </TableCell>
               <TableCell className="text-center">
                 <Switch />

@@ -1,5 +1,6 @@
 import { Nullable, Optional } from "./declare";
 
+const rowsPerPage = 10;
 /**
  *
  * @param {T} arr
@@ -86,6 +87,10 @@ const convertMiliSecToDays = (miliSec: number): number => {
   return Math.round(miliSec / (1000 * 60 * 60 * 24));
 };
 
+const getPages = (rows: number): number => {
+  return Math.ceil(rows / rowsPerPage);
+};
+
 export {
   arrayInReverse,
   getImageUrl,
@@ -99,4 +104,5 @@ export {
   isDiscount,
   applyDiscount,
   convertMiliSecToDays,
+  getPages,
 };

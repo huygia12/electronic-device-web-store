@@ -8,3 +8,4 @@ export { default as RemoveIcon } from "./remove-icon";
 export { default as FileImagePlaceholder } from "./file-image-placeholder";
 export { default as Banner } from "./banner";
 export { default as ImageOverView } from "./image-overview";
+export { default as CustomPagination } from "./custom-pagination";
