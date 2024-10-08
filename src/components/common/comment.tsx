@@ -22,10 +22,10 @@ interface CommentProps extends HTMLAttributes<HTMLDivElement> {
 
 const Comment: FC<CommentProps> = ({ ...props }) => {
   const { currentUser } = useCurrentUser();
-  const { commentSocket } = useSocket();
+  const { socket } = useSocket();
 
   const handleDeleteReview = (reviewID: string) => {
-    commentSocket?.emit(
+    socket?.emit(
       `review:delete`,
       { reviewID },
       (error: Optional<SocketEmitError>) => {

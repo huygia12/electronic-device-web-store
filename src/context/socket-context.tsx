@@ -1,26 +1,25 @@
 import { ClientEvents, ServerEvents } from "@/types/socket";
 import { createContext, useEffect, ReactNode, useState } from "react";
 import { Socket } from "socket.io-client";
-import { commentSocketInstance } from "@/config";
+import { socketInstance } from "@/config";
 
 interface SocketContextProps {
-  commentSocket: Socket<ServerEvents, ClientEvents> | undefined;
+  socket: Socket<ServerEvents, ClientEvents> | undefined;
 }
 
 const SocketContext = createContext<SocketContextProps | undefined>(undefined);
 
 const SocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [commentSocket, setCommentSocket] =
-    useState<Socket<ServerEvents, ClientEvents>>();
+  const [socket, setSocket] = useState<Socket<ServerEvents, ClientEvents>>();
 
   useEffect(() => {
-    commentSocketInstance.on("connect", () => {
-      setCommentSocket(commentSocketInstance);
+    socketInstance.on("connect", () => {
+      setSocket(socketInstance);
     });
   }, []);
 
   return (
-    <SocketContext.Provider value={{ commentSocket: commentSocket }}>
+    <SocketContext.Provider value={{ socket: socket }}>
       {children}
     </SocketContext.Provider>
   );

@@ -1,7 +1,7 @@
 import { CartProvider } from "@/context";
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet, useNavigation, useRouteLoaderData } from "react-router-dom";
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
 import {
   ScrollToTop,
   ScrollToTopButton,
@@ -11,10 +11,29 @@ import { MailRegisterSection, UserHeader, AppFooter } from ".";
 import { ZaloButton } from "@/components/user";
 import { Banner } from "@/components/common";
 import { StoreFullJoin } from "@/types/model";
+import { useAuth, useSocket } from "@/hooks";
+import auth from "@/utils/auth";
 
 const UserLayout: React.FC = () => {
   const store = useRouteLoaderData("userlayout") as StoreFullJoin;
   const navigation = useNavigation();
+  const { socket } = useSocket();
+  const { logout } = useAuth();
+
+  useEffect(() => {
+    const handleBanned = async (payload: { userID: string }) => {
+      if (auth.getUser()?.userID === payload.userID) {
+        toast.info("Tài khoản của bạn đã bị khóa!");
+        await logout();
+      }
+    };
+
+    socket?.on("user:ban", handleBanned);
+
+    return () => {
+      socket?.off("user:ban", handleBanned);
+    };
+  }, []);
 
   return (
     <CartProvider>
@@ -37,7 +56,12 @@ const UserLayout: React.FC = () => {
       <AppFooter />
       <ZaloButton />
       <ScrollToTopButton />
-      <Toaster richColors />
+      <Toaster
+        richColors
+        toastOptions={{
+          className: "text-xl h-[5rem] right-10 bottom-5 ",
+        }}
+      />
     </CartProvider>
   );
 };

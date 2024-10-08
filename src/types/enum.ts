@@ -22,11 +22,6 @@ enum Sort {
   ZTOA = "ztoa",
 }
 
-enum SocketNamespace {
-  COMMENT = "/comment",
-  NOTIFICATION = "/notification",
-}
-
 enum SchemaResponse {
   REQUIRED = "Không được bỏ trống!",
   INVALID = "Không hợp lệ!",
@@ -41,11 +36,4 @@ enum SchemaResponse {
   RATING_INVALID = "Vui lòng chọn số sao đánh giá!",
 }
 
-export {
-  Role,
-  InvoiceStatus,
-  PaymentMethod,
-  Sort,
-  SchemaResponse,
-  SocketNamespace,
-};
+export { Role, InvoiceStatus, PaymentMethod, Sort, SchemaResponse };

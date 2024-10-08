@@ -41,7 +41,7 @@ const PersonalReviewBox = forwardRef<HTMLFormElement, PersonalReviewBoxProps>(
     const { currentUser } = useCurrentUser();
     const { navigate } = useCustomNavigate();
     const [ratingStarInput, setRatingStarInput] = useState(5);
-    const { commentSocket } = useSocket();
+    const { socket } = useSocket();
     const { register, handleSubmit, reset } = useForm<ReviewCreationFromProps>({
       resolver: zodResolver(ReviewCreationSchema),
     });
@@ -58,7 +58,7 @@ const PersonalReviewBox = forwardRef<HTMLFormElement, PersonalReviewBoxProps>(
         return;
       }
 
-      commentSocket?.emit(
+      socket?.emit(
         `review:create`,
         {
           productID: props.product.productID,

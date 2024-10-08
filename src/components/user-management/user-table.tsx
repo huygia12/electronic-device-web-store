@@ -9,25 +9,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { SquarePen, Trash2 } from "lucide-react";
-import UpdateUserDialog from "@/components/admin/update-user-dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { buttonVariants } from "@/utils/constants";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDateTime } from "@/utils/helpers";
 import { User } from "@/types/model";
-import { Button } from "@/components/ui/button";
 import Badge from "../ui/badge";
 import { userService } from "@/services";
+import { cn } from "@/lib/utils";
+import { Optional } from "@/utils/declare";
+import { Role } from "@/types/enum";
 
 const colName: string[] = [
   "STT",
@@ -37,108 +26,83 @@ const colName: string[] = [
   "EMAIL",
   "VAI TRÒ",
   "KHÓA NGƯỜI DÙNG",
-  "THAO TÁC",
 ];
 
 interface UserTableProps extends HTMLAttributes<HTMLTableElement> {
   users: User[];
-  handleDeleteUser: (userID: string) => void;
-  hadnleEditUser: (user: User) => void;
+  selectedUser: Optional<User>;
+  setSelectedUser: (user: User) => void;
+  handleBanUser: (value: boolean) => void;
 }
 
 const UserTable: FC<UserTableProps> = ({ ...props }) => {
   return (
-    <ScrollArea className="relavtive h-[58vh]">
-      <Table>
-        <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
-          <tr>
-            {colName.map((item, key) => {
-              return (
-                <TableHead
-                  key={key}
-                  className=" text-center text-black font-extrabold text-[1rem]"
+    <Card className={cn("rounded-2xl shadow-lg", props.className)}>
+      <CardHeader className="py-6 px-10">
+        <CardTitle className="text-8">Danh sách khách hàng</CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col px-6 pb-4">
+        <ScrollArea className="relavtive h-[58vh]">
+          <Table>
+            <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
+              <tr>
+                {colName.map((item, key) => {
+                  return (
+                    <TableHead
+                      key={key}
+                      className=" text-center text-black font-extrabold text-[1rem]"
+                    >
+                      {item}
+                    </TableHead>
+                  );
+                })}
+              </tr>
+            </TableHeader>
+            <TableBody>
+              {props.users.map((user, index) => (
+                <TableRow
+                  key={index}
+                  className={cn(
+                    "cursor-pointer",
+                    props.selectedUser?.userID === user.userID &&
+                      "bg-theme-softer"
+                  )}
+                  onClick={() => props.setSelectedUser(user)}
                 >
-                  {item}
-                </TableHead>
-              );
-            })}
-          </tr>
-        </TableHeader>
-        <TableBody>
-          {props.users.map((user, index) => (
-            <TableRow key={index}>
-              <TableCell className="text-center text-base">
-                {index + 1}
-              </TableCell>
-              <TableCell className="text-center  text-base">
-                {user.userName}
-              </TableCell>
-              <TableCell className="text-center text-base">
-                {user.phoneNumber}
-              </TableCell>
-              <TableCell className="text-center text-base">
-                {`${formatDateTime(`${user.createdAt}`)}`}
-              </TableCell>
-              <TableCell className="text-center text-base">
-                {user.email}
-              </TableCell>
-              <TableCell className="text-center text-base">
-                <Badge className="bg-blue-500 text-white text-base h-8 hover_!bg-blue-500">
-                  {userService.getRoleToDisplay(user.role)}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-center">
-                <Switch />
-              </TableCell>
-              <TableCell
-                colSpan={3}
-                className="flex items-center justify-center space-x-2"
-              >
-                <UpdateUserDialog
-                  user={user}
-                  handleUpdateUser={props.hadnleEditUser}
-                >
-                  <Button variant="neutral">
-                    <SquarePen />
-                  </Button>
-                </UpdateUserDialog>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="negative">
-                      <Trash2 />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Bạn muốn xóa?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Người dùng sẽ không bị xóa hoàn toàn nhưng hành động này
-                        hiện không thể hoàn tác.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogAction
-                        onClick={() =>
-                          user.userID && props.handleDeleteUser(user.userID)
-                        }
-                        className={buttonVariants({
-                          variant: "negative",
-                        })}
-                      >
-                        Xóa
-                      </AlertDialogAction>
-                      <AlertDialogCancel className="mt-0">
-                        Hủy
-                      </AlertDialogCancel>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </ScrollArea>
+                  <TableCell className="text-center text-base">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell className="text-center text-base">
+                    {user.userName}
+                  </TableCell>
+                  <TableCell className="text-center text-base">
+                    {user.phoneNumber}
+                  </TableCell>
+                  <TableCell className="text-center text-base">
+                    {formatDateTime(`${user.createdAt}`)}
+                  </TableCell>
+                  <TableCell className="text-center text-base">
+                    {user.email}
+                  </TableCell>
+                  <TableCell className="text-center text-base">
+                    <Badge className="bg-blue-500 text-white text-base h-8 hover_!bg-blue-500">
+                      {userService.getRoleToDisplay(user.role)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Switch
+                      disabled={user.role === Role.ADMIN}
+                      defaultChecked={user.isBanned || false}
+                      onCheckedChange={props.handleBanUser}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </ScrollArea>
+      </CardContent>
+    </Card>
   );
 };
 

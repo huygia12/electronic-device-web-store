@@ -14,10 +14,6 @@ import { Label } from "../ui/label";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserFormProps, UserSchema } from "@/utils/schema";
-import { Optional } from "@/utils/declare";
-import { firebaseService, userService } from "@/services";
-import { toast } from "sonner";
-import axios from "axios";
 import { cn } from "@/lib/utils";
 import { LoadingSpinner } from "../effect";
 import { Separator } from "../ui/separator";
@@ -26,7 +22,7 @@ import { Button } from "../ui/button";
 
 interface UserDialogProps extends HTMLAttributes<HTMLFormElement> {
   user?: User;
-  handleUpdateUser: (user: User) => void;
+  handleUpdateUser: (formProps: UserFormProps, avatarFile?: File) => void;
 }
 
 const UpdateUserDialog: React.FC<UserDialogProps> = ({
@@ -36,7 +32,6 @@ const UpdateUserDialog: React.FC<UserDialogProps> = ({
   const {
     register,
     handleSubmit,
-    setError,
     watch,
     setValue,
     formState: { errors, isSubmitting },
@@ -46,47 +41,8 @@ const UpdateUserDialog: React.FC<UserDialogProps> = ({
   const avatarFiles = watch("avatar");
 
   const handleFormSubmission: SubmitHandler<UserFormProps> = async (data) => {
-    try {
-      let avatar: Optional<string>;
-      if (data.avatar[0]) {
-        props.user?.avatar &&
-          (await firebaseService.apis.deleteImagesInFireBase([
-            props.user.avatar,
-          ]));
-        avatar = (
-          await firebaseService.apis.insertImagesToFireBase(
-            data.avatar,
-            `/users/${props.user!.userID}`
-          )
-        )[0];
-      }
-
-      const updatedUserInfor: User = await userService.apis.updateUser(
-        props.user!.userID,
-        {
-          userName: data.userName,
-          email: data.email,
-          phoneNumber: data.phoneNumber,
-          avatar: avatar,
-        }
-      );
-
-      props.handleUpdateUser(updatedUserInfor);
-      toast.success("Thay đổi thành công!");
-      setValue("avatar", []);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setError("root", {
-          message: error.response?.data.message || error.message,
-        });
-        // Handle error response if available
-        console.error(`Response data: ${error.response?.data}`);
-        console.error(`Response status: ${error.response?.status})`);
-      } else {
-        console.error("Unexpected error:", error);
-      }
-      toast.error("Cập nhật thất bại!");
-    }
+    props.handleUpdateUser(data, avatarFiles?.[0]);
+    setValue("avatar", []);
   };
 
   return (
@@ -199,8 +155,10 @@ const UpdateUserDialog: React.FC<UserDialogProps> = ({
                 <Avatar className="size-[12rem] mx-auto">
                   <AvatarImage
                     src={
-                      (avatarFiles && getImageUrl(avatarFiles[0])) ||
-                      props.user?.avatar ||
+                      (avatarFiles &&
+                        avatarFiles?.[0] &&
+                        getImageUrl(avatarFiles[0])) ||
+                      props.user!.avatar ||
                       "/blankAvt.jpg"
                     }
                     alt="avt"

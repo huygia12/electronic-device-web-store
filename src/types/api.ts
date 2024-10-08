@@ -94,7 +94,7 @@ export interface UserUpdate {
   userName: string;
   email: string;
   phoneNumber: Optional<string>;
-  avatar: Optional<string>;
+  avatar?: string;
 }
 
 //Slide

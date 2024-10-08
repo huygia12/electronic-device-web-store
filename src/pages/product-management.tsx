@@ -12,9 +12,8 @@ import { Category, Provider } from "@/types/model";
 import { CustomPagination } from "@/components/common";
 import { getPages } from "@/utils/helpers";
 
-const searchingDelay = 2000;
-
 const ProductManagement: FC = () => {
+  const searchingDelay = useRef<number>(2000);
   const initData = useRouteLoaderData("product_management") as {
     products: ProductSummary[];
     totalProducts: number;
@@ -69,7 +68,7 @@ const ProductManagement: FC = () => {
       setTotalPages(getPages(res.totalProducts));
       toast.dismiss(toasting.current!.id);
       toasting.current = null;
-    }, searchingDelay);
+    }, searchingDelay.current);
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchingQuery, selectedCategory, selectedProvider, currentPage]);

@@ -30,14 +30,14 @@ const ProductDetailPage: FC = () => {
     product.productItems[0]
   );
   const [reviews, setReviews] = useState<ReviewFullJoin[]>([]);
-  const { commentSocket } = useSocket();
+  const { socket } = useSocket();
   const [replyToComment, setReplyToComment] = useState<ReviewFullJoin>();
   const [reviewDisplay, setReviewDisplay] = useState<number>(0);
   const personalReviewBox = useRef<HTMLFormElement | null>(null);
 
   useEffect(() => {
     const setup = async () => {
-      commentSocket?.emit(`product:join`, { productID: product.productID });
+      socket?.emit(`product:join`, { productID: product.productID });
       const reviewResponse = await reviewService.apis.getReviews(
         product.productID
       );
@@ -89,13 +89,13 @@ const ProductDetailPage: FC = () => {
       }
     };
 
-    commentSocket?.on("review:create", handleReviewCreate);
-    commentSocket?.on("review:delete", handleReviewDelete);
+    socket?.on("review:create", handleReviewCreate);
+    socket?.on("review:delete", handleReviewDelete);
 
     return () => {
-      commentSocket?.emit(`product:leave`, { productID: product.productID });
-      commentSocket?.off("review:create", handleReviewCreate);
-      commentSocket?.off("review:delete", handleReviewDelete);
+      socket?.emit(`product:leave`, { productID: product.productID });
+      socket?.off("review:create", handleReviewCreate);
+      socket?.off("review:delete", handleReviewDelete);
     };
   }, []);
 

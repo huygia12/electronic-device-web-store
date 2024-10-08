@@ -16,7 +16,12 @@ const AdminLayout: React.FC = () => {
         </div>
       </main>
       <AppFooter className="bg-theme-softer" />
-      <Toaster richColors />
+      <Toaster
+        richColors
+        toastOptions={{
+          className: "text-xl h-[4rem] right-10 bottom-5",
+        }}
+      />
     </>
   );
 };

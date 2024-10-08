@@ -13,11 +13,16 @@ export interface ClientEvents {
     payload: { reviewID: string },
     callback: (error: SocketEmitError) => void
   ) => void;
+  "user:ban": (
+    payload: { userID: string; banned: boolean },
+    callback: (error: SocketEmitError) => void
+  ) => void;
 }
 
 export interface ServerEvents {
   "review:create": (payload: { review: ReviewFullJoin }) => void;
   "review:delete": (payload: { review: Review }) => void;
+  "user:ban": (payload: { userID: string }) => void;
 }
 
 export interface SocketEmitError {

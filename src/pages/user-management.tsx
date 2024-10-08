@@ -1,119 +1,188 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import { AddUserDialog } from "@/components/admin";
 import { User } from "@/types/model";
-import { Plus, Search } from "lucide-react";
-import { FC, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 import { toast } from "sonner";
 import { userService } from "@/services";
-import { UserTable } from "@/components/user-management";
+import { UserTable, UserTools } from "@/components/user-management";
+import { CustomPagination, SearchBox } from "@/components/common";
+import { Optional } from "@/utils/declare";
+import { SignupFormProps, UserFormProps } from "@/utils/schema";
+import axios, { HttpStatusCode } from "axios";
+import { getPages } from "@/utils/helpers";
+import { useSocket } from "@/hooks";
+import { SocketEmitError } from "@/types/socket";
 
 const UserManagement: FC = () => {
-  const users = useRouteLoaderData("user_management") as User[];
-  const [existingUsers, setExistUsers] = useState(users);
+  const searchingDelay = useRef<number>(2000);
+  const initData = useRouteLoaderData("user_management") as {
+    users: User[];
+    totalUsers: number;
+  };
+  const [users, setUsers] = useState<User[]>(initData.users);
+  const [totalPages, setTotalPages] = useState<number>(
+    getPages(initData.totalUsers)
+  );
+  const [selectedUser, setSelectedUser] = useState<Optional<User>>();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchText, setSearchText] = useState<string>();
+  const toasting = useRef<{
+    id: string | number;
+    state: boolean;
+  } | null>();
+  const { socket } = useSocket();
 
-  const handleDeleteUser = async (userID: string) => {
-    const deleteUser = userService.apis.deleteUser(userID);
+  useEffect(() => {
+    if (toasting.current === undefined) {
+      toasting.current = null;
+    } else {
+      if (!toasting.current?.state) {
+        toasting.current = { id: toast.loading("Đang xử lý..."), state: true };
+      }
+    }
+
+    const delayDebounceFn = setTimeout(async () => {
+      const res: { users: User[]; totalUsers: number } =
+        await userService.apis.getUsers({
+          searching: searchText,
+          currentPage: currentPage,
+        });
+
+      setUsers(res.users);
+      setTotalPages(getPages(res.totalUsers));
+      toast.dismiss(toasting.current!.id);
+      toasting.current = null;
+    }, searchingDelay.current);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchText, currentPage]);
+
+  const handleDeleteUser = () => {
+    const deleteUser = userService.apis.deleteUser(selectedUser!.userID);
     toast.promise(deleteUser, {
       loading: "Đang xử lý...",
       success: () => {
-        setExistUsers(
-          existingUsers.filter((userHolder) => userHolder.userID !== userID)
-        );
+        setUsers(userService.deleteUser(selectedUser!, users));
+        setSelectedUser(undefined);
         return "Xóa thành công!";
       },
-      error: "Xóa thất bại!",
+      error: (error) => {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status == HttpStatusCode.Conflict) {
+            return "Xóa thất bại: người dùng này không thể bị xóa!";
+          }
+        }
+        return "Xóa thất bại";
+      },
     });
   };
 
-  const handleUpdateUser = (user: User) => {
-    setExistUsers(
-      existingUsers.map((userHolder) => {
-        if (userHolder.userID === user.userID) {
-          return user;
+  const handleUpdateUser = (data: UserFormProps, avatarFile?: File) => {
+    const updateUser = userService.apis.updateUser(
+      selectedUser!.userID,
+      {
+        userName: data.userName,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+      },
+      selectedUser!,
+      avatarFile
+    );
+
+    toast.promise(updateUser, {
+      loading: "Đang xử lý...",
+      success: (user: User) => {
+        setSelectedUser(user);
+        setUsers(userService.updateUser(user, users));
+        return "Cập nhật thành công!";
+      },
+      error: (error) => {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status == HttpStatusCode.Conflict) {
+            return "Cập nhật thất bại: email này đã được sử dụng!";
+          }
         }
-        return userHolder;
-      })
+        return "Cập nhật thất bại";
+      },
+    });
+  };
+
+  const handleAddUser = (data: SignupFormProps, avatarFile?: File) => {
+    const signup = userService.apis.signup(
+      {
+        userName: data.userName,
+        email: data.email,
+        password: data.password,
+        retypePassword: data.retypePassword,
+        phoneNumber: data.phoneNumber,
+      },
+      avatarFile
+    );
+
+    toast.promise(signup, {
+      loading: "Đang xử lý...",
+      success: (user: User) => {
+        setUsers(userService.addUser(user, users));
+        return "Thêm thành công!";
+      },
+      error: (error) => {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status == HttpStatusCode.Conflict) {
+            return "Thêm thất bại: email này đã được sử dụng!";
+          }
+        }
+        return "Thêm thất bại!";
+      },
+    });
+  };
+
+  const handleBanUser = (value: boolean) => {
+    socket?.emit(
+      `user:ban`,
+      {
+        userID: selectedUser!.userID,
+        banned: value,
+      },
+      (error: Optional<SocketEmitError>) => {
+        let response: string;
+        if (error) {
+          response = "Mở khóa người dùng thất bại!";
+          if (value) response = "Khóa người dùng thất bại!";
+          toast.error(response);
+        } else {
+          response = "Mở khóa người dùng thành công!";
+          if (value) response = "Khóa người dùng thành công!";
+          toast.success(response);
+        }
+      }
     );
   };
 
-  const handleAddUser = (user: User) => {
-    setExistUsers([...existingUsers, user]);
-  };
-
   return (
-    <>
-      <Card className="rounded-2xl shadow-lg my-8">
-        <CardContent className="flex justify-between p-6">
-          <AddUserDialog handleAddUser={handleAddUser}>
-            <Button variant="positive" className="text-xl">
-              Thêm khách hàng mới
-              <Plus />
-            </Button>
-          </AddUserDialog>
+    <div>
+      <SearchBox setSearchText={setSearchText} />
 
-          <div className="relative flex-1 md_grow-0 h-[2.5rem]">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Tìm kiếm..."
-              className="h-full text-xl w-full rounded-lg bg-background pl-8 md_w-[200px] lg_w-[336px]"
-            />
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex gap-4">
+        <UserTable
+          users={users}
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+          handleBanUser={handleBanUser}
+          className="flex-1"
+        />
 
-      {/** Table */}
-      <Card className="rounded-2xl shadow-lg mb-4">
-        <CardHeader className="py-6 px-10">
-          <CardTitle className="text-8">Danh sách khách hàng</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col px-6 pb-4">
-          <UserTable
-            users={users}
-            handleDeleteUser={handleDeleteUser}
-            hadnleEditUser={handleUpdateUser}
-          />
-        </CardContent>
-      </Card>
+        <UserTools
+          selectedUser={selectedUser}
+          handleAddUser={handleAddUser}
+          handleUpdateUser={handleUpdateUser}
+          handleDeleteUser={handleDeleteUser}
+        />
+      </div>
 
-      {/** Pagination */}
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#" isActive>
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    </>
+      <CustomPagination
+        setCurrentPage={setCurrentPage}
+        totalPages={totalPages}
+      />
+    </div>
   );
 };
 

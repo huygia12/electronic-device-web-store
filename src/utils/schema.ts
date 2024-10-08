@@ -73,7 +73,7 @@ const inputFormPreprocess = (schema: z.ZodTypeAny) =>
 
 const UserSchema = z.object({
   userName: notBlankString(),
-  avatar: inputFormPreprocess(validateFile(true)).optional(),
+  avatar: inputFormPreprocess(validateFile(true)),
   phoneNumber: z
     .string()
     .refine((value) => {
@@ -99,7 +99,7 @@ const SignupSchema = z.object({
   retypePassword: z
     .string()
     .min(6, { message: SchemaResponse.PASSWORD_INVALID }),
-  avatar: inputFormPreprocess(validateFile()).optional(),
+  avatar: inputFormPreprocess(validateFile(true)),
   phoneNumber: z
     .string()
     .refine((value) => {
@@ -304,10 +304,6 @@ const ReviewCreationSchema = z.object({
   reviewContent: notBlankString(),
 });
 
-const ProductSearchingSchema = z.object({
-  productName: z.string().nullable(),
-});
-
 export type ShippingForm = z.infer<typeof ShippingSchema>;
 
 export type SignupFormProps = z.infer<typeof SignupSchema>;
@@ -332,8 +328,6 @@ export type ProductItemsUpdateFormProps = z.infer<
 
 export type ReviewCreationFromProps = z.infer<typeof ReviewCreationSchema>;
 
-export type ProductSearchingFormProps = z.infer<typeof ProductSearchingSchema>;
-
 export {
   UserSchema,
   LoginSchema,
@@ -343,5 +337,4 @@ export {
   ProductSchema,
   ProductUpdateSchema,
   ReviewCreationSchema,
-  ProductSearchingSchema,
 };

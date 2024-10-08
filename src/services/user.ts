@@ -1,16 +1,22 @@
-import axios, { AxiosResponse } from "axios";
-import { axiosInstance } from "@/config/axios-config";
+import { AxiosResponse } from "axios";
+import {
+  axiosInstance,
+  axiosInstanceWithoutAuthorize,
+} from "@/config/axios-config";
 import { UserUpdate } from "@/types/api";
 import { User } from "@/types/model";
 import { SignupFormProps } from "@/utils/schema";
-import { Args, Nullable } from "@/utils/declare";
+import { Args, Nullable, Optional } from "@/utils/declare";
 import { Role } from "@/types/enum";
+import firebaseService from "./firebase";
+
+const userEndPoint = "/users";
 
 const userService = {
   apis: {
-    signup: async (data: SignupFormProps): Promise<string> => {
-      const response = await axios.post<{ info: { userID: string } }>(
-        `${import.meta.env.VITE_API_URL}/users/signup`,
+    signup: async (data: SignupFormProps, avatarFile?: File): Promise<User> => {
+      const response = await axiosInstanceWithoutAuthorize.post<{ info: User }>(
+        `${userEndPoint}/signup`,
         {
           userName: data.userName.trim(),
           email: data.email.trim(),
@@ -20,7 +26,23 @@ const userService = {
         }
       );
 
-      return response.data.info.userID;
+      if (avatarFile) {
+        const avatarUrl = (
+          await firebaseService.apis.insertImagesToFireBase(
+            data.avatar,
+            `/users/${response.data.info.userID}`
+          )
+        )[0];
+
+        const newUser: User = await userService.apis.updateUserAvatar(
+          response.data.info.userID,
+          avatarUrl
+        );
+
+        return newUser;
+      }
+
+      return response.data.info;
     },
     getUser: async (args: Args | string): Promise<Nullable<User>> => {
       let userID: string;
@@ -31,67 +53,84 @@ const userService = {
       }
 
       try {
-        const res = await axiosInstance.get<{ info: User }>(`/users/${userID}`);
+        const res = await axiosInstance.get<{ info: User }>(
+          `${userEndPoint}/${userID}`
+        );
         return res.data.info;
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
+        console.error("Unexpected error:", error);
         return null;
       }
     },
-    updateUser: async (userID: string, data: UserUpdate): Promise<User> => {
+    updateUser: async (
+      userID: string,
+      data: UserUpdate,
+      currentUser: User,
+      avatarFile?: File
+    ): Promise<User> => {
+      let avatarUrl: Optional<string>;
+      if (avatarFile) {
+        currentUser.avatar &&
+          (await firebaseService.apis.deleteImageInFireBase(
+            currentUser.avatar
+          ));
+        avatarUrl = await firebaseService.apis.insertImageToFireBase(
+          avatarFile,
+          `/users/${currentUser.userID}`
+        );
+      }
+
       const res = await axiosInstance.put<{ info: User }>(
-        `/users/${userID}`,
-        data
+        `${userEndPoint}/${userID}`,
+        {
+          ...data,
+          avatar: avatarUrl,
+        }
       );
       return res.data.info;
     },
     updateUserAvatar: async (userID: string, avatar: string): Promise<User> => {
-      const res = await axiosInstance.put<{ info: User }>(`/users/${userID}`, {
-        avatar: avatar,
-      });
+      const res = await axiosInstance.put<{ info: User }>(
+        `${userEndPoint}/${userID}`,
+        {
+          avatar: avatar,
+        }
+      );
+
       return res.data.info;
     },
-    getUsers: async (params: { recently?: boolean }): Promise<User[]> => {
-      let queryUrl: string = "/users";
-      if (params.recently === true) {
-        queryUrl = `/users?recently=${params.recently}`;
-      }
+    getUsers: async (params: {
+      recently?: boolean;
+      searching?: string;
+      currentPage?: number;
+    }): Promise<{ users: User[]; totalUsers: number }> => {
+      let queryUrl: string = `${userEndPoint}?`;
 
-      try {
-        const res = await axiosInstance.get<{ info: User[] }>(queryUrl);
-        return res.data.info;
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
-        return [];
-      }
+      params.recently === true && (queryUrl += `recently=${params.recently}`);
+      params.searching && (queryUrl += `&searching=${params.searching}`);
+      params.currentPage && (queryUrl += `&currentPage=${params.currentPage}`);
+
+      const res = await axiosInstance.get<{
+        info: { users: User[]; totalUsers: number };
+      }>(queryUrl);
+      return res.data.info;
     },
     deleteUser: async (userID: string): Promise<AxiosResponse> => {
-      const res = await axiosInstance.delete(`/users/${userID}`);
+      const res = await axiosInstance.delete(`${userEndPoint}/${userID}`);
       return res;
     },
   },
   getRoleToDisplay: (role: Role) => {
     return role === Role.ADMIN ? "Admin" : "Khách hàng";
+  },
+  addUser: (user: User, users: User[]) => {
+    return [user, ...users];
+  },
+  updateUser: (user: User, users: User[]) => {
+    return [user, ...users.filter((e) => e.userID !== user.userID)];
+  },
+  deleteUser: (user: User, users: User[]) => {
+    return [...users.filter((e) => e.userID !== user.userID)];
   },
 };
 
