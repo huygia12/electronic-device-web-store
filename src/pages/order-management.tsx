@@ -1,61 +1,36 @@
 import { OrderTable } from "@/components/admin";
+import { CustomPagination } from "@/components/common";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { InvoiceFullJoin } from "@/types/model";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 
 const OrderManagement: FC = () => {
   const invoiceData = useRouteLoaderData(
     "invoice_management"
   ) as InvoiceFullJoin[];
+  const [totalPages, setTotalPages] = useState<number>(10);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  console.log(currentPage, setTotalPages);
 
   return (
-    <>
+    <div>
       {/** TABLE */}
       <Card className="rounded-2xl shadow-lg mt-8 mb-4">
         <CardHeader className="py-6 px-10">
-          <CardTitle className="text-8">Đơn hàng cần xác nhận</CardTitle>
+          <CardTitle className="text-8">Quản lý đơn hàng</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-col px-6 pb-4">
+        <CardContent className="px-6 pb-4">
           <OrderTable orders={invoiceData} />
         </CardContent>
       </Card>
 
-      {/** PAGINATION */}
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#" isActive>
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    </>
+      <CustomPagination
+        setCurrentPage={setCurrentPage}
+        totalPages={totalPages}
+      />
+    </div>
   );
 };
 

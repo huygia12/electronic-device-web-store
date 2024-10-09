@@ -19,7 +19,6 @@ import {
   ProductManagement,
   Products,
   ProviderManagement,
-  ReviewManagement,
   Signup,
   StoreManagement,
   Unauthorized,
@@ -180,10 +179,6 @@ const routes = createBrowserRouter([
         id: "invoice_management",
         loader: invoiceService.apis.getInvoices,
         element: <OrderManagement />,
-      },
-      {
-        path: "reviews",
-        element: <ReviewManagement />,
       },
       {
         path: "store",

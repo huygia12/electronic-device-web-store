@@ -1,6 +1,5 @@
-import { Statistic } from "@/types/model";
+import { InvoiceStatistic, Statistic } from "@/types/model";
 import { axiosInstance, reqConfig } from "@/config";
-import axios from "axios";
 import { Nullable } from "@/utils/declare";
 
 const statisticService = {
@@ -14,20 +13,73 @@ const statisticService = {
 
         return res.data.info;
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
+        console.error("Unexpected error:", error);
         return null;
       }
     },
+  },
+  caculateTotalOfRevenueAndOrder: (
+    chartData: InvoiceStatistic[]
+  ): { revenue: number; order: number } => {
+    return {
+      revenue: chartData.reduce((acc, curr) => acc + curr.revenue, 0),
+      order: chartData.reduce((acc, curr) => acc + curr.order, 0),
+    };
+  },
+  getStatisticFromFirstDayOfMonth: (
+    chartData: InvoiceStatistic[]
+  ): InvoiceStatistic[] => {
+    const now = new Date();
+    let dayInMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    let lastDayInChartData: string | null = null;
+
+    const statistic = chartData.reduce<InvoiceStatistic[]>((prev, curr) => {
+      while (dayInMonth.getDate() < new Date(curr.date).getDate()) {
+        prev.push({
+          date: dayInMonth.toISOString(),
+          revenue: 0,
+          order: 0,
+        });
+
+        dayInMonth = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          dayInMonth.getDate() + 1
+        );
+      }
+
+      prev.push(curr);
+      lastDayInChartData = curr.date;
+
+      return prev;
+    }, []);
+
+    while (dayInMonth.getDate() < now.getDate()) {
+      statistic.push({
+        date: dayInMonth.toISOString(),
+        revenue: 0,
+        order: 0,
+      });
+
+      dayInMonth = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        dayInMonth.getDate() + 1
+      );
+    }
+
+    if (
+      lastDayInChartData! &&
+      new Date(lastDayInChartData).getDate() < now.getDate()
+    ) {
+      statistic.push({
+        date: dayInMonth.toISOString(),
+        revenue: 0,
+        order: 0,
+      });
+    }
+
+    return statistic;
   },
 };
 

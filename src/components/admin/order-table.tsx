@@ -9,11 +9,12 @@ import {
 import { InvoiceFullJoin } from "@/types/model";
 import { HTMLAttributes } from "react";
 import { Button } from "../ui/button";
-import { Check, Eye, X } from "lucide-react";
 import Badge from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "../ui/scroll-area";
 import { invoiceService } from "@/services";
+import { formatDateTime } from "@/utils/helpers";
+import OrderDetailDialog from "./order-detail-dialog";
 
 interface OrderTableProps extends HTMLAttributes<HTMLDivElement> {
   orders: InvoiceFullJoin[];
@@ -23,7 +24,7 @@ const colName: string[] = [
   "KHÁCH HÀNG",
   "ID ĐƠN HÀNG",
   "NGÀY ĐẶT HÀNG",
-  "SỐ LOẠI HÀNG",
+  "SỐ MẶT HÀNG",
   "TỔNG TIỀN",
   "TRẠNG THÁI",
   "THAO TÁC",
@@ -53,29 +54,25 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
               <TableCell className="text-center text-base">
                 {invoice.userName}
               </TableCell>
-              <TableCell className="text-center  text-base">
+              <TableCell className="text-center text-base">
                 {invoice.invoiceID}
               </TableCell>
               <TableCell className="text-center text-base">
-                {`${invoice.createdAt}`}
+                {formatDateTime(`${invoice.createdAt}`)}
               </TableCell>
               <TableCell className="text-center text-base">{`${invoice.invoiceProducts.length} sản phẩm`}</TableCell>
-              <TableCell className="text-center text-base">{`${invoiceService.getTotalBill(invoice)}đ`}</TableCell>
+              <TableCell className="text-center text-base">{`${invoiceService.getTotalBill(invoice).toLocaleString()}đ`}</TableCell>
               <TableCell className="text-center">
-                <Badge className="bg-blue-500 text-white hover_bg-blue-500">
-                  {invoice.status}
+                <Badge className="bg-green-500 text-white py-2 px-4 text-sm hover_bg-green-500">
+                  {invoiceService.getInvoiceStatus(invoice.status)}
                 </Badge>
               </TableCell>
               <TableCell className="flex items-center justify-center space-x-2">
-                <Button variant="neutral">
-                  <Eye />
-                </Button>
-                <Button variant="positive">
-                  <Check />
-                </Button>
-                <Button variant="negative">
-                  <X />
-                </Button>
+                <OrderDetailDialog invoice={invoice}>
+                  <Button variant="neutral" className="text-base">
+                    Xem
+                  </Button>
+                </OrderDetailDialog>
               </TableCell>
             </TableRow>
           ))}

@@ -63,7 +63,7 @@ export interface Invoice {
   products: CartItem[];
 }
 
-interface InvoiceProduct {
+export interface InvoiceProduct {
   discount: Nullable<number>;
   price: number;
   productName: string;
@@ -177,9 +177,15 @@ export type ReviewFullJoin = Review & {
 };
 
 //Statistic
+export interface InvoiceStatistic {
+  date: string; //must be ISO 8601 format
+  order: number;
+  revenue: number;
+}
+
 export interface Statistic {
-  users: number;
-  products: number;
+  totalUsers: number;
+  totalProducts: number;
   invoices: {
     today: number;
     yesterday: number;
@@ -188,6 +194,9 @@ export interface Statistic {
     today: number;
     yesterday: number;
   };
+  newUsers: User[];
+  orders: InvoiceFullJoin[];
+  invoiceStatistic: InvoiceStatistic[];
 }
 
 //User

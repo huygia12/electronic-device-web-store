@@ -82,7 +82,7 @@ const ProviderManagement = () => {
   };
 
   return (
-    <section>
+    <div>
       <SearchBox setSearchText={setSearchText} />
 
       {/** Table */}
@@ -101,7 +101,7 @@ const ProviderManagement = () => {
           handleDeleteProvider={handleDeleteProvider}
         />
       </div>
-    </section>
+    </div>
   );
 };
 

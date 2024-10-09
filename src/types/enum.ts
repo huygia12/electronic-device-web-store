@@ -6,13 +6,15 @@ enum Role {
 enum InvoiceStatus {
   NEW = "NEW",
   SHIPPING = "SHIPPING",
-  DONE = "SHIPPINNG",
+  DONE = "DONE",
   ABORT = "ABORT",
+  PAYMENT_WATING = "PAYMENT_WATING",
 }
 
 enum PaymentMethod {
   COD = "COD",
   BANKING = "BANKING",
+  NONE = "NONE",
 }
 
 enum Sort {

@@ -1,7 +1,7 @@
 import { CartItem, InvoiceFullJoin } from "@/types/model";
 import { axiosInstance, reqConfig } from "@/config/axios-config";
 import axios from "axios";
-import { InvoiceStatus } from "@/types/enum";
+import { InvoiceStatus, PaymentMethod } from "@/types/enum";
 import { OrderInsertion, ProductOrderInsertion } from "@/types/api";
 
 const invoiceService = {
@@ -75,6 +75,57 @@ const invoiceService = {
       itemID: item.itemID,
       quantity: item.quantity,
     }));
+  },
+  getInvoicePaymentMethod: (method: PaymentMethod): string => {
+    let paymentMethod: string;
+    if (method === PaymentMethod.BANKING)
+      paymentMethod = "Thanh Toán Bằng Chuyển Khoản";
+    else if (method === PaymentMethod.COD)
+      paymentMethod = "Thanh Toán Khi Nhận Hàng";
+    else paymentMethod = "Chưa Thanh Toán";
+
+    return paymentMethod;
+  },
+  getInvoiceStatus: (status: InvoiceStatus): string => {
+    let invoiceStatus: string;
+    if (status === InvoiceStatus.NEW) invoiceStatus = "Đang Chờ Duyệt";
+    else if (status === InvoiceStatus.PAYMENT_WATING)
+      invoiceStatus = "Đang Chờ Thanh Toán";
+    else if (status === InvoiceStatus.SHIPPING)
+      invoiceStatus = "Đang Giao Hàng";
+    else if (status === InvoiceStatus.DONE)
+      invoiceStatus = "Giao Hàng Thành Công";
+    else invoiceStatus = "Đã Bị Hủy";
+
+    return invoiceStatus;
+  },
+  getInvoiceStatusLevel: (invoiceStatus: InvoiceStatus): number => {
+    return invoiceStatus === InvoiceStatus.NEW
+      ? 1
+      : invoiceStatus === InvoiceStatus.PAYMENT_WATING
+        ? 2
+        : invoiceStatus === InvoiceStatus.SHIPPING
+          ? 3
+          : invoiceStatus === InvoiceStatus.DONE
+            ? 4
+            : 5;
+  },
+  getInvoiceStatusDisabled: (
+    statusToCompare: InvoiceStatus,
+    currentStatus: InvoiceStatus
+  ) => {
+    if ([InvoiceStatus.ABORT, InvoiceStatus.DONE].includes(currentStatus)) {
+      // When currentStatus has already been to DONE or ABORT, it cannot change the status anyfurther
+      return true;
+    } else if (currentStatus === InvoiceStatus.SHIPPING) {
+      // When currentStatus has already been to shipping, it can only turn into DONE status
+      return statusToCompare !== InvoiceStatus.DONE;
+    }
+
+    return (
+      invoiceService.getInvoiceStatusLevel(currentStatus) >
+      invoiceService.getInvoiceStatusLevel(statusToCompare)
+    );
   },
 };
 

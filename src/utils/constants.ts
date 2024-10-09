@@ -1,3 +1,4 @@
+import { ChartConfig } from "@/components/ui/chart";
 import { AdminNavItem, Phase } from "@/types/component";
 import { cva } from "class-variance-authority";
 import {
@@ -6,7 +7,6 @@ import {
   Users2,
   Shapes,
   PackageSearch,
-  MessageSquareCode,
   Store,
   Factory,
   Boxes,
@@ -136,13 +136,6 @@ const navItems: AdminNavItem[] = [
     children: [],
   },
   {
-    name: "Đánh giá",
-    url: "/admin/reviews",
-    icon: MessageSquareCode,
-    hasChild: false,
-    children: [],
-  },
-  {
     name: "Cửa hàng",
     url: "/admin/store",
     icon: Store,
@@ -185,6 +178,17 @@ const productListHeader: string[] = [
   "Số lượng",
 ];
 
+const chartConfig = {
+  revenue: {
+    label: "Doanh thu",
+    color: "hsl(var(--chart-1))",
+  },
+  order: {
+    label: "Đơn hàng",
+    color: "hsl(var(--chart-2))",
+  },
+} satisfies ChartConfig;
+
 export {
   badgeVariants,
   buttonVariants,
@@ -192,4 +196,5 @@ export {
   phases,
   invoiceListHeader,
   productListHeader,
+  chartConfig,
 };
