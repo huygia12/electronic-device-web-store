@@ -39,7 +39,6 @@ import { Role } from "@/types/enum";
 import { AuthProvider } from "@/context";
 import categoryService from "@/services/category";
 import PreventLoginUserRoute from "./prevent-login-user-route";
-import { Args } from "@/utils/declare";
 
 const routes = createBrowserRouter([
   {
@@ -204,11 +203,7 @@ const routes = createBrowserRouter([
           {
             path: ":id",
             id: "product_edition",
-            loader: async (params: Args) => {
-              return await productService.apis.getProductFullJoin({
-                ...params,
-              });
-            },
+            loader: productService.apis.getProductFullJoin,
             element: <ProductEdittion />,
           },
           {

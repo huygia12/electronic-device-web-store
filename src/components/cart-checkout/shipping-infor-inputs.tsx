@@ -11,12 +11,12 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import useCurrentUser from "@/hooks/use-current-user";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { ShippingForm } from "@/utils/schema";
+import { ShippingFormProps } from "@/utils/schema";
 import { District, Province, Ward } from "@/types/api";
 
 interface ShippingInputsProps extends HTMLAttributes<HTMLDivElement> {
-  register: UseFormRegister<ShippingForm>;
-  errors: FieldErrors<ShippingForm>;
+  register: UseFormRegister<ShippingFormProps>;
+  errors: FieldErrors<ShippingFormProps>;
   provinces: Province[];
   districts: District[];
   wards: Ward[];

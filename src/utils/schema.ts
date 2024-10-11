@@ -304,7 +304,7 @@ const ReviewCreationSchema = z.object({
   reviewContent: notBlankString(),
 });
 
-export type ShippingForm = z.infer<typeof ShippingSchema>;
+export type ShippingFormProps = z.infer<typeof ShippingSchema>;
 
 export type SignupFormProps = z.infer<typeof SignupSchema>;
 

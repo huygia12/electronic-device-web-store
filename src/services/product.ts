@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
   axiosInstance,
   axiosInstanceWithoutAuthorize,
   reqConfig,
 } from "@/config";
-import { Args, Nullable, Optional } from "@/utils/declare";
+import { Args, Optional } from "@/utils/declare";
 import { ProductSummary } from "@/types/api";
 import { ProductFullJoin } from "@/types/model";
 import { ProductInputFormProps, ProductItemsFormProps } from "@/utils/schema";
@@ -65,126 +65,82 @@ const productService = {
         return [];
       }
     },
-    getProductFullJoin: async ({
-      params,
-    }: Args): Promise<Nullable<ProductFullJoin>> => {
-      try {
-        const res = await axiosInstanceWithoutAuthorize.get<{
-          info: ProductFullJoin;
-        }>(`/products/${params.id}`, reqConfig);
-        return res.data.info;
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
-        return null;
+    getProductFullJoin: async (
+      args: Args | string
+    ): Promise<ProductFullJoin> => {
+      let productID: string;
+      if (typeof args === "string") {
+        productID = args;
+      } else {
+        productID = args.params.id!;
       }
+
+      const res = await axiosInstanceWithoutAuthorize.get<{
+        info: ProductFullJoin;
+      }>(`/products/${productID}`, reqConfig);
+
+      return res.data.info;
     },
     deleteProduct: async (
       productID: string,
       deepClean?: boolean
-    ): Promise<boolean> => {
-      try {
-        const getResponse = await axiosInstanceWithoutAuthorize.get<{
-          info: ProductFullJoin;
-        }>(`/products/${productID}`, reqConfig);
+    ): Promise<AxiosResponse> => {
+      //Get product so that we can delete it images
+      const resOfGet = await axiosInstanceWithoutAuthorize.get<{
+        info: ProductFullJoin;
+      }>(`/products/${productID}`, reqConfig);
 
-        await axiosInstance.delete(`/products/${productID}`, reqConfig);
+      //Delete product
+      const resOfDelete = await axiosInstance.delete(
+        `/products/${productID}`,
+        reqConfig
+      );
 
-        if (deepClean) {
-          firebaseService.apis.deleteImagesInFireBase(
-            getResponse.data.info.productItems.map((item) => item.thump)
-          );
-        }
-        getResponse.data.info.productItems.forEach((item) => {
-          firebaseService.apis.deleteImagesInFireBase(
-            item.itemImages.map((imageObject) => imageObject.source)
-          );
-        });
-        return true;
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          if (error.response) {
-            console.error(`Response data: ${error.response.data}`);
-            console.error(`Response status: ${error.response.status})`);
-          }
-        } else {
-          console.error("Unexpected error:", error);
-        }
-        return false;
-      }
-    },
-    addProduct: async (product: ProductInputFormProps): Promise<boolean> => {
-      let productPayload;
-      try {
-        let options = product.productAttributes?.reduce<string[]>(
-          (prev, curr) => {
-            prev.push(curr.optionID);
-            return prev;
-          },
-          []
+      if (deepClean) {
+        firebaseService.apis.deleteImagesInFireBase(
+          resOfGet.data.info.productItems.map((item) => item.thump)
         );
-
-        if (options) {
-          if (options.length <= 0) {
-            options = undefined;
-          }
-        }
-        const productItems =
-          await productService.getProductItemsAfterUploadImages(
-            product.productItems
-          );
-
-        productPayload = {
-          productName: product.productName,
-          description:
-            product.description?.length && product.description.length > 0
-              ? product.description
-              : undefined,
-          length: product.length,
-          width: product.width,
-          height: product.height,
-          weight: product.weight,
-          warranty: product.warranty,
-          categoryID: product.categoryID,
-          providerID: product.providerID,
-          options: options,
-          productItems: productItems,
-        };
-
-        //post new product
-        await axiosInstance.post("/products", productPayload, reqConfig);
-        return true;
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          // Handle error response if available
-          console.error(`Response data: ${error.response?.data}`);
-          console.error(`Response status: ${error.response?.status})`);
-        } else {
-          console.error("Unexpected error:", error);
-        }
-
-        if (productPayload) {
-          productPayload.productItems.forEach((item) => {
-            //delete images if add product fail
-            firebaseService.apis.deleteImagesInFireBase([
-              item.thump,
-              ...item.itemImages,
-            ]);
-          });
-        }
-        return false;
       }
+      resOfGet.data.info.productItems.forEach((item) => {
+        firebaseService.apis.deleteImagesInFireBase(
+          item.itemImages.map((imageObject) => imageObject.source)
+        );
+      });
+
+      return resOfDelete;
+    },
+    addProduct: async (
+      product: ProductInputFormProps,
+      productAttributeOptions: string[] | undefined,
+      productItems: ProductItemsFormProps
+    ): Promise<AxiosResponse> => {
+      const productPayload = {
+        productName: product.productName,
+        description:
+          product.description && product.description.length > 0
+            ? product.description
+            : undefined,
+        length: product.length,
+        width: product.width,
+        height: product.height,
+        weight: product.weight,
+        warranty: product.warranty,
+        categoryID: product.categoryID,
+        providerID: product.providerID,
+        options: productAttributeOptions,
+        productItems: productItems,
+      };
+
+      const res = await axiosInstance.post(
+        "/products",
+        productPayload,
+        reqConfig
+      );
+
+      return res;
     },
     updateProduct: async (product: ProductInputFormProps): Promise<boolean> => {
+      // TODO:
       let productPayload;
       try {
         let options = product.productAttributes?.reduce<string[]>(
@@ -393,7 +349,7 @@ const productService = {
   },
   getProductItemsAfterUploadImages: async (
     productItems: ProductItemsFormProps
-  ) => {
+  ): Promise<ProductItemsFormProps> => {
     const items = [];
     for (const item of productItems) {
       const thump: string[] = await firebaseService.apis.insertImagesToFireBase(
@@ -419,6 +375,14 @@ const productService = {
     }
 
     return items;
+  },
+  handleConsequencesIfAddProductFail: (items: ProductItemsFormProps) => {
+    items.forEach((item) => {
+      firebaseService.apis.deleteImagesInFireBase([
+        item.thump,
+        ...item.itemImages,
+      ]);
+    });
   },
 };
 

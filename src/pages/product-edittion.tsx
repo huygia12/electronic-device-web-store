@@ -46,8 +46,6 @@ import { LoadingSpinner } from "@/components/effect";
 import categoryService from "@/services/category";
 import { attributeService, providerService } from "@/services";
 import { Optional } from "@/utils/declare";
-import { toast } from "sonner";
-import { useCustomNavigate } from "@/hooks";
 import ImageOverView from "@/components/common/image-overview";
 import { useRouteLoaderData } from "react-router-dom";
 import { retrieveImageUrl } from "@/utils/helpers";
@@ -57,7 +55,6 @@ const ProductEdittion: FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [providers, setProviders] = useState<Provider[]>([]);
   const [attributes, setAttributes] = useState<Attribute[]>([]);
-  const { navigate } = useCustomNavigate();
 
   const [selectComponentKey, setSelectComponentKey] = useState<number>(1);
   const [itemQuantity, setItemQuantity] = useState<number>(1);
@@ -219,16 +216,17 @@ const ProductEdittion: FC = () => {
   const handleFormSubmission: SubmitHandler<ProductUpdateFormProps> = async (
     data
   ) => {
+    console.log(JSON.stringify(data, null, 2));
     // const response: boolean = await productService.apis.updateProduct(data);
-    const response = true;
-    if (response) {
-      toast.success("Thay đổi thành công!");
-      navigate("/admin/products", {
-        unstable_viewTransition: true,
-      });
-    } else {
-      toast.error("Thay đổi thất bại!");
-    }
+    // const response = true;
+    // if (response) {
+    //   toast.success("Thay đổi thành công!");
+    //   navigate("/admin/products", {
+    //     unstable_viewTransition: true,
+    //   });
+    // } else {
+    //   toast.error("Thay đổi thất bại!");
+    // }
   };
 
   return (

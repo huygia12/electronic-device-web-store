@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { cartService, invoiceService } from "@/services";
 import { deliveryService } from "@/services";
 import { Nullable } from "@/utils/declare";
-import { ShippingForm, ShippingSchema } from "@/utils/schema";
+import { ShippingFormProps, ShippingSchema } from "@/utils/schema";
 import { BillDisplay, ShippingInputs } from "@/components/cart-checkout";
 import { toast } from "sonner";
 
@@ -29,7 +29,7 @@ const CartCheckout: FC = () => {
     clearErrors,
     watch,
     formState: { errors },
-  } = useForm<ShippingForm>({
+  } = useForm<ShippingFormProps>({
     resolver: zodResolver(ShippingSchema),
   });
 
@@ -157,7 +157,7 @@ const CartCheckout: FC = () => {
   };
 
   //TODO: handle reponse payload afteer submit order
-  const handleShippingFormSubmission: SubmitHandler<ShippingForm> = async (
+  const handleShippingFormSubmission: SubmitHandler<ShippingFormProps> = async (
     data
   ) => {
     const createOrder = invoiceService.apis.createOrder({

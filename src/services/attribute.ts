@@ -205,6 +205,20 @@ const attributeService = {
       attr.typeValue.toLowerCase().includes(text.toLowerCase())
     );
   },
+  getIDOutOfOptions: (
+    attributes: ProductAttributesFormProps | undefined
+  ): string[] | undefined => {
+    let options: string[] | undefined = attributes?.reduce<string[]>(
+      (prev, curr) => {
+        prev.push(curr.optionID);
+        return prev;
+      },
+      []
+    );
+    options && options.length <= 0 && (options = undefined);
+
+    return options;
+  },
 };
 
 export default attributeService;
