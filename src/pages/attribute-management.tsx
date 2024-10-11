@@ -191,7 +191,7 @@ const AttributeManagement: FC = () => {
 
   return (
     <div>
-      <SearchBox setSearchText={handleSearching} />
+      <SearchBox className="mt-8 mb-4" setSearchText={handleSearching} />
 
       <div className="grid grid-cols-5 gap-4">
         {/** ATTRIBUTE TYPE */}

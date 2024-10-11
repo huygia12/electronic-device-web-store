@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import {
   axiosInstance,
   axiosInstanceWithoutAuthorize,
@@ -11,25 +11,11 @@ import { Optional } from "@/utils/declare";
 const attributeService = {
   apis: {
     getAttributes: async (): Promise<Attribute[]> => {
-      try {
-        const res = await axiosInstanceWithoutAuthorize.get<{
-          info: Attribute[];
-        }>("/attributes", reqConfig);
-        return res.data.info;
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
-        return [];
-      }
+      const res = await axiosInstanceWithoutAuthorize.get<{
+        info: Attribute[];
+      }>("/attributes", reqConfig);
+
+      return res.data.info;
     },
     addAttributeType: async (name: string): Promise<Attribute> => {
       const response = await axiosInstance.post<{ info: Attribute }>(

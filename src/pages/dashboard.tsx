@@ -6,9 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Statistic } from "@/types/model";
+import { InvoiceFullJoin, Statistic } from "@/types/model";
 import OrderTable from "@/components/admin/order-table";
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   ArrowRight,
   DollarSign,
@@ -22,11 +22,14 @@ import {
   StatisticCard,
   StatisticChart,
 } from "@/components/dash-board";
+import { invoiceService } from "@/services";
+import { InvoiceStatus } from "@/types/enum";
 
 const ORDERS_LINK = "/admin/invoices";
 
 const Dashboard: FC = () => {
   const statistic = useRouteLoaderData("dash_board") as Statistic;
+  const [orders, setOrders] = useState<InvoiceFullJoin[]>(statistic.orders);
 
   return (
     <div className="flex flex-col py-8">
@@ -73,7 +76,14 @@ const Dashboard: FC = () => {
             <CardTitle className="text-8">Đơn hàng cần xác nhận</CardTitle>
           </CardHeader>
           <CardContent className="px-6">
-            <OrderTable orders={statistic.orders} />
+            <OrderTable
+              orders={invoiceService.getInvoiceAfterFilterStatus(
+                orders,
+                InvoiceStatus.NEW
+              )}
+              setOrders={setOrders}
+              className="max-h-[40vh]"
+            />
           </CardContent>
           <CardFooter className="flex justify-center">
             <NavLink

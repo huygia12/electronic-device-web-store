@@ -17,9 +17,10 @@ interface CustomPaginationProps extends HTMLAttributes<HTMLDivElement> {
 
 const CustomPagination: FC<CustomPaginationProps> = ({
   currentPage = 1,
+  totalPages = 0,
   ...props
 }) => {
-  if (props.totalPages === 0) {
+  if (totalPages === 0) {
     return;
   }
 
@@ -58,7 +59,7 @@ const CustomPagination: FC<CustomPaginationProps> = ({
           <PaginationLink isActive>{currentPage}</PaginationLink>
         </PaginationItem>
 
-        {props.totalPages - currentPage > 0 && (
+        {totalPages - currentPage > 0 && (
           <PaginationItem>
             <PaginationLink
               onClick={() => props.setCurrentPage(currentPage + 1)}
@@ -68,19 +69,17 @@ const CustomPagination: FC<CustomPaginationProps> = ({
           </PaginationItem>
         )}
 
-        {props.totalPages - currentPage > 2 && <PaginationEllipsis />}
+        {totalPages - currentPage > 2 && <PaginationEllipsis />}
 
-        {props.totalPages - currentPage > 1 && (
+        {totalPages - currentPage > 1 && (
           <PaginationItem>
-            <PaginationLink
-              onClick={() => props.setCurrentPage(props.totalPages)}
-            >
-              {props.totalPages}
+            <PaginationLink onClick={() => props.setCurrentPage(totalPages)}>
+              {totalPages}
             </PaginationLink>
           </PaginationItem>
         )}
 
-        {currentPage !== props.totalPages && (
+        {currentPage !== totalPages && (
           <PaginationItem>
             <PaginationNext
               onClick={() => props.setCurrentPage(currentPage + 1)}

@@ -91,6 +91,10 @@ const getPages = (rows: number): number => {
   return Math.ceil(rows / rowsPerPage);
 };
 
+const getTheFollowingDay = (date: Date): Date => {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+};
+
 export {
   arrayInReverse,
   getImageUrl,
@@ -105,4 +109,5 @@ export {
   applyDiscount,
   convertMiliSecToDays,
   getPages,
+  getTheFollowingDay,
 };

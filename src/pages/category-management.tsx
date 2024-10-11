@@ -85,7 +85,7 @@ const CategoryManagement: FC = () => {
 
   return (
     <section>
-      <SearchBox setSearchText={setSearchText} />
+      <SearchBox className="mt-8 mb-4" setSearchText={setSearchText} />
 
       {/** Table */}
       <div className="flex gap-4">

@@ -25,8 +25,8 @@ interface CategoryTableProps extends HTMLAttributes<HTMLDivElement> {
 const CategoryTable: FC<CategoryTableProps> = ({ ...props }) => {
   if (props.categories.length === 0) {
     return (
-      <Card className={cn("rounded-2xl shadow-lg", props.className)}>
-        <CardContent className="flex flex-col p-4">
+      <Card className={cn("rounded-2xl shadow-lg ", props.className)}>
+        <CardContent className="flex flex-col p-4 h-[60vh]">
           <div className="flex flex-col items-center">
             <img width={500} src="/empty-box.svg" alt="emptyCart" />
             <span className="text-xl font-medium text-slate-500 mb-10">
@@ -41,7 +41,7 @@ const CategoryTable: FC<CategoryTableProps> = ({ ...props }) => {
   return (
     <Card className={cn("rounded-2xl shadow-lg", props.className)}>
       <CardContent className="flex flex-col p-4">
-        <ScrollArea className="relative h-[58vh]">
+        <ScrollArea className="relative h-[56vh]">
           <Table>
             <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
               <tr>

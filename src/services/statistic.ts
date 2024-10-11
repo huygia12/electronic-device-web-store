@@ -1,6 +1,7 @@
 import { InvoiceStatistic, Statistic } from "@/types/model";
 import { axiosInstance, reqConfig } from "@/config";
 import { Nullable } from "@/utils/declare";
+import { getTheFollowingDay } from "@/utils/helpers";
 
 const statisticService = {
   apis: {
@@ -41,11 +42,7 @@ const statisticService = {
           order: 0,
         });
 
-        dayInMonth = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          dayInMonth.getDate() + 1
-        );
+        dayInMonth = getTheFollowingDay(dayInMonth);
       }
 
       prev.push(curr);
@@ -54,6 +51,7 @@ const statisticService = {
       return prev;
     }, []);
 
+    dayInMonth = getTheFollowingDay(dayInMonth);
     while (dayInMonth.getDate() < now.getDate()) {
       statistic.push({
         date: dayInMonth.toISOString(),
@@ -61,11 +59,7 @@ const statisticService = {
         order: 0,
       });
 
-      dayInMonth = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        dayInMonth.getDate() + 1
-      );
+      dayInMonth = getTheFollowingDay(dayInMonth);
     }
 
     if (

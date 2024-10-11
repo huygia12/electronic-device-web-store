@@ -5,7 +5,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { HTMLAttributes, useState } from "react";
+import { HTMLAttributes, useMemo } from "react";
 import { InvoiceFullJoin } from "@/types/model";
 import { invoiceService } from "@/services";
 import { formatDateTime } from "@/utils/helpers";
@@ -15,18 +15,37 @@ import { Button } from "../ui/button";
 import { Download } from "lucide-react";
 import ChangeOrderStatus from "./change-order-status";
 import ProductInOrder from "./product-in-order";
+import { toast } from "sonner";
 
 interface OrderDetailDialogProps extends HTMLAttributes<HTMLDivElement> {
   invoice: InvoiceFullJoin;
+  updateInvoice: (invoice: InvoiceFullJoin) => void;
 }
 
 const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
   className,
   ...props
 }) => {
-  const [invoiceState, setInvoiceState] = useState<InvoiceStatus>(
-    props.invoice.status
+  const invoiceState = useMemo<InvoiceStatus>(
+    () => props.invoice.status,
+    [props.invoice]
   );
+
+  const setInvoiceStatus = (status: InvoiceStatus) => {
+    const updateInvoice = invoiceService.apis.upateInvoice(
+      props.invoice.invoiceID,
+      { status: status }
+    );
+
+    toast.promise(updateInvoice, {
+      loading: "Đang xử lý...",
+      success: (invoice: InvoiceFullJoin) => {
+        props.updateInvoice(invoice);
+        return "Cập nhật trạng thái đơn hàng thành công!";
+      },
+      error: "Cập nhật trạng thái đơn hàng thất bại!",
+    });
+  };
 
   return (
     <Dialog>
@@ -68,8 +87,9 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
         </div>
 
         <ChangeOrderStatus
+          invoiceID={props.invoice.invoiceID}
           invoiceState={invoiceState}
-          setInvoiceState={setInvoiceState}
+          setInvoiceState={setInvoiceStatus}
           className="mt-10"
         />
 

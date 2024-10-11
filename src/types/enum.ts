@@ -8,7 +8,7 @@ enum InvoiceStatus {
   SHIPPING = "SHIPPING",
   DONE = "DONE",
   ABORT = "ABORT",
-  PAYMENT_WATING = "PAYMENT_WATING",
+  PAYMENT_WAITING = "PAYMENT_WAITING",
 }
 
 enum PaymentMethod {

@@ -39,10 +39,10 @@ interface ProductTableProps extends HTMLAttributes<HTMLDivElement> {
 const ProductTable: FC<ProductTableProps> = ({ ...props }) => {
   return (
     <Card className={cn("rounded-2xl shadow-lg flex-1", props.className)}>
-      <CardContent className="flex flex-col p-4">
+      <CardContent className="flex flex-col p-4 h-[60vh]">
         {props.products.length !== 0 ? (
-          <ScrollArea className="relative h-[58vh]">
-            <Table>
+          <ScrollArea className="relative h-[60vh]">
+            <Table className="">
               <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
                 <tr>
                   {colName.map((item, key) => {
@@ -57,7 +57,7 @@ const ProductTable: FC<ProductTableProps> = ({ ...props }) => {
                   })}
                 </tr>
               </TableHeader>
-              <TableBody>
+              <TableBody className="">
                 {props.products.map((product, index) => (
                   <TableRow
                     key={index}

@@ -159,7 +159,7 @@ const UserManagement: FC = () => {
 
   return (
     <div>
-      <SearchBox setSearchText={setSearchText} />
+      <SearchBox className="mt-8 mb-4" setSearchText={setSearchText} />
 
       <div className="flex gap-4">
         <UserTable

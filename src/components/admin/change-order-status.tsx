@@ -21,6 +21,7 @@ import { FC, HTMLAttributes, useState } from "react";
 import { buttonVariants } from "@/utils/constants";
 
 interface ChangeOrderStatusProps extends HTMLAttributes<HTMLDivElement> {
+  invoiceID: string;
   invoiceState: InvoiceStatus;
   setInvoiceState: (invoiceState: InvoiceStatus) => void;
 }
@@ -35,8 +36,8 @@ const ChangeOrderStatus: FC<ChangeOrderStatusProps> = ({ ...props }) => {
   };
 
   const confirmSelection = () => {
-    setIsDialogOpen(false);
     props.setInvoiceState(pendingValue!);
+    // setIsDialogOpen(false);
   };
 
   const cancelSelection = () => {
@@ -68,10 +69,10 @@ const ChangeOrderStatus: FC<ChangeOrderStatusProps> = ({ ...props }) => {
           </SelectItem>
           <SelectItem
             disabled={invoiceService.getInvoiceStatusDisabled(
-              InvoiceStatus.PAYMENT_WATING,
+              InvoiceStatus.PAYMENT_WAITING,
               props.invoiceState
             )}
-            value={InvoiceStatus.PAYMENT_WATING}
+            value={InvoiceStatus.PAYMENT_WAITING}
           >
             Duyệt Đơn Hàng
           </SelectItem>

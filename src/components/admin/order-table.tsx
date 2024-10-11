@@ -15,10 +15,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { invoiceService } from "@/services";
 import { formatDateTime } from "@/utils/helpers";
 import OrderDetailDialog from "./order-detail-dialog";
-
-interface OrderTableProps extends HTMLAttributes<HTMLDivElement> {
-  orders: InvoiceFullJoin[];
-}
+import { Separator } from "../ui/separator";
 
 const colName: string[] = [
   "KHÁCH HÀNG",
@@ -30,9 +27,18 @@ const colName: string[] = [
   "THAO TÁC",
 ];
 
+interface OrderTableProps extends HTMLAttributes<HTMLDivElement> {
+  orders: InvoiceFullJoin[];
+  setOrders: (invoice: InvoiceFullJoin[]) => void;
+}
+
 const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
+  const updateInvoice = async (invoice: InvoiceFullJoin) => {
+    props.setOrders(invoiceService.updateInvoices(invoice, props.orders));
+  };
+
   return (
-    <ScrollArea className={cn("relative max-h-[70vh]", className)}>
+    <ScrollArea className={cn("relative", className)}>
       <Table>
         <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
           <tr>
@@ -68,7 +74,10 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
                 </Badge>
               </TableCell>
               <TableCell className="flex items-center justify-center space-x-2">
-                <OrderDetailDialog invoice={invoice}>
+                <OrderDetailDialog
+                  invoice={invoice}
+                  updateInvoice={updateInvoice}
+                >
                   <Button variant="neutral" className="text-base">
                     Xem
                   </Button>
@@ -76,6 +85,11 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
               </TableCell>
             </TableRow>
           ))}
+          <tr>
+            <td>
+              <Separator />
+            </td>
+          </tr>
         </TableBody>
       </Table>
     </ScrollArea>
