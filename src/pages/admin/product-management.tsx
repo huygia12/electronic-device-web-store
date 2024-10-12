@@ -6,7 +6,7 @@ import { categoryService, productService, providerService } from "@/services";
 import {
   HeaderBar,
   ProductTable,
-  SideBar,
+  ProductTools,
 } from "@/components/product-management";
 import { Category, Provider } from "@/types/model";
 import { CustomPagination } from "@/components/common";
@@ -126,7 +126,7 @@ const ProductManagement: FC = () => {
           setSelectedProduct={setSelectedProduct}
         />
 
-        <SideBar
+        <ProductTools
           className="mt-4"
           setDeepCleanProductID={setDeepCleanProductID}
           selectedProduct={selectedProduct}

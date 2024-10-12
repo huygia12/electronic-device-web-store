@@ -26,7 +26,7 @@ interface ProductInOrder extends HTMLAttributes<HTMLDivElement> {
   products: InvoiceProduct[];
 }
 
-const ProductInOrder: FC<ProductInOrder> = ({ ...props }) => {
+const ProductInInvoice: FC<ProductInOrder> = ({ ...props }) => {
   return (
     <div className={props.className}>
       <label htmlFor="product-list" className="text-xl font-semibold">
@@ -98,4 +98,4 @@ const ProductInOrder: FC<ProductInOrder> = ({ ...props }) => {
   );
 };
 
-export default ProductInOrder;
+export default ProductInInvoice;

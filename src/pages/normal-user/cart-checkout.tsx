@@ -9,6 +9,7 @@ import { Nullable } from "@/utils/declare";
 import { ShippingFormProps, ShippingSchema } from "@/utils/schema";
 import { BillDisplay, ShippingInputs } from "@/components/cart-checkout";
 import { toast } from "sonner";
+import { ProductInCart } from "@/components/user";
 
 const CartCheckout: FC = () => {
   const { itemsInLocal, setPhaseID, removeInvoice } = useCartProps();
@@ -18,7 +19,10 @@ const CartCheckout: FC = () => {
   const [serviceID, setServiceID] = useState("");
   const [shippingFee, setShippingFee] = useState<Nullable<number>>(null);
   const [shippingTime, setShippingTime] = useState(0);
-  const [totalAmountOfBill, setTotalAmountOfBill] = useState(0);
+  const [totalAmountOfBill, setTotalAmountOfBill] = useState(
+    cartService.getTotalAmount(itemsInLocal) -
+      cartService.getTotalDiscountAmount(itemsInLocal)
+  );
   const { currentUser } = useCurrentUser();
   const { navigate } = useCustomNavigate();
 
@@ -41,18 +45,13 @@ const CartCheckout: FC = () => {
     const setup = async () => {
       setPhaseID("2");
 
-      setTotalAmountOfBill(
-        cartService.getTotalAmount(itemsInLocal) -
-          cartService.getTotalDiscountAmount(itemsInLocal)
-      );
-
       const fetchedProvinces: Province[] =
         await deliveryService.apis.getProvinces();
       setProvinces(fetchedProvinces);
     };
 
     setup();
-  }, []);
+  }, [setPhaseID]);
 
   useEffect(() => {
     /** DISTRICT */
@@ -156,7 +155,7 @@ const CartCheckout: FC = () => {
     clearErrors("province");
   };
 
-  //TODO: handle reponse payload afteer submit order
+  //TODO: handle reponse payload after submit order
   const handleShippingFormSubmission: SubmitHandler<ShippingFormProps> = async (
     data
   ) => {
@@ -180,31 +179,35 @@ const CartCheckout: FC = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(handleShippingFormSubmission)}
-      className="grid grid-cols-4 w-full gap-4"
-    >
-      <ShippingInputs
-        register={register}
-        errors={errors}
-        provinces={provinces}
-        districts={districts}
-        wards={wards}
-        handleProvinceChange={handleProvinceChange}
-        handleDistrictChange={handleDistrictChange}
-        handleWardChange={handleWardChange}
-        selectedProvince={province}
-        selectedDistrict={district}
-        selectedWard={ward}
-      />
+    <div className="">
+      <form
+        onSubmit={handleSubmit(handleShippingFormSubmission)}
+        className="grid grid-cols-4 w-full gap-4"
+      >
+        <ShippingInputs
+          register={register}
+          errors={errors}
+          provinces={provinces}
+          districts={districts}
+          wards={wards}
+          handleProvinceChange={handleProvinceChange}
+          handleDistrictChange={handleDistrictChange}
+          handleWardChange={handleWardChange}
+          selectedProvince={province}
+          selectedDistrict={district}
+          selectedWard={ward}
+        />
 
-      {/** BILL */}
-      <BillDisplay
-        shippingFee={shippingFee}
-        shippingTime={shippingTime}
-        totalMoney={totalAmountOfBill}
-      />
-    </form>
+        {/** BILL */}
+        <BillDisplay
+          shippingFee={shippingFee}
+          shippingTime={shippingTime}
+          totalMoney={totalAmountOfBill}
+        />
+      </form>
+
+      <ProductInCart className="mt-10" />
+    </div>
   );
 };
 

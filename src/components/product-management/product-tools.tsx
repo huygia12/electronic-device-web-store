@@ -25,7 +25,7 @@ interface SideBarProps extends HTMLAttributes<HTMLDivElement> {
   handleDeleteProduct: () => void;
 }
 
-const SideBar: FC<SideBarProps> = ({ ...props }) => {
+const ProductTools: FC<SideBarProps> = ({ ...props }) => {
   return (
     <Card className={cn("rounded-xl shadow-lg", props.className)}>
       <CardContent className="p-4 space-y-4 flex flex-col contain-content">
@@ -109,4 +109,4 @@ const SideBar: FC<SideBarProps> = ({ ...props }) => {
   );
 };
 
-export default SideBar;
+export default ProductTools;

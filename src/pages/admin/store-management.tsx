@@ -1,6 +1,6 @@
 import { SideBanner, SlideShow } from "@/components/commercial-management";
 import { FC, useState } from "react";
-import { editingSlides } from "./data";
+import { editingSlides } from "../data";
 import { Slide, StoreFullJoin } from "@/types/model";
 import { SlideCreation } from "@/types/api";
 import { Banner } from "@/types/component";

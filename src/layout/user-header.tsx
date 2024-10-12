@@ -10,7 +10,7 @@ import { Role } from "@/types/enum";
 import { DropMenuLinkItem, DropdownAvatar } from "@/components/common";
 import { FC } from "react";
 import useCurrentUser from "@/hooks/use-current-user";
-import SearchBar from "@/components/user-header/search-bar";
+import SearchBar from "@/components/user/search-bar";
 
 const navComponents: { title: string; path: string }[] = [
   { title: "Trang Chủ", path: "/" },

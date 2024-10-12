@@ -13,7 +13,7 @@ import { NavLink } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import { FC, useState } from "react";
-import routes from "../middleware/routes";
+import routes from "../../middleware/routes";
 import axios, { HttpStatusCode } from "axios";
 import { LoadingSpinner } from "@/components/effect";
 import { SignupFormProps, SignupSchema } from "@/utils/schema";

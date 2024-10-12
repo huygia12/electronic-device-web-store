@@ -24,7 +24,7 @@ import {
   SlideShow,
 } from "@/components/user";
 import CardProduct from "@/components/user/product-card";
-import { LAPTOP_ID, PHONE_ID, slides } from "./data";
+import { LAPTOP_ID, PHONE_ID, slides } from "../data";
 import { productService, providerService } from "@/services";
 import categoryService from "@/services/category";
 import { CardSkeleton, LinesSkeleton } from "@/components/common/skeleton";

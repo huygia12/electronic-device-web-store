@@ -14,7 +14,7 @@ import { InvoiceStatus } from "@/types/enum";
 import { Button } from "../ui/button";
 import { Download } from "lucide-react";
 import ChangeOrderStatus from "./change-order-status";
-import ProductInOrder from "./product-in-order";
+import ProductInInvoice from "./product-in-invoice";
 import { toast } from "sonner";
 
 interface OrderDetailDialogProps extends HTMLAttributes<HTMLDivElement> {
@@ -93,7 +93,7 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
           className="mt-10"
         />
 
-        <ProductInOrder
+        <ProductInInvoice
           products={props.invoice.invoiceProducts}
           className="mt-10"
         />
