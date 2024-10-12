@@ -320,7 +320,7 @@ export type ProductAttributesFormProps = z.infer<
   typeof ProductAttributesSchema
 >;
 
-export type ProductUpdateFormProps = z.infer<typeof ProductSchema>;
+export type ProductUpdateFormProps = z.infer<typeof ProductUpdateSchema>;
 
 export type ProductItemsUpdateFormProps = z.infer<
   typeof ProductItemsUpdateSchema

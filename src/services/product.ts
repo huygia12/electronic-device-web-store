@@ -7,7 +7,12 @@ import {
 import { Args, Optional } from "@/utils/declare";
 import { ProductSummary } from "@/types/api";
 import { ProductFullJoin } from "@/types/model";
-import { ProductInputFormProps, ProductItemsFormProps } from "@/utils/schema";
+import {
+  ProductAttributesFormProps,
+  ProductInputFormProps,
+  ProductItemsFormProps,
+  ProductUpdateFormProps,
+} from "@/utils/schema";
 import { Attribute, AttributeOption, ProductItem } from "@/types/model";
 import firebaseService from "./firebase";
 
@@ -319,6 +324,22 @@ const productService = {
 
     return attributes;
   },
+  getAttributeOptionsOutOfProduct: (
+    product: ProductFullJoin
+  ): ProductAttributesFormProps => {
+    return product.productAttributes.reduce<ProductAttributesFormProps>(
+      (prev, curr) => {
+        prev.push({
+          typeID: curr.attributeOption.typeID,
+          typeValue: curr.attributeOption.attributeType.typeValue,
+          optionID: curr.attributeOption.optionID,
+          optionValue: curr.attributeOption.optionValue,
+        });
+        return prev;
+      },
+      []
+    );
+  },
   isContainAllRequiredAttributeOptions: (
     product: ProductFullJoin,
     attribute: AttributeOption[]
@@ -383,6 +404,24 @@ const productService = {
         ...item.itemImages,
       ]);
     });
+  },
+  getProductUpdateDefaultValue: (
+    product: ProductFullJoin
+  ): ProductUpdateFormProps => {
+    return {
+      productName: product.productName,
+      description: product.description || undefined,
+      length: product.length,
+      width: product.width,
+      height: product.height,
+      weight: product.weight,
+      warranty: product.warranty,
+      categoryID: product.category.categoryID,
+      providerID: product.provider.providerID,
+      productAttributes:
+        productService.getAttributeOptionsOutOfProduct(product),
+      productItems: product.productItems,
+    };
   },
 };
 

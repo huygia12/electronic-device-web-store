@@ -44,7 +44,7 @@ import {
 } from "@/utils/schema";
 import { LoadingSpinner } from "@/components/effect";
 import categoryService from "@/services/category";
-import { attributeService, providerService } from "@/services";
+import { attributeService, productService, providerService } from "@/services";
 import { Optional } from "@/utils/declare";
 import ImageOverView from "@/components/common/image-overview";
 import { useRouteLoaderData } from "react-router-dom";
@@ -57,7 +57,9 @@ const ProductEdittion: FC = () => {
   const [attributes, setAttributes] = useState<Attribute[]>([]);
 
   const [selectComponentKey, setSelectComponentKey] = useState<number>(1);
-  const [itemQuantity, setItemQuantity] = useState<number>(1);
+  const [itemQuantity, setItemQuantity] = useState<number>(
+    product.productItems.length
+  );
   const [selectedAttribute, setSelectedAttribute] = useState<Attribute>();
 
   const {
@@ -70,6 +72,7 @@ const ProductEdittion: FC = () => {
     formState: { errors, isSubmitting },
   } = useForm<ProductUpdateFormProps>({
     resolver: zodResolver(ProductUpdateSchema),
+    defaultValues: productService.getProductUpdateDefaultValue(product),
   });
 
   const itemController = useFieldArray({
@@ -86,6 +89,8 @@ const ProductEdittion: FC = () => {
     watch("productItems") || [];
   const productAttributesAddition: ProductAttributesFormProps =
     watch("productAttributes") || [];
+  // const categoryID: string = watch("categoryID");
+  // const providerID: string = watch("providerID");
 
   useLayoutEffect(() => {
     const fetchData = async () => {
@@ -96,42 +101,6 @@ const ProductEdittion: FC = () => {
       setCategories(categories);
       setProviders(providers);
       setAttributes(attributes);
-      setItemQuantity(product.productItems.length);
-
-      setValue(
-        "productAttributes",
-        product.productAttributes.reduce<ProductAttributesFormProps>(
-          (prev, curr) => {
-            return [
-              ...prev,
-              {
-                typeID: curr.attributeOption.typeID,
-                optionID: curr.attributeOption.optionID,
-                optionValue: curr.attributeOption.optionValue,
-                typeValue: curr.attributeOption.attributeType.typeValue,
-              },
-            ];
-          },
-          []
-        )
-      );
-      setValue("categoryID", product.category.categoryID);
-      setValue("providerID", product.provider.providerID);
-      setValue(
-        "productItems",
-        product.productItems.map((item) => {
-          return {
-            thump: item.thump,
-            quantity: item.quantity,
-            price: item.price,
-            productCode: item.productCode,
-            discount: item.discount,
-            color: item.color,
-            storage: item.storage,
-            itemImages: item.itemImages.map((itemImage) => itemImage.source),
-          };
-        })
-      );
     };
 
     fetchData();
@@ -193,7 +162,7 @@ const ProductEdittion: FC = () => {
       return retrieveImageUrl(edittedThump[0]);
     }
 
-    return product.productItems[index].thump;
+    return product.productItems[index]?.thump;
   };
 
   const getProductItemsOfNthItem = (index: number): string[] => {
@@ -208,10 +177,12 @@ const ProductEdittion: FC = () => {
       );
     }
 
-    return product.productItems[index].itemImages.map(
+    return product.productItems[index]?.itemImages?.map(
       (productImage) => productImage.source
     );
   };
+
+  console.log(errors);
 
   const handleFormSubmission: SubmitHandler<ProductUpdateFormProps> = async (
     data
@@ -247,7 +218,6 @@ const ProductEdittion: FC = () => {
                 id="name"
                 type="text"
                 autoComplete={"off"}
-                defaultValue={product.productName}
                 {...register("productName")}
                 placeholder="abc"
                 className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
@@ -268,7 +238,6 @@ const ProductEdittion: FC = () => {
                 {...register("warranty")}
                 type="number"
                 min={0}
-                defaultValue={product.warranty}
                 className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
               />
               {errors.warranty && (
@@ -282,7 +251,7 @@ const ProductEdittion: FC = () => {
                 <span className="text-red-600 ">*</span>
               </Label>
               <Select
-                value={watch("categoryID") || product.category.categoryID}
+                value={watch("categoryID")}
                 onValueChange={(value) => {
                   setValue("categoryID", value);
                   clearErrors("categoryID");
@@ -292,7 +261,6 @@ const ProductEdittion: FC = () => {
                   id="category"
                   value={watch("categoryID")}
                   {...register("categoryID")}
-                  defaultValue={product.category.categoryID}
                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                 >
                   <SelectValue className="p-0" />
@@ -369,7 +337,6 @@ const ProductEdittion: FC = () => {
                 <Input
                   id="length"
                   autoComplete={"off"}
-                  defaultValue={product.length}
                   {...register("length")}
                   min={0}
                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
@@ -387,7 +354,6 @@ const ProductEdittion: FC = () => {
                 <Input
                   id="width"
                   autoComplete={"off"}
-                  defaultValue={product.width}
                   {...register("width")}
                   min={0}
                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
@@ -405,7 +371,6 @@ const ProductEdittion: FC = () => {
                 <Input
                   id="height"
                   autoComplete={"off"}
-                  defaultValue={product.height}
                   {...register("height")}
                   min={0}
                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
@@ -423,7 +388,6 @@ const ProductEdittion: FC = () => {
                 <Input
                   id="weight"
                   autoComplete={"off"}
-                  defaultValue={product.weight}
                   {...register("weight")}
                   min={0}
                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
@@ -571,7 +535,6 @@ const ProductEdittion: FC = () => {
             <Textarea
               id="desc"
               {...register("description")}
-              defaultValue={watch("description")}
               placeholder="...abc"
               className="border-2 border-stone-400 text-lg min-h-12 focus_border-none h-full"
             />
@@ -605,17 +568,15 @@ const ProductEdittion: FC = () => {
                       {`${errors.productItems?.[parentIndex]?.thump?.message}`}
                     </div>
                   )}
-                  {
-                    <ImageOverView
+                  <ImageOverView
+                    src={getThumpOfNthItem(parentIndex)}
+                    alt={`thump-${parentIndex}`}
+                  >
+                    <img
                       src={getThumpOfNthItem(parentIndex)}
-                      alt={`thump-${parentIndex}`}
-                    >
-                      <img
-                        src={getThumpOfNthItem(parentIndex)}
-                        className="cursor-pointer max-w-40 object-cover rounded-md border-stone-300 border-2"
-                      />
-                    </ImageOverView>
-                  }
+                      className="cursor-pointer max-w-40 object-cover rounded-md border-stone-300 border-2"
+                    />
+                  </ImageOverView>
                 </div>
                 <div className="overflow-auto flex flex-col gap-2">
                   <Label
@@ -639,26 +600,24 @@ const ProductEdittion: FC = () => {
                       {`${errors.productItems?.[parentIndex]?.itemImages?.message}`}
                     </div>
                   )}
-                  {
-                    <div className="overflow-auto flex flex-row gap-2 ">
-                      {getProductItemsOfNthItem(parentIndex).map(
-                        (image, index) => {
-                          return (
-                            <ImageOverView
-                              key={index}
+                  <div className="overflow-auto flex flex-row gap-2 ">
+                    {getProductItemsOfNthItem(parentIndex)?.map(
+                      (image, index) => {
+                        return (
+                          <ImageOverView
+                            key={index}
+                            src={image}
+                            alt={`productimage-${index}`}
+                          >
+                            <img
                               src={image}
-                              alt={`productimage-${index}`}
-                            >
-                              <img
-                                src={image}
-                                className="max-w-40 object-cover rounded-md border-stone-300 border-2"
-                              />
-                            </ImageOverView>
-                          );
-                        }
-                      )}
-                    </div>
-                  }
+                              className="max-w-40 object-cover rounded-md border-stone-300 border-2"
+                            />
+                          </ImageOverView>
+                        );
+                      }
+                    )}
+                  </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
@@ -675,7 +634,6 @@ const ProductEdittion: FC = () => {
                       )}
                       id={`price-${parentIndex}`}
                       type="number"
-                      defaultValue={`${product.productItems[parentIndex].price}`}
                       autoComplete={"off"}
                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                     />
@@ -701,7 +659,6 @@ const ProductEdittion: FC = () => {
                       max={1000000000}
                       id={`quantity-${parentIndex}`}
                       type="number"
-                      defaultValue={`${product.productItems[parentIndex].quantity}`}
                       autoComplete={"off"}
                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                     />
@@ -725,9 +682,6 @@ const ProductEdittion: FC = () => {
                       )}
                       id={`code-${parentIndex}`}
                       type="text"
-                      defaultValue={
-                        product.productItems[parentIndex].productCode
-                      }
                       autoComplete={"off"}
                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                     />
@@ -754,9 +708,6 @@ const ProductEdittion: FC = () => {
                       max={100}
                       min={0}
                       type="number"
-                      defaultValue={
-                        product.productItems[parentIndex].discount || 0
-                      }
                       autoComplete={"off"}
                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                     />
@@ -780,7 +731,6 @@ const ProductEdittion: FC = () => {
                       )}
                       id={`color-${parentIndex}`}
                       type="text"
-                      defaultValue={product.productItems[parentIndex].color}
                       autoComplete={"off"}
                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                     />
@@ -803,9 +753,6 @@ const ProductEdittion: FC = () => {
                       )}
                       id={`capacity-${parentIndex}`}
                       type="text"
-                      defaultValue={
-                        product.productItems[parentIndex].storage || ""
-                      }
                       autoComplete={"off"}
                       className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
                     />
