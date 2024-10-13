@@ -14,11 +14,11 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "../ui/scroll-area";
 import { invoiceService } from "@/services";
 import { formatDateTime } from "@/utils/helpers";
-import OrderDetailDialog from "./order-detail-dialog";
+import InvoiceDetailDialog from "./invoice-detail-dialog";
 import { Separator } from "../ui/separator";
 
 const colName: string[] = [
-  "KHÁCH HÀNG",
+  "TÊN ĐẶT HÀNG",
   "ID ĐƠN HÀNG",
   "NGÀY ĐẶT HÀNG",
   "SỐ MẶT HÀNG",
@@ -28,14 +28,14 @@ const colName: string[] = [
 ];
 
 interface OrderTableProps extends HTMLAttributes<HTMLDivElement> {
-  orders: InvoiceFullJoin[];
-  setOrders: (invoice: InvoiceFullJoin[]) => void;
+  invoices: InvoiceFullJoin[];
+  setInvoices: (invoice: InvoiceFullJoin[]) => void;
 }
 
-const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
+const InvoiceTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
   const updateInvoice = async (invoice: InvoiceFullJoin) => {
-    props.setOrders(
-      invoiceService.deleteInvoice(invoice.invoiceID, props.orders)
+    props.setInvoices(
+      invoiceService.deleteInvoice(invoice.invoiceID, props.invoices)
     );
   };
 
@@ -57,7 +57,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
           </tr>
         </TableHeader>
         <TableBody>
-          {props.orders.map((invoice, index) => (
+          {props.invoices.map((invoice, index) => (
             <TableRow key={index}>
               <TableCell className="text-center text-base">
                 {invoice.userName}
@@ -76,14 +76,14 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
                 </Badge>
               </TableCell>
               <TableCell className="flex items-center justify-center space-x-2">
-                <OrderDetailDialog
+                <InvoiceDetailDialog
                   invoice={invoice}
                   updateInvoice={updateInvoice}
                 >
                   <Button variant="neutral" className="text-base">
                     Xem
                   </Button>
-                </OrderDetailDialog>
+                </InvoiceDetailDialog>
               </TableCell>
             </TableRow>
           ))}
@@ -98,4 +98,4 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
   );
 };
 
-export default OrderTable;
+export default InvoiceTable;

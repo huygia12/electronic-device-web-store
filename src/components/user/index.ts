@@ -6,6 +6,5 @@ export * from "./product-collection";
 export { default as SlideShow } from "./slide-show";
 export { default as RatingPoint } from "./rating-point";
 export { default as ProductDialog } from "./product-dialog";
-export { default as AvatarPlaceholder } from "./avatar-placeholder";
 export { default as ZaloButton } from "./zalo-button";
 export { default as ProductInCart } from "./product-in-cart";

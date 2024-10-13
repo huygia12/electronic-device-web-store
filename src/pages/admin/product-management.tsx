@@ -56,18 +56,21 @@ const ProductManagement: FC = () => {
     }
 
     const delayDebounceFn = setTimeout(async () => {
-      const res: { products: ProductSummary[]; totalProducts: number } =
-        await productService.apis.getProductsSummary({
-          categoryID: selectedCategory,
-          providerID: selectedProvider,
-          searching: searchingQuery,
-          currentPage: currentPage,
-        });
+      try {
+        const res: { products: ProductSummary[]; totalProducts: number } =
+          await productService.apis.getProductsSummary({
+            categoryID: selectedCategory,
+            providerID: selectedProvider,
+            searching: searchingQuery,
+            currentPage: currentPage,
+          });
 
-      setProducts(res.products);
-      setTotalPages(getPages(res.totalProducts));
-      toast.dismiss(toasting.current!.id);
-      toasting.current = null;
+        setProducts(res.products);
+        setTotalPages(getPages(res.totalProducts));
+      } finally {
+        toast.dismiss(toasting.current!.id);
+        toasting.current = null;
+      }
     }, searchingDelay.current);
 
     return () => clearTimeout(delayDebounceFn);

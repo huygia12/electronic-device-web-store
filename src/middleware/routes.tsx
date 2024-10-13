@@ -79,24 +79,29 @@ const routes = createBrowserRouter([
         path: "users",
         children: [
           {
-            path: "orders",
-            id: "user_invoices",
-            // loader: loader.getOrders,
-            element: (
-              <ProtectedRoute>
-                <PersonalInvoice />
-              </ProtectedRoute>
-            ),
-          },
-          {
             path: ":id",
-            id: "user_profile",
-            loader: userService.apis.getUser,
-            element: (
-              <ProtectedRoute>
-                <EditProfile />
-              </ProtectedRoute>
-            ),
+            children: [
+              {
+                index: true,
+                id: "user_profile",
+                loader: userService.apis.getUser,
+                element: (
+                  <ProtectedRoute>
+                    <EditProfile />
+                  </ProtectedRoute>
+                ),
+              },
+              {
+                path: "orders",
+                id: "user_invoices",
+                loader: invoiceService.apis.getMyInvoices,
+                element: (
+                  <ProtectedRoute>
+                    <PersonalInvoice />
+                  </ProtectedRoute>
+                ),
+              },
+            ],
           },
         ],
       },

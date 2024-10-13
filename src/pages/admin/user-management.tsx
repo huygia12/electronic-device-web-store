@@ -41,16 +41,19 @@ const UserManagement: FC = () => {
     }
 
     const delayDebounceFn = setTimeout(async () => {
-      const res: { users: User[]; totalUsers: number } =
-        await userService.apis.getUsers({
-          searching: searchText,
-          currentPage: currentPage,
-        });
+      try {
+        const res: { users: User[]; totalUsers: number } =
+          await userService.apis.getUsers({
+            searching: searchText,
+            currentPage: currentPage,
+          });
 
-      setUsers(res.users);
-      setTotalPages(getPages(res.totalUsers));
-      toast.dismiss(toasting.current!.id);
-      toasting.current = null;
+        setUsers(res.users);
+        setTotalPages(getPages(res.totalUsers));
+      } finally {
+        toast.dismiss(toasting.current!.id);
+        toasting.current = null;
+      }
     }, searchingDelay.current);
 
     return () => clearTimeout(delayDebounceFn);

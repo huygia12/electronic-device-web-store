@@ -12,17 +12,18 @@ import { formatDateTime } from "@/utils/helpers";
 import Badge from "../ui/badge";
 import { InvoiceStatus } from "@/types/enum";
 import { Button } from "../ui/button";
-import { Download } from "lucide-react";
-import ChangeOrderStatus from "./change-order-status";
-import ProductInInvoice from "@/components/common/product-in-invoice";
 import { toast } from "sonner";
+import { ProductInInvoice } from "@/components/common";
+import { cn } from "@/lib/utils";
+import OrderCancelDialog from "./order-cancel-dialog";
 
-interface OrderDetailDialogProps extends HTMLAttributes<HTMLDivElement> {
+interface InvoiceDetailDialogProps extends HTMLAttributes<HTMLDivElement> {
+  disableAction?: boolean;
   invoice: InvoiceFullJoin;
   updateInvoice: (invoice: InvoiceFullJoin) => void;
 }
 
-const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
+const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
   className,
   ...props
 }) => {
@@ -31,19 +32,34 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
     [props.invoice]
   );
 
-  const setInvoiceStatus = (status: InvoiceStatus) => {
+  const payOrder = async () => {
+    const toastID = toast.loading("Đang xử lý...");
+    try {
+      const paymentUrl = await invoiceService.apis.payOrder(
+        props.invoice.invoiceID
+      );
+
+      window.location.href = paymentUrl;
+    } catch {
+      toast.error("Thanh toán thất bại!");
+    } finally {
+      toast.dismiss(toastID);
+    }
+  };
+
+  const abortOrder = () => {
     const updateInvoice = invoiceService.apis.upateInvoice(
       props.invoice.invoiceID,
-      { status: status }
+      { status: InvoiceStatus.ABORT }
     );
 
     toast.promise(updateInvoice, {
       loading: "Đang xử lý...",
       success: (invoice: InvoiceFullJoin) => {
         props.updateInvoice(invoice);
-        return "Cập nhật trạng thái đơn hàng thành công!";
+        return "Hủy đơn hàng thành công!";
       },
-      error: "Cập nhật trạng thái đơn hàng thất bại!",
+      error: "Hủy đơn hàng thất bại!",
     });
   };
 
@@ -57,7 +73,7 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
             <span className="mr-4 space-x-4 flex items-center">
               <span>{props.invoice.invoiceID}</span>
               <Badge className="bg-green-500 rounded-md text-white py-1 px-4 text-lg hover_bg-green-500">
-                {invoiceService.getInvoiceStatus(props.invoice.status)}
+                {invoiceService.getInvoiceStatus(invoiceState)}
               </Badge>
             </span>
           </DialogTitle>
@@ -86,13 +102,6 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
           </div>
         </div>
 
-        <ChangeOrderStatus
-          invoiceID={props.invoice.invoiceID}
-          invoiceState={invoiceState}
-          setInvoiceState={setInvoiceStatus}
-          className="mt-10"
-        />
-
         <ProductInInvoice
           products={props.invoice.invoiceProducts}
           className="mt-10"
@@ -103,14 +112,30 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
             <span className="text-2xl font-semibold mr-4">TỔNG TIỀN :</span>
             <span className="text-2xl font-medium">{`${invoiceService.getTotalBill(props.invoice).toLocaleString()}đ`}</span>
           </span>
-          <span className="ml-auto space-x-2">
-            <Button className="ml-auto bg-white !text-green-500 !border-green-500 border-2 text-base hover_!bg-green-500 hover_!text-white">
-              <Download className="mr-2" /> Xuất Tệp Excel
+          <span
+            className={cn("ml-auto space-x-2", props.disableAction && "hidden")}
+          >
+            <Button
+              disabled={invoiceService.getUserButtonDisabled(
+                "accept",
+                invoiceState
+              )}
+              variant="neutral"
+              onClick={payOrder}
+            >
+              Thanh toán
             </Button>
-            <Button className="ml-auto bg-white !text-red-500 !border-red-500 border-2 text-base hover_!bg-red-500 hover_!text-white">
-              <Download className="mr-2" />
-              Xuất Tệp PDF
-            </Button>
+            <OrderCancelDialog handleConfirm={abortOrder}>
+              <Button
+                disabled={invoiceService.getUserButtonDisabled(
+                  "cancel",
+                  invoiceState
+                )}
+                variant="negative"
+              >
+                Hủy đơn hàng
+              </Button>
+            </OrderCancelDialog>
           </span>
         </div>
       </DialogContent>
@@ -118,4 +143,4 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
   );
 };
 
-export default OrderDetailDialog;
+export default InvoiceDetailDialog;

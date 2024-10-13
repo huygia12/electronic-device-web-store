@@ -11,6 +11,7 @@ import { InvoiceStatus } from "@/types/enum";
 import { FC, HTMLAttributes } from "react";
 
 interface HeaderBarProps extends HTMLAttributes<HTMLDivElement> {
+  searchPlaceholder?: string;
   setSearchText: (text: string) => void;
   setSelectedStatus: (status: InvoiceStatus) => void;
 }
@@ -22,7 +23,7 @@ const HeaderBar: FC<HeaderBarProps> = ({ ...props }) => {
     >
       <SearchBox
         setSearchText={props.setSearchText}
-        placeholder="Tìm kiếm theo tên khách hàng..."
+        placeholder={props.searchPlaceholder}
         className="flex-1"
       />
 
@@ -37,7 +38,7 @@ const HeaderBar: FC<HeaderBarProps> = ({ ...props }) => {
         <SelectContent>
           <SelectItem value={InvoiceStatus.NEW}>Đang Chờ Duyệt</SelectItem>
           <SelectItem value={InvoiceStatus.PAYMENT_WAITING}>
-            Duyệt Đơn Hàng
+            Đã Duyệt
           </SelectItem>
           <SelectItem value={InvoiceStatus.SHIPPING}>
             Đang Vận Chuyển

@@ -59,7 +59,7 @@ const ChangeOrderStatus: FC<ChangeOrderStatusProps> = ({ ...props }) => {
         </SelectTrigger>
         <SelectContent>
           <SelectItem
-            disabled={invoiceService.getInvoiceStatusDisabled(
+            disabled={invoiceService.getAdminInvoiceStatusDisabled(
               InvoiceStatus.NEW,
               props.invoiceState
             )}
@@ -68,7 +68,7 @@ const ChangeOrderStatus: FC<ChangeOrderStatusProps> = ({ ...props }) => {
             Đang Chờ Duyệt
           </SelectItem>
           <SelectItem
-            disabled={invoiceService.getInvoiceStatusDisabled(
+            disabled={invoiceService.getAdminInvoiceStatusDisabled(
               InvoiceStatus.PAYMENT_WAITING,
               props.invoiceState
             )}
@@ -77,7 +77,7 @@ const ChangeOrderStatus: FC<ChangeOrderStatusProps> = ({ ...props }) => {
             Duyệt Đơn Hàng
           </SelectItem>
           <SelectItem
-            disabled={invoiceService.getInvoiceStatusDisabled(
+            disabled={invoiceService.getAdminInvoiceStatusDisabled(
               InvoiceStatus.SHIPPING,
               props.invoiceState
             )}
@@ -86,7 +86,7 @@ const ChangeOrderStatus: FC<ChangeOrderStatusProps> = ({ ...props }) => {
             Đang Vận Chuyển
           </SelectItem>
           <SelectItem
-            disabled={invoiceService.getInvoiceStatusDisabled(
+            disabled={invoiceService.getAdminInvoiceStatusDisabled(
               InvoiceStatus.DONE,
               props.invoiceState
             )}
@@ -95,7 +95,7 @@ const ChangeOrderStatus: FC<ChangeOrderStatusProps> = ({ ...props }) => {
             Giao Hàng Thành Công
           </SelectItem>
           <SelectItem
-            disabled={invoiceService.getInvoiceStatusDisabled(
+            disabled={invoiceService.getAdminInvoiceStatusDisabled(
               InvoiceStatus.ABORT,
               props.invoiceState
             )}

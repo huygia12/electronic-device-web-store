@@ -3,10 +3,9 @@ import { axiosInstance, reqConfig } from "@/config/axios-config";
 import { InvoiceStatus, PaymentMethod } from "@/types/enum";
 import { OrderInsertion, ProductOrderInsertion } from "@/types/api";
 import { Args } from "@/utils/declare";
+import { invoiceEndPoint } from "./invoice";
 
-const invoiceEndPoint = "/invoices";
-
-const invoiceService = {
+export const invoiceService = {
   apis: {
     getMyInvoices: async (
       args: Args | string
@@ -69,7 +68,7 @@ const invoiceService = {
     },
     payOrder: async (invoiceID: string): Promise<string> => {
       const res = await axiosInstance.patch<{ info: string }>(
-        `${invoiceEndPoint}/${invoiceID}/payment`,
+        `${invoiceEndPoint}/${invoiceID}`,
         reqConfig
       );
 
@@ -185,10 +184,10 @@ const invoiceService = {
     ];
   },
   deleteInvoice: (
-    invoiceID: string,
+    invoice: InvoiceFullJoin,
     invoices: InvoiceFullJoin[]
   ): InvoiceFullJoin[] => {
-    return [...invoices.filter((e) => e.invoiceID !== invoiceID)];
+    return [...invoices.filter((e) => e.invoiceID !== invoice.invoiceID)];
   },
   getInvoiceAfterFilterStatus: (
     invoices: InvoiceFullJoin[],
@@ -197,5 +196,3 @@ const invoiceService = {
     return invoices.filter((e) => e.status === status);
   },
 };
-
-export default invoiceService;

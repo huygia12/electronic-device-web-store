@@ -5,7 +5,7 @@ import { TfiHeadphoneAlt } from "react-icons/tfi";
 import { PackageSearch } from "lucide-react";
 import { useAuth, useCartProps } from "@/hooks";
 import { toast } from "sonner";
-import { AvatarPlaceholder, CounterLabel } from "@/components/user";
+import { CounterLabel } from "@/components/user";
 import { Role } from "@/types/enum";
 import { DropMenuLinkItem, DropdownAvatar } from "@/components/common";
 import { FC } from "react";
@@ -25,6 +25,7 @@ const AppClientHeader: FC = () => {
 
   return (
     <header className="w-full flex flex-col sticky top-0 z-50 shadow-xl">
+      {/** UPPER */}
       <div className="flex justify-around bg-third">
         <div className="flex justify-between w-myLayout text-[0.8rem] py-2">
           <span className="flex items-center ">
@@ -48,11 +49,15 @@ const AppClientHeader: FC = () => {
         </div>
       </div>
 
+      {/** UNDER */}
       <div className="bg-theme h-[5rem] shadow-md flex justify-center ">
         <div className="w-myLayout items-center grid grid-cols-5">
+          {/** WEBSITE LOGO */}
           <NavLink to="/" className="mr-20" unstable_viewTransition>
             <img src="/logo.svg.png" alt="logo" className="h-12" />
           </NavLink>
+
+          {/** SEARCH BAR AND OTHERS */}
           <div className="col-span-3 grid grid-cols-3 items-center">
             <SearchBar />
 
@@ -67,7 +72,7 @@ const AppClientHeader: FC = () => {
               </NavLink>
               {currentUser && (
                 <NavLink
-                  to="orders"
+                  to={`/users/${currentUser.userID}/orders`}
                   className="relative"
                   unstable_viewTransition
                 >
@@ -84,6 +89,8 @@ const AppClientHeader: FC = () => {
               </NavLink>
             </div>
           </div>
+
+          {/** USER DROP DOWN MENU */}
           {currentUser ? (
             <DropdownAvatar className="ml-10">
               <DropMenuLinkItem
@@ -115,7 +122,23 @@ const AppClientHeader: FC = () => {
               />
             </DropdownAvatar>
           ) : (
-            <AvatarPlaceholder />
+            <div className="space-x-2 text-[1.1rem] flex justify-end">
+              <NavLink
+                className="hover_text-primary-foreground hover_font-semibold"
+                to="/login"
+                unstable_viewTransition={true}
+              >
+                Đăng nhập
+              </NavLink>
+              <span>/</span>
+              <NavLink
+                className="hover_text-primary-foreground hover_font-semibold"
+                to="/signup"
+                unstable_viewTransition={true}
+              >
+                Đăng ký
+              </NavLink>
+            </div>
           )}
         </div>
       </div>

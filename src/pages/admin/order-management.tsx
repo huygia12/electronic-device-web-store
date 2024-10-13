@@ -1,5 +1,5 @@
 import { OrderTable } from "@/components/admin";
-import { CustomPagination } from "@/components/common";
+import { CustomPagination, InvoiceUpperBar } from "@/components/common";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { InvoiceFullJoin } from "@/types/model";
 import { FC, useEffect, useRef, useState } from "react";
@@ -8,7 +8,6 @@ import { InvoiceStatus } from "@/types/enum";
 import { toast } from "sonner";
 import { invoiceService } from "@/services";
 import { getPages } from "@/utils/helpers";
-import { HeaderBar } from "@/components/invoice-management";
 
 const OrderManagement: FC = () => {
   const searchingDelay = useRef<number>(2000);
@@ -42,17 +41,20 @@ const OrderManagement: FC = () => {
     }
 
     const delayDebounceFn = setTimeout(async () => {
-      const res: { invoices: InvoiceFullJoin[]; totalInvoices: number } =
-        await invoiceService.apis.getInvoices({
-          searching: searchText,
-          currentPage: currentPage,
-          status: selectedStatus,
-        });
+      try {
+        const res: { invoices: InvoiceFullJoin[]; totalInvoices: number } =
+          await invoiceService.apis.getInvoices({
+            searching: searchText,
+            currentPage: currentPage,
+            status: selectedStatus,
+          });
 
-      setInvoices(res.invoices);
-      setTotalPages(getPages(res.totalInvoices));
-      toast.dismiss(toasting.current!.id);
-      toasting.current = null;
+        setInvoices(res.invoices);
+        setTotalPages(getPages(res.totalInvoices));
+      } finally {
+        toast.dismiss(toasting.current!.id);
+        toasting.current = null;
+      }
     }, searchingDelay.current);
 
     return () => clearTimeout(delayDebounceFn);
@@ -61,7 +63,8 @@ const OrderManagement: FC = () => {
   return (
     <div>
       {/** TABLE */}
-      <HeaderBar
+      <InvoiceUpperBar
+        searchPlaceholder="Tìm kiếm theo tên khách hàng..."
         setSelectedStatus={setSelectedStatus}
         setSearchText={setSearchText}
         className="mt-8"
