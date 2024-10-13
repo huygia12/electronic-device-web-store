@@ -36,7 +36,7 @@ const Homepage: FC = () => {
   const [phonesData, setPhonesData] = useState<ProductFullJoin[]>();
   const [laptopsData, setLaptopsData] = useState<ProductFullJoin[]>();
   const plugin = React.useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: true })
+    Autoplay({ delay: 3000, stopOnInteraction: true })
   );
   const { navigate } = useCustomNavigate();
 
@@ -64,7 +64,7 @@ const Homepage: FC = () => {
   return (
     <main>
       <section className="flex flex-row max-h-[40.8rem] space-x-3 mb-[4rem]">
-        <form className="bg-white shadow-general w-1/6 min-h-full rounded-lg overflow-hiddenv">
+        <div className="bg-white shadow-general w-1/6 min-h-full rounded-lg overflow-hiddenv">
           <h1 className="bg-theme space-x-1 flex items-center text-[1rem] font-semibold pt-4 pb-4 pl-2">
             <SwatchBook />
             <span>DANH MỤC SẢN PHẨM</span>
@@ -110,7 +110,8 @@ const Homepage: FC = () => {
           ) : (
             <LinesSkeleton quantity={5} />
           )}
-        </form>
+        </div>
+
         <div className="grid grid-cols-3 gap-3 w-5/6">
           <Carousel
             plugins={[plugin.current]}
@@ -169,6 +170,7 @@ const Homepage: FC = () => {
           </NavLink>
         </div>
       </section> */}
+
       <section className="w-full my-16 space-y-20">
         <div>
           <CollectionHeader title="LAPTOP" />
@@ -192,7 +194,7 @@ const Homepage: FC = () => {
             {phonesData
               ? phonesData.map((product, index) => (
                   <CarouselItem key={index} className="basis-1/5">
-                    <ProductCard product={product} className="shadow-none" />
+                    <ProductCard product={product} className="" />
                   </CarouselItem>
                 ))
               : Array.from({ length: 20 }).map((_, index) => (

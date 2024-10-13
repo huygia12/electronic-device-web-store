@@ -25,7 +25,7 @@ const Bill: FC<HTMLAttributes<HTMLDivElement>> = () => {
   };
 
   return (
-    <Card className="rounded-md">
+    <Card className="rounded-md shadow-md">
       <CardHeader className="px-4">
         <CardTitle className="mb-4">ĐƠN HÀNG</CardTitle>
         <CardDescription>

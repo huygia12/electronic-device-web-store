@@ -89,6 +89,17 @@ const userService = {
       );
       return res.data.info;
     },
+    updatePassword: async (
+      userID: string,
+      prePassword: string,
+      newPassword: string
+    ): Promise<AxiosResponse> => {
+      const res = await axiosInstance.patch(`${userEndPoint}/${userID}`, {
+        oldPassword: prePassword,
+        newPassword: newPassword,
+      });
+      return res;
+    },
     updateUserAvatar: async (userID: string, avatar: string): Promise<User> => {
       const res = await axiosInstance.put<{ info: User }>(
         `${userEndPoint}/${userID}`,

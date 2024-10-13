@@ -32,7 +32,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
   const { currentUser } = useCurrentUser();
 
   return (
-    <section className="grid grid-cols-3 gap-4 col-span-3 border-2 border-slate-2 rounded-md p-4">
+    <section className="grid grid-cols-3 gap-4 col-span-3 border-2 border-slate-2 rounded-md p-4 shadow-lg">
       <h1 className="text-2xl font-semibold col-span-3">THÔNG TIN GIAO HÀNG</h1>
       {/** ACCOUNT NAME */}
       <div className="space-y-1">

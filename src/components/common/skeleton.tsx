@@ -51,7 +51,7 @@ const CardSkeleton: React.FC<HTMLAttributes<HTMLDivElement>> = ({
       {...props}
     >
       <BaseSkeleton className="w-full rounded-none h-[18rem] mt-0" />
-      <CardHeader className="p-1.5 mt-2">
+      <CardHeader className="p-1.5 mt-20">
         <CardTitle className="text-[1.1rem] hover_underline hover_text-primary-foreground">
           <BaseSkeleton className="w-5/6" />
         </CardTitle>

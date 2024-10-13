@@ -161,6 +161,9 @@ const CartCheckout: FC = () => {
   ) => {
     const createOrder = invoiceService.apis.createOrder({
       ...data,
+      province: deliveryService.getProvice(provinces, Number(data.province)),
+      district: deliveryService.getDistrict(districts, Number(data.district)),
+      ward: deliveryService.getWard(wards, data.ward),
       userID: currentUser!.userID,
       shippingFee: shippingFee || 0,
       shippingTime: shippingTime || 0,
@@ -206,7 +209,7 @@ const CartCheckout: FC = () => {
         />
       </form>
 
-      <ProductInCart className="mt-10" />
+      <ProductInCart className="mt-8" />
     </div>
   );
 };

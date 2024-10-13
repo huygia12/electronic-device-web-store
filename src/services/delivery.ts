@@ -26,17 +26,7 @@ const deliveryService = {
 
         return response.data.data;
       } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
+        console.error("Unexpected error:", error);
         return [];
       }
     },
@@ -54,17 +44,7 @@ const deliveryService = {
 
         return response.data.data;
       } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
+        console.error("Unexpected error:", error);
         return [];
       }
     },
@@ -82,17 +62,7 @@ const deliveryService = {
 
         return response.data.data;
       } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
+        console.error("Unexpected error:", error);
         return [];
       }
     },
@@ -114,17 +84,7 @@ const deliveryService = {
 
         return response.data;
       } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
+        console.error("Unexpected error:", error);
         return null;
       }
     },
@@ -158,17 +118,7 @@ const deliveryService = {
         );
         return response.data.data.total;
       } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
+        console.error("Unexpected error:", error);
         return null;
       }
     },
@@ -197,20 +147,19 @@ const deliveryService = {
 
         return response.data.data.leadtime;
       } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
+        console.error("Unexpected error:", error);
         return null;
       }
     },
+  },
+  getProvice: (provinces: Province[], id: number): string => {
+    return provinces.find((e) => e.ProvinceID === id)!.ProvinceName;
+  },
+  getDistrict: (districts: District[], id: number): string => {
+    return districts.find((e) => e.DistrictID === id)!.DistrictName;
+  },
+  getWard: (wards: Ward[], id: string): string => {
+    return wards.find((e) => e.WardCode === id)!.WardName;
   },
 };
 

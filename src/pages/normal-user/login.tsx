@@ -53,9 +53,6 @@ const Login: FC = () => {
             message: "Tài khoản hiện không thể đăng nhập!",
           });
         }
-        // Handle error response if available
-        console.error(`Response data: ${error.response?.data}`);
-        console.error(`Response status: ${error.response?.status})`);
       } else {
         console.error("Unexpected error:", error);
       }

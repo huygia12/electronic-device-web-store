@@ -63,7 +63,9 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
           email: data.email,
           phoneNumber: data.phoneNumber,
           avatar: avatar,
-        }
+        },
+        currentUser!,
+        avatarFiles[0]
       );
 
       toast.success("Cập nhật thành công!");
@@ -74,9 +76,6 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
         setError("root", {
           message: error.response?.data.message || error.message,
         });
-        // Handle error response if available
-        console.error(`Response data: ${error.response?.data}`);
-        console.error(`Response status: ${error.response?.status})`);
       } else {
         console.error("Unexpected error:", error);
       }

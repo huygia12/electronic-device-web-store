@@ -71,7 +71,7 @@ const EditableCartTable: FC<HTMLAttributes<HTMLDivElement>> = ({
   return (
     <section
       className={cn(
-        "col-span-3 flex flex-col border-2 border-slate-2 rounded-md",
+        "col-span-3 flex flex-col border-2 border-slate-2 rounded-md shadow-md",
         props.className
       )}
     >

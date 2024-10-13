@@ -28,7 +28,7 @@ import { cn } from "@/lib/utils";
 import { Sort } from "@/types/enum";
 import { applyDiscount, isDiscount } from "@/utils/helpers";
 
-const Products: FC = () => {
+const ProductFilter: FC = () => {
   const [searchParams] = useSearchParams();
   const [productsData, setProductsData] = useState<ProductFullJoin[]>();
   const [attributesData, setAttributesData] = useState<Attribute[]>();
@@ -300,4 +300,4 @@ const Products: FC = () => {
     </div>
   );
 };
-export default Products;
+export default ProductFilter;

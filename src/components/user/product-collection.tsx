@@ -7,6 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 interface CollectionHeaderProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
@@ -38,8 +39,17 @@ const ProductCollection: React.FC<HTMLAttributes<HTMLDivElement>> = ({
   className,
   ...props
 }) => {
+  const plugin = React.useRef(
+    Autoplay({ delay: 2000, stopOnInteraction: true })
+  );
+
   return (
-    <Carousel className="px-6">
+    <Carousel
+      plugins={[plugin.current]}
+      onMouseEnter={plugin.current.stop}
+      onMouseLeave={plugin.current.play}
+      className="px-6"
+    >
       <CarouselContent className="px-2 pb-6 pt-4">
         {props.children}
       </CarouselContent>

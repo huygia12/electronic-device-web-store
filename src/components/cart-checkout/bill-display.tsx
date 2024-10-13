@@ -25,7 +25,7 @@ const BillDisplay: FC<BillDisplayProps> = ({ ...props }) => {
 
   return (
     <section className="rounded-md">
-      <Card>
+      <Card className="shadow-lg">
         <CardHeader className="px-4">
           <CardTitle className="mb-4">ĐƠN HÀNG</CardTitle>
           <CardDescription>

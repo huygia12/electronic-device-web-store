@@ -10,10 +10,54 @@ import { Label } from "@/components/ui/label";
 import { FC, HTMLAttributes, useState } from "react";
 import { Button } from "../ui/button";
 import { Eye, EyeOff } from "lucide-react";
+import ConfirmNewPasswordDialog from "./confirm-new-password-dialog";
+import { toast } from "sonner";
+import { userService } from "@/services";
+import { useCurrentUser } from "@/hooks";
+import { HttpStatusCode } from "axios";
 
 const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
   const [oldPasswordVisible, setOldPasswordVisible] = useState(false);
   const [newPasswordVisible, setNewPasswordVisible] = useState(false);
+  const [oldPassword, setOldPassword] = useState<string>();
+  const [newPassword, setNewPassword] = useState<string>();
+  const { currentUser } = useCurrentUser();
+
+  const handleUpdatePassword = async (value: string) => {
+    if (!oldPassword) {
+      toast.error("Vui lòng nhập mật khẩu cũ!");
+      return;
+    }
+    if (!newPassword || newPassword.length < 6) {
+      toast.error("Mật khẩu mới không hợp lệ!");
+      return;
+    }
+    if (value !== newPassword) {
+      toast.error("Mật khẩu nhập lại chưa chính xác!");
+      return;
+    }
+
+    const updatePassword = userService.apis.updatePassword(
+      currentUser!.userID,
+      oldPassword,
+      newPassword
+    );
+
+    toast.promise(updatePassword, {
+      loading: "Đang xử lý...",
+      success: () => {
+        setNewPassword(undefined);
+        setOldPassword(undefined);
+        return "Thay đổi thành công!";
+      },
+      error: (error) => {
+        if (error.response?.status == HttpStatusCode.Unauthorized) {
+          return "Thay đổi thất bại: mật khẩu cũ không đúng!";
+        }
+        return "Thay đổi thất bại!";
+      },
+    });
+  };
 
   return (
     <Card className="w-full pb-4">
@@ -36,6 +80,7 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
               type={!oldPasswordVisible ? "password" : "text"}
               autoComplete="new-password"
               className="h-full text-lg pr-10"
+              onChange={(e) => setOldPassword(e.target.value)}
             />
             <button
               className="absolute text-muted-foreground right-2 bottom-2"
@@ -45,13 +90,13 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
               }}
             >
               {oldPasswordVisible ? (
-                <Eye className="ml-2" />
-              ) : (
                 <EyeOff className="ml-2" />
+              ) : (
+                <Eye className="ml-2" />
               )}
             </button>
           </div>
-          <div className="flex ml-auto relative">
+          <div className="flex ml-auto relative mr-20">
             <Label htmlFor="new-password" className="text-lg my-auto w-[14rem]">
               Mật khẩu mới
               <span className="text-red-600 ">*</span>
@@ -61,6 +106,7 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
               type={!newPasswordVisible ? "password" : "text"}
               autoComplete="new-password"
               className="h-full text-lg pr-10"
+              onChange={(e) => setNewPassword(e.target.value)}
             />
             <button
               className="absolute text-muted-foreground right-2 bottom-2"
@@ -70,15 +116,19 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
               }}
             >
               {newPasswordVisible ? (
-                <Eye className="ml-2" />
-              ) : (
                 <EyeOff className="ml-2" />
+              ) : (
+                <Eye className="ml-2" />
               )}
             </button>
           </div>
-          <Button variant="negative" className="ml-auto">
-            Lưu
-          </Button>
+          <ConfirmNewPasswordDialog
+            handleDialogAcceptEvent={handleUpdatePassword}
+          >
+            <Button variant="negative" className="ml-auto">
+              Lưu
+            </Button>
+          </ConfirmNewPasswordDialog>
         </form>
       </CardContent>
     </Card>

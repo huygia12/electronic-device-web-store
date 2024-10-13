@@ -25,7 +25,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
   return (
     <Card
       className={cn(
-        "p-2.5 shadow-xl transition ease-out duration-300 hover_scale-105 relative flex flex-col justify-between h-full",
+        "p-2.5 shadow-md transition ease-out duration-300 hover_scale-105 relative flex flex-col justify-between h-full",
         className
       )}
     >
@@ -33,14 +33,14 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
         to={"/products/" + props.product.productID}
         unstable_viewTransition
       >
-        <div className="h-[15rem] mb-10z">
+        <div className="h-[15rem] mb-10">
           <CustomImage
             src={currentItem.thump}
             alt={currentItem.itemID}
             className="h-[16rem] m-auto"
           />
         </div>
-        <CardHeader className="p-1.5 mt-2">
+        <CardHeader className="p-1.5 mt-6">
           <CardTitle className="text-[1rem] hover_underline hover_text-primary-foreground">
             {props.product.productName}
           </CardTitle>
@@ -75,7 +75,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
             </del>
           )}
         </div>
-        {currentItem.discount && (
+        {isDiscount(currentItem.discount) && (
           <SaleTag
             percentage={`-${currentItem.discount}%`}
             className="absolute top-0 left-[-1rem]"

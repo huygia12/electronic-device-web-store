@@ -25,6 +25,9 @@ const BannerImg: React.FC<BannerImgProps> = ({ className, ...props }) => {
           alt={props.alt}
           className="rounded-xl h-[210px] w-full object-fill"
         />
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
+          <div className="absolute top-0 left-0 w-[150%] h-[20%] bg-gradient-to-r from-transparent via-white/70 to-transparent opacity-20 animate-sweep"></div>
+        </div>
       </AspectRatio>
     </NavLink>
   );

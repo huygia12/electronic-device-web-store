@@ -13,11 +13,11 @@ import { NavLink } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import { FC, useState } from "react";
-import routes from "../../middleware/routes";
 import axios, { HttpStatusCode } from "axios";
 import { LoadingSpinner } from "@/components/effect";
 import { SignupFormProps, SignupSchema } from "@/utils/schema";
 import { userService } from "@/services";
+import { useCustomNavigate } from "@/hooks";
 
 const Signup: FC = () => {
   const {
@@ -31,6 +31,7 @@ const Signup: FC = () => {
   const [passwordVisibility, setPasswordvisibility] = useState(false);
   const [retypePasswordVisibility, setRetypePasswordvisibility] =
     useState(false);
+  const { navigate } = useCustomNavigate();
 
   const handleSignupFormSubmission: SubmitHandler<SignupFormProps> = async (
     data
@@ -45,7 +46,7 @@ const Signup: FC = () => {
 
       await userService.apis.signup(data);
 
-      await routes.navigate("/login", { unstable_viewTransition: true });
+      navigate("/login", { unstable_viewTransition: true });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status == HttpStatusCode.Conflict) {
@@ -56,11 +57,6 @@ const Signup: FC = () => {
           setError("root", {
             message: "Đăng ký thất bại!",
           });
-        }
-        // Handle error response if available
-        if (error.response) {
-          console.error(`Response data: ${error.response.data}`);
-          console.error(`Response status: ${error.response.status})`);
         }
       } else {
         console.error("Unexpected error:", error);
