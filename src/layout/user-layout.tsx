@@ -1,4 +1,4 @@
-import { CartProvider } from "@/context";
+import { BlinkProvider, CartProvider } from "@/context";
 import React, { useEffect } from "react";
 import { Outlet, useNavigation, useRouteLoaderData } from "react-router-dom";
 import { Toaster, toast } from "sonner";
@@ -37,31 +37,33 @@ const UserLayout: React.FC = () => {
 
   return (
     <CartProvider>
-      <ScrollToTop />
-      <UserHeader />
-      <div className="flex justify-center space-x-10 w-full py-10 min-h-[70vh]">
-        <Banner
-          bannerUrl={store.leftBanner}
-          className="sticky top-36 self-start"
-        />
-        <div className="w-myLayout">
-          {navigation.state === "loading" ? <TopBarProgress /> : <Outlet />}
+      <BlinkProvider>
+        <ScrollToTop />
+        <UserHeader />
+        <div className="flex justify-center space-x-10 w-full py-10 min-h-[70vh]">
+          <Banner
+            bannerUrl={store.leftBanner}
+            className="sticky top-36 self-start"
+          />
+          <div className="w-myLayout">
+            {navigation.state === "loading" ? <TopBarProgress /> : <Outlet />}
+          </div>
+          <Banner
+            bannerUrl={store.rightBanner}
+            className="sticky top-36 self-start"
+          />
         </div>
-        <Banner
-          bannerUrl={store.rightBanner}
-          className="sticky top-36 self-start"
+        <MailRegisterSection />
+        <AppFooter />
+        <ZaloButton />
+        <ScrollToTopButton />
+        <Toaster
+          richColors
+          toastOptions={{
+            className: "text-xl h-[5rem] right-10 bottom-5 ",
+          }}
         />
-      </div>
-      <MailRegisterSection />
-      <AppFooter />
-      <ZaloButton />
-      <ScrollToTopButton />
-      <Toaster
-        richColors
-        toastOptions={{
-          className: "text-xl h-[5rem] right-10 bottom-5 ",
-        }}
-      />
+      </BlinkProvider>
     </CartProvider>
   );
 };

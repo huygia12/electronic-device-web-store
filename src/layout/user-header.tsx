@@ -2,8 +2,8 @@ import { LiaShippingFastSolid } from "react-icons/lia";
 import { FiShoppingBag } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import { TfiHeadphoneAlt } from "react-icons/tfi";
-import { PackageSearch } from "lucide-react";
-import { useAuth, useCartProps } from "@/hooks";
+import { AlignJustify, PackageSearch } from "lucide-react";
+import { useAuth, useBlink, useCartProps, useCustomNavigate } from "@/hooks";
 import { toast } from "sonner";
 import { CounterLabel } from "@/components/user";
 import { Role } from "@/types/enum";
@@ -14,7 +14,7 @@ import SearchBar from "@/components/user/search-bar";
 
 const navComponents: { title: string; path: string }[] = [
   { title: "Trang Chủ", path: "/" },
-  { title: "Giới Thiệu", path: "/intro" },
+  { title: "Giới Thiệu", path: "#footer" },
   { title: "Liên Hệ", path: "#footer" },
 ];
 
@@ -22,6 +22,19 @@ const AppClientHeader: FC = () => {
   const { itemsInLocal } = useCartProps();
   const { logout } = useAuth();
   const { currentUser } = useCurrentUser();
+  const { navigate, location } = useCustomNavigate();
+  const { makeBlink } = useBlink();
+
+  const handleGoToMenu = () => {
+    const targetPath = "/";
+
+    if (location.pathname === targetPath) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      navigate(`${targetPath}?toCategory=${true}`);
+    }
+    makeBlink();
+  };
 
   return (
     <header className="w-full flex flex-col sticky top-0 z-50 shadow-xl">
@@ -31,7 +44,7 @@ const AppClientHeader: FC = () => {
           <span className="flex items-center ">
             <TfiHeadphoneAlt className="pr-2" size={20} />
             Gọi mua hàng: &nbsp;
-            <b> Hà Nội: 0388.725.928 (8h-21h)</b>
+            <b> Hà Nội: 0773.341.*** (8h-21h)</b>
           </span>
           <span>
             {navComponents.map((item, index) => {
@@ -51,17 +64,24 @@ const AppClientHeader: FC = () => {
 
       {/** UNDER */}
       <div className="bg-theme h-[5rem] shadow-md flex justify-center ">
-        <div className="w-myLayout items-center grid grid-cols-5">
+        <div className="w-myLayout items-center grid grid-cols-10">
           {/** WEBSITE LOGO */}
-          <NavLink to="/" className="mr-20" unstable_viewTransition>
+          <NavLink to="/" className="col-span-2" unstable_viewTransition>
             <img src="/logo.svg.png" alt="logo" className="h-12" />
           </NavLink>
 
           {/** SEARCH BAR AND OTHERS */}
-          <div className="col-span-3 grid grid-cols-3 items-center">
-            <SearchBar />
+          <div className="col-span-6 grid grid-cols-6 items-center">
+            <button
+              onClick={handleGoToMenu}
+              className="w-36 bg-theme-softer text-gray-700 rounded-md px-2 flex h-10 items-center hover_bg-yellow-400"
+            >
+              <AlignJustify className="mr-4" /> Danh Mục
+            </button>
 
-            <div className="flex flex-row items-center space-x-[2rem] ml-20">
+            <SearchBar className="ml-10 col-span-3" />
+
+            <div className="col-span-2 flex flex-row items-center space-x-[2rem] ml-20">
               <NavLink
                 to="/cart/view"
                 className="relative"
@@ -92,7 +112,7 @@ const AppClientHeader: FC = () => {
 
           {/** USER DROP DOWN MENU */}
           {currentUser ? (
-            <DropdownAvatar className="ml-10">
+            <DropdownAvatar className="ml-auto col-span-2">
               <DropMenuLinkItem
                 item={{
                   name: "Tài Khoản Của Tôi",

@@ -1,4 +1,7 @@
-import { SideBanner, SlideShow } from "@/components/commercial-management";
+import {
+  SideBanner,
+  EditableSlideShow,
+} from "@/components/commercial-management";
 import { FC, useState } from "react";
 import { editingSlides } from "../data";
 import { Slide, StoreFullJoin } from "@/types/model";
@@ -27,7 +30,11 @@ const StoreManagement: FC = () => {
         storeID={store.storeID}
         position="left"
       />
-      <SlideShow className="flex-1" slides={slides} editSlides={setSlides} />
+      <EditableSlideShow
+        className="flex-1"
+        slides={slides}
+        editSlides={setSlides}
+      />
       <SideBanner
         banner={rightBanner}
         setBanner={setRightBanner}

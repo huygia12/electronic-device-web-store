@@ -44,15 +44,13 @@ const ProductFilter: FC = () => {
       const categoryID: Nullable<string> = searchParams.get("categoryID");
       const providerID: Nullable<string> = searchParams.get("providerID");
       if (categoryID) {
-        productRes =
-          await productService.apis.getProductsFullJoinWithCategoryID(
-            categoryID
-          );
+        productRes = await productService.apis.getProductsFullJoin({
+          categoryID: categoryID,
+        });
       } else if (providerID) {
-        productRes =
-          await productService.apis.getProductsFullJoinWithProviderID(
-            providerID
-          );
+        productRes = await productService.apis.getProductsFullJoin({
+          providerID: providerID,
+        });
       }
 
       setProductsData(productRes);

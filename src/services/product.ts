@@ -16,6 +16,8 @@ import {
 import { Attribute, AttributeOption, ProductItem } from "@/types/model";
 import firebaseService from "./firebase";
 
+const productEndPoint = "/products";
+
 const productService = {
   apis: {
     getProductsSummary: async (params: {
@@ -24,7 +26,7 @@ const productService = {
       providerID?: string;
       currentPage?: number;
     }): Promise<{ products: ProductSummary[]; totalProducts: number }> => {
-      let path: string = `/products?`;
+      let path: string = `${productEndPoint}?`;
       params.searching && (path = `${path}&searching=${params.searching}`);
       params.providerID && (path = `${path}&providerID=${params.providerID}`);
       params.categoryID && (path = `${path}&categoryID=${params.categoryID}`);
@@ -34,7 +36,7 @@ const productService = {
       try {
         const res = await axiosInstanceWithoutAuthorize.get<{
           info: { products: ProductSummary[]; totalProducts: number };
-        }>(path, reqConfig);
+        }>(path);
 
         return res.data.info;
       } catch (error) {
@@ -42,27 +44,20 @@ const productService = {
         return { products: [], totalProducts: 0 };
       }
     },
-    getProductsFullJoinWithCategoryID: async (
-      categoryID: string
-    ): Promise<ProductFullJoin[]> => {
-      try {
-        const res = await axiosInstanceWithoutAuthorize.get<{
-          info: { products: ProductFullJoin[] };
-        }>(`/products?detail=true&categoryID=${categoryID}`, reqConfig);
+    getProductsFullJoin: async (params: {
+      categoryID?: string;
+      providerID?: string;
+      saleArrange?: boolean;
+    }): Promise<ProductFullJoin[]> => {
+      let path = `${productEndPoint}?detail=true`;
+      params.categoryID && (path += `&categoryID=${params.categoryID}`);
+      params.providerID && (path += `&providerID=${params.providerID}`);
+      params.saleArrange && (path += `&saleArrange=${params.saleArrange}`);
 
-        return res.data.info.products;
-      } catch (error) {
-        console.error("Unexpected error: ", error);
-        return [];
-      }
-    },
-    getProductsFullJoinWithProviderID: async (
-      providerID: string
-    ): Promise<ProductFullJoin[]> => {
       try {
         const res = await axiosInstanceWithoutAuthorize.get<{
           info: { products: ProductFullJoin[] };
-        }>(`/products?detail=true&providerID=${providerID}`, reqConfig);
+        }>(path);
 
         return res.data.info.products;
       } catch (error) {

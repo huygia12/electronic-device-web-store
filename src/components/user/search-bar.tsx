@@ -6,8 +6,9 @@ import { Optional } from "@/utils/declare";
 import { productService } from "@/services";
 import { ProductSummary } from "@/types/api";
 import { useCustomNavigate } from "@/hooks";
+import { cn } from "@/lib/utils";
 
-const SearchBar: FC<HTMLAttributes<HTMLFormElement>> = () => {
+const SearchBar: FC<HTMLAttributes<HTMLFormElement>> = ({ ...props }) => {
   const [searchQuery, setSearchQuery] = useState<Optional<string>>();
   const [products, setProducts] = useState<Optional<ProductSummary[]>>();
   const { navigate } = useCustomNavigate();
@@ -62,10 +63,7 @@ const SearchBar: FC<HTMLAttributes<HTMLFormElement>> = () => {
   };
 
   return (
-    <div
-      ref={wrapperRef}
-      className="w-full col-span-2 relative flex-1 md_grow-0 h-[2.7rem]"
-    >
+    <div ref={wrapperRef} className={cn("relative h-10", props.className)}>
       <Search className="absolute left-2.5 top-3.5 h-4 w-4 text-muted-foreground" />
       <Input
         placeholder="Tìm kiếm..."

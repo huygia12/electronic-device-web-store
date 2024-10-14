@@ -1,15 +1,17 @@
 import React, { HTMLAttributes } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { FaArrowRightLong } from "react-icons/fa6";
 import {
   Carousel,
   CarouselContent,
   CarouselNext,
   CarouselPrevious,
-} from "../ui/carousel";
+} from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import { useCustomNavigate } from "@/hooks";
 
 interface CollectionHeaderProps extends HTMLAttributes<HTMLDivElement> {
+  url: string;
   title: string;
 }
 
@@ -17,6 +19,8 @@ const CollectionHeader: React.FC<CollectionHeaderProps> = ({
   className,
   ...props
 }) => {
+  const { navigate } = useCustomNavigate();
+
   return (
     <div className="flex flex-row items-center justify-between">
       <span className="text-[1.8rem] font-extrabold border-l-primary border-l-4 pl-2">
@@ -25,6 +29,7 @@ const CollectionHeader: React.FC<CollectionHeaderProps> = ({
       <span className="flex items-center">
         <span className="flex space-x-2">{props.children}</span>
         <Button
+          onClick={() => navigate(props.url)}
           variant="negative"
           className="flex flex-row items-center h-8 ml-[2rem]"
         >

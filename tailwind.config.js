@@ -91,6 +91,12 @@ module.exports = {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.05)" },
         },
+        shake: {
+          "0%, 100%": { transform: "translateX(0)", opacity: "1" },
+          "25%": { transform: "translateX(-10px)", opacity: "0.3" },
+          "50%": { transform: "translateX(10px)", opacity: "1" },
+          "75%": { transform: "translateX(-10px)", opacity: "0.3" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -98,6 +104,7 @@ module.exports = {
         sweep: "sweep 1.5s ease-in-out infinite",
         "sweep-slow": "sweep 2.5s ease-in infinite",
         pulseZoom: "pulseZoom 3s ease-in-out infinite",
+        shake: "shake 1s ease-in-out",
       },
       width: {
         myLayout: "90rem",

@@ -31,7 +31,7 @@ interface SlideShowProps extends HTMLAttributes<HTMLDivElement> {
   editSlides: Dispatch<SetStateAction<(Slide | SlideCreation)[]>>;
 }
 
-const SlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
+const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
   const slideIds = useMemo(
     () => props.slides.map((slide) => slide.index),
     [props.slides]
@@ -130,4 +130,4 @@ const SlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
   );
 };
 
-export default SlideShow;
+export default EditableSlideShow;
