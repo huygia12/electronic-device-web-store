@@ -8,3 +8,4 @@ export { default as RatingPoint } from "./rating-point";
 export { default as ProductDialog } from "./product-dialog";
 export { default as ZaloButton } from "./zalo-button";
 export { default as ProductInCart } from "./product-in-cart";
+export { default as HorizontalProductCard } from "./horizontal-product-card";

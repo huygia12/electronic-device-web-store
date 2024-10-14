@@ -23,7 +23,7 @@ const LeftProductDetailSection: FC<LeftProductDetailSectionProps> = ({
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: true }));
 
   return (
-    <section className="flex flex-col justify-center">
+    <section className="flex flex-col">
       <Carousel
         plugins={[plugin.current]}
         onMouseEnter={plugin.current.stop}
@@ -53,7 +53,7 @@ const LeftProductDetailSection: FC<LeftProductDetailSectionProps> = ({
       </div>
 
       <div className="border-slate-100 border-2 rounded-xl shadow-lg p-4">
-        <h5 className="font-semibold text-[1.2rem] py-4">Thông số thiết bị</h5>
+        <h5 className="font-semibold text-[1.4rem] py-4">Thông số thiết bị</h5>
         <Table className="border-2 border-slate-200">
           <TableBody>
             {props.product.productAttributes.map((attr, index) => (

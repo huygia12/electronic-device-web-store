@@ -11,12 +11,14 @@ import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { applyDiscount } from "@/utils/helpers";
+import RelatedProducts from "./related-products";
 
 interface RightProductDetailSectionProps
   extends HTMLAttributes<HTMLHeadElement> {
   product: ProductFullJoin;
   currentItem: ProductItem;
   setCurrentItem: (item: ProductItem) => void;
+  relatedProducts?: ProductFullJoin[];
 }
 
 const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
@@ -81,6 +83,7 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
 
   return (
     <section>
+      {/** Tilte and price */}
       <div className="flex justify-between items-baseline mb-12 pb-4 border-b-2 border-dashed border-slate-300">
         <div className="space-x-4">
           <span className="text-3xl font-semibold text-primary-foreground">{`${props.currentItem ? applyDiscount(props.currentItem.price, props.currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
@@ -96,6 +99,7 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
         </div>
       </div>
 
+      {/** Product items selection and quantity input */}
       <form>
         <Label className="text-lg font-semibold my-2">Chọn sản phẩm:</Label>
         <div className="width-full grid grid-cols-2 gap-1 mb-10">
@@ -172,6 +176,9 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
           </Button>
         </div>
       </form>
+
+      {/** Related products */}
+      <RelatedProducts products={props.relatedProducts} className="mt-8" />
     </section>
   );
 };

@@ -47,12 +47,16 @@ const productService = {
     getProductsFullJoin: async (params: {
       categoryID?: string;
       providerID?: string;
+      exceptID?: string;
       saleArrange?: boolean;
+      take?: number;
     }): Promise<ProductFullJoin[]> => {
       let path = `${productEndPoint}?detail=true`;
       params.categoryID && (path += `&categoryID=${params.categoryID}`);
       params.providerID && (path += `&providerID=${params.providerID}`);
       params.saleArrange && (path += `&saleArrange=${params.saleArrange}`);
+      params.take && (path += `&take=${params.take}`);
+      params.exceptID && (path += `&exceptID=${params.exceptID}`);
 
       try {
         const res = await axiosInstanceWithoutAuthorize.get<{
