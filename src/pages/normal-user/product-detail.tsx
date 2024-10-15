@@ -45,14 +45,14 @@ const ProductDetailPage: FC = () => {
       setReviews(reviewResponse);
       setReviewDisplay(reviewResponse.length > 5 ? 5 : reviewResponse.length);
 
-      const products: ProductFullJoin[] =
+      const response: { products: ProductFullJoin[] } =
         await productService.apis.getProductsFullJoin({
           categoryID: product.category.categoryID,
           providerID: product.provider.providerID,
           exceptID: product.productID,
           take: 5,
         });
-      setRelatedProducts(products);
+      setRelatedProducts(response.products);
     };
 
     setup();

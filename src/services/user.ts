@@ -117,9 +117,9 @@ const userService = {
     }): Promise<{ users: User[]; totalUsers: number }> => {
       let queryUrl: string = `${userEndPoint}?`;
 
-      params.recently === true && (queryUrl += `recently=${params.recently}`);
-      params.searching && (queryUrl += `&searching=${params.searching}`);
-      params.currentPage && (queryUrl += `&currentPage=${params.currentPage}`);
+      params.recently === true && (queryUrl += `recently=${params.recently}&`);
+      params.searching && (queryUrl += `searching=${params.searching}&`);
+      params.currentPage && (queryUrl += `currentPage=${params.currentPage}`);
 
       const res = await axiosInstance.get<{
         info: { users: User[]; totalUsers: number };

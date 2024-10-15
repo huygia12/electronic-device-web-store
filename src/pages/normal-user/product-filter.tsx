@@ -17,45 +17,46 @@ import {
 } from "@/components/ui/select";
 import { Minus } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { MoneyInput, ProductCard } from "@/components/user";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Separator } from "@/components/ui/separator";
+import { MoneyInput } from "@/components/user";
 import { useSearchParams } from "react-router-dom";
-import { productService } from "@/services";
-import { Nullable, Optional } from "@/utils/declare";
-import { CardSkeleton } from "@/components/common";
+import { attributeService, productService } from "@/services";
+import { Optional } from "@/utils/declare";
 import { cn } from "@/lib/utils";
 import { Sort } from "@/types/enum";
 import { applyDiscount, isDiscount } from "@/utils/helpers";
+import { AttributeFilter, ProductList } from "@/components/product-filter";
 
 const ProductFilter: FC = () => {
   const [searchParams] = useSearchParams();
   const [productsData, setProductsData] = useState<ProductFullJoin[]>();
-  const [attributesData, setAttributesData] = useState<Attribute[]>();
+  const [attributes, setAttributes] = useState<Attribute[]>();
   const [sortValue, setSortValue] = useState<Optional<string>>(undefined); //Using Sort enum values
   const [isSale, setIsSale] = useState<boolean>(false);
   const [selectComponentKey, setSelectComponentKey] = useState<number>(1);
   const [selectedOptions, setSelectedOptions] = useState<AttributeOption[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<ProductFullJoin[]>();
+  const [numberOfProducts, setNumberOfProducts] = useState<number>();
 
   useEffect(() => {
     const fetchData = async () => {
-      let productRes: ProductFullJoin[] = [];
-      const categoryID: Nullable<string> = searchParams.get("categoryID");
-      const providerID: Nullable<string> = searchParams.get("providerID");
-      if (categoryID) {
-        productRes = await productService.apis.getProductsFullJoin({
-          categoryID: categoryID,
-        });
-      } else if (providerID) {
-        productRes = await productService.apis.getProductsFullJoin({
-          providerID: providerID,
-        });
-      }
+      const categoryID: string | null = searchParams.get("categoryID");
+      const providerID: string | null = searchParams.get("providerID");
 
-      setProductsData(productRes);
-      setFilteredProducts(productRes);
-      setAttributesData(productService.getAttributesOutOfProduct(productRes));
+      const attributesRes = await attributeService.apis.getAttributes({
+        categoryID: categoryID || undefined,
+        providerID: providerID || undefined,
+      });
+      setAttributes(attributeService.filterEmtyAttributeOptions(attributesRes));
+
+      const productRes: { products: ProductFullJoin[]; totalProducts: number } =
+        await productService.apis.getProductsFullJoin({
+          categoryID: categoryID || undefined,
+          providerID: providerID || undefined,
+        });
+
+      setNumberOfProducts(productRes.totalProducts || 0);
+      setProductsData(productRes.products);
+      setFilteredProducts(productRes.products);
     };
 
     fetchData();
@@ -116,7 +117,7 @@ const ProductFilter: FC = () => {
     }
   };
 
-  const handleSellectOptionEvent = (option: AttributeOption) => {
+  const handleSelectOptionEvent = (option: AttributeOption) => {
     const newSelectedOptions = selectedOptions.filter(
       (iter) => iter.typeID !== option.typeID
     );
@@ -125,7 +126,6 @@ const ProductFilter: FC = () => {
   };
 
   const handleAttributeClearEvent = () => {
-    setSelectComponentKey(selectComponentKey === 1 ? 2 : 1);
     setSelectedOptions([]);
     window.scrollTo(0, 0);
   };
@@ -133,62 +133,25 @@ const ProductFilter: FC = () => {
   return (
     <div className="grid grid-cols-4 gap-8">
       <div>
-        <div className="sticky top-36 flex flex-col">
-          <h2 className="w-full text-[1.4rem] font-extrabold pt-2 pb-4">
-            LỌC SẢN PHẨM
-          </h2>
-          <ul key={selectComponentKey} className="px-4">
-            {attributesData?.map((attr, parentIndex) => {
-              return (
-                <li key={parentIndex} className="space-y-3 mb-8">
-                  <h5 className="text-slate-700 font-extrabold">
-                    {attr.typeValue}
-                  </h5>
-                  <Separator className="border-1 border-slate-400" />
-                  <RadioGroup className="pl-4 space-y-2">
-                    {attr.attributeOptions?.map((option, childIndex) => {
-                      return (
-                        <div
-                          key={childIndex}
-                          className="flex items-center space-x-2"
-                        >
-                          <RadioGroupItem
-                            onClick={() => handleSellectOptionEvent(option)}
-                            value={option.optionID}
-                            id={`${parentIndex}${childIndex}`}
-                          />
-                          <Label
-                            htmlFor={`${parentIndex}${childIndex}`}
-                            className="text-slate-600 !my-0"
-                          >
-                            {option.optionValue}
-                          </Label>
-                        </div>
-                      );
-                    })}
-                  </RadioGroup>
-                </li>
-              );
-            })}
-          </ul>
-          {attributesData && attributesData.length > 0 && (
-            <Button
-              variant={"destructive"}
-              onClick={() => {
-                handleAttributeClearEvent();
-              }}
-              className="ml-auto mr-4 w-20"
-            >
-              Làm mới
-            </Button>
-          )}
-        </div>
+        <AttributeFilter
+          attributes={attributes}
+          handleClearEvent={handleAttributeClearEvent}
+          handleSelectOption={handleSelectOptionEvent}
+          className="sticky top-36"
+        />
       </div>
 
       <div className="col-span-3 flex flex-col gap-6">
         <div>
-          <h1 className="text-[2rem] font-semibold mb-[0.5rem]">
-            TẤT CẢ SẢN PHẨM
+          <h1 className="text-[1.6rem] font-semibold mb-[0.5rem]">
+            {numberOfProducts !== undefined ? (
+              <>
+                Kết Quả Lọc Cho:{" "}
+                <span className="text-[1.4rem] text-red-600 font-light">{`(${numberOfProducts} kết quả)`}</span>
+              </>
+            ) : (
+              <>Tìm Kiếm ...</>
+            )}
           </h1>
           <hr className="border-dashed border-[0.1rem] border-secondary-foreground" />
         </div>
@@ -264,36 +227,11 @@ const ProductFilter: FC = () => {
             <Minus size={15} />
             <MoneyInput className="border-slate-600 max-w-[8rem] max-h-[2.3rem]" />
           </span>
+          <Button variant="neutral">Lọc</Button>
         </div>
 
         {/** PRODUCT LIST */}
-        <div
-          className={cn(
-            "col-span-3 grid grid-cols-4 gap-4",
-            filteredProducts &&
-              filteredProducts.length === 0 &&
-              "flex flex-col items-center"
-          )}
-        >
-          {filteredProducts ? (
-            filteredProducts.length > 0 ? (
-              filteredProducts.map((product, index) => (
-                <ProductCard key={index} product={product} />
-              ))
-            ) : (
-              <>
-                <img width={500} src="/empty-box.svg" alt="emptyCart" />
-                <span className="text-xl font-medium text-slate-500 mb-10">
-                  Chưa có sản phẩm nào!
-                </span>
-              </>
-            )
-          ) : (
-            Array.from({ length: 15 }).map((_, index) => (
-              <CardSkeleton key={index} />
-            ))
-          )}
-        </div>
+        <ProductList products={filteredProducts} />
       </div>
     </div>
   );

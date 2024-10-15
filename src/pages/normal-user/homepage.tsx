@@ -31,29 +31,29 @@ const Homepage: FC = () => {
         await providerService.apis.getProviders();
       setProviders(providersRes);
 
-      const onSalePhonesResponse: ProductFullJoin[] =
+      const onSalePhonesResponse: { products: ProductFullJoin[] } =
         await productService.apis.getProductsFullJoin({
           categoryID: PHONE_ID,
-          saleArrange: true,
+          sale: true,
         });
-      setOnSalePhones(onSalePhonesResponse);
+      setOnSalePhones(onSalePhonesResponse.products);
 
-      const phonesDataRes: ProductFullJoin[] =
+      const phonesDataRes: { products: ProductFullJoin[] } =
         await productService.apis.getProductsFullJoin({ categoryID: PHONE_ID });
-      setPhonesData(phonesDataRes);
+      setPhonesData(phonesDataRes.products);
 
-      const onSaleLaptopsResponse: ProductFullJoin[] =
+      const onSaleLaptopsResponse: { products: ProductFullJoin[] } =
         await productService.apis.getProductsFullJoin({
           categoryID: LAPTOP_ID,
-          saleArrange: true,
+          sale: true,
         });
-      setOnSaleLaptops(onSaleLaptopsResponse);
+      setOnSaleLaptops(onSaleLaptopsResponse.products);
 
-      const laptopsDataRes: ProductFullJoin[] =
+      const laptopsDataRes: { products: ProductFullJoin[] } =
         await productService.apis.getProductsFullJoin({
           categoryID: LAPTOP_ID,
         });
-      setLaptopsData(laptopsDataRes);
+      setLaptopsData(laptopsDataRes.products);
     };
 
     fetchData();

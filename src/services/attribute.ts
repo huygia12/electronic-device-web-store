@@ -8,18 +8,27 @@ import { Attribute, AttributeOption } from "@/types/model";
 import { ProductAttributesFormProps } from "@/utils/schema";
 import { Optional } from "@/utils/declare";
 
+const attributeEndPoint = "/attributes";
+
 const attributeService = {
   apis: {
-    getAttributes: async (): Promise<Attribute[]> => {
+    getAttributes: async (params: {
+      providerID?: string;
+      categoryID?: string;
+    }): Promise<Attribute[]> => {
+      let path = `${attributeEndPoint}?`;
+      params.providerID && (path += `providerID=${params.providerID}&`);
+      params.categoryID && (path += `categoryID=${params.categoryID}`);
+
       const res = await axiosInstanceWithoutAuthorize.get<{
         info: Attribute[];
-      }>("/attributes", reqConfig);
+      }>(path);
 
       return res.data.info;
     },
     addAttributeType: async (name: string): Promise<Attribute> => {
       const response = await axiosInstance.post<{ info: Attribute }>(
-        "/attributes",
+        attributeEndPoint,
         {
           typeValue: name,
         },
@@ -32,7 +41,7 @@ const attributeService = {
       newName: string
     ): Promise<Attribute> => {
       const response = await axiosInstance.put<{ info: Attribute }>(
-        `/attributes/${typeID}`,
+        `${attributeEndPoint}/${typeID}`,
         {
           typeValue: newName,
         },
@@ -43,7 +52,7 @@ const attributeService = {
     },
     deleteAttributeType: async (typeID: string): Promise<AxiosResponse> => {
       const response = await axiosInstance.delete(
-        `/attributes/${typeID}`,
+        `${attributeEndPoint}/${typeID}`,
         reqConfig
       );
 
@@ -54,7 +63,7 @@ const attributeService = {
       option: string
     ): Promise<AttributeOption> => {
       const response = await axiosInstance.post<{ info: AttributeOption }>(
-        `/attributes/${typeID}/options`,
+        `${attributeEndPoint}/${typeID}/options`,
         {
           optionValue: option,
         },
@@ -69,7 +78,7 @@ const attributeService = {
       newName: string
     ): Promise<AttributeOption> => {
       const response = await axiosInstance.put<{ info: AttributeOption }>(
-        `/attributes/${typeID}/options/${optionID}`,
+        `${attributeEndPoint}/${typeID}/options/${optionID}`,
         {
           optionValue: newName,
         },
@@ -79,7 +88,7 @@ const attributeService = {
     },
     deleteAttributeOption: async (typeID: string, optionID: string) => {
       const response = await axiosInstance.delete(
-        `/attributes/${typeID}/options/${optionID}`,
+        `${attributeEndPoint}/${typeID}/options/${optionID}`,
         reqConfig
       );
       return response;
@@ -218,6 +227,11 @@ const attributeService = {
     options && options.length <= 0 && (options = undefined);
 
     return options;
+  },
+  filterEmtyAttributeOptions: (attributes: Attribute[]): Attribute[] => {
+    return attributes.filter(
+      (attribute) => attribute.attributeOptions.length > 0
+    );
   },
 };
 

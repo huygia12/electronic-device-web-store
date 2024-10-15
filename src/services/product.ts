@@ -48,26 +48,21 @@ const productService = {
       categoryID?: string;
       providerID?: string;
       exceptID?: string;
-      saleArrange?: boolean;
+      sale?: boolean;
       take?: number;
-    }): Promise<ProductFullJoin[]> => {
+    }): Promise<{ products: ProductFullJoin[]; totalProducts: number }> => {
       let path = `${productEndPoint}?detail=true`;
       params.categoryID && (path += `&categoryID=${params.categoryID}`);
       params.providerID && (path += `&providerID=${params.providerID}`);
-      params.saleArrange && (path += `&saleArrange=${params.saleArrange}`);
+      params.sale && (path += `&sale=${params.sale}`);
       params.take && (path += `&take=${params.take}`);
       params.exceptID && (path += `&exceptID=${params.exceptID}`);
 
-      try {
-        const res = await axiosInstanceWithoutAuthorize.get<{
-          info: { products: ProductFullJoin[] };
-        }>(path);
+      const res = await axiosInstanceWithoutAuthorize.get<{
+        info: { products: ProductFullJoin[]; totalProducts: number };
+      }>(path);
 
-        return res.data.info.products;
-      } catch (error) {
-        console.error("Unexpected error: ", error);
-        return [];
-      }
+      return res.data.info;
     },
     getProductFullJoin: async (
       args: Args | string
