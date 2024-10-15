@@ -1,18 +1,9 @@
-import { Nullable, Optional } from "./declare";
+import { Nullable } from "./declare";
 
 const rowsPerPage = 10;
-/**
- *
- * @param {T} arr
- * @returns reverse array but clone it to another
- */
-const arrayInReverse = <T>(arr: T[]): T[] => {
-  const temp: T[] = [...arr].reverse();
-  return temp;
-};
 
-const getImageUrl = (file: File): Optional<string> => {
-  let url: Optional<string>;
+const getImageUrl = (file: File): string | undefined => {
+  let url: string | undefined;
   try {
     url = URL.createObjectURL(file);
   } catch {
@@ -96,8 +87,6 @@ const getTheFollowingDay = (date: Date): Date => {
 };
 
 export {
-  arrayInReverse,
-  getImageUrl,
   formatDateTime,
   getRatioString,
   getNumberGapString,
@@ -110,4 +99,5 @@ export {
   convertMiliSecToDays,
   getPages,
   getTheFollowingDay,
+  getImageUrl,
 };

@@ -1,15 +1,15 @@
-import { CartItem, ProductFullJoin, ProductItem } from "@/types/model";
+import { ProductFullJoin, ProductItem } from "@/types/model";
 import { Error } from "@/types/error";
-import { FC, HTMLAttributes, useState } from "react";
-import { Label } from "../ui/label";
+import { FC, HTMLAttributes, useMemo, useState } from "react";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { CircleCheck, CircleX, Coins, ShoppingBasket } from "lucide-react";
-import { productService } from "@/services";
-import { Input } from "../ui/input";
-import { useCartProps } from "@/hooks";
+import { cartService, productService } from "@/services";
+import { Input } from "@/components/ui/input";
+import { useCartProps, useCustomNavigate } from "@/hooks";
 import { toast } from "sonner";
-import { Button } from "../ui/button";
-import { Checkbox } from "../ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { applyDiscount } from "@/utils/helpers";
 import RelatedProducts from "./related-products";
 
@@ -27,10 +27,11 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
   const { itemsInLocal, setItemsInLocal } = useCartProps();
   const [inputQuantity, setInputQuantity] = useState(1);
   const [quantityError, setQuantityError] = useState<Error>({ success: true });
-
-  const checkDisableButton = () => {
-    return quantityError.success && props.currentItem.quantity > 0;
-  };
+  const { navigate } = useCustomNavigate();
+  const quantityValidation = useMemo(
+    () => quantityError.success && props.currentItem.quantity > 0,
+    [quantityError, props.currentItem]
+  );
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -40,21 +41,14 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
       return;
     }
 
-    let checkExisted: boolean = false;
-    const bucket: CartItem[] = itemsInLocal.map((i) => i);
+    const addResult = cartService.handleAddToCart(
+      props.currentItem,
+      inputQuantity,
+      itemsInLocal
+    );
 
-    bucket.map((item) => {
-      if (
-        item.itemID === props.currentItem.itemID &&
-        item.productID === props.product.productID
-      ) {
-        item.quantity += inputQuantity;
-        checkExisted = true;
-      }
-    });
-
-    checkExisted ||
-      bucket.push(
+    addResult.checkExisted ||
+      addResult.newCartItems.push(
         productService.convertProductToCartItem(
           props.product,
           props.currentItem,
@@ -62,7 +56,7 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
         )
       );
     toast.success("Thêm vào giỏ hàng thành công!");
-    setItemsInLocal(bucket);
+    setItemsInLocal(addResult.newCartItems);
   };
 
   const handleQuantityInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,6 +75,14 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
     }
   };
 
+  const handleBuyClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate(
+      `/cart/checkout?productID=${props.currentItem.productID}&itemID=${props.currentItem.itemID}&quantity=${inputQuantity}`,
+      { unstable_viewTransition: true }
+    );
+  };
+
   return (
     <section>
       {/** Tilte and price */}
@@ -90,8 +92,8 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
           <del className="text-slate-500">{`${props.currentItem ? props.currentItem?.price.toLocaleString() : 0}đ`}</del>
         </div>
         <div className="flex gap-2">
-          {checkDisableButton() ? "Còn hàng" : "Hết hàng"}
-          {checkDisableButton() ? (
+          {quantityValidation ? "Còn hàng" : "Hết hàng"}
+          {quantityValidation ? (
             <CircleCheck className="text-green-500 " />
           ) : (
             <CircleX className="text-red-500" />
@@ -161,7 +163,7 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
         <div className="mt-14 w-full grid grid-cols-2 gap-1">
           <Button
             variant="neutral"
-            disabled={!checkDisableButton()}
+            disabled={!quantityValidation}
             className="flex items-center text-[1.2rem] min-h-12"
             onClick={(e) => handleAddToCart(e)}
           >
@@ -169,8 +171,9 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
           </Button>
           <Button
             variant="negative"
-            disabled={!checkDisableButton()}
+            disabled={!quantityValidation}
             className="flex items-center text-[1.2rem] min-h-12"
+            onClick={(e) => handleBuyClick(e)}
           >
             <Coins /> &nbsp; Mua ngay
           </Button>

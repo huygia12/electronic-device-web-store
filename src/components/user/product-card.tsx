@@ -1,26 +1,36 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import SaleTag from "../ui/saleTag";
+import SaleTag from "@/components/ui/saleTag";
 import React, { HTMLAttributes, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { ProductFullJoin, ProductItem } from "@/types/model";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { NavLink } from "react-router-dom";
 import { Coins, ShoppingBasket } from "lucide-react";
 import { ProductDialog } from ".";
-import CardTag from "../ui/cardTag";
+import CardTag from "@/components/ui/cardTag";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { CustomImage } from "../common";
+import { CustomImage } from "@/components/common";
 import { applyDiscount, isDiscount } from "@/utils/helpers";
+import { useCustomNavigate } from "@/hooks";
 
 interface CardProductProps extends HTMLAttributes<HTMLDivElement> {
   product: ProductFullJoin;
 }
 
 const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
+  const { navigate } = useCustomNavigate();
   const currentItem = useMemo<ProductItem>(
     () => props.product.productItems[0],
     [props.product]
   );
+
+  const handleBuyClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate(
+      `/cart/checkout?productID=${props.product.productID}&itemID=${props.product.productItems[0].itemID}&quantity=${1}`,
+      { unstable_viewTransition: true }
+    );
+  };
 
   return (
     <Card
@@ -52,12 +62,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
             return (
               <CardTag
                 key={index}
-                content={
-                  attr.attributeOption.attributeType.typeValue +
-                  ": " +
-                  attr.attributeOption.optionValue +
-                  "."
-                }
+                content={`${attr.attributeOption.attributeType.typeValue}: ${attr.attributeOption.optionValue}.`}
               />
             );
           })}
@@ -83,11 +88,15 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
         )}
         <div className="w-full flex items-center justify-around mt-4">
           <ProductDialog product={props.product}>
-            <Button variant="neutral" onClick={() => {}}>
+            <Button variant="neutral">
               <ShoppingBasket />
             </Button>
           </ProductDialog>
-          <Button variant="negative" className="flex gap-2 items-center">
+          <Button
+            variant="negative"
+            className="flex gap-2 items-center"
+            onClick={(e) => handleBuyClick(e)}
+          >
             <Coins />
             Mua ngay
           </Button>

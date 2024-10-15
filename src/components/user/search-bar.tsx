@@ -2,15 +2,16 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { FC, HTMLAttributes, useEffect, useRef, useState } from "react";
 import { LoadingSpinner } from "@/components/effect";
-import { Optional } from "@/utils/declare";
 import { productService } from "@/services";
 import { ProductSummary } from "@/types/api";
 import { useCustomNavigate } from "@/hooks";
 import { cn } from "@/lib/utils";
+import { applyDiscount, isDiscount } from "@/utils/helpers";
 
-const SearchBar: FC<HTMLAttributes<HTMLFormElement>> = ({ ...props }) => {
-  const [searchQuery, setSearchQuery] = useState<Optional<string>>();
-  const [products, setProducts] = useState<Optional<ProductSummary[]>>();
+const SearchBar: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
+  const searchingDelay = useRef<number>(1000);
+  const [seachText, setSearchText] = useState<string>();
+  const [products, setProducts] = useState<ProductSummary[]>();
   const { navigate } = useCustomNavigate();
   const [productsVisibility, setProductsVisibility] = useState(false);
   const [typing, setTyping] = useState(false);
@@ -18,35 +19,40 @@ const SearchBar: FC<HTMLAttributes<HTMLFormElement>> = ({ ...props }) => {
 
   useEffect(() => {
     //Close products search results if click outside of the search bar
-    document.addEventListener("mousedown", handleSearchInputBlur);
+    document.addEventListener("mousedown", handleClickOutsideOfSearchInput);
 
     return () =>
-      document.removeEventListener("mousedown", handleSearchInputBlur);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutsideOfSearchInput
+      );
   }, []);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
       const res: { products: ProductSummary[] } =
-        await productService.apis.getProductsSummary({});
+        await productService.apis.getProductsSummary({
+          searching: seachText,
+        });
 
       setProducts(res.products);
       setTyping(false);
-      if (searchQuery) {
+      if (seachText) {
         setProductsVisibility(true);
       }
-    }, 2000);
+    }, searchingDelay.current);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchQuery]);
+  }, [seachText]);
 
   const handleProductClick = (productID: string) => {
-    navigate("/products/" + productID, {
+    navigate(`/products/${productID}`, {
       unstable_viewTransition: true,
     });
     setProductsVisibility(false);
   };
 
-  const handleSearchInputBlur = (event: MouseEvent) => {
+  const handleClickOutsideOfSearchInput = (event: MouseEvent) => {
     if (
       wrapperRef.current &&
       !wrapperRef.current.contains(event.target as Node)
@@ -59,29 +65,29 @@ const SearchBar: FC<HTMLAttributes<HTMLFormElement>> = ({ ...props }) => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     !typing && setTyping(true);
-    setSearchQuery(event.target.value);
+    setSearchText(event.target.value);
   };
 
   return (
     <div ref={wrapperRef} className={cn("relative h-10", props.className)}>
-      <Search className="absolute left-2.5 top-3.5 h-4 w-4 text-muted-foreground" />
+      <Search className="absolute top-1/2 left-3 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
       <Input
-        placeholder="Tìm kiếm..."
+        placeholder="Tìm kiếm sản phẩm..."
         onFocus={() => setProductsVisibility(true)}
         onChange={(e) => handleSearchInputChange(e)}
-        className="h-full text-xl w-full rounded-2xl bg-background pl-8"
+        className="h-full text-xl w-full rounded-lg bg-background pl-8"
       />
       {typing && (
         <LoadingSpinner
           size={22}
-          className="text-black absolute right-3 top-3"
+          className="text-muted-foreground absolute top-0 bottom-0 right-3 m-auto"
         />
       )}
       {products &&
         productsVisibility &&
         !typing &&
         (products.length > 0 ? (
-          <ul className="absolute flex flex-wrap gap-2 mt-4 bg-white opacity-95 rounded-lg px-2 py-2 shadow-general">
+          <ul className="absolute flex flex-wrap gap-2 mt-4 right-1/2 transform translate-x-1/2 bg-white opacity-95 rounded-lg px-2 py-2 shadow-general">
             {products.map((product) => (
               <li
                 key={product.productID}
@@ -93,9 +99,20 @@ const SearchBar: FC<HTMLAttributes<HTMLFormElement>> = ({ ...props }) => {
                   alt={product.productName}
                   className="w-12 h-12 rounded-md object-cover"
                 />
-                <span className="ml-2 text-md truncate">
+                <span className="ml-2 max-w-[40rem] text-md truncate">
                   {product.productName}
                 </span>
+                <span className="ml-2 text-sm text-red-700">
+                  {`${applyDiscount(
+                    product.productItems[0].price,
+                    product.productItems[0].discount
+                  ).toLocaleString()}đ`}
+                </span>
+                {isDiscount(product.productItems[0].discount) && (
+                  <del className="text-[0.8rem] ml-2 text-secondary-foreground">
+                    {`${product.productItems[0].price.toLocaleString()}đ`}
+                  </del>
+                )}
               </li>
             ))}
           </ul>

@@ -9,9 +9,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { applyDiscount, getDiscount } from "@/utils/helpers";
-import { useCartProps } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "../ui/card";
+import { CartItem } from "@/types/model";
 
 const header = [
   "STT",
@@ -23,10 +23,12 @@ const header = [
   "Thành Tiền",
 ];
 
-const ProductInCart: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
-  const { itemsInLocal } = useCartProps();
+interface ProductInCartProps extends HTMLAttributes<HTMLDivElement> {
+  cartItems?: CartItem[];
+}
 
-  if (itemsInLocal?.length === 0) return;
+const ProductInCart: FC<ProductInCartProps> = ({ ...props }) => {
+  if (!props.cartItems || props.cartItems?.length === 0) return;
 
   return (
     <Card className={cn("rounded-lg shadow-lg", props.className)}>
@@ -52,7 +54,7 @@ const ProductInCart: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
               </tr>
             </TableHeader>
             <TableBody>
-              {itemsInLocal.map((product, index) => {
+              {props.cartItems.map((product, index) => {
                 return (
                   <TableRow key={index}>
                     <TableCell className="text-center text-base">

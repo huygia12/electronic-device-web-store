@@ -9,19 +9,32 @@ import {
 } from "@/components/ui/card";
 import { convertMiliSecToDays } from "@/utils/helpers";
 import { Separator } from "@/components/ui/separator";
-import { FC, HTMLAttributes } from "react";
+import { FC, HTMLAttributes, useMemo } from "react";
 import { cartService } from "@/services";
-import { useCartProps } from "@/hooks";
 import { Nullable } from "@/utils/declare";
+import { CartItem } from "@/types/model";
 
 interface BillDisplayProps extends HTMLAttributes<HTMLDivElement> {
+  cartItems: CartItem[] | undefined;
   shippingFee: Nullable<number>;
   shippingTime: number;
   totalMoney: number;
 }
 
 const BillDisplay: FC<BillDisplayProps> = ({ ...props }) => {
-  const { itemsInLocal } = useCartProps();
+  const buyButtonDisability = useMemo(
+    () => !props.cartItems || props.cartItems.length === 0,
+    [props.cartItems]
+  );
+  const totalBillAmount = useMemo(
+    () => (props.cartItems ? cartService.getTotalAmount(props.cartItems) : 0),
+    [props.cartItems]
+  );
+  const totalDiscountAmount = useMemo(
+    () =>
+      props.cartItems ? cartService.getTotalDiscountAmount(props.cartItems) : 0,
+    [props.cartItems]
+  );
 
   return (
     <section className="rounded-md">
@@ -36,9 +49,7 @@ const BillDisplay: FC<BillDisplayProps> = ({ ...props }) => {
           <Separator className="border-dashed" />
           <div className="flex justify-between">
             <span>Tổng tiền hàng</span>
-            <span>
-              {cartService.getTotalAmount(itemsInLocal).toLocaleString() + "đ"}
-            </span>
+            <span>{totalBillAmount.toLocaleString() + "đ"}</span>
           </div>
           {props.shippingFee && (
             <>
@@ -50,11 +61,7 @@ const BillDisplay: FC<BillDisplayProps> = ({ ...props }) => {
           )}
           <div className="flex justify-between">
             <span>Tổng tiền giảm giá</span>
-            <del>
-              {cartService
-                .getTotalDiscountAmount(itemsInLocal)
-                .toLocaleString() + "đ"}
-            </del>
+            <del>{totalDiscountAmount.toLocaleString() + "đ"}</del>
           </div>
           <Separator className="border-dashed" />
           <div className="flex justify-between items-center font-semibold">
@@ -66,7 +73,7 @@ const BillDisplay: FC<BillDisplayProps> = ({ ...props }) => {
           <Button
             type="submit"
             variant="neutral"
-            disabled={itemsInLocal.length === 0}
+            disabled={buyButtonDisability}
             className="w-full"
           >
             Hoàn thành đơn hàng

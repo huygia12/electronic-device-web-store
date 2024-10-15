@@ -261,20 +261,31 @@ const productService = {
   },
   convertProductToCartItem: (
     product: ProductFullJoin,
-    item: ProductItem,
+    item: ProductItem | string,
     quantity: number
   ) => {
+    let itemToAdd: ProductItem | undefined;
+    if (typeof item === "string") {
+      itemToAdd = product.productItems.find((i) => i.itemID === item);
+    } else {
+      itemToAdd = item;
+    }
+
+    if (!itemToAdd) {
+      throw new Error(`Item cannot be found in product: ${product.productID}`);
+    }
+
     return {
       productName: product.productName,
-      price: item.price,
+      price: itemToAdd.price,
       quantity: quantity,
-      discount: item.discount,
-      productCode: item.productCode,
-      color: item.color,
-      storage: item.storage,
-      thump: item.thump,
+      discount: itemToAdd.discount,
+      productCode: itemToAdd.productCode,
+      color: itemToAdd.color,
+      storage: itemToAdd.storage,
+      thump: itemToAdd.thump,
       productID: product.productID,
-      itemID: item.itemID,
+      itemID: itemToAdd.itemID,
       height: product.height,
       length: product.length,
       width: product.width,

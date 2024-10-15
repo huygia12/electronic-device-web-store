@@ -12,7 +12,9 @@ const CartVisting: FC = () => {
     <div className="grid grid-cols-4 w-full gap-4">
       <EditableCartTable className="p-4" />
 
-      <Bill />
+      <div>
+        <Bill />
+      </div>
     </div>
   );
 };

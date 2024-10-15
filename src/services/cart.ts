@@ -1,5 +1,5 @@
 import { Error } from "@/types/error";
-import { CartItem } from "@/types/model";
+import { CartItem, ProductItem } from "@/types/model";
 
 const cartService = {
   getTotalDiscountAmount: (items: CartItem[]): number => {
@@ -47,6 +47,26 @@ const cartService = {
       }
       return element;
     });
+  },
+  handleAddToCart: (
+    productItem: ProductItem,
+    validQuantity: number,
+    prevCartItems: CartItem[]
+  ): { newCartItems: CartItem[]; checkExisted: boolean } => {
+    let checkExisted: boolean = false;
+
+    const newCartItems = prevCartItems.map((item) => {
+      if (
+        item.itemID === productItem.itemID &&
+        item.productID === productItem.productID
+      ) {
+        item.quantity += validQuantity;
+        checkExisted = true;
+      }
+      return item;
+    });
+
+    return { newCartItems, checkExisted };
   },
 };
 

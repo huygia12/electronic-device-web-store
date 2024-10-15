@@ -50,7 +50,7 @@ export interface ProductSummary {
   warranty: number;
   category: Category;
   provider: Provider;
-  productItems: { thump: string }[];
+  productItems: { thump: string; price: number; discount: number | null }[];
 }
 
 export interface ProductInsertPayload {

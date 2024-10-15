@@ -9,15 +9,15 @@ import {
 } from "@/components/ui/dialog";
 import { buttonVariants } from "@/utils/constants";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Label } from "../ui/label";
+import { Label } from "@/components/ui/label";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignupFormProps, SignupSchema } from "@/utils/schema";
 import { cn } from "@/lib/utils";
-import { LoadingSpinner } from "../effect";
-import { Separator } from "../ui/separator";
+import { LoadingSpinner } from "@/components/effect";
+import { Separator } from "@/components/ui/separator";
 import { getImageUrl } from "@/utils/helpers";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
 
 interface UserDialogProps extends HTMLAttributes<HTMLDivElement> {

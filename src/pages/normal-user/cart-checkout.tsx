@@ -3,16 +3,23 @@ import { useCartProps, useCurrentUser, useCustomNavigate } from "@/hooks";
 import { FC, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { cartService, invoiceService } from "@/services";
+import { cartService, invoiceService, productService } from "@/services";
 import { deliveryService } from "@/services";
 import { Nullable } from "@/utils/declare";
 import { ShippingFormProps, ShippingSchema } from "@/utils/schema";
 import { BillDisplay, ShippingInputs } from "@/components/cart-checkout";
 import { toast } from "sonner";
 import { ProductInCart } from "@/components/user";
+import { useSearchParams } from "react-router-dom";
+import { CartItem } from "@/types/model";
 
 const CartCheckout: FC = () => {
+  const [searchParams] = useSearchParams();
   const { itemsInLocal, setPhaseID, removeInvoice } = useCartProps();
+  const { currentUser } = useCurrentUser();
+  const { navigate } = useCustomNavigate();
+
+  const [cartItems, setCartItems] = useState<CartItem[]>();
   const [provinces, setProvinces] = useState<Province[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
   const [wards, setWards] = useState<Ward[]>([]);
@@ -23,8 +30,6 @@ const CartCheckout: FC = () => {
     cartService.getTotalAmount(itemsInLocal) -
       cartService.getTotalDiscountAmount(itemsInLocal)
   );
-  const { currentUser } = useCurrentUser();
-  const { navigate } = useCustomNavigate();
 
   const {
     register,
@@ -44,14 +49,36 @@ const CartCheckout: FC = () => {
   useEffect(() => {
     const setup = async () => {
       setPhaseID("2");
+      const productIDInQuery: string | null = searchParams.get("productID");
+      const itemIDInQuery: string | null = searchParams.get("itemID");
+      const quantity: string | null = searchParams.get("quantity");
 
-      const fetchedProvinces: Province[] =
+      if (currentUser) {
+        setValue("email", currentUser.email);
+        currentUser.phoneNumber &&
+          setValue("phoneNumber", currentUser.phoneNumber);
+      }
+
+      if (productIDInQuery && itemIDInQuery && quantity) {
+        const product =
+          await productService.apis.getProductFullJoin(productIDInQuery);
+        const item = productService.convertProductToCartItem(
+          product,
+          itemIDInQuery,
+          Number(quantity)
+        );
+        setCartItems([item]);
+      } else {
+        setCartItems(itemsInLocal);
+      }
+
+      const provincesResponse: Province[] =
         await deliveryService.apis.getProvinces();
-      setProvinces(fetchedProvinces);
+      setProvinces(provincesResponse);
     };
 
     setup();
-  }, [setPhaseID]);
+  }, []);
 
   useEffect(() => {
     /** DISTRICT */
@@ -159,15 +186,20 @@ const CartCheckout: FC = () => {
   const handleShippingFormSubmission: SubmitHandler<ShippingFormProps> = async (
     data
   ) => {
+    if (!currentUser) {
+      navigate("/login", { unstable_viewTransition: true });
+      return;
+    }
+
     const createOrder = invoiceService.apis.createOrder({
       ...data,
       province: deliveryService.getProvice(provinces, Number(data.province)),
       district: deliveryService.getDistrict(districts, Number(data.district)),
       ward: deliveryService.getWard(wards, data.ward),
-      userID: currentUser!.userID,
+      userID: currentUser.userID,
       shippingFee: shippingFee || 0,
       shippingTime: shippingTime || 0,
-      invoiceProducts: invoiceService.getProductOrderInsertion(itemsInLocal),
+      invoiceProducts: invoiceService.getProductOrderInsertion(cartItems!),
     });
 
     toast.promise(createOrder, {
@@ -203,13 +235,14 @@ const CartCheckout: FC = () => {
 
         {/** BILL */}
         <BillDisplay
+          cartItems={cartItems}
           shippingFee={shippingFee}
           shippingTime={shippingTime}
           totalMoney={totalAmountOfBill}
         />
       </form>
 
-      <ProductInCart className="mt-8" />
+      <ProductInCart cartItems={cartItems} className="mt-8" />
     </div>
   );
 };

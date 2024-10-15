@@ -62,6 +62,7 @@ const UserLayout: React.FC = () => {
           toastOptions={{
             className: "text-xl h-[5rem] right-10 bottom-5 ",
           }}
+          closeButton={true}
         />
       </BlinkProvider>
     </CartProvider>
