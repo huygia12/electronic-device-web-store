@@ -17,7 +17,7 @@ import {
   ProductDetail,
   ProductEdittion,
   ProductManagement,
-  ProductFilter,
+  FilteredProductList,
   ProviderManagement,
   Signup,
   StoreManagement,
@@ -65,7 +65,7 @@ const routes = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <ProductFilter />,
+            element: <FilteredProductList />,
           },
           {
             path: ":id",

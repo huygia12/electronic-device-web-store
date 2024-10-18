@@ -7,6 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { cn } from "@/lib/utils";
 import { FC, HTMLAttributes } from "react";
 
 interface CustomPaginationProps extends HTMLAttributes<HTMLDivElement> {
@@ -25,7 +26,7 @@ const CustomPagination: FC<CustomPaginationProps> = ({
   }
 
   return (
-    <Pagination className="mt-8">
+    <Pagination className={cn("mt-8", props.className)}>
       <PaginationContent>
         {currentPage !== 1 && (
           <PaginationItem>

@@ -1,22 +1,31 @@
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, HTMLAttributes, useMemo, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
-import { Attribute, AttributeOption } from "@/types/model";
-import { Button } from "../ui/button";
-import { Label } from "../ui/label";
+import { Attribute } from "@/types/model";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
 interface AttributeFilterProps extends HTMLAttributes<HTMLDivElement> {
+  params: URLSearchParams;
   attributes: Attribute[] | undefined;
-  handleClearEvent: () => void;
-  handleSelectOption: (option: AttributeOption) => void;
+  onReset: () => void;
+  onOptionSelected: (optionID: string, attribute: Attribute) => void;
 }
 
 const AttributeFilter: FC<AttributeFilterProps> = ({ ...props }) => {
   const [selectComponentKey, setSelectComponentKey] = useState<number>(1);
+  const refreshButtonVisibility = useMemo(
+    () => props.attributes && props.attributes.length > 0,
+    [props.attributes]
+  );
+  const optionIDs = useMemo<string[]>(() => {
+    const currentFilter = props.params.get("optionIDs") || "";
+    return currentFilter.split(",").filter(Boolean);
+  }, [props.params]);
 
   const handleClearEvent = () => {
-    props.handleClearEvent();
+    props.onReset();
     setSelectComponentKey(selectComponentKey === 1 ? 2 : 1);
   };
 
@@ -41,7 +50,10 @@ const AttributeFilter: FC<AttributeFilterProps> = ({ ...props }) => {
                       className="flex items-center space-x-2"
                     >
                       <RadioGroupItem
-                        onClick={() => props.handleSelectOption(option)}
+                        checked={optionIDs.includes(option.optionID)}
+                        onClick={() =>
+                          props.onOptionSelected(option.optionID, attr)
+                        }
                         value={option.optionID}
                         id={`${parentIndex}${childIndex}`}
                       />
@@ -59,7 +71,7 @@ const AttributeFilter: FC<AttributeFilterProps> = ({ ...props }) => {
           );
         })}
       </ul>
-      {props.attributes && props.attributes.length > 0 && (
+      {refreshButtonVisibility && (
         <Button
           variant={"destructive"}
           onClick={handleClearEvent}

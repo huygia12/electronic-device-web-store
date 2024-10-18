@@ -7,7 +7,7 @@ export { default as InvoiceLookup } from "./normal-user/invoices-lookup";
 export { default as Login } from "./normal-user/login";
 export { default as PersonalInvoice } from "./normal-user/personal-invoices";
 export { default as ProductDetail } from "./normal-user/product-detail";
-export { default as ProductFilter } from "./normal-user/product-filter";
+export { default as FilteredProductList } from "./normal-user/filtered-product-list";
 export { default as Signup } from "./normal-user/signup";
 
 export { default as OrderManagement } from "./admin/order-management";

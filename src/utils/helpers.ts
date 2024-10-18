@@ -78,8 +78,8 @@ const convertMiliSecToDays = (miliSec: number): number => {
   return Math.round(miliSec / (1000 * 60 * 60 * 24));
 };
 
-const getPages = (rows: number): number => {
-  return Math.ceil(rows / rowsPerPage);
+const getPages = (rows: number, limit?: number): number => {
+  return Math.ceil(rows / (limit || rowsPerPage));
 };
 
 const getTheFollowingDay = (date: Date): Date => {

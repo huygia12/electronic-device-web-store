@@ -11,7 +11,6 @@ const useCustomNavigate = () => {
 
   const navigate = (to: string, options?: NavigateOptions) => {
     defaultNavigate(to, {
-      replace: true,
       state: { from: location.pathname },
       ...options,
     });

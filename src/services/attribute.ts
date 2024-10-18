@@ -6,7 +6,6 @@ import {
 } from "@/config";
 import { Attribute, AttributeOption } from "@/types/model";
 import { ProductAttributesFormProps } from "@/utils/schema";
-import { Optional } from "@/utils/declare";
 
 const attributeEndPoint = "/attributes";
 
@@ -129,7 +128,7 @@ const attributeService = {
   findAttributeOption: (
     attribute: Attribute,
     optionID: string
-  ): Optional<AttributeOption> => {
+  ): AttributeOption | undefined => {
     return attribute.attributeOptions.find(
       (option) => option.optionID === optionID
     );

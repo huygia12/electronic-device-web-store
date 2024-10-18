@@ -44,23 +44,12 @@ const productService = {
         return { products: [], totalProducts: 0 };
       }
     },
-    getProductsFullJoin: async (params: {
-      categoryID?: string;
-      providerID?: string;
-      exceptID?: string;
-      sale?: boolean;
-      take?: number;
-    }): Promise<{ products: ProductFullJoin[]; totalProducts: number }> => {
-      let path = `${productEndPoint}?detail=true`;
-      params.categoryID && (path += `&categoryID=${params.categoryID}`);
-      params.providerID && (path += `&providerID=${params.providerID}`);
-      params.sale && (path += `&sale=${params.sale}`);
-      params.take && (path += `&take=${params.take}`);
-      params.exceptID && (path += `&exceptID=${params.exceptID}`);
-
+    getProductsFullJoin: async (
+      queryParams: Record<string, string>
+    ): Promise<{ products: ProductFullJoin[]; totalProducts: number }> => {
       const res = await axiosInstanceWithoutAuthorize.get<{
         info: { products: ProductFullJoin[]; totalProducts: number };
-      }>(path);
+      }>(`${productEndPoint}?detail=true`, { params: queryParams });
 
       return res.data.info;
     },
