@@ -3,8 +3,10 @@ import axios, { AxiosRequestConfig } from "axios";
 import { fromUnixTime, isAfter } from "date-fns";
 import { InvalidTokenError, jwtDecode } from "jwt-decode";
 
+const apiUrl = `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}`;
+
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: apiUrl,
   timeout: 100000, // 10 seconds
   headers: {
     "Content-Type": "application/json",
@@ -24,7 +26,7 @@ axiosInstance.interceptors.request.use(async (config) => {
       //If access token is expired
       if (!isAfter(fromUnixTime(tokenDecoded.exp), Date.now())) {
         const res = await axiosInstance.get(
-          `${import.meta.env.VITE_API_URL}/users/refresh`,
+          `${apiUrl}/users/refresh`,
           reqConfig
         );
 

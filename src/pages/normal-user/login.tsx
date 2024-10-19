@@ -80,7 +80,6 @@ const Login: FC = () => {
             <Input
               id="email"
               {...register("email")}
-              defaultValue="huy@gmail.com"
               type="email"
               placeholder="abc@gmail.com"
               autoComplete="email"
@@ -98,7 +97,6 @@ const Login: FC = () => {
             <Input
               id="password"
               {...register("password")}
-              defaultValue="123123"
               type="password"
               autoComplete="new-password"
               className="text-lg"

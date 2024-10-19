@@ -11,14 +11,19 @@ import { MailRegisterSection, UserHeader, AppFooter } from ".";
 import { ZaloButton } from "@/components/user";
 import { Banner } from "@/components/common";
 import { Store } from "@/types/model";
-import { useAuth, useSocket } from "@/hooks";
-import { authService } from "@/services";
+import { useAuth, useCurrentUser, useSocket } from "@/hooks";
+import { authService, invoiceService } from "@/services";
+import useMyInvoice from "@/hooks/use-invoice";
+import { InvoiceStatus } from "@/types/enum";
 
 const UserLayout: React.FC = () => {
   const store = useRouteLoaderData("userlayout") as Store;
   const navigation = useNavigation();
   const { socket } = useSocket();
   const { logout } = useAuth();
+  const { setNumberOfShippingInvoice: setNumberOfRequestingInvoice } =
+    useMyInvoice();
+  const { currentUser } = useCurrentUser();
 
   useEffect(() => {
     const handleBanned = async (payload: { userID: string }) => {
@@ -33,6 +38,18 @@ const UserLayout: React.FC = () => {
     return () => {
       socket?.off("user:ban", handleBanned);
     };
+  }, []);
+
+  useEffect(() => {
+    const initialize = async () => {
+      const res = await invoiceService.apis.getInvoices({
+        userID: currentUser!.userID,
+        status: InvoiceStatus.SHIPPING,
+      });
+      setNumberOfRequestingInvoice(res.totalInvoices);
+    };
+
+    currentUser && initialize();
   }, []);
 
   return (

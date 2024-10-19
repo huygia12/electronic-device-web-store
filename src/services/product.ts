@@ -350,7 +350,7 @@ const productService = {
       } else {
         thump = await firebaseService.apis.insertImagesToFireBase(
           item.thump,
-          `test/thump`
+          `products/thump`
         );
         images.push(thump[0]);
       }
@@ -359,7 +359,7 @@ const productService = {
       if (item.itemImages instanceof FileList) {
         productImages = await firebaseService.apis.insertImagesToFireBase(
           item.itemImages,
-          `test`
+          `products`
         );
         images = images.concat(productImages);
       } else {

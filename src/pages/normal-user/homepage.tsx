@@ -34,7 +34,7 @@ const Homepage: FC = () => {
       const onSalePhonesResponse: { products: Product[] } =
         await productService.apis.getProductsFullJoin({
           categoryID: PHONE_ID,
-          sale: true,
+          sale: "true",
         });
       setOnSalePhones(onSalePhonesResponse.products);
 
@@ -45,7 +45,7 @@ const Homepage: FC = () => {
       const onSaleLaptopsResponse: { products: Product[] } =
         await productService.apis.getProductsFullJoin({
           categoryID: LAPTOP_ID,
-          sale: true,
+          sale: "true",
         });
       setOnSaleLaptops(onSaleLaptopsResponse.products);
 

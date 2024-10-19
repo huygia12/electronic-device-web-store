@@ -11,6 +11,7 @@ import { DropMenuLinkItem, DropdownAvatar } from "@/components/common";
 import { FC } from "react";
 import useCurrentUser from "@/hooks/use-current-user";
 import SearchBar from "@/components/user/search-bar";
+import useMyInvoice from "@/hooks/use-invoice";
 
 const navComponents: { title: string; path: string }[] = [
   { title: "Trang Chủ", path: "/" },
@@ -24,6 +25,7 @@ const AppClientHeader: FC = () => {
   const { currentUser } = useCurrentUser();
   const { navigate, location } = useCustomNavigate();
   const { makeBlink } = useBlink();
+  const { numberOfShippingInvoice } = useMyInvoice();
 
   const handleGoToMenu = () => {
     const targetPath = "/";
@@ -87,7 +89,7 @@ const AppClientHeader: FC = () => {
                 className="relative"
                 unstable_viewTransition
               >
-                <FiShoppingBag size={40} />
+                <FiShoppingBag size={36} />
                 <CounterLabel counter={itemsInLocal.length} />
               </NavLink>
               {currentUser && (
@@ -96,8 +98,8 @@ const AppClientHeader: FC = () => {
                   className="relative"
                   unstable_viewTransition
                 >
-                  <LiaShippingFastSolid size={45} />
-                  <CounterLabel counter={6} />
+                  <LiaShippingFastSolid size={42} />
+                  <CounterLabel counter={numberOfShippingInvoice} />
                 </NavLink>
               )}
               <NavLink
@@ -105,7 +107,7 @@ const AppClientHeader: FC = () => {
                 className="relative"
                 unstable_viewTransition
               >
-                <PackageSearch size={40} />
+                <PackageSearch size={38} />
               </NavLink>
             </div>
           </div>

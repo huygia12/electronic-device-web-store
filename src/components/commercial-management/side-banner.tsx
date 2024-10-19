@@ -23,9 +23,10 @@ interface SideBannerProps extends HTMLAttributes<HTMLDivElement> {
   setBanner: Dispatch<SetStateAction<Banner>>;
   storeID: string;
   position: string;
+  modifiable?: boolean;
 }
 
-const SideBanner: FC<SideBannerProps> = ({ ...props }) => {
+const SideBanner: FC<SideBannerProps> = ({ modifiable = true, ...props }) => {
   const [displayImage, setDisplayImage] = useState<string | null>(
     props.banner.prevBanner
   );
@@ -90,7 +91,7 @@ const SideBanner: FC<SideBannerProps> = ({ ...props }) => {
             alt="sideBanner"
             className="rounded-lg"
           />
-          <RemoveIcon onClick={handleRemoveButton} />
+          {modifiable && <RemoveIcon onClick={handleRemoveButton} />}
         </div>
       ) : (
         <div className="w-[12rem]" {...getRootProps()}>
@@ -101,18 +102,20 @@ const SideBanner: FC<SideBannerProps> = ({ ...props }) => {
           />
         </div>
       )}
-      <div className="flex justify-between mt-2">
-        {props.banner.newBanner !== undefined && (
-          <Button variant="positive" onClick={handleSaveButton}>
-            Lưu
-          </Button>
-        )}
-        {props.banner.newBanner !== undefined && (
-          <Button variant="negative" onClick={handleResetButton}>
-            Hoàn tác
-          </Button>
-        )}
-      </div>
+      {modifiable && (
+        <div className="flex justify-between mt-2">
+          {props.banner.newBanner !== undefined && (
+            <Button variant="positive" onClick={handleSaveButton}>
+              Lưu
+            </Button>
+          )}
+          {props.banner.newBanner !== undefined && (
+            <Button variant="negative" onClick={handleResetButton}>
+              Hoàn tác
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

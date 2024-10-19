@@ -1,18 +1,20 @@
 import { useSortable } from "@dnd-kit/sortable";
-import { ImageOverView, CustomImage, RemoveIcon } from "@/components/common";
+import { CustomImage, RemoveIcon } from "@/components/common";
 import { FC, HTMLAttributes } from "react";
 import { retrieveImageUrl } from "@/utils/helpers";
 import { Slide } from "@/types/model";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
 import { SlideInsertionPayload } from "@/types/payload";
+import ImageOverView from "./image-overview";
 
-interface SlideContainerProps extends HTMLAttributes<HTMLDivElement> {
+interface SlideWrapperProps extends HTMLAttributes<HTMLDivElement> {
   slide: Slide | SlideInsertionPayload;
   handleDeleteSlide: (slideID: string) => void;
+  onUrlChange?: (value: string | undefined) => void;
 }
 
-const SlideWrapper: FC<SlideContainerProps> = ({ className, ...props }) => {
+const SlideWrapper: FC<SlideWrapperProps> = ({ className, ...props }) => {
   const {
     setNodeRef,
     attributes,
@@ -36,7 +38,12 @@ const SlideWrapper: FC<SlideContainerProps> = ({ className, ...props }) => {
       style={{ transition, transform: CSS.Transform.toString(transform) }}
       className={cn("relative", isDragging && "opacity-40", className)}
     >
-      <ImageOverView src={props.slide.url} alt="sideBanner">
+      <ImageOverView
+        src={props.slide.url}
+        alt="sideBanner"
+        reference={props.slide.ref}
+        onUrlChange={props.onUrlChange}
+      >
         <CustomImage
           src={retrieveImageUrl(props.slide.url)}
           alt="slide"

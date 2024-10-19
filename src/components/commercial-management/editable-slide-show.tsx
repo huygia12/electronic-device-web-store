@@ -25,6 +25,7 @@ import { useDropzone } from "react-dropzone";
 import { SlideInsertionPayload } from "@/types/payload";
 import { FileImagePlaceholder } from "../common";
 import { retrieveImageUrl } from "@/utils/helpers";
+import { toast } from "sonner";
 
 interface SlideShowProps extends HTMLAttributes<HTMLDivElement> {
   slides: (Slide | SlideInsertionPayload)[];
@@ -86,6 +87,20 @@ const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
     });
   };
 
+  const handleUrlChange = (value: string | undefined, index: number) => {
+    props.editSlides((prevValue) =>
+      prevValue.map((slide) =>
+        slide.index === index
+          ? {
+              ...slide,
+              ref: value || null,
+            }
+          : slide
+      )
+    );
+    toast.success("Đổi liên kết thành công!");
+  };
+
   const handleDeleteSlide = (slideID: string) => {
     props.editSlides((prevSlides) =>
       prevSlides.filter((slide) => `${slide.index}` !== slideID)
@@ -105,6 +120,7 @@ const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
               key={slide.index}
               slide={slide}
               handleDeleteSlide={handleDeleteSlide}
+              onUrlChange={(value) => handleUrlChange(value, slide.index)}
             />
           ))}
         </SortableContext>
