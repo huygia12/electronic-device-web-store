@@ -76,14 +76,39 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        sweep: {
+          "0%": {
+            transform: "translate(-150%, -150%) rotate(45deg)",
+            opacity: "0",
+          },
+          "50%": { opacity: "1" },
+          "100%": {
+            transform: "translate(150%, 150%) rotate(45deg)",
+            opacity: "0",
+          },
+        },
+        pulseZoom: {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.05)" },
+        },
+        shake: {
+          "0%, 100%": { transform: "translateX(0)", opacity: "1" },
+          "25%": { transform: "translateX(-10px)", opacity: "0.3" },
+          "50%": { transform: "translateX(10px)", opacity: "1" },
+          "75%": { transform: "translateX(-10px)", opacity: "0.3" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        sweep: "sweep 1.5s ease-in-out infinite",
+        "sweep-slow": "sweep 2.5s ease-in infinite",
+        pulseZoom: "pulseZoom 3s ease-in-out infinite",
+        shake: "shake 1s ease-in-out",
       },
       width: {
-        myLayout: "75%",
-        adminLayout: "90%",
+        myLayout: "90rem",
+        adminLayout: "110rem",
       },
       boxShadow: {
         general:
