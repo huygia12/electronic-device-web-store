@@ -28,7 +28,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import {
   ProductAttributesFormProps,
-  ProductInsertionFormProps,
+  ProductUpdateFormProps,
 } from "@/utils/schema";
 import { Category, Provider, Attribute } from "@/types/model";
 import { Button } from "@/components/ui/button";
@@ -36,8 +36,8 @@ import { attributeService } from "@/services";
 import { cn } from "@/lib/utils";
 
 interface ProductAdditionSectionProps extends HTMLAttributes<HTMLDivElement> {
-  register: UseFormRegister<ProductInsertionFormProps>;
-  errors: FieldErrors<ProductInsertionFormProps>;
+  register: UseFormRegister<ProductUpdateFormProps>;
+  errors: FieldErrors<ProductUpdateFormProps>;
   categories: Category[];
   providers: Provider[];
   attributes: Attribute[];
@@ -378,7 +378,6 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </div>
-
       {/** RIGHT */}
       <div className="space-y-2 mb-10">
         <Label htmlFor="desc" className="text-lg font-extrabold">

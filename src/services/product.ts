@@ -7,6 +7,7 @@ import {
   ProductAttributesFormProps,
   ProductInsertionFormProps,
   ProductItemsInsertionFormProps,
+  ProductItemsUpdateFormProps,
   ProductUpdateFormProps,
 } from "@/utils/schema";
 import { Attribute, AttributeOption, ProductItem } from "@/types/model";
@@ -122,67 +123,45 @@ const productService = {
       return res;
     },
     updateProduct: async (
-      product: ProductInsertionFormProps
-    ): Promise<boolean> => {
-      // TODO:
-      let productPayload;
-      try {
-        let options = product.productAttributes?.reduce<string[]>(
-          (prev, curr) => {
-            prev.push(curr.optionID);
-            return prev;
-          },
-          []
-        );
+      productID: string,
+      product: ProductUpdateFormProps,
+      productAttributeOptions: string[] | undefined,
+      productItems: ProductItemsUpdateFormProps,
+      removedItem: ProductItemsUpdateFormProps
+    ): Promise<AxiosResponse> => {
+      const productPayload = {
+        productName: product.productName,
+        description:
+          product.description && product.description.length > 0
+            ? product.description
+            : undefined,
+        length: product.length,
+        width: product.width,
+        height: product.height,
+        weight: product.weight,
+        warranty: product.warranty,
+        categoryID: product.categoryID,
+        providerID: product.providerID,
+        options: productAttributeOptions,
+        productItems: productItems,
+      };
 
-        if (options) {
-          if (options.length <= 0) {
-            options = undefined;
-          }
+      const res = await axiosInstance.put(
+        `${productEndPoint}/${productID}`,
+        productPayload,
+        reqConfig
+      );
+
+      for (const item of removedItem) {
+        if (!(item.itemImages instanceof FileList)) {
+          firebaseService.apis.deleteImagesInFireBase(item.itemImages);
         }
-        const productItems =
-          await productService.getProductItemsAfterUploadImages(
-            product.productItems
-          );
-
-        productPayload = {
-          productName: product.productName,
-          description:
-            product.description?.length && product.description.length > 0
-              ? product.description
-              : undefined,
-          length: product.length,
-          width: product.width,
-          height: product.height,
-          weight: product.weight,
-          warranty: product.warranty,
-          categoryID: product.categoryID,
-          providerID: product.providerID,
-          options: options,
-          productItems: productItems,
-        };
-
-        //post new product
-        await axiosInstance.post(
-          `${productEndPoint}`,
-          productPayload,
-          reqConfig
-        );
-        return true;
-      } catch (error) {
-        console.error("Unexpected error:", error);
-
-        if (productPayload) {
-          productPayload.productItems.forEach((item) => {
-            //delete images if add product fail
-            firebaseService.apis.deleteImagesInFireBase([
-              item.thump,
-              ...item.itemImages,
-            ]);
-          });
+        if (!(item.thump instanceof FileList)) {
+          firebaseService.apis.deleteImagesInFireBase(item.thump);
         }
-        return false;
       }
+
+      return res;
     },
   },
   getPriceRange: (product: Product): string => {
@@ -358,18 +337,34 @@ const productService = {
   },
   getProductItemsAfterUploadImages: async (
     productItems: ProductItemsInsertionFormProps
-  ): Promise<ProductItemsInsertionFormProps> => {
+  ): Promise<{
+    items: ProductItemsInsertionFormProps;
+    uploadedImage: string[];
+  }> => {
     const items = [];
+    let images: string[] = [];
     for (const item of productItems) {
-      const thump: string[] = await firebaseService.apis.insertImagesToFireBase(
-        item.thump,
-        `test/thump`
-      );
-      const productImages: string[] =
-        await firebaseService.apis.insertImagesToFireBase(
+      let thump: string[];
+      if (typeof item.thump === "string") {
+        thump = [item.thump];
+      } else {
+        thump = await firebaseService.apis.insertImagesToFireBase(
+          item.thump,
+          `test/thump`
+        );
+        images.push(thump[0]);
+      }
+
+      let productImages: string[];
+      if (item.itemImages instanceof FileList) {
+        productImages = await firebaseService.apis.insertImagesToFireBase(
           item.itemImages,
           `test`
         );
+        images = images.concat(productImages);
+      } else {
+        productImages = item.itemImages;
+      }
 
       items.push({
         thump: thump[0],
@@ -383,17 +378,10 @@ const productService = {
       });
     }
 
-    return items;
+    return { items, uploadedImage: images };
   },
-  handleConsequencesIfAddProductFail: (
-    items: ProductItemsInsertionFormProps
-  ) => {
-    items.forEach((item) => {
-      firebaseService.apis.deleteImagesInFireBase([
-        item.thump,
-        ...item.itemImages,
-      ]);
-    });
+  handleConsequencesIfCUProductFail: (urls: string[]) => {
+    firebaseService.apis.deleteImagesInFireBase(urls);
   },
   getProductUpdateDefaultValue: (product: Product): ProductUpdateFormProps => {
     return {
@@ -408,7 +396,12 @@ const productService = {
       providerID: product.provider.providerID,
       productAttributes:
         productService.getAttributeOptionsOutOfProduct(product),
-      productItems: product.productItems,
+      productItems: product.productItems.map((item) => {
+        return {
+          ...item,
+          itemImages: item.itemImages.map((image) => image.source),
+        };
+      }),
     };
   },
   createNewItemHolder: () => {

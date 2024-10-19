@@ -5,7 +5,12 @@ const phoneNumberRegex = new RegExp("^[0-9]+$");
 
 const positiveSafeFloat = (errorMessage: string = SchemaResponse.INVALID) =>
   z.preprocess(
-    (value) => parseFloat(z.string().parse(value)),
+    (value) => {
+      if (typeof value === "string") {
+        return parseFloat(value);
+      }
+      return value;
+    },
     z
       .number({ message: errorMessage })
       .positive({ message: errorMessage })
@@ -14,7 +19,12 @@ const positiveSafeFloat = (errorMessage: string = SchemaResponse.INVALID) =>
 
 const positiveSafeInteger = (errorMessage: string = SchemaResponse.INVALID) =>
   z.preprocess(
-    (value) => parseInt(z.string().parse(value)),
+    (value) => {
+      if (typeof value === "string") {
+        return parseInt(value);
+      }
+      return value;
+    },
     z
       .number({ message: errorMessage })
       .int({ message: errorMessage })
@@ -271,7 +281,12 @@ const ProductItemsUpdateSchema = z
       price: inputFormPreprocess(positiveSafeInteger()),
       productCode: notBlankString(),
       discount: z.preprocess(
-        (a) => parseFloat(z.string().parse(a)),
+        (value) => {
+          if (typeof value === "string") {
+            return parseFloat(value);
+          }
+          return value;
+        },
         z
           .number({ message: SchemaResponse.INVALID })
           .min(0, { message: SchemaResponse.MUST_BETWEEN_0_AND_100 })

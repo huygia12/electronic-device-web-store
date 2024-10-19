@@ -6,19 +6,46 @@ import ImageOverView from "@/components/common/image-overview";
 import { retrieveImageUrl } from "@/utils/helpers";
 import {
   ProductAttributesFormProps,
-  ProductInsertionFormProps,
-  ProductItemsInsertionFormProps,
+  ProductItemsUpdateFormProps,
+  ProductUpdateFormProps,
 } from "@/utils/schema";
+import { Product } from "@/types/model";
 
-interface ItemAdditionProps extends HTMLAttributes<HTMLUListElement> {
+interface ItemEdittionProps extends HTMLAttributes<HTMLUListElement> {
+  product: Product;
   itemQuantity: number;
-  register: UseFormRegister<ProductInsertionFormProps>;
-  errors: FieldErrors<ProductInsertionFormProps>;
-  productItemsAddition: ProductItemsInsertionFormProps;
+  register: UseFormRegister<ProductUpdateFormProps>;
+  errors: FieldErrors<ProductUpdateFormProps>;
+  productItemsAddition: ProductItemsUpdateFormProps;
   productAttributesAddition: ProductAttributesFormProps;
 }
 
-const ItemAdditionSection: FC<ItemAdditionProps> = ({ ...props }) => {
+const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
+  const getThumpOfNthItem = (index: number): string => {
+    const edittedThump = props.productItemsAddition[index]?.thump;
+
+    if (edittedThump instanceof FileList && edittedThump.length > 0) {
+      return retrieveImageUrl(edittedThump[0]);
+    }
+
+    return edittedThump;
+  };
+
+  const getProductItemsOfNthItem = (index: number): string[] => {
+    const edittedProductImages = props.productItemsAddition[index]?.itemImages;
+
+    if (
+      edittedProductImages instanceof FileList &&
+      edittedProductImages.length > 0
+    ) {
+      return Array.from(edittedProductImages).map((productImage) =>
+        retrieveImageUrl(productImage)
+      );
+    }
+
+    return edittedProductImages;
+  };
+
   return (
     <ul className="mb-8">
       {Array.from({ length: props.itemQuantity }).map((_, parentIndex) => {
@@ -48,21 +75,15 @@ const ItemAdditionSection: FC<ItemAdditionProps> = ({ ...props }) => {
                   {`${props.errors.productItems?.[parentIndex]?.thump?.message}`}
                 </div>
               )}
-              {props.productItemsAddition[parentIndex]?.thump?.[0] && (
-                <ImageOverView
-                  src={retrieveImageUrl(
-                    props.productItemsAddition[parentIndex].thump[0]
-                  )}
-                  alt={`thump-${parentIndex}`}
-                >
-                  <img
-                    src={retrieveImageUrl(
-                      props.productItemsAddition[parentIndex].thump[0]
-                    )}
-                    className="cursor-pointer max-w-40 object-cover rounded-md border-stone-300 border-2"
-                  />
-                </ImageOverView>
-              )}
+              <ImageOverView
+                src={getThumpOfNthItem(parentIndex)}
+                alt={`thump-${parentIndex}`}
+              >
+                <img
+                  src={getThumpOfNthItem(parentIndex)}
+                  className="cursor-pointer max-w-40 object-cover rounded-md border-stone-300 border-2"
+                />
+              </ImageOverView>
             </div>
             <div className="overflow-auto flex flex-col gap-2">
               <Label
@@ -86,26 +107,22 @@ const ItemAdditionSection: FC<ItemAdditionProps> = ({ ...props }) => {
                   {`${props.errors.productItems?.[parentIndex]?.itemImages?.message}`}
                 </div>
               )}
-              {props.productItemsAddition[parentIndex]?.itemImages && (
-                <div className="overflow-auto flex flex-row gap-2 ">
-                  {Array.from(
-                    props.productItemsAddition[parentIndex].itemImages
-                  ).map((image, index) => {
-                    return (
-                      <ImageOverView
-                        key={index}
-                        src={retrieveImageUrl(image)}
-                        alt={`productimage-${index}`}
-                      >
-                        <img
-                          src={retrieveImageUrl(image)}
-                          className="max-w-40 object-cover rounded-md border-stone-300 border-2"
-                        />
-                      </ImageOverView>
-                    );
-                  })}
-                </div>
-              )}
+              <div className="overflow-auto flex flex-row gap-2 ">
+                {getProductItemsOfNthItem(parentIndex)?.map((image, index) => {
+                  return (
+                    <ImageOverView
+                      key={index}
+                      src={image}
+                      alt={`productimage-${index}`}
+                    >
+                      <img
+                        src={image}
+                        className="max-w-40 object-cover rounded-md border-stone-300 border-2"
+                      />
+                    </ImageOverView>
+                  );
+                })}
+              </div>
             </div>
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
@@ -195,7 +212,6 @@ const ItemAdditionSection: FC<ItemAdditionProps> = ({ ...props }) => {
                   id={`discount-${parentIndex}`}
                   max={100}
                   min={0}
-                  defaultValue={0}
                   type="number"
                   autoComplete={"off"}
                   className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
@@ -259,4 +275,4 @@ const ItemAdditionSection: FC<ItemAdditionProps> = ({ ...props }) => {
   );
 };
 
-export default ItemAdditionSection;
+export default ItemEdittionSection;

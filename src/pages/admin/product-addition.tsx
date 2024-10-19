@@ -124,8 +124,9 @@ const ProductAddition: FC = () => {
     data
   ) => {
     const toastID = toast.loading("Xử lý ảnh...");
-    const productItemsToInsert =
-      await productService.getProductItemsAfterUploadImages(data.productItems);
+    const result = await productService.getProductItemsAfterUploadImages(
+      data.productItems
+    );
 
     const attributesToInsert = attributeService.getIDOutOfOptions(
       data.productAttributes
@@ -134,20 +135,22 @@ const ProductAddition: FC = () => {
     const addProduct = productService.apis.addProduct(
       data,
       attributesToInsert,
-      productItemsToInsert
+      result.items
     );
 
     toast.dismiss(toastID);
     toast.promise(addProduct, {
       loading: "Thêm sản phẩm...",
       success: () => {
+        toast.dismiss(toastID);
         navigate("/admin/products", {
           unstable_viewTransition: true,
         });
         return "Thêm thành công!";
       },
       error: () => {
-        productService.handleConsequencesIfAddProductFail(productItemsToInsert);
+        toast.dismiss(toastID);
+        productService.handleConsequencesIfCUProductFail(result.uploadedImage);
         return "Thêm thất bại!";
       },
     });
@@ -168,11 +171,11 @@ const ProductAddition: FC = () => {
           selectedProvider={providerID}
           selectedAttribute={selectedAttribute}
           productAttributesAddition={productAttributesAddition}
-          handleSelectCategory={handleSelectCategory}
-          handleSelectProvider={handleSelectProvider}
-          handleDeleteProductAttribute={handleDeleteProductAttribute}
-          handleSelectAttributeType={handleSelectAttributeType}
-          handleAddProductAttribute={handleAddProductAttribute}
+          onCategorySelection={handleSelectCategory}
+          onProviderSelection={handleSelectProvider}
+          onProductAttributeRemoval={handleDeleteProductAttribute}
+          onAttributeTypeSelection={handleSelectAttributeType}
+          onAttributeProductAdding={handleAddProductAttribute}
         />
 
         {/** ITEMS */}
