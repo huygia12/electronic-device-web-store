@@ -1,4 +1,8 @@
-import { Nullable } from "./declare";
+import { ActionFunctionArgs, ParamParseKey, Params } from "react-router-dom";
+
+export interface Args extends ActionFunctionArgs {
+  params: Params<ParamParseKey<string>>;
+}
 
 const rowsPerPage = 10;
 
@@ -61,15 +65,15 @@ const retrieveImageUrl = (image: unknown): string => {
   throw new Error("Invalid image!");
 };
 
-const getDiscount = (discount: Nullable<number>): number => {
+const getDiscount = (discount: number | null): number => {
   return discount ?? 0;
 };
 
-const isDiscount = (discount: Nullable<number>): boolean => {
+const isDiscount = (discount: number | null): boolean => {
   return discount !== null && discount > 0;
 };
 
-const applyDiscount = (price: number, discount: Nullable<number>): number => {
+const applyDiscount = (price: number, discount: number | null): number => {
   if (!discount) return price;
   return price * (1 - discount / 100);
 };

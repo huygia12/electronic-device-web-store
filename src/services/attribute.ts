@@ -1,9 +1,5 @@
 import { AxiosResponse } from "axios";
-import {
-  axiosInstance,
-  axiosInstanceWithoutAuthorize,
-  reqConfig,
-} from "@/config";
+import { axiosInstance, reqConfig } from "@/config";
 import { Attribute, AttributeOption } from "@/types/model";
 import { ProductAttributesFormProps } from "@/utils/schema";
 
@@ -19,7 +15,7 @@ const attributeService = {
       params.providerID && (path += `providerID=${params.providerID}&`);
       params.categoryID && (path += `categoryID=${params.categoryID}`);
 
-      const res = await axiosInstanceWithoutAuthorize.get<{
+      const res = await axiosInstance.get<{
         info: Attribute[];
       }>(path);
 

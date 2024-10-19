@@ -1,5 +1,4 @@
-import { ProductFullJoin, ProductItem } from "@/types/model";
-import { Error } from "@/types/error";
+import { Product, ProductItem } from "@/types/model";
 import { FC, HTMLAttributes, useMemo, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
@@ -12,13 +11,14 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { applyDiscount } from "@/utils/helpers";
 import RelatedProducts from "./related-products";
+import { Error } from "@/types/component";
 
 interface RightProductDetailSectionProps
   extends HTMLAttributes<HTMLHeadElement> {
-  product: ProductFullJoin;
+  product: Product;
   currentItem: ProductItem;
   setCurrentItem: (item: ProductItem) => void;
-  relatedProducts?: ProductFullJoin[];
+  relatedProducts?: Product[];
 }
 
 const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({

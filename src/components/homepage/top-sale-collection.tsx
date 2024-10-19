@@ -1,5 +1,5 @@
 import { FC, HTMLAttributes, useRef } from "react";
-import { ProductFullJoin } from "@/types/model";
+import { Product } from "@/types/model";
 import { CardSkeleton } from "@/components/common";
 import { NavLink } from "react-router-dom";
 import { RippleEffect } from "@/components/effect";
@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 interface TopSaleCollectionProps extends HTMLAttributes<HTMLDivElement> {
   to: string;
   headerTitle: string;
-  products: ProductFullJoin[] | undefined;
+  products: Product[] | undefined;
 }
 
 const TopSaleCollection: FC<TopSaleCollectionProps> = ({ ...props }) => {

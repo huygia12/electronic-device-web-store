@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { userService } from "@/services";
 import { UserTable, UserTools } from "@/components/user-management";
 import { CustomPagination, SearchBox } from "@/components/common";
-import { Optional } from "@/utils/declare";
 import { SignupFormProps, UserFormProps } from "@/utils/schema";
 import axios, { HttpStatusCode } from "axios";
 import { getPages } from "@/utils/helpers";
@@ -22,7 +21,7 @@ const UserManagement: FC = () => {
   const [totalPages, setTotalPages] = useState<number>(
     getPages(initData.totalUsers)
   );
-  const [selectedUser, setSelectedUser] = useState<Optional<User>>();
+  const [selectedUser, setSelectedUser] = useState<User | undefined>();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchText, setSearchText] = useState<string>();
   const toasting = useRef<{
@@ -145,7 +144,7 @@ const UserManagement: FC = () => {
         userID: selectedUser!.userID,
         banned: value,
       },
-      (error: Optional<SocketEmitError>) => {
+      (error: SocketEmitError | undefined) => {
         let response: string;
         if (error) {
           response = "Mở khóa người dùng thất bại!";

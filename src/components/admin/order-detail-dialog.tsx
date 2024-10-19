@@ -6,20 +6,20 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { HTMLAttributes, useMemo } from "react";
-import { InvoiceFullJoin } from "@/types/model";
+import { Invoice } from "@/types/model";
 import { invoiceService } from "@/services";
 import { formatDateTime } from "@/utils/helpers";
-import Badge from "../ui/badge";
+import Badge from "@/components/ui/badge";
 import { InvoiceStatus } from "@/types/enum";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import ChangeOrderStatus from "./change-order-status";
 import ProductInInvoice from "@/components/common/product-in-invoice";
 import { toast } from "sonner";
 
 interface OrderDetailDialogProps extends HTMLAttributes<HTMLDivElement> {
-  invoice: InvoiceFullJoin;
-  updateInvoice: (invoice: InvoiceFullJoin) => void;
+  invoice: Invoice;
+  updateInvoice: (invoice: Invoice) => void;
 }
 
 const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
@@ -39,7 +39,7 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
 
     toast.promise(updateInvoice, {
       loading: "Đang xử lý...",
-      success: (invoice: InvoiceFullJoin) => {
+      success: (invoice: Invoice) => {
         props.updateInvoice(invoice);
         return "Cập nhật trạng thái đơn hàng thành công!";
       },

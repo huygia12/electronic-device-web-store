@@ -1,13 +1,12 @@
-import { District, Province, ServiceRes, Ward } from "@/types/api";
+import { District, Province, ShippingService, Ward } from "@/types/payload";
 import { useCartProps, useCurrentUser, useCustomNavigate } from "@/hooks";
 import { FC, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cartService, invoiceService, productService } from "@/services";
 import { deliveryService } from "@/services";
-import { Nullable } from "@/utils/declare";
 import { ShippingFormProps, ShippingSchema } from "@/utils/schema";
-import { BillDisplay, ShippingInputs } from "@/components/cart-checkout";
+import { Bill, ShippingInputs } from "@/components/cart-checkout";
 import { toast } from "sonner";
 import { ProductInCart } from "@/components/user";
 import { useSearchParams } from "react-router-dom";
@@ -24,7 +23,7 @@ const CartCheckout: FC = () => {
   const [districts, setDistricts] = useState<District[]>([]);
   const [wards, setWards] = useState<Ward[]>([]);
   const [serviceID, setServiceID] = useState("");
-  const [shippingFee, setShippingFee] = useState<Nullable<number>>(null);
+  const [shippingFee, setShippingFee] = useState<number | null>(null);
   const [shippingTime, setShippingTime] = useState(0);
   const [totalAmountOfBill, setTotalAmountOfBill] = useState(
     cartService.getTotalAmount(itemsInLocal) -
@@ -103,7 +102,7 @@ const CartCheckout: FC = () => {
       if (fetchedWards.length === 0) return;
 
       /** GET SHIPPING SERVICE ID */
-      const fetchedServices: Nullable<ServiceRes> =
+      const fetchedServices: ShippingService | null =
         await deliveryService.apis.getServices(Number(district));
 
       if (!fetchedServices) return;
@@ -132,7 +131,7 @@ const CartCheckout: FC = () => {
 
     if (value) {
       const promises = itemsInLocal.map(async (item) => {
-        const itemShippingFee: Nullable<number> =
+        const itemShippingFee: number | null =
           await deliveryService.apis.getShippingFee(
             Number(serviceID),
             Number(district),
@@ -155,7 +154,7 @@ const CartCheckout: FC = () => {
         });
 
       /** GET DELIVERY TIME */
-      const shippingTimeValue: Nullable<number> =
+      const shippingTimeValue: number | null =
         await deliveryService.apis.getDeliveryTime(
           Number(serviceID),
           Number(district),
@@ -191,7 +190,7 @@ const CartCheckout: FC = () => {
       return;
     }
 
-    const createOrder = invoiceService.apis.createOrder({
+    const createOrder = invoiceService.apis.createInvoice({
       ...data,
       province: deliveryService.getProvice(provinces, Number(data.province)),
       district: deliveryService.getDistrict(districts, Number(data.district)),
@@ -234,7 +233,7 @@ const CartCheckout: FC = () => {
         />
 
         {/** BILL */}
-        <BillDisplay
+        <Bill
           cartItems={cartItems}
           shippingFee={shippingFee}
           shippingTime={shippingTime}

@@ -1,12 +1,10 @@
 import { useCurrentUser, useCustomNavigate, useSocket } from "@/hooks";
-import {
-  ProductFullJoin,
-  ReviewFullJoin,
-  ReviewFullJoinChild,
-} from "@/types/model";
+import { Product, ReviewFullJoin, ChildReviewFullJoin } from "@/types/model";
 import { SocketEmitError } from "@/types/socket";
-import { Nullable, Optional } from "@/utils/declare";
-import { ReviewCreationFromProps, ReviewCreationSchema } from "@/utils/schema";
+import {
+  ReviewInsertionFromProps,
+  ReviewInsertionSchema,
+} from "@/utils/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   FormHTMLAttributes,
@@ -19,17 +17,17 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { User } from "lucide-react";
-import { StarRating } from "../common";
-import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
-import Badge from "../ui/badge";
+import { StarRating } from "@/components/common";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import Badge from "@/components/ui/badge";
 
 interface PersonalReviewBoxProps extends FormHTMLAttributes<HTMLFormElement> {
-  product: ProductFullJoin;
-  replyToComment: Nullable<ReviewFullJoin>;
+  product: Product;
+  replyToComment: ReviewFullJoin | null;
   setReplyToComment: (
-    review: ReviewFullJoin | ReviewFullJoinChild | undefined
+    review: ReviewFullJoin | ChildReviewFullJoin | undefined
   ) => void;
 }
 
@@ -42,15 +40,17 @@ const PersonalReviewBox = forwardRef<HTMLFormElement, PersonalReviewBoxProps>(
     const { navigate } = useCustomNavigate();
     const [ratingStarInput, setRatingStarInput] = useState(5);
     const { socket } = useSocket();
-    const { register, handleSubmit, reset } = useForm<ReviewCreationFromProps>({
-      resolver: zodResolver(ReviewCreationSchema),
-    });
+    const { register, handleSubmit, reset } = useForm<ReviewInsertionFromProps>(
+      {
+        resolver: zodResolver(ReviewInsertionSchema),
+      }
+    );
 
     const handleMakeStarRate = (rating: number) => {
       setRatingStarInput(rating);
     };
 
-    const handleAddReview: SubmitHandler<ReviewCreationFromProps> = (data) => {
+    const handleAddReview: SubmitHandler<ReviewInsertionFromProps> = (data) => {
       if (!currentUser) {
         navigate("/login", {
           unstable_viewTransition: true,
@@ -67,7 +67,7 @@ const PersonalReviewBox = forwardRef<HTMLFormElement, PersonalReviewBoxProps>(
           rating: props.replyToComment ? null : ratingStarInput,
           ...data,
         },
-        (error: Optional<SocketEmitError>) => {
+        (error: SocketEmitError | undefined) => {
           if (error) {
             toast.error("Gửi đánh giá thất bại!");
           } else {

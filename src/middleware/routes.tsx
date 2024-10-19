@@ -7,7 +7,6 @@ import {
   Dashboard,
   EditProfile,
   HomePage,
-  Intro,
   InvoiceLookup,
   Login,
   OrderManagement,
@@ -55,10 +54,6 @@ const routes = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
-      },
-      {
-        path: "intro",
-        element: <Intro />,
       },
       {
         path: "products",

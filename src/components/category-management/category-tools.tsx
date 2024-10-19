@@ -14,12 +14,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { FC, HTMLAttributes } from "react";
-import { Optional } from "@/utils/declare";
 import { Category } from "@/types/model";
 import CategoryDialog from "./category-dialog";
 
 interface CategoryToolsProps extends HTMLAttributes<HTMLDivElement> {
-  selectedCategory: Optional<Category>;
+  selectedCategory: Category | undefined;
   handleAddCategory: (value: string) => void;
   handleUpdateCategory: (value: string) => void;
   handleDeleteCategory: () => void;

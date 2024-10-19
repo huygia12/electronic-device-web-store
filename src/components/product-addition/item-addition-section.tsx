@@ -6,15 +6,15 @@ import ImageOverView from "@/components/common/image-overview";
 import { retrieveImageUrl } from "@/utils/helpers";
 import {
   ProductAttributesFormProps,
-  ProductInputFormProps,
-  ProductItemsFormProps,
+  ProductInsertionFormProps,
+  ProductItemsInsertionFormProps,
 } from "@/utils/schema";
 
 interface ItemAdditionProps extends HTMLAttributes<HTMLUListElement> {
   itemQuantity: number;
-  register: UseFormRegister<ProductInputFormProps>;
-  errors: FieldErrors<ProductInputFormProps>;
-  productItemsAddition: ProductItemsFormProps;
+  register: UseFormRegister<ProductInsertionFormProps>;
+  errors: FieldErrors<ProductInsertionFormProps>;
+  productItemsAddition: ProductItemsInsertionFormProps;
   productAttributesAddition: ProductAttributesFormProps;
 }
 

@@ -1,4 +1,4 @@
-import { HTMLAttributes } from "react";
+import { FC, HTMLAttributes } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { User } from "@/types/model";
 import { buttonVariants } from "@/utils/constants";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,10 +25,7 @@ interface UserDialogProps extends HTMLAttributes<HTMLFormElement> {
   handleUpdateUser: (formProps: UserFormProps, avatarFile?: File) => void;
 }
 
-const UpdateUserDialog: React.FC<UserDialogProps> = ({
-  className,
-  ...props
-}) => {
+const UpdateUserDialog: FC<UserDialogProps> = ({ className, ...props }) => {
   const {
     register,
     handleSubmit,

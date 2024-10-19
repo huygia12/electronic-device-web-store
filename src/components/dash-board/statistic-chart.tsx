@@ -16,7 +16,7 @@ import { FC, HTMLAttributes, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { chartConfig } from "@/utils/constants";
 import { statisticService } from "@/services";
-import { InvoiceStatistic } from "@/types/model";
+import { InvoiceStatistic } from "@/types/payload";
 
 interface StatisticChartProps extends HTMLAttributes<HTMLDivElement> {
   invoiceStatistic: InvoiceStatistic[];

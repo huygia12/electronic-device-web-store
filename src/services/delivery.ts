@@ -1,12 +1,11 @@
-import { Nullable } from "@/utils/declare";
 import {
   District,
   Province,
-  ServiceRes,
-  ShippingAmountRes,
-  ShippingTimeRes,
+  ShippingService,
+  ShippingAmount,
+  ShippingTime,
   Ward,
-} from "@/types/api";
+} from "@/types/payload";
 import { CartItem } from "@/types/model";
 import axios from "axios";
 import { applyDiscount } from "@/utils/helpers";
@@ -66,9 +65,11 @@ const deliveryService = {
         return [];
       }
     },
-    getServices: async (districtID: number): Promise<Nullable<ServiceRes>> => {
+    getServices: async (
+      districtID: number
+    ): Promise<ShippingService | null> => {
       try {
-        const response = await axios.post<ServiceRes>(
+        const response = await axios.post<ShippingService>(
           import.meta.env.VITE_GHN_SERVICE,
           {
             shop_id: Number(import.meta.env.VITE_SHOP_ID),
@@ -93,9 +94,9 @@ const deliveryService = {
       districtID: number,
       wardID: string,
       item: CartItem
-    ): Promise<Nullable<number>> => {
+    ): Promise<number | null> => {
       try {
-        const response = await axios.post<ShippingAmountRes>(
+        const response = await axios.post<ShippingAmount>(
           import.meta.env.VITE_GHN_SHIPPINGFEE,
           {
             from_district_id: Number(import.meta.env.VITE_SHOP_DISTRICT_ID),
@@ -126,9 +127,9 @@ const deliveryService = {
       serviceID: number,
       districtID: number,
       wardID: string
-    ): Promise<Nullable<number>> => {
+    ): Promise<number | null> => {
       try {
-        const response = await axios.post<ShippingTimeRes>(
+        const response = await axios.post<ShippingTime>(
           import.meta.env.VITE_GHN_SHIPPINGTIME,
           {
             from_district_id: Number(import.meta.env.VITE_SHOP_DISTRICT_ID),

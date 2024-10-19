@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SaleTag from "@/components/ui/saleTag";
 import React, { HTMLAttributes, useMemo } from "react";
 import { cn } from "@/lib/utils";
-import { ProductFullJoin, ProductItem } from "@/types/model";
+import { Product, ProductItem } from "@/types/model";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "react-router-dom";
 import { Coins, ShoppingBasket } from "lucide-react";
@@ -14,7 +14,7 @@ import { applyDiscount, isDiscount } from "@/utils/helpers";
 import { useCustomNavigate } from "@/hooks";
 
 interface CardProductProps extends HTMLAttributes<HTMLDivElement> {
-  product: ProductFullJoin;
+  product: Product;
 }
 
 const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {

@@ -10,8 +10,8 @@ import {
 import { HTMLAttributes, useState } from "react";
 import { Category } from "@/types/model";
 import { buttonVariants } from "@/utils/constants";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 interface CategoryDialogProps extends HTMLAttributes<HTMLFormElement> {
   category?: Category;

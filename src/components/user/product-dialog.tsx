@@ -5,7 +5,7 @@ import {
   ShoppingBasket,
   Truck,
 } from "lucide-react";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Dialog,
   DialogClose,
@@ -13,30 +13,30 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { Label } from "../ui/label";
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import {
   Carousel,
   CarouselContent,
   CarouselNext,
   CarouselPrevious,
-} from "../ui/carousel";
-import { Input } from "../ui/input";
-import { Checkbox } from "../ui/checkbox";
+} from "@/components/ui/carousel";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { buttonVariants } from "@/utils/constants";
 import SlideShow from "./slide-show";
 import { productService } from "@/services";
-import { CartItem, ProductFullJoin, ProductItem } from "@/types/model";
-import { Error } from "@/types/error";
+import { CartItem, Product, ProductItem } from "@/types/model";
 import { HTMLAttributes, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useCartProps } from "@/hooks";
 import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
 import { applyDiscount } from "@/utils/helpers";
+import { Error } from "@/types/component";
 
 interface ProductDialogProps extends HTMLAttributes<HTMLDivElement> {
-  product: ProductFullJoin;
+  product: Product;
 }
 
 const ProductDialog: React.FC<ProductDialogProps> = ({

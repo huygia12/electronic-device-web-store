@@ -6,7 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { InvoiceFullJoin, Statistic } from "@/types/model";
+import { Invoice } from "@/types/model";
+import { Statistic } from "@/types/payload";
 import OrderTable from "@/components/admin/order-table";
 import { FC, useState } from "react";
 import {
@@ -29,7 +30,7 @@ const ORDERS_LINK = "/admin/invoices";
 
 const Dashboard: FC = () => {
   const statistic = useRouteLoaderData("dash_board") as Statistic;
-  const [orders, setOrders] = useState<InvoiceFullJoin[]>(statistic.orders);
+  const [orders, setOrders] = useState<Invoice[]>(statistic.orders);
 
   return (
     <div className="flex flex-col py-8">

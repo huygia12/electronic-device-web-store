@@ -1,22 +1,18 @@
-import { InvoiceStatistic, Statistic } from "@/types/model";
+import { InvoiceStatistic, Statistic } from "@/types/payload";
 import { axiosInstance, reqConfig } from "@/config";
-import { Nullable } from "@/utils/declare";
 import { getTheFollowingDay } from "@/utils/helpers";
+
+const statisticEndpoint = "/statistic";
 
 const statisticService = {
   apis: {
-    getStatistic: async (): Promise<Nullable<Statistic>> => {
-      try {
-        const res = await axiosInstance.get<{ info: Statistic }>(
-          "/statistic",
-          reqConfig
-        );
+    getStatistic: async (): Promise<Statistic> => {
+      const res = await axiosInstance.get<{ info: Statistic }>(
+        `${statisticEndpoint}`,
+        reqConfig
+      );
 
-        return res.data.info;
-      } catch (error) {
-        console.error("Unexpected error:", error);
-        return null;
-      }
+      return res.data.info;
     },
   },
   caculateTotalOfRevenueAndOrder: (

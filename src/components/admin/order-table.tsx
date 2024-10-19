@@ -6,18 +6,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { InvoiceFullJoin } from "@/types/model";
+import { Invoice } from "@/types/model";
 import { HTMLAttributes } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import Badge from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { invoiceService } from "@/services";
 import { formatDateTime } from "@/utils/helpers";
 import OrderDetailDialog from "./order-detail-dialog";
-import { Separator } from "../ui/separator";
+import { Separator } from "@/components/ui/separator";
 
-const colName: string[] = [
+const columnHeaders: string[] = [
   "KHÁCH HÀNG",
   "ID ĐƠN HÀNG",
   "NGÀY ĐẶT HÀNG",
@@ -28,12 +28,12 @@ const colName: string[] = [
 ];
 
 interface OrderTableProps extends HTMLAttributes<HTMLDivElement> {
-  orders: InvoiceFullJoin[];
-  setOrders: (invoice: InvoiceFullJoin[]) => void;
+  orders: Invoice[];
+  setOrders: (invoice: Invoice[]) => void;
 }
 
 const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
-  const updateInvoice = async (invoice: InvoiceFullJoin) => {
+  const updateInvoice = async (invoice: Invoice) => {
     props.setOrders(
       invoiceService.deleteInvoice(invoice.invoiceID, props.orders)
     );
@@ -44,7 +44,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
       <Table>
         <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
           <tr>
-            {colName.map((item, key) => {
+            {columnHeaders.map((item, key) => {
               return (
                 <TableHead
                   key={key}

@@ -1,5 +1,4 @@
-import auth from "@/utils/auth";
-import { Nullable, Optional } from "@/utils/declare";
+import { authService } from "@/services";
 import axios, { AxiosRequestConfig } from "axios";
 import { fromUnixTime, isAfter } from "date-fns";
 import { InvalidTokenError, jwtDecode } from "jwt-decode";
@@ -12,35 +11,27 @@ export const axiosInstance = axios.create({
   },
 });
 
-export const axiosInstanceWithoutAuthorize = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-  timeout: 100000, // 10 seconds
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
 export const reqConfig: AxiosRequestConfig = {
   withCredentials: true, // Include credentials in requests
 };
 
 axiosInstance.interceptors.request.use(async (config) => {
-  let accessToken: Nullable<string> = auth.token.getAccessToken();
+  let accessToken: string | null = authService.token.getAccessToken();
   if (accessToken) {
     try {
       const tokenDecoded = jwtDecode<{ exp: number }>(accessToken);
 
       //If access token is expired
       if (!isAfter(fromUnixTime(tokenDecoded.exp), Date.now())) {
-        const res = await axiosInstanceWithoutAuthorize.get(
+        const res = await axiosInstance.get(
           `${import.meta.env.VITE_API_URL}/users/refresh`,
           reqConfig
         );
 
-        const newAccessToken: Optional<string> = res.data.info.accessToken;
+        const newAccessToken: string | undefined = res.data.info.accessToken;
 
         if (newAccessToken) {
-          auth.token.setAccessToken(newAccessToken);
+          authService.token.setAccessToken(newAccessToken);
           accessToken = newAccessToken;
         }
         console.debug("AXIOS CONFIG : request new AT", newAccessToken);

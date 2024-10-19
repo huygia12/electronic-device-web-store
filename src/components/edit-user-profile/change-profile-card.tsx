@@ -18,8 +18,7 @@ import { FC, HTMLAttributes } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { firebaseService, userService } from "@/services";
 import { toast } from "sonner";
-import { LoadingSpinner } from "../effect";
-import { Optional } from "@/utils/declare";
+import { LoadingSpinner } from "@/components/effect";
 import { getImageUrl } from "@/utils/helpers";
 import useCurrentUser from "@/hooks/use-current-user";
 import { cn } from "@/lib/utils";
@@ -42,7 +41,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
     data
   ) => {
     try {
-      let avatar: Optional<string>;
+      let avatar: string | undefined;
       if (data.avatar[0]) {
         currentUser?.avatar &&
           (await firebaseService.apis.deleteImagesInFireBase([

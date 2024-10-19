@@ -11,15 +11,14 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { FC, HTMLAttributes, useMemo } from "react";
 import { Attribute, AttributeOption } from "@/types/model";
-import { Optional } from "@/utils/declare";
 import { cn } from "@/lib/utils";
 
 const optionColsName: string[] = ["STT", "GIÁ TRỊ"];
 
 interface AttributeOptionTableProps extends HTMLAttributes<HTMLDivElement> {
   attributes: Attribute[];
-  selectedAttribute: Optional<Attribute>;
-  selectedAttributeOption: Optional<AttributeOption>;
+  selectedAttribute: Attribute | undefined;
+  selectedAttributeOption: AttributeOption | undefined;
   setSelectedAttributeOption: (option: AttributeOption) => void;
 }
 

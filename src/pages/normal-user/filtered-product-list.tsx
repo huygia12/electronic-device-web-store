@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { Attribute, ProductFullJoin } from "@/types/model";
+import { Attribute, Product } from "@/types/model";
 import { attributeService, productService } from "@/services";
 import { Sort } from "@/types/enum";
 import {
@@ -11,7 +11,7 @@ import { CustomPagination } from "@/components/common";
 import { getPages } from "@/utils/helpers";
 
 const FilteredProductList: FC = () => {
-  const [products, setProducts] = useState<ProductFullJoin[]>();
+  const [products, setProducts] = useState<Product[]>();
   const [numberOfProducts, setNumberOfProducts] = useState<number>();
   const [currentPage, setCurrentPage] = useState<number>();
   const [attributes, setAttributes] = useState<Attribute[]>();

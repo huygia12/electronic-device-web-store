@@ -1,11 +1,11 @@
-import { ReviewFullJoin, ReviewFullJoinChild } from "@/types/model";
+import { ReviewFullJoin, ChildReviewFullJoin } from "@/types/model";
 import { FC, HTMLAttributes, MutableRefObject } from "react";
-import { Comment } from "../common";
+import { Comment } from "@/components/common";
 
 interface ReviewListProps extends HTMLAttributes<HTMLDivElement> {
   reviews: ReviewFullJoin[];
   setReplyToComment: (
-    commentID: ReviewFullJoin | ReviewFullJoinChild | undefined
+    commentID: ReviewFullJoin | ChildReviewFullJoin | undefined
   ) => void;
   reviewDisplay: number;
   setReviewDisplay: (reviews: number) => void;

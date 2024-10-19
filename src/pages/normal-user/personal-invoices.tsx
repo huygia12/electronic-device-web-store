@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { InvoiceFullJoin } from "@/types/model";
+import { Invoice } from "@/types/model";
 import { FC, useEffect, useRef, useState } from "react";
 import { useRouteLoaderData, useSearchParams } from "react-router-dom";
 import { InvoiceTable } from "@/components/my-invoices";
@@ -13,14 +13,12 @@ import { useCurrentUser } from "@/hooks";
 const PersonalInvoices: FC = () => {
   const searchingDelay = useRef<number>(2000);
   const initData = useRouteLoaderData("user_invoices") as {
-    invoices: InvoiceFullJoin[];
+    invoices: Invoice[];
     totalInvoices: number;
   };
   const { currentUser } = useCurrentUser();
   const [searchParams] = useSearchParams();
-  const [invoices, setInvoices] = useState<InvoiceFullJoin[]>(
-    initData.invoices
-  );
+  const [invoices, setInvoices] = useState<Invoice[]>(initData.invoices);
   const [totalPages, setTotalPages] = useState<number>(
     getPages(initData.totalInvoices)
   );
@@ -68,7 +66,7 @@ const PersonalInvoices: FC = () => {
 
     const delayDebounceFn = setTimeout(async () => {
       try {
-        const res: { invoices: InvoiceFullJoin[]; totalInvoices: number } =
+        const res: { invoices: Invoice[]; totalInvoices: number } =
           await invoiceService.apis.getInvoices({
             userID: currentUser!.userID,
             invoiceID: searchText,

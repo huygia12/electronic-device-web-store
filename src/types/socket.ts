@@ -1,12 +1,12 @@
-import { Nullable } from "@/utils/declare";
 import { Review, ReviewFullJoin } from "./model";
+import { ReviewInsertionPayload } from "./payload";
 
 //Events
 export interface ClientEvents {
   "product:join": (payload: { productID: string }) => void;
   "product:leave": (payload: { productID: string }) => void;
   "review:create": (
-    payload: ReviewCreation,
+    payload: ReviewInsertionPayload,
     callback: (error: SocketEmitError) => void
   ) => void;
   "review:delete": (
@@ -29,13 +29,4 @@ export interface SocketEmitError {
   status: number;
   message?: string;
   detail?: unknown;
-}
-
-//Payload
-export interface ReviewCreation {
-  reviewContent: string;
-  rating: Nullable<number>;
-  productID: string;
-  userID: string;
-  parentID: Nullable<string>;
 }

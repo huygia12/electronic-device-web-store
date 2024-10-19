@@ -1,10 +1,10 @@
 import { HorizontalProductCard } from "@/components/user";
 import { FC, HTMLAttributes } from "react";
-import { ProductFullJoin } from "@/types/model";
+import { Product } from "@/types/model";
 import { cn } from "@/lib/utils";
 
 interface RelatedProducts extends HTMLAttributes<HTMLDivElement> {
-  products: ProductFullJoin[] | undefined;
+  products: Product[] | undefined;
 }
 
 const RelatedProducts: FC<RelatedProducts> = ({ ...props }) => {

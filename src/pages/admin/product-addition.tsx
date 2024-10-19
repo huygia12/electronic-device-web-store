@@ -7,9 +7,9 @@ import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ProductAttributesFormProps,
-  ProductInputFormProps,
-  ProductItemsFormProps,
-  ProductSchema,
+  ProductInsertionFormProps,
+  ProductItemsInsertionFormProps,
+  ProductInsertionSchema,
 } from "@/utils/schema";
 import categoryService from "@/services/category";
 import { attributeService, productService, providerService } from "@/services";
@@ -36,8 +36,8 @@ const ProductAddition: FC = () => {
     clearErrors,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<ProductInputFormProps>({
-    resolver: zodResolver(ProductSchema),
+  } = useForm<ProductInsertionFormProps>({
+    resolver: zodResolver(ProductInsertionSchema),
   });
 
   const itemController = useFieldArray({
@@ -50,7 +50,7 @@ const ProductAddition: FC = () => {
     name: "productAttributes",
   });
 
-  const productItemsAddition: ProductItemsFormProps =
+  const productItemsAddition: ProductItemsInsertionFormProps =
     watch("productItems") || [];
   const productAttributesAddition: ProductAttributesFormProps =
     watch("productAttributes") || [];
@@ -61,7 +61,7 @@ const ProductAddition: FC = () => {
     const fetchData = async () => {
       const categories = await categoryService.apis.getCategories();
       const providers = await providerService.apis.getProviders();
-      const attributes = await attributeService.apis.getAttributes();
+      const attributes = await attributeService.apis.getAttributes({});
 
       setCategories(categories);
       setProviders(providers);
@@ -74,16 +74,7 @@ const ProductAddition: FC = () => {
   const handleAddItem = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    itemController.append({
-      thump: null,
-      quantity: null,
-      price: null,
-      productCode: "",
-      discount: 0,
-      color: "",
-      storage: "",
-      itemImages: null,
-    });
+    itemController.append(productService.createNewItemHolder());
     setItemQuantity(itemQuantity + 1);
   };
 
@@ -129,7 +120,7 @@ const ProductAddition: FC = () => {
     clearErrors("providerID");
   };
 
-  const handleFormSubmission: SubmitHandler<ProductInputFormProps> = async (
+  const handleFormSubmission: SubmitHandler<ProductInsertionFormProps> = async (
     data
   ) => {
     const toastID = toast.loading("Xử lý ảnh...");

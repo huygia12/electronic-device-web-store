@@ -1,9 +1,7 @@
 import { ReactNode, createContext, useLayoutEffect, useRef } from "react";
-import { Nullable, Optional } from "@/utils/declare";
 import useCustomNavigate from "@/hooks/use-custom-navigate";
 import { LoginFormProps } from "@/utils/schema";
 import { authService } from "@/services";
-import auth from "@/utils/auth";
 import { Role } from "@/types/enum";
 import useCurrentUser from "@/hooks/use-current-user";
 
@@ -21,15 +19,15 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   useLayoutEffect(() => {
     const checkAccessToken = async (): Promise<boolean> => {
-      const accessToken: Nullable<string> = auth.token.getAccessToken();
+      const accessToken: string | null = authService.token.getAccessToken();
 
       if (!accessToken) {
-        const newAccessToken: Optional<string> =
+        const newAccessToken: string | undefined =
           await authService.apis.refreshToken();
         if (!newAccessToken) {
           return false;
         }
-        auth.token.setAccessToken(newAccessToken);
+        authService.token.setAccessToken(newAccessToken);
       }
 
       return true;
@@ -48,10 +46,10 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const login = async (data: LoginFormProps, goBack: boolean = true) => {
-    const from: Optional<string> = location.state?.from;
+    const from: string | undefined = location.state?.from;
 
     const accessToken = await authService.apis.login(data);
-    auth.token.setAccessToken(accessToken);
+    authService.token.setAccessToken(accessToken);
 
     await updateCurrentUser();
     navigate(
@@ -71,7 +69,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     } catch (error) {
       console.error(`Response data: ${error}`);
     } finally {
-      auth.token.removeAccessToken();
+      authService.token.removeAccessToken();
       setCurrentUser(null);
       navigate("/login", { state: { from: "/logout" } });
     }

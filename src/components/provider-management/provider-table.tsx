@@ -12,19 +12,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Provider } from "@/types/model";
 import { FC, HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
-import { Optional } from "@/utils/declare";
 
-const colName: string[] = [
-  "STT",
-  "MÃ NHÃN HÀNG",
-  "TÊN NHÃN HÀNG",
-  "SỐ SẢN PHẨM",
-];
+const columnHeaders = ["STT", "MÃ NHÃN HÀNG", "TÊN NHÃN HÀNG", "SỐ SẢN PHẨM"];
 
 interface ProviderTableProps extends HTMLAttributes<HTMLDivElement> {
   providers: Provider[];
-  selectedProvider: Optional<Provider>;
-  setSelectedProvider: (provider: Optional<Provider>) => void;
+  selectedProvider: Provider | undefined;
+  setSelectedProvider: (provider: Provider | undefined) => void;
 }
 
 const ProviderTable: FC<ProviderTableProps> = ({ ...props }) => {
@@ -50,7 +44,7 @@ const ProviderTable: FC<ProviderTableProps> = ({ ...props }) => {
           <Table>
             <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white">
               <tr>
-                {colName.map((item, key) => {
+                {columnHeaders.map((item, key) => {
                   return (
                     <TableHead
                       key={key}

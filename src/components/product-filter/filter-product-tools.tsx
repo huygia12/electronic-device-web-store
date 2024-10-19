@@ -129,7 +129,11 @@ const FilterProductTools: FC<FilterToolsProps> = ({ ...props }) => {
           onValueChange={props.onPriceRangeChange}
         />
       </span>
-      <Button onClick={props.onFilter} variant="neutral" className="ml-15">
+      <Button
+        onClick={() => props.onFilter()}
+        variant="neutral"
+        className="ml-15"
+      >
         Lọc
       </Button>
     </div>

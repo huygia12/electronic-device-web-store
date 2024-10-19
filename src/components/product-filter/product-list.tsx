@@ -1,11 +1,11 @@
 import { cn } from "@/lib/utils";
-import { ProductFullJoin } from "@/types/model";
+import { Product } from "@/types/model";
 import { FC, HTMLAttributes } from "react";
 import { CardSkeleton } from "@/components/common";
 import { ProductCard } from "@/components/user";
 
 interface ProductListProps extends HTMLAttributes<HTMLDivElement> {
-  products: ProductFullJoin[] | undefined;
+  products: Product[] | undefined;
 }
 
 const ProductList: FC<ProductListProps> = ({ ...props }) => {

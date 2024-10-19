@@ -1,4 +1,4 @@
-import { Error } from "@/types/error";
+import { Error } from "@/types/component";
 import { CartItem, ProductItem } from "@/types/model";
 
 const cartService = {

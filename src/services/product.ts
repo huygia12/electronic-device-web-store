@@ -1,16 +1,12 @@
-import axios, { AxiosResponse } from "axios";
-import {
-  axiosInstance,
-  axiosInstanceWithoutAuthorize,
-  reqConfig,
-} from "@/config";
-import { Args, Optional } from "@/utils/declare";
-import { ProductSummary } from "@/types/api";
-import { ProductFullJoin } from "@/types/model";
+import { AxiosResponse } from "axios";
+import { axiosInstance, reqConfig } from "@/config";
+import { Args } from "@/utils/helpers";
+import { ProductSummary } from "@/types/payload";
+import { Product } from "@/types/model";
 import {
   ProductAttributesFormProps,
-  ProductInputFormProps,
-  ProductItemsFormProps,
+  ProductInsertionFormProps,
+  ProductItemsInsertionFormProps,
   ProductUpdateFormProps,
 } from "@/utils/schema";
 import { Attribute, AttributeOption, ProductItem } from "@/types/model";
@@ -34,7 +30,7 @@ const productService = {
         (path = `${path}&currentPage=${params.currentPage}`);
 
       try {
-        const res = await axiosInstanceWithoutAuthorize.get<{
+        const res = await axiosInstance.get<{
           info: { products: ProductSummary[]; totalProducts: number };
         }>(path);
 
@@ -46,16 +42,14 @@ const productService = {
     },
     getProductsFullJoin: async (
       queryParams: Record<string, string>
-    ): Promise<{ products: ProductFullJoin[]; totalProducts: number }> => {
-      const res = await axiosInstanceWithoutAuthorize.get<{
-        info: { products: ProductFullJoin[]; totalProducts: number };
+    ): Promise<{ products: Product[]; totalProducts: number }> => {
+      const res = await axiosInstance.get<{
+        info: { products: Product[]; totalProducts: number };
       }>(`${productEndPoint}?detail=true`, { params: queryParams });
 
       return res.data.info;
     },
-    getProductFullJoin: async (
-      args: Args | string
-    ): Promise<ProductFullJoin> => {
+    getProductFullJoin: async (args: Args | string): Promise<Product> => {
       let productID: string;
       if (typeof args === "string") {
         productID = args;
@@ -63,9 +57,9 @@ const productService = {
         productID = args.params.id!;
       }
 
-      const res = await axiosInstanceWithoutAuthorize.get<{
-        info: ProductFullJoin;
-      }>(`/products/${productID}`, reqConfig);
+      const res = await axiosInstance.get<{
+        info: Product;
+      }>(`${productEndPoint}/${productID}`);
 
       return res.data.info;
     },
@@ -74,13 +68,13 @@ const productService = {
       deepClean?: boolean
     ): Promise<AxiosResponse> => {
       //Get product so that we can delete it images
-      const resOfGet = await axiosInstanceWithoutAuthorize.get<{
-        info: ProductFullJoin;
-      }>(`/products/${productID}`, reqConfig);
+      const resOfGet = await axiosInstance.get<{
+        info: Product;
+      }>(`${productEndPoint}/${productID}`);
 
       //Delete product
       const resOfDelete = await axiosInstance.delete(
-        `/products/${productID}`,
+        `${productEndPoint}/${productID}`,
         reqConfig
       );
 
@@ -98,9 +92,9 @@ const productService = {
       return resOfDelete;
     },
     addProduct: async (
-      product: ProductInputFormProps,
+      product: ProductInsertionFormProps,
       productAttributeOptions: string[] | undefined,
-      productItems: ProductItemsFormProps
+      productItems: ProductItemsInsertionFormProps
     ): Promise<AxiosResponse> => {
       const productPayload = {
         productName: product.productName,
@@ -120,14 +114,16 @@ const productService = {
       };
 
       const res = await axiosInstance.post(
-        "/products",
+        `${productEndPoint}`,
         productPayload,
         reqConfig
       );
 
       return res;
     },
-    updateProduct: async (product: ProductInputFormProps): Promise<boolean> => {
+    updateProduct: async (
+      product: ProductInsertionFormProps
+    ): Promise<boolean> => {
       // TODO:
       let productPayload;
       try {
@@ -167,16 +163,14 @@ const productService = {
         };
 
         //post new product
-        await axiosInstance.post("/products", productPayload, reqConfig);
+        await axiosInstance.post(
+          `${productEndPoint}`,
+          productPayload,
+          reqConfig
+        );
         return true;
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          // Handle error response if available
-          console.error(`Response data: ${error.response?.data}`);
-          console.error(`Response status: ${error.response?.status})`);
-        } else {
-          console.error("Unexpected error:", error);
-        }
+        console.error("Unexpected error:", error);
 
         if (productPayload) {
           productPayload.productItems.forEach((item) => {
@@ -191,7 +185,7 @@ const productService = {
       }
     },
   },
-  getPriceRange: (product: ProductFullJoin): string => {
+  getPriceRange: (product: Product): string => {
     const len: number = product.productItems.length;
     if (len === 0) {
       /** Doesnt have any items */
@@ -219,7 +213,7 @@ const productService = {
 
     return `${min.toLocaleString()} - ${max.toLocaleString()}`;
   },
-  getSaleRange: (product: ProductFullJoin): string => {
+  getSaleRange: (product: Product): string => {
     const len: number = product.productItems.length;
     if (len === 0) {
       /** Doesnt have any items */
@@ -249,7 +243,7 @@ const productService = {
     return `${min}-${max}`;
   },
   convertProductToCartItem: (
-    product: ProductFullJoin,
+    product: Product,
     item: ProductItem | string,
     quantity: number
   ) => {
@@ -281,13 +275,13 @@ const productService = {
       weight: product.weight,
     };
   },
-  getAttributesOutOfProduct: (products: ProductFullJoin[]): Attribute[] => {
+  getAttributesOutOfProduct: (products: Product[]): Attribute[] => {
     const attributes = products.reduce<Attribute[]>((prev, curr) => {
       curr.productAttributes.map((item) => {
-        const attributeHolder: Optional<Attribute> = prev.find(
+        const attributeHolder: Attribute | undefined = prev.find(
           (attribute) => attribute.typeID === item.attributeOption.typeID
         );
-        const optionHolder: Optional<AttributeOption> =
+        const optionHolder: AttributeOption | undefined =
           attributeHolder?.attributeOptions.find(
             (option) => option.optionID === item.attributeOption.optionID
           );
@@ -319,7 +313,7 @@ const productService = {
     return attributes;
   },
   getAttributeOptionsOutOfProduct: (
-    product: ProductFullJoin
+    product: Product
   ): ProductAttributesFormProps => {
     return product.productAttributes.reduce<ProductAttributesFormProps>(
       (prev, curr) => {
@@ -335,7 +329,7 @@ const productService = {
     );
   },
   isContainAllRequiredAttributeOptions: (
-    product: ProductFullJoin,
+    product: Product,
     attribute: AttributeOption[]
   ) => {
     const productOptions: string[] = product.productAttributes.reduce<string[]>(
@@ -363,8 +357,8 @@ const productService = {
     return true;
   },
   getProductItemsAfterUploadImages: async (
-    productItems: ProductItemsFormProps
-  ): Promise<ProductItemsFormProps> => {
+    productItems: ProductItemsInsertionFormProps
+  ): Promise<ProductItemsInsertionFormProps> => {
     const items = [];
     for (const item of productItems) {
       const thump: string[] = await firebaseService.apis.insertImagesToFireBase(
@@ -391,7 +385,9 @@ const productService = {
 
     return items;
   },
-  handleConsequencesIfAddProductFail: (items: ProductItemsFormProps) => {
+  handleConsequencesIfAddProductFail: (
+    items: ProductItemsInsertionFormProps
+  ) => {
     items.forEach((item) => {
       firebaseService.apis.deleteImagesInFireBase([
         item.thump,
@@ -399,9 +395,7 @@ const productService = {
       ]);
     });
   },
-  getProductUpdateDefaultValue: (
-    product: ProductFullJoin
-  ): ProductUpdateFormProps => {
+  getProductUpdateDefaultValue: (product: Product): ProductUpdateFormProps => {
     return {
       productName: product.productName,
       description: product.description || undefined,
@@ -415,6 +409,18 @@ const productService = {
       productAttributes:
         productService.getAttributeOptionsOutOfProduct(product),
       productItems: product.productItems,
+    };
+  },
+  createNewItemHolder: () => {
+    return {
+      thump: null,
+      quantity: null,
+      price: null,
+      productCode: "",
+      discount: 0,
+      color: "",
+      storage: "",
+      itemImages: null,
     };
   },
 };

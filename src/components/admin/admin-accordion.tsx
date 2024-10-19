@@ -1,22 +1,19 @@
-import React, { HTMLAttributes } from "react";
+import { FC, HTMLAttributes } from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../ui/accordion";
+} from "@/components/ui/accordion";
 import { NavLink } from "react-router-dom";
-import { SheetClose } from "../ui/sheet";
+import { SheetClose } from "@/components/ui/sheet";
 import { AdminNavSubItem } from "@/types/component";
 
 interface AdminAccordionProps extends HTMLAttributes<HTMLDivElement> {
   subItems: AdminNavSubItem[];
 }
 
-const AdminAccordion: React.FC<AdminAccordionProps> = ({
-  className,
-  ...props
-}) => {
+const AdminAccordion: FC<AdminAccordionProps> = ({ className, ...props }) => {
   return (
     <Accordion type="single" collapsible className="w-full">
       <AccordionItem value="item">

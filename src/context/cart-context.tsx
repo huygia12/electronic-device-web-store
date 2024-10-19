@@ -1,6 +1,5 @@
 import { useLocalStorage } from "@/hooks";
 import { CartItem } from "@/types/model";
-import { Optional } from "@/utils/declare";
 import { ReactNode, createContext, useState } from "react";
 
 export interface CartContextProps {
@@ -11,7 +10,7 @@ export interface CartContextProps {
   setPhaseID: (value: string) => void;
 }
 
-const CartContext = createContext<Optional<CartContextProps>>(undefined);
+const CartContext = createContext<CartContextProps | undefined>(undefined);
 
 const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [itemsInLocal, setItemsInLocal, removeInvoice] =

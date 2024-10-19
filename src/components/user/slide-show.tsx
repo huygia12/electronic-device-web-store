@@ -1,7 +1,7 @@
 import React, { HTMLAttributes } from "react";
 import { NavLink } from "react-router-dom";
-import { CarouselItem } from "../ui/carousel";
-import CustomImage from "../common/custom-image";
+import { CarouselItem } from "@/components/ui/carousel";
+import CustomImage from "@/components/common/custom-image";
 
 interface SlideShowProps extends HTMLAttributes<HTMLDivElement> {
   src: string;

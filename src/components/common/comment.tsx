@@ -3,19 +3,18 @@ import { User } from "lucide-react";
 import { StarRating } from "../common";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FC, HTMLAttributes, MutableRefObject } from "react";
-import { ReviewFullJoin, ReviewFullJoinChild } from "@/types/model";
+import { ReviewFullJoin, ChildReviewFullJoin } from "@/types/model";
 import { useCurrentUser } from "@/hooks";
 import { useSocket } from "@/hooks";
-import { Optional } from "@/utils/declare";
 import { SocketEmitError } from "@/types/socket";
 import { toast } from "sonner";
 import { Role } from "@/types/enum";
 
 interface CommentProps extends HTMLAttributes<HTMLDivElement> {
   index?: number;
-  review: ReviewFullJoin | ReviewFullJoinChild;
+  review: ReviewFullJoin | ChildReviewFullJoin;
   setReplyToComment: (
-    commentID: ReviewFullJoin | ReviewFullJoinChild | undefined
+    commentID: ReviewFullJoin | ChildReviewFullJoin | undefined
   ) => void;
   fillInRef?: MutableRefObject<HTMLFormElement | null>;
 }
@@ -28,7 +27,7 @@ const Comment: FC<CommentProps> = ({ ...props }) => {
     socket?.emit(
       `review:delete`,
       { reviewID },
-      (error: Optional<SocketEmitError>) => {
+      (error: SocketEmitError | undefined) => {
         if (error) {
           toast.error("Xóa đánh giá thất bại!");
         } else {

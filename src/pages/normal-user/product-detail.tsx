@@ -1,8 +1,8 @@
 import {
   ProductItem,
-  ProductFullJoin,
+  Product,
   ReviewFullJoin,
-  ReviewFullJoinChild,
+  ChildReviewFullJoin,
   Review,
 } from "@/types/model";
 import { FC, useEffect, useRef, useState } from "react";
@@ -22,10 +22,9 @@ import {
 } from "@/components/product-detail";
 import { useSocket } from "@/hooks";
 import { productService, reviewService } from "@/services";
-import { Optional } from "@/utils/declare";
 
 const ProductDetailPage: FC = () => {
-  const product = useRouteLoaderData("product_detail") as ProductFullJoin;
+  const product = useRouteLoaderData("product_detail") as Product;
   const [currentItem, setCurrentItem] = useState<ProductItem>(
     product.productItems[0]
   );
@@ -33,7 +32,7 @@ const ProductDetailPage: FC = () => {
   const { socket } = useSocket();
   const [replyToComment, setReplyToComment] = useState<ReviewFullJoin>();
   const [reviewDisplay, setReviewDisplay] = useState<number>(0);
-  const [relatedProducts, setRelatedProducts] = useState<ProductFullJoin[]>();
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>();
   const personalReviewBox = useRef<HTMLFormElement | null>(null);
 
   useEffect(() => {
@@ -45,12 +44,12 @@ const ProductDetailPage: FC = () => {
       setReviews(reviewResponse);
       setReviewDisplay(reviewResponse.length > 5 ? 5 : reviewResponse.length);
 
-      const response: { products: ProductFullJoin[] } =
+      const response: { products: Product[] } =
         await productService.apis.getProductsFullJoin({
           categoryID: product.category.categoryID,
           providerID: product.provider.providerID,
           exceptID: product.productID,
-          take: 5,
+          take: "5",
         });
       setRelatedProducts(response.products);
     };
@@ -90,9 +89,9 @@ const ProductDetailPage: FC = () => {
   }, []);
 
   const handleReplyToComment = (
-    review: ReviewFullJoin | ReviewFullJoinChild | undefined
+    review: ReviewFullJoin | ChildReviewFullJoin | undefined
   ) => {
-    let temp: Optional<ReviewFullJoin>;
+    let temp: ReviewFullJoin | undefined;
     if (review) {
       const reviewID: string = review.parentID
         ? review.parentID

@@ -1,46 +1,27 @@
-import {
-  axiosInstance,
-  axiosInstanceWithoutAuthorize,
-  reqConfig,
-} from "@/config";
-import { Nullable } from "@/utils/declare";
-import axios from "axios";
+import { axiosInstance, reqConfig } from "@/config";
 import firebaseService from "./firebase";
-import { StoreFullJoin } from "@/types/model";
+import { Store } from "@/types/model";
+
+const storeEndpoint = "/stores";
 
 const storeService = {
   apis: {
-    getStore: async () => {
-      try {
-        const res = await axiosInstanceWithoutAuthorize.get<{
-          info: StoreFullJoin;
-        }>("/stores", reqConfig);
+    getStore: async (): Promise<Store> => {
+      const res = await axiosInstance.get<{
+        info: Store;
+      }>(`${storeEndpoint}`);
 
-        return res.data.info;
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
-        return null;
-      }
+      return res.data.info;
     },
     updateBannerImage: async (
       storeID: string,
-      prevBanner: Nullable<string>,
+      prevBanner: string | null,
       position: string,
-      newBanner: Nullable<File> = null
-    ): Promise<Nullable<string>> => {
+      newBanner: File | null = null
+    ): Promise<string | null> => {
       try {
-        let path = `/stores/${storeID}/banners`;
-        let bannerUrl: Nullable<string> = null;
+        let path = `${storeEndpoint}/${storeID}/banners`;
+        let bannerUrl: string | null = null;
         if (newBanner) {
           bannerUrl = await firebaseService.apis.insertImageToFireBase(
             newBanner,
@@ -64,17 +45,7 @@ const storeService = {
 
         return bannerUrl;
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          // AxiosError-specific handling
-          console.error("Axios error:", error.message);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-          }
-        } else {
-          // General error handling
-          console.error("Unexpected error:", error);
-        }
+        console.error("Unexpected error:", error);
         return null;
       }
     },

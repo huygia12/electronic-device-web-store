@@ -28,7 +28,7 @@ import {
   Attribute,
   AttributeOption,
   Category,
-  ProductFullJoin,
+  Product,
   Provider,
 } from "@/types/model";
 import { cn } from "@/lib/utils";
@@ -45,13 +45,12 @@ import {
 import { LoadingSpinner } from "@/components/effect";
 import categoryService from "@/services/category";
 import { attributeService, productService, providerService } from "@/services";
-import { Optional } from "@/utils/declare";
 import ImageOverView from "@/components/common/image-overview";
 import { useRouteLoaderData } from "react-router-dom";
 import { retrieveImageUrl } from "@/utils/helpers";
 
 const ProductEdittion: FC = () => {
-  const product = useRouteLoaderData("product_edition") as ProductFullJoin;
+  const product = useRouteLoaderData("product_edition") as Product;
   const [categories, setCategories] = useState<Category[]>([]);
   const [providers, setProviders] = useState<Provider[]>([]);
   const [attributes, setAttributes] = useState<Attribute[]>([]);
@@ -96,7 +95,7 @@ const ProductEdittion: FC = () => {
     const fetchData = async () => {
       const categories = await categoryService.apis.getCategories();
       const providers = await providerService.apis.getProviders();
-      const attributes = await attributeService.apis.getAttributes();
+      const attributes = await attributeService.apis.getAttributes({});
 
       setCategories(categories);
       setProviders(providers);
@@ -129,7 +128,7 @@ const ProductEdittion: FC = () => {
   };
 
   const handleAddProductAttribute = (optionID: string) => {
-    const option: Optional<AttributeOption> =
+    const option: AttributeOption | undefined =
       selectedAttribute &&
       attributeService.findAttributeOption(selectedAttribute, optionID);
 

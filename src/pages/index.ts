@@ -2,7 +2,6 @@ export { default as CartCheckout } from "./normal-user/cart-checkout";
 export { default as CartVisiting } from "./normal-user/cart-visting";
 export { default as EditProfile } from "./normal-user/edit-profile";
 export { default as HomePage } from "./normal-user/homepage";
-export { default as Intro } from "./normal-user/intro";
 export { default as InvoiceLookup } from "./normal-user/invoices-lookup";
 export { default as Login } from "./normal-user/login";
 export { default as PersonalInvoice } from "./normal-user/personal-invoices";

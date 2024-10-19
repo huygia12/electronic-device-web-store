@@ -10,19 +10,19 @@ import {
 import { MailRegisterSection, UserHeader, AppFooter } from ".";
 import { ZaloButton } from "@/components/user";
 import { Banner } from "@/components/common";
-import { StoreFullJoin } from "@/types/model";
+import { Store } from "@/types/model";
 import { useAuth, useSocket } from "@/hooks";
-import auth from "@/utils/auth";
+import { authService } from "@/services";
 
 const UserLayout: React.FC = () => {
-  const store = useRouteLoaderData("userlayout") as StoreFullJoin;
+  const store = useRouteLoaderData("userlayout") as Store;
   const navigation = useNavigation();
   const { socket } = useSocket();
   const { logout } = useAuth();
 
   useEffect(() => {
     const handleBanned = async (payload: { userID: string }) => {
-      if (auth.getUser()?.userID === payload.userID) {
+      if (authService.getUser()?.userID === payload.userID) {
         toast.info("Tài khoản của bạn đã bị khóa!");
         await logout();
       }

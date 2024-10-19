@@ -5,13 +5,13 @@ import {
 } from "@/components/user";
 import { CarouselItem } from "@/components/ui/carousel";
 import { FC, HTMLAttributes } from "react";
-import { ProductFullJoin } from "@/types/model";
+import { Product } from "@/types/model";
 import { CardSkeleton } from "@/components/common";
 
 interface NormalCollectionProps extends HTMLAttributes<HTMLDivElement> {
   to: string;
   headerTitle: string;
-  products: ProductFullJoin[] | undefined;
+  products: Product[] | undefined;
 }
 
 const NormalCollection: FC<NormalCollectionProps> = ({ ...props }) => {

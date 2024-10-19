@@ -112,7 +112,7 @@ const SignupSchema = z.object({
     .optional(),
 });
 
-const ProductItemsSchema = z
+const ProductItemsInsertionSchema = z
   .array(
     z.object({
       thump: inputFormPreprocess(validateFile()),
@@ -144,7 +144,7 @@ const ProductAttributesSchema = z.array(
   })
 );
 
-const ProductSchema = z.object({
+const ProductInsertionSchema = z.object({
   productName: notBlankString(),
   description: z.string().trim().optional(),
   length: positiveSafeFloat(),
@@ -155,7 +155,7 @@ const ProductSchema = z.object({
   categoryID: notBlankString(),
   providerID: notBlankString(),
   productAttributes: ProductAttributesSchema.optional(),
-  productItems: ProductItemsSchema,
+  productItems: ProductItemsInsertionSchema,
 });
 
 const ShippingSchema = z.object({
@@ -300,7 +300,7 @@ const ProductUpdateSchema = z.object({
   productItems: ProductItemsUpdateSchema,
 });
 
-const ReviewCreationSchema = z.object({
+const ReviewInsertionSchema = z.object({
   reviewContent: notBlankString(),
 });
 
@@ -312,9 +312,11 @@ export type LoginFormProps = z.infer<typeof LoginSchema>;
 
 export type UserFormProps = z.infer<typeof UserSchema>;
 
-export type ProductInputFormProps = z.infer<typeof ProductSchema>;
+export type ProductInsertionFormProps = z.infer<typeof ProductInsertionSchema>;
 
-export type ProductItemsFormProps = z.infer<typeof ProductItemsSchema>;
+export type ProductItemsInsertionFormProps = z.infer<
+  typeof ProductItemsInsertionSchema
+>;
 
 export type ProductAttributesFormProps = z.infer<
   typeof ProductAttributesSchema
@@ -326,7 +328,7 @@ export type ProductItemsUpdateFormProps = z.infer<
   typeof ProductItemsUpdateSchema
 >;
 
-export type ReviewCreationFromProps = z.infer<typeof ReviewCreationSchema>;
+export type ReviewInsertionFromProps = z.infer<typeof ReviewInsertionSchema>;
 
 export {
   UserSchema,
@@ -334,7 +336,7 @@ export {
   SignupSchema,
   ShippingSchema,
   AttributeTypeSchema,
-  ProductSchema,
+  ProductInsertionSchema,
   ProductUpdateSchema,
-  ReviewCreationSchema,
+  ReviewInsertionSchema,
 };

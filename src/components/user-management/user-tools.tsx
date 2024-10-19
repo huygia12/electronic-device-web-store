@@ -16,13 +16,12 @@ import { FC, HTMLAttributes } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { User } from "@/types/model";
-import { Optional } from "@/utils/declare";
 import UpdateUserDialog from "./update-user-dialog";
 import AddUserDialog from "./add-user-dialog";
 import { SignupFormProps, UserFormProps } from "@/utils/schema";
 
 interface UserToolsProps extends HTMLAttributes<HTMLDivElement> {
-  selectedUser: Optional<User>;
+  selectedUser: User | undefined;
   handleDeleteUser: () => void;
   handleUpdateUser: (formProps: UserFormProps, avatarFile?: File) => void;
   handleAddUser: (formProps: SignupFormProps, avatarFile?: File) => void;

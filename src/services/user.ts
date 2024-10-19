@@ -1,12 +1,9 @@
 import { AxiosResponse } from "axios";
-import {
-  axiosInstance,
-  axiosInstanceWithoutAuthorize,
-} from "@/config/axios-config";
-import { UserUpdate } from "@/types/api";
+import { axiosInstance, reqConfig } from "@/config/axios-config";
+import { UserUpdatePayload } from "@/types/payload";
 import { User } from "@/types/model";
 import { SignupFormProps } from "@/utils/schema";
-import { Args, Nullable, Optional } from "@/utils/declare";
+import { Args } from "@/utils/helpers";
 import { Role } from "@/types/enum";
 import firebaseService from "./firebase";
 
@@ -15,7 +12,7 @@ const userEndPoint = "/users";
 const userService = {
   apis: {
     signup: async (data: SignupFormProps, avatarFile?: File): Promise<User> => {
-      const response = await axiosInstanceWithoutAuthorize.post<{ info: User }>(
+      const response = await axiosInstance.post<{ info: User }>(
         `${userEndPoint}/signup`,
         {
           userName: data.userName.trim(),
@@ -44,7 +41,7 @@ const userService = {
 
       return response.data.info;
     },
-    getUser: async (args: Args | string): Promise<Nullable<User>> => {
+    getUser: async (args: Args | string): Promise<User | null> => {
       let userID: string;
       if (typeof args === "string") {
         userID = args;
@@ -64,11 +61,11 @@ const userService = {
     },
     updateUser: async (
       userID: string,
-      data: UserUpdate,
+      data: UserUpdatePayload,
       currentUser: User,
       avatarFile?: File
     ): Promise<User> => {
-      let avatarUrl: Optional<string>;
+      let avatarUrl: string | undefined;
       if (avatarFile) {
         currentUser.avatar &&
           (await firebaseService.apis.deleteImageInFireBase(
@@ -85,7 +82,8 @@ const userService = {
         {
           ...data,
           avatar: avatarUrl,
-        }
+        },
+        reqConfig
       );
       return res.data.info;
     },
@@ -115,19 +113,22 @@ const userService = {
       searching?: string;
       currentPage?: number;
     }): Promise<{ users: User[]; totalUsers: number }> => {
-      let queryUrl: string = `${userEndPoint}?`;
+      let path: string = `${userEndPoint}?`;
 
-      params.recently === true && (queryUrl += `recently=${params.recently}&`);
-      params.searching && (queryUrl += `searching=${params.searching}&`);
-      params.currentPage && (queryUrl += `currentPage=${params.currentPage}`);
+      params.recently === true && (path += `recently=${params.recently}&`);
+      params.searching && (path += `searching=${params.searching}&`);
+      params.currentPage && (path += `currentPage=${params.currentPage}`);
 
       const res = await axiosInstance.get<{
         info: { users: User[]; totalUsers: number };
-      }>(queryUrl);
+      }>(path);
       return res.data.info;
     },
     deleteUser: async (userID: string): Promise<AxiosResponse> => {
-      const res = await axiosInstance.delete(`${userEndPoint}/${userID}`);
+      const res = await axiosInstance.delete(
+        `${userEndPoint}/${userID}`,
+        reqConfig
+      );
       return res;
     },
   },

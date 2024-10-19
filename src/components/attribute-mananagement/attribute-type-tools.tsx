@@ -15,11 +15,10 @@ import { Button } from "@/components/ui/button";
 import { Plus, SquarePen, Trash2 } from "lucide-react";
 import { Attribute } from "@/types/model";
 import { buttonVariants } from "@/utils/constants";
-import { Optional } from "@/utils/declare";
 import AttributeDialog from "./attribute-dialog";
 
 interface AttributeTypeProps extends HTMLAttributes<HTMLDivElement> {
-  selectedAttribute: Optional<Attribute>;
+  selectedAttribute: Attribute | undefined;
   handleAddAttributeType: (value: string) => void;
   handleUpdateAttributeType: (value: string) => void;
   handleDeleteAttributeType: () => void;

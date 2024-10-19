@@ -1,6 +1,6 @@
 import { InvoiceProduct } from "@/types/model";
 import { FC, HTMLAttributes } from "react";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
   TableBody,
@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { applyDiscount, getDiscount } from "@/utils/helpers";
 
-const header = [
+const columnHeaders = [
   "STT",
   "Ảnh",
   "Sản Phẩm",
@@ -39,7 +39,7 @@ const ProductInInvoice: FC<ProductInOrder> = ({ ...props }) => {
         <Table>
           <TableHeader className="z-10 sticky top-0 border-b-2 bg-white shadow-lg">
             <tr>
-              {header.map((title, index) => {
+              {columnHeaders.map((title, index) => {
                 return (
                   <TableHead
                     className=" text-center text-black font-extrabold text-[1rem]"

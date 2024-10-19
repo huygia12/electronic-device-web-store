@@ -1,7 +1,7 @@
 import { OrderTable } from "@/components/admin";
 import { CustomPagination, InvoiceUpperBar } from "@/components/common";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { InvoiceFullJoin } from "@/types/model";
+import { Invoice } from "@/types/model";
 import { FC, useEffect, useRef, useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 import { InvoiceStatus } from "@/types/enum";
@@ -12,12 +12,10 @@ import { getPages } from "@/utils/helpers";
 const OrderManagement: FC = () => {
   const searchingDelay = useRef<number>(2000);
   const initData = useRouteLoaderData("invoice_management") as {
-    invoices: InvoiceFullJoin[];
+    invoices: Invoice[];
     totalInvoices: number;
   };
-  const [invoices, setInvoices] = useState<InvoiceFullJoin[]>(
-    initData.invoices
-  );
+  const [invoices, setInvoices] = useState<Invoice[]>(initData.invoices);
   const [totalPages, setTotalPages] = useState<number>(
     getPages(initData.totalInvoices)
   );
@@ -42,7 +40,7 @@ const OrderManagement: FC = () => {
 
     const delayDebounceFn = setTimeout(async () => {
       try {
-        const res: { invoices: InvoiceFullJoin[]; totalInvoices: number } =
+        const res: { invoices: Invoice[]; totalInvoices: number } =
           await invoiceService.apis.getInvoices({
             searching: searchText,
             currentPage: currentPage,

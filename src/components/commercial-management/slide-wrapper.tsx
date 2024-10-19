@@ -5,10 +5,10 @@ import { retrieveImageUrl } from "@/utils/helpers";
 import { Slide } from "@/types/model";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
-import { SlideCreation } from "@/types/api";
+import { SlideInsertionPayload } from "@/types/payload";
 
 interface SlideContainerProps extends HTMLAttributes<HTMLDivElement> {
-  slide: Slide | SlideCreation;
+  slide: Slide | SlideInsertionPayload;
   handleDeleteSlide: (slideID: string) => void;
 }
 

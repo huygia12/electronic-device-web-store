@@ -1,4 +1,3 @@
-import { Optional } from "@/utils/declare";
 import { ReactNode, createContext, useState } from "react";
 
 export interface BlinkContextProps {
@@ -6,7 +5,7 @@ export interface BlinkContextProps {
   makeBlink: () => void;
 }
 
-const BlinkContext = createContext<Optional<BlinkContextProps>>(undefined);
+const BlinkContext = createContext<BlinkContextProps | undefined>(undefined);
 
 const BlinkProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isBlink, setIsBlink] = useState<boolean>(false);

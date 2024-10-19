@@ -8,7 +8,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FC, HTMLAttributes, useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
 import ConfirmNewPasswordDialog from "./confirm-new-password-dialog";
 import { toast } from "sonner";

@@ -1,14 +1,11 @@
 import { cn } from "@/lib/utils";
-import React, { HTMLAttributes } from "react";
+import { FC, HTMLAttributes } from "react";
 
 interface LoadingSpinnerProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;
 }
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-  size = 40,
-  className,
-}) => {
+const LoadingSpinner: FC<LoadingSpinnerProps> = ({ size = 40, className }) => {
   const spinnerSize = {
     width: `${size}px`,
     height: `${size}px`,

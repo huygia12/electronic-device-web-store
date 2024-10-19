@@ -7,11 +7,9 @@ interface RatingPointProps extends HTMLAttributes<HTMLSpanElement> {
   iconSize: number;
 }
 
-const defaultStyles: string = "flex flex-row items-center";
-
 const RatingPoint: React.FC<RatingPointProps> = ({ className, ...props }) => {
   return (
-    <span className={cn(defaultStyles, className)}>
+    <span className={cn("flex flex-row items-center", className)}>
       <span>{props.rate}</span>
       <RiStarSFill size={props.iconSize} />
     </span>

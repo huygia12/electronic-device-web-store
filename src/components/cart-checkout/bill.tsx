@@ -11,17 +11,16 @@ import { convertMiliSecToDays } from "@/utils/helpers";
 import { Separator } from "@/components/ui/separator";
 import { FC, HTMLAttributes, useMemo } from "react";
 import { cartService } from "@/services";
-import { Nullable } from "@/utils/declare";
 import { CartItem } from "@/types/model";
 
-interface BillDisplayProps extends HTMLAttributes<HTMLDivElement> {
+interface BillProps extends HTMLAttributes<HTMLDivElement> {
   cartItems: CartItem[] | undefined;
-  shippingFee: Nullable<number>;
+  shippingFee: number | null;
   shippingTime: number;
   totalMoney: number;
 }
 
-const BillDisplay: FC<BillDisplayProps> = ({ ...props }) => {
+const Bill: FC<BillProps> = ({ ...props }) => {
   const buyButtonDisability = useMemo(
     () => !props.cartItems || props.cartItems.length === 0,
     [props.cartItems]
@@ -95,4 +94,4 @@ const BillDisplay: FC<BillDisplayProps> = ({ ...props }) => {
   );
 };
 
-export default BillDisplay;
+export default Bill;

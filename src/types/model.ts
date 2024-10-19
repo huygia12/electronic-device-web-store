@@ -1,7 +1,5 @@
 import { InvoiceStatus, PaymentMethod, Role } from "@/types/enum";
-import { Nullable } from "@/utils/declare";
 
-//Attributes
 export interface AttributeOption {
   optionID: string;
   optionValue: string;
@@ -23,15 +21,14 @@ export type ProductAttribute = AttributeOption & {
   attributeType: AttributeType;
 };
 
-//Cart
 export interface CartItem {
   productName: string;
   price: number;
   quantity: number;
-  discount: Nullable<number>;
+  discount: number | null;
   productCode: string;
   color: string;
-  storage: Nullable<string>;
+  storage: string | null;
   thump: string;
   productID: string;
   itemID: string;
@@ -41,44 +38,13 @@ export interface CartItem {
   weight: number;
 }
 
-//Category
 export interface Category {
   categoryID: string;
   categoryName: string;
   productQuantity?: number;
 }
 
-//Invoice
 export interface Invoice {
-  invoiceID: string;
-  status: string;
-  payment: string;
-  city: string;
-  ward: string;
-  province: string;
-  phoneNumber: string;
-  detailAddress?: string;
-  createdAt: Date;
-  userName: string;
-  products: CartItem[];
-}
-
-export interface InvoiceProduct {
-  discount: Nullable<number>;
-  price: number;
-  productName: string;
-  quantity: number;
-  invoiceID: string;
-  productID: string;
-  productCode: string;
-  thump: string;
-  color: string;
-  storage: Nullable<string>;
-  categoryName: string;
-  providerName: string;
-}
-
-export interface InvoiceFullJoin {
   invoiceID: string;
   status: InvoiceStatus;
   payment: PaymentMethod;
@@ -97,13 +63,30 @@ export interface InvoiceFullJoin {
   invoiceProducts: InvoiceProduct[];
 }
 
-//Product
+//InvoiceProduct
+export interface InvoiceProduct {
+  discount: number | null;
+  price: number;
+  productName: string;
+  quantity: number;
+  invoiceID: string;
+  productID: string;
+  productCode: string;
+  thump: string;
+  color: string;
+  storage: string | null;
+  categoryName: string;
+  providerName: string;
+}
+
+//ItemImage
 interface ItemImage {
   imageID: string;
   source: string;
   itemID: string;
 }
 
+//ProductItem
 export interface ProductItem {
   productID: string;
   itemID: string;
@@ -111,16 +94,17 @@ export interface ProductItem {
   quantity: number;
   price: number;
   productCode: string;
-  discount: Nullable<number>;
+  discount: number | null;
   color: string;
-  storage: Nullable<string>;
+  storage: string | null;
   itemImages: ItemImage[];
 }
 
-export interface ProductFullJoin {
+//Product
+export interface Product {
   productID: string;
   productName: string;
-  description: Nullable<string>;
+  description: string | null;
   length: number;
   width: number;
   height: number;
@@ -145,102 +129,59 @@ export interface Provider {
 export interface Review {
   reviewID: string;
   reviewContent: string;
-  rating: Nullable<number>;
+  rating: number | null;
   productID: string;
   userID: string;
-  parentID: Nullable<string>;
+  parentID: string | null;
   createdAt: Date;
 }
 
-export type ReviewFullJoinChild = Review & {
-  childrenReview: Review[];
-  user: {
-    userID: string;
-    userName: string;
-    avatar: Nullable<string>;
-    role: Role;
-    createdAt: Date;
-  };
+export type ChildReviewFullJoin = Review & {
+  // childrenReview: Review[];
+  user: BaseUser;
   product: { productName: string };
 };
 
 export type ReviewFullJoin = Review & {
-  childrenReview: ReviewFullJoinChild[];
-  user: {
-    userID: string;
-    userName: string;
-    avatar: Nullable<string>;
-    role: Role;
-    createdAt: Date;
-  };
+  childrenReview: ChildReviewFullJoin[];
+  user: BaseUser;
   product: { productName: string };
 };
 
-//Statistic
-export interface InvoiceStatistic {
-  date: string; //must be ISO 8601 format
-  order: number;
-  revenue: number;
-}
-
-export interface Statistic {
-  totalUsers: number;
-  totalProducts: number;
-  invoices: {
-    today: number;
-    yesterday: number;
-  };
-  revenue: {
-    today: number;
-    yesterday: number;
-  };
-  newUsers: User[];
-  orders: InvoiceFullJoin[];
-  invoiceStatistic: InvoiceStatistic[];
-}
-
 //User
-export interface User {
-  userID: string;
-  userName: string;
-  email: string;
-  phoneNumber: Nullable<string>;
-  avatar: Nullable<string>;
-  isBanned: Nullable<boolean>;
-  role: Role;
+export type User = BaseUser & {
+  phoneNumber: string | null;
+  isBanned: boolean | null;
   createdAt: Date;
   updateAt: Date;
-}
+};
 
-export interface AuthUser {
+export interface BaseUser {
   userID: string;
   userName: string;
   email: string;
-  avatar: Nullable<string>;
+  avatar: string | null;
   role: Role;
-  exp: string;
 }
 
-//Store
+//Slide
 export interface Slide {
   slideID: string;
   url: string;
-  ref: Nullable<string>;
+  ref: string | null;
   storeID: string;
   index: number;
 }
 
+//Store
 export interface Store {
   storeID: string;
   storeName: string;
-  description: Nullable<string>;
-  address: Nullable<string>;
-  phoneNumber: Nullable<string>;
-  email: Nullable<string>;
-  leftBanner: Nullable<string>;
-  rightBanner: Nullable<string>;
+  description: string | null;
+  address: string | null;
+  phoneNumber: string | null;
+  email: string | null;
+  leftBanner: string | null;
+  rightBanner: string | null;
+  slideShows?: Slide[];
 }
-
-export type StoreFullJoin = Store & {
-  slideShows: Slide[];
-};

@@ -28,7 +28,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import {
   ProductAttributesFormProps,
-  ProductInputFormProps,
+  ProductInsertionFormProps,
 } from "@/utils/schema";
 import { Category, Provider, Attribute } from "@/types/model";
 import { Button } from "../ui/button";
@@ -36,8 +36,8 @@ import { attributeService } from "@/services";
 import { cn } from "@/lib/utils";
 
 interface ProductAdditionSectionProps extends HTMLAttributes<HTMLDivElement> {
-  register: UseFormRegister<ProductInputFormProps>;
-  errors: FieldErrors<ProductInputFormProps>;
+  register: UseFormRegister<ProductInsertionFormProps>;
+  errors: FieldErrors<ProductInsertionFormProps>;
   categories: Category[];
   providers: Provider[];
   attributes: Attribute[];

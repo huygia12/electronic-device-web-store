@@ -4,13 +4,13 @@ import {
 } from "@/components/commercial-management";
 import { FC, useState } from "react";
 import { editingSlides } from "../data";
-import { Slide, StoreFullJoin } from "@/types/model";
-import { SlideCreation } from "@/types/api";
+import { Slide, Store } from "@/types/model";
+import { SlideInsertionPayload } from "@/types/payload";
 import { Banner } from "@/types/component";
 import { useRouteLoaderData } from "react-router-dom";
 
 const StoreManagement: FC = () => {
-  const store = useRouteLoaderData("store_management") as StoreFullJoin;
+  const store = useRouteLoaderData("store_management") as Store;
   const [leftBanner, setLeftBanner] = useState<Banner>({
     newBanner: undefined,
     prevBanner: store.leftBanner,
@@ -20,7 +20,7 @@ const StoreManagement: FC = () => {
     prevBanner: store.rightBanner,
   });
   const [slides, setSlides] =
-    useState<(Slide | SlideCreation)[]>(editingSlides);
+    useState<(Slide | SlideInsertionPayload)[]>(editingSlides);
 
   return (
     <div className="mt-20 flex w-full">

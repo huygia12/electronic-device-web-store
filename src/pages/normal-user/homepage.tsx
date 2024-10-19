@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Category, ProductFullJoin, Provider } from "@/types/model";
+import { Category, Product, Provider } from "@/types/model";
 import { LAPTOP_ID, PHONE_ID } from "@/pages/data";
 import { productService, providerService } from "@/services";
 import categoryService from "@/services/category";
@@ -15,10 +15,10 @@ import { useBlink } from "@/hooks";
 const Homepage: FC = () => {
   const [providers, setProviders] = useState<Provider[]>();
   const [categories, setCategories] = useState<Category[]>();
-  const [phonesData, setPhonesData] = useState<ProductFullJoin[]>();
-  const [laptopsData, setLaptopsData] = useState<ProductFullJoin[]>();
-  const [onSalePhones, setOnSalePhones] = useState<ProductFullJoin[]>();
-  const [onSaleLaptops, setOnSaleLaptops] = useState<ProductFullJoin[]>();
+  const [phonesData, setPhonesData] = useState<Product[]>();
+  const [laptopsData, setLaptopsData] = useState<Product[]>();
+  const [onSalePhones, setOnSalePhones] = useState<Product[]>();
+  const [onSaleLaptops, setOnSaleLaptops] = useState<Product[]>();
   const { isBlink } = useBlink();
 
   useEffect(() => {
@@ -31,25 +31,25 @@ const Homepage: FC = () => {
         await providerService.apis.getProviders();
       setProviders(providersRes);
 
-      const onSalePhonesResponse: { products: ProductFullJoin[] } =
+      const onSalePhonesResponse: { products: Product[] } =
         await productService.apis.getProductsFullJoin({
           categoryID: PHONE_ID,
           sale: true,
         });
       setOnSalePhones(onSalePhonesResponse.products);
 
-      const phonesDataRes: { products: ProductFullJoin[] } =
+      const phonesDataRes: { products: Product[] } =
         await productService.apis.getProductsFullJoin({ categoryID: PHONE_ID });
       setPhonesData(phonesDataRes.products);
 
-      const onSaleLaptopsResponse: { products: ProductFullJoin[] } =
+      const onSaleLaptopsResponse: { products: Product[] } =
         await productService.apis.getProductsFullJoin({
           categoryID: LAPTOP_ID,
           sale: true,
         });
       setOnSaleLaptops(onSaleLaptopsResponse.products);
 
-      const laptopsDataRes: { products: ProductFullJoin[] } =
+      const laptopsDataRes: { products: Product[] } =
         await productService.apis.getProductsFullJoin({
           categoryID: LAPTOP_ID,
         });

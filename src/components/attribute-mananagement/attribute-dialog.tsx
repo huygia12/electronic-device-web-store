@@ -10,8 +10,8 @@ import {
 import { HTMLAttributes, useState } from "react";
 import { Attribute } from "@/types/model";
 import { buttonVariants } from "@/utils/constants";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 interface AttibuteDialogProps extends HTMLAttributes<HTMLFormElement> {
   attribute?: Attribute;

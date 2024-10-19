@@ -15,11 +15,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Plus, SquarePen, Trash2 } from "lucide-react";
 import { FC, HTMLAttributes } from "react";
 import { Provider } from "@/types/model";
-import { Optional } from "@/utils/declare";
 import ProviderDialog from "./provider-dialog";
 
 interface ProviderToolsProps extends HTMLAttributes<HTMLDivElement> {
-  selectedProvider: Optional<Provider>;
+  selectedProvider: Provider | undefined;
   handleAddProvider: (value: string) => void;
   handleUpdateProvider: (value: string) => void;
   handleDeleteProvider: () => void;

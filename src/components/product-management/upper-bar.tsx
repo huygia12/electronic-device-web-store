@@ -9,21 +9,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Category, Provider } from "@/types/model";
-import { Button } from "../ui/button";
-import { Optional } from "@/utils/declare";
+import { Button } from "@/components/ui/button";
 
-interface HeaderbarProps extends HTMLAttributes<HTMLDivElement> {
+interface UpperBarProps extends HTMLAttributes<HTMLDivElement> {
   setSearchingInput: (text: string) => void;
   providers: Provider[];
   categories: Category[];
-  selectedCategory: Optional<string>;
-  selectedProvider: Optional<string>;
+  selectedCategory: string | undefined;
+  selectedProvider: string | undefined;
   setSelectedCategory: (id: string) => void;
   setSelectedProvider: (id: string) => void;
   handleRefreshFilter: () => void;
 }
 
-const HeaderBar: FC<HeaderbarProps> = ({ ...props }) => {
+const UpperBar: FC<UpperBarProps> = ({ ...props }) => {
   const [categoryKey, setCategoryKey] = useState<number>(1);
   const [providerKey, setProviderKey] = useState<number>(3);
 
@@ -89,4 +88,4 @@ const HeaderBar: FC<HeaderbarProps> = ({ ...props }) => {
   );
 };
 
-export default HeaderBar;
+export default UpperBar;

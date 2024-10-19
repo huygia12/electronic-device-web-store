@@ -1,5 +1,4 @@
-import { Nullable, Optional } from "@/utils/declare";
-import { Category, Provider } from "./model";
+import { Category, Invoice, Provider, User } from "./model";
 
 //Delivery from GHN apis
 export interface Province {
@@ -19,20 +18,20 @@ export interface Ward {
   WardName: string;
 }
 
-export interface ServiceRes {
+export interface ShippingService {
   data: {
     service_id: number;
     service_type_id: number;
   }[];
 }
 
-export interface ShippingAmountRes {
+export interface ShippingAmount {
   data: {
     total: number;
   };
 }
 
-export interface ShippingTimeRes {
+export interface ShippingTime {
   data: {
     leadtime: number;
   };
@@ -42,7 +41,7 @@ export interface ShippingTimeRes {
 export interface ProductSummary {
   productID: string;
   productName: string;
-  description: Nullable<string>;
+  description: string | null;
   length: number;
   width: number;
   height: number;
@@ -53,9 +52,9 @@ export interface ProductSummary {
   productItems: { thump: string; price: number; discount: number | null }[];
 }
 
-export interface ProductInsertPayload {
+export interface ProductInsertionPayload {
   productName: string;
-  description: Optional<string>;
+  description: string | undefined;
   length: number;
   width: number;
   height: number;
@@ -64,49 +63,38 @@ export interface ProductInsertPayload {
   categoryID: string;
   providerID: string;
   options: string[];
-  productItems: ProductItemInsertPayload[];
+  productItems: ProductItemInsertionPayload[];
 }
 
-export interface ProductItemInsertPayload {
+export interface ProductItemInsertionPayload {
   thump: string;
   quantity: number;
   price: number;
   productCode: string;
   discount: number;
   color: string;
-  storage: Optional<string>;
+  storage: string | undefined;
   itemImages: string[] | null;
 }
 
-export interface ProductItemInputProps {
-  thump: Nullable<File>;
-  quantity: Nullable<number>;
-  price: Nullable<number>;
-  productCode: Nullable<string>;
-  discount: Nullable<number>;
-  color: Nullable<string>;
-  storage: Nullable<string>;
-  itemImages: Nullable<File[]>;
-}
-
 //User
-export interface UserUpdate {
+export interface UserUpdatePayload {
   userName: string;
   email: string;
-  phoneNumber: Optional<string>;
+  phoneNumber: string | undefined;
   avatar?: string;
 }
 
 //Slide
-export interface SlideCreation {
+export interface SlideInsertionPayload {
   file: File;
   url: string;
-  ref: Nullable<string>;
+  ref: string | null;
   index: number;
 }
 
 //Invoice
-export interface OrderInsertion {
+export interface InvoiceInsertionPayload {
   district: string;
   ward: string;
   province: string;
@@ -117,11 +105,43 @@ export interface OrderInsertion {
   note?: string;
   shippingFee: number;
   shippingTime: number;
-  invoiceProducts: ProductOrderInsertion[];
+  invoiceProducts: ProductInvoiceInsertionPayload[];
 }
 
-export interface ProductOrderInsertion {
+export interface ProductInvoiceInsertionPayload {
   productID: string;
   itemID: string;
   quantity: number;
+}
+
+//Statistic
+export interface InvoiceStatistic {
+  date: string; //must be ISO 8601 format
+  order: number;
+  revenue: number;
+}
+
+export interface Statistic {
+  totalUsers: number;
+  totalProducts: number;
+  invoices: {
+    today: number;
+    yesterday: number;
+  };
+  revenue: {
+    today: number;
+    yesterday: number;
+  };
+  newUsers: User[];
+  orders: Invoice[];
+  invoiceStatistic: InvoiceStatistic[];
+}
+
+//Review
+export interface ReviewInsertionPayload {
+  reviewContent: string;
+  rating: number | null;
+  productID: string;
+  userID: string;
+  parentID: string | null;
 }

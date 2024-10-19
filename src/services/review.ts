@@ -1,26 +1,22 @@
 import { Review, ReviewFullJoin } from "@/types/model";
-import { axiosInstanceWithoutAuthorize, reqConfig } from "@/config";
-import { Nullable } from "@/utils/declare";
+import { axiosInstance, reqConfig } from "@/config";
+
+const reviewEndpoint = "/reviews";
 
 const reviewService = {
   apis: {
     getReviews: async (productID?: string): Promise<ReviewFullJoin[]> => {
-      let path = "/reviews";
+      let path = `${reviewEndpoint}`;
       if (productID) {
         path += `?productID=${productID}`;
       }
-      try {
-        const res = await axiosInstanceWithoutAuthorize.get<{
-          info: ReviewFullJoin[];
-        }>(path, reqConfig);
-        return res.data.info;
-      } catch (error) {
-        console.error("Unexpected error:", error);
-        return [];
-      }
+      const res = await axiosInstance.get<{
+        info: ReviewFullJoin[];
+      }>(path, reqConfig);
+      return res.data.info;
     },
   },
-  getAverageRatingPoint: (reviews: Review[]): Nullable<number> => {
+  getAverageRatingPoint: (reviews: Review[]): number | null => {
     let reviewCounter: number = 0;
     let total: number = 0;
     reviews.map((review) => {

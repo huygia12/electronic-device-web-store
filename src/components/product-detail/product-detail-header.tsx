@@ -1,8 +1,8 @@
-import { ProductFullJoin, ProductItem } from "@/types/model";
+import { Product, ProductItem } from "@/types/model";
 import { FC, HTMLAttributes } from "react";
 
 interface ProductDetailHeaderProps extends HTMLAttributes<HTMLHeadElement> {
-  product: ProductFullJoin;
+  product: Product;
   currentItem: ProductItem;
 }
 

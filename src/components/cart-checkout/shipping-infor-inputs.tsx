@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import useCurrentUser from "@/hooks/use-current-user";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { ShippingFormProps } from "@/utils/schema";
-import { District, Province, Ward } from "@/types/api";
+import { District, Province, Ward } from "@/types/payload";
 
 interface ShippingInputsProps extends HTMLAttributes<HTMLDivElement> {
   register: UseFormRegister<ShippingFormProps>;

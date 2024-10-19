@@ -1,8 +1,11 @@
-import { CartItem, InvoiceFullJoin } from "@/types/model";
+import { CartItem, Invoice } from "@/types/model";
 import { axiosInstance, reqConfig } from "@/config/axios-config";
 import { InvoiceStatus, PaymentMethod } from "@/types/enum";
-import { OrderInsertion, ProductOrderInsertion } from "@/types/api";
-import { Args } from "@/utils/declare";
+import {
+  InvoiceInsertionPayload,
+  ProductInvoiceInsertionPayload,
+} from "@/types/payload";
+import { Args } from "@/utils/helpers";
 
 const invoiceEndPoint = "/invoices";
 
@@ -10,7 +13,7 @@ const invoiceService = {
   apis: {
     getMyInvoices: async (
       args: Args | string
-    ): Promise<{ invoices: InvoiceFullJoin[]; totalInvoices: number }> => {
+    ): Promise<{ invoices: Invoice[]; totalInvoices: number }> => {
       let userID: string;
       if (typeof args === "string") {
         userID = args;
@@ -19,18 +22,15 @@ const invoiceService = {
       }
 
       const response = await axiosInstance.get<{
-        info: { invoices: InvoiceFullJoin[]; totalInvoices: number };
-      }>(
-        `${invoiceEndPoint}?userID=${userID}&status=${InvoiceStatus.NEW}`,
-        reqConfig
-      );
+        info: { invoices: Invoice[]; totalInvoices: number };
+      }>(`${invoiceEndPoint}?userID=${userID}&status=${InvoiceStatus.NEW}`);
 
       return response.data.info;
     },
-    getInvoice: async (invoiceID: string): Promise<InvoiceFullJoin> => {
+    getInvoice: async (invoiceID: string): Promise<Invoice> => {
       const response = await axiosInstance.get<{
-        info: InvoiceFullJoin;
-      }>(`${invoiceEndPoint}/${invoiceID}`, reqConfig);
+        info: Invoice;
+      }>(`${invoiceEndPoint}/${invoiceID}`);
 
       return response.data.info;
     },
@@ -41,7 +41,7 @@ const invoiceService = {
       currentPage?: number;
       invoiceID?: string;
       userID?: string;
-    }): Promise<{ invoices: InvoiceFullJoin[]; totalInvoices: number }> => {
+    }): Promise<{ invoices: Invoice[]; totalInvoices: number }> => {
       let path: string = `${invoiceEndPoint}?`;
       path += `status=${params.status || InvoiceStatus.NEW}`;
       params.date && (path += `&date=${params.date}`);
@@ -51,15 +51,15 @@ const invoiceService = {
       params.userID && (path += `&userID=${params.userID}`);
 
       const response = await axiosInstance.get<{
-        info: { invoices: InvoiceFullJoin[]; totalInvoices: number };
-      }>(path, reqConfig);
+        info: { invoices: Invoice[]; totalInvoices: number };
+      }>(path);
 
       return response.data.info;
     },
-    createOrder: async (
-      orderPayload: OrderInsertion
-    ): Promise<InvoiceFullJoin> => {
-      const res = await axiosInstance.post<{ info: InvoiceFullJoin }>(
+    createInvoice: async (
+      orderPayload: InvoiceInsertionPayload
+    ): Promise<Invoice> => {
+      const res = await axiosInstance.post<{ info: Invoice }>(
         `${invoiceEndPoint}`,
         orderPayload,
         reqConfig
@@ -67,7 +67,7 @@ const invoiceService = {
 
       return res.data.info;
     },
-    payOrder: async (invoiceID: string): Promise<string> => {
+    payInvoice: async (invoiceID: string): Promise<string> => {
       const res = await axiosInstance.patch<{ info: string }>(
         `${invoiceEndPoint}/${invoiceID}/payment`,
         reqConfig
@@ -82,8 +82,8 @@ const invoiceService = {
         paymentID?: string;
         payment?: PaymentMethod;
       }
-    ): Promise<InvoiceFullJoin> => {
-      const res = await axiosInstance.patch<{ info: InvoiceFullJoin }>(
+    ): Promise<Invoice> => {
+      const res = await axiosInstance.patch<{ info: Invoice }>(
         `${invoiceEndPoint}/${invoiceID}`,
         {
           status: params.status,
@@ -96,7 +96,7 @@ const invoiceService = {
       return res.data.info;
     },
   },
-  getTotalBill: (invoice: InvoiceFullJoin): number => {
+  getTotalBill: (invoice: Invoice): number => {
     return invoice.invoiceProducts.reduce(
       (total, item) =>
         total + item.quantity * (1 - (item.discount || 0) / 100) * item.price,
@@ -105,7 +105,7 @@ const invoiceService = {
   },
   getProductOrderInsertion: (
     cartItems: CartItem[]
-  ): ProductOrderInsertion[] => {
+  ): ProductInvoiceInsertionPayload[] => {
     return cartItems.map((item) => ({
       productID: item.productID,
       itemID: item.itemID,
@@ -175,25 +175,19 @@ const invoiceService = {
       invoiceService.getInvoiceStatusLevel(statusToCompare)
     );
   },
-  updateInvoices: (
-    invoice: InvoiceFullJoin,
-    invoices: InvoiceFullJoin[]
-  ): InvoiceFullJoin[] => {
+  updateInvoices: (invoice: Invoice, invoices: Invoice[]): Invoice[] => {
     return [
       invoice,
       ...invoices.filter((e) => e.invoiceID !== invoice.invoiceID),
     ];
   },
-  deleteInvoice: (
-    invoiceID: string,
-    invoices: InvoiceFullJoin[]
-  ): InvoiceFullJoin[] => {
+  deleteInvoice: (invoiceID: string, invoices: Invoice[]): Invoice[] => {
     return [...invoices.filter((e) => e.invoiceID !== invoiceID)];
   },
   getInvoiceAfterFilterStatus: (
-    invoices: InvoiceFullJoin[],
+    invoices: Invoice[],
     status: InvoiceStatus
-  ): InvoiceFullJoin[] => {
+  ): Invoice[] => {
     return invoices.filter((e) => e.status === status);
   },
 };

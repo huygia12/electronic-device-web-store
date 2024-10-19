@@ -1,10 +1,9 @@
 import { FC, HTMLAttributes } from "react";
 import CustomImage from "./custom-image";
 import { cn } from "@/lib/utils";
-import { Nullable } from "@/utils/declare";
 
 interface BannerProps extends HTMLAttributes<HTMLDivElement> {
-  bannerUrl: Nullable<string>;
+  bannerUrl: string | null;
 }
 
 const Banner: FC<BannerProps> = ({ ...props }) => {

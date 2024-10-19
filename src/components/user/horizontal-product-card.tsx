@@ -1,13 +1,13 @@
 import SaleTag from "@/components/ui/saleTag";
 import React, { HTMLAttributes, useMemo } from "react";
-import { ProductFullJoin, ProductItem } from "@/types/model";
+import { Product, ProductItem } from "@/types/model";
 import { NavLink } from "react-router-dom";
 import { CustomImage } from "@/components/common";
 import { applyDiscount, isDiscount } from "@/utils/helpers";
 
 interface HorizontalProductCardProps extends HTMLAttributes<HTMLDivElement> {
   key: number;
-  product: ProductFullJoin;
+  product: Product;
 }
 
 const HorizontalProductCard: React.FC<HorizontalProductCardProps> = ({

@@ -2,13 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { invoiceService } from "@/services";
-import { InvoiceFullJoin } from "@/types/model";
+import { Invoice } from "@/types/model";
 import { formatDateTime } from "@/utils/helpers";
 import { FC, FormEventHandler, useState } from "react";
 import { toast } from "sonner";
 
 const InvoiceLookup: FC = () => {
-  const [invoice, setInvoice] = useState<InvoiceFullJoin>();
+  const [invoice, setInvoice] = useState<Invoice>();
   const [searchText, setSearchText] = useState<string>();
 
   const handleSearch: FormEventHandler<HTMLFormElement> = (e) => {
@@ -19,7 +19,7 @@ const InvoiceLookup: FC = () => {
 
     toast.promise(getInvoice, {
       loading: "Đang xử lý...",
-      success: (result: InvoiceFullJoin) => {
+      success: (result: Invoice) => {
         setInvoice(result);
 
         return "Đã tìm thấy đơn hàng!";

@@ -1,10 +1,10 @@
-import { ProductSummary } from "@/types/api";
+import { ProductSummary } from "@/types/payload";
 import { useRouteLoaderData } from "react-router-dom";
 import { FC, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { categoryService, productService, providerService } from "@/services";
 import {
-  HeaderBar,
+  UpperBar,
   ProductTable,
   ProductTools,
 } from "@/components/product-management";
@@ -109,7 +109,7 @@ const ProductManagement: FC = () => {
   return (
     <div className="mt-8">
       {/**Search */}
-      <HeaderBar
+      <UpperBar
         categories={categories}
         providers={providers}
         setSearchingInput={setSearchingQuery}

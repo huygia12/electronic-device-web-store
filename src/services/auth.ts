@@ -1,39 +1,35 @@
-import { Optional } from "@/utils/declare";
-import axios, { AxiosResponse } from "axios";
-import { axiosInstanceWithoutAuthorize, reqConfig } from "@/config";
+import { AxiosResponse } from "axios";
+import { axiosInstance, reqConfig } from "@/config";
 import { LoginFormProps } from "@/utils/schema";
+import { BaseUser } from "@/types/model";
+import { jwtDecode } from "jwt-decode";
+
+const TOKEN_NAME: string = "access_token";
+const userEndpoint = "/users";
 
 const authService = {
   apis: {
-    refreshToken: async (): Promise<Optional<string>> => {
+    refreshToken: async (): Promise<string | undefined> => {
       try {
-        const res = await axiosInstanceWithoutAuthorize.get(
-          `${import.meta.env.VITE_API_URL}/users/refresh`,
+        const res = await axiosInstance.get(
+          `${userEndpoint}/refresh`,
           reqConfig
         );
 
-        const accessToken: Optional<string> = res.data.info.accessToken;
+        const accessToken: string | undefined = res.data.info.accessToken;
 
         return accessToken;
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          console.error(`Error response: ${error.response}`);
-        } else {
-          console.error("Unexpected error:", error);
-        }
+        console.error("Unexpected error:", error);
       }
     },
     login: async (data: LoginFormProps): Promise<string> => {
-      const res = await axiosInstanceWithoutAuthorize.post(
-        `${import.meta.env.VITE_API_URL}/users/login`,
-        {
-          email: data.email.trim(),
-          password: data.password.trim(),
-        },
-        reqConfig
-      );
+      const res = await axiosInstance.post(`${userEndpoint}/login`, {
+        email: data.email.trim(),
+        password: data.password.trim(),
+      });
 
-      const accessToken: Optional<string> = res.data.info.accessToken;
+      const accessToken: string | undefined = res.data.info.accessToken;
       if (!accessToken) {
         console.debug("AUTH APIS: access token: ", JSON.stringify(accessToken));
         throw new Error(`Access token is undefined`);
@@ -42,13 +38,39 @@ const authService = {
       return accessToken;
     },
     logout: async (): Promise<AxiosResponse> => {
-      const res = await axiosInstanceWithoutAuthorize.delete(
-        `/users/logout`,
+      const res = await axiosInstance.delete(
+        `${userEndpoint}/logout`,
         reqConfig
       );
 
       return res;
     },
+  },
+  token: {
+    name: TOKEN_NAME,
+    getAccessToken: () => window.sessionStorage.getItem(TOKEN_NAME),
+    setAccessToken: (token: string) =>
+      window.sessionStorage.setItem(TOKEN_NAME, token),
+    removeAccessToken: () => window.sessionStorage.removeItem(TOKEN_NAME),
+  },
+  getUser: function (): BaseUser | null {
+    try {
+      const rawToken: string | null | undefined =
+        window.sessionStorage.getItem("access_token");
+      if (!rawToken) return null;
+
+      const tokenDecoded = jwtDecode<BaseUser>(rawToken);
+      if (!tokenDecoded.userID) return null;
+
+      const userDecoded: BaseUser = {
+        ...tokenDecoded,
+      };
+
+      return userDecoded;
+    } catch {
+      console.debug("Invalid token!");
+      return null;
+    }
   },
 };
 

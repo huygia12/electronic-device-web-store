@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { FC, HTMLAttributes, useEffect, useRef, useState } from "react";
 import { LoadingSpinner } from "@/components/effect";
 import { productService } from "@/services";
-import { ProductSummary } from "@/types/api";
+import { ProductSummary } from "@/types/payload";
 import { useCustomNavigate } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { applyDiscount, isDiscount } from "@/utils/helpers";

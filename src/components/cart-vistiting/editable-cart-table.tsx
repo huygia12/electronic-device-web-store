@@ -14,12 +14,12 @@ import { Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useCartProps } from "@/hooks";
-import { Error } from "@/types/error";
 import DeleteAllItemsDialog from "./delete-all-items-dialog";
 import { cartService } from "@/services";
 import { cn } from "@/lib/utils";
+import { Error } from "@/types/component";
 
-const header = [
+const columnHeaders = [
   "STT",
   "Ảnh",
   "Sản Phẩm",
@@ -88,7 +88,7 @@ const EditableCartTable: FC<HTMLAttributes<HTMLDivElement>> = ({
             <Table>
               <TableHeader className="z-10 sticky top-0 border-b-2 bg-white shadow-lg">
                 <tr>
-                  {header.map((title, index) => {
+                  {columnHeaders.map((title, index) => {
                     return (
                       <TableHead
                         className=" text-center text-black font-extrabold text-[1rem]"

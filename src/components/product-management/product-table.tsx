@@ -16,10 +16,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { FC, HTMLAttributes } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ProductSummary } from "@/types/api";
+import { ProductSummary } from "@/types/payload";
 import { cn } from "@/lib/utils";
 
-const colName: string[] = [
+const columnHeaders = [
   "STT",
   "ẢNH SẢN PHẨM",
   "TÊN SẢN PHẨM",
@@ -45,7 +45,7 @@ const ProductTable: FC<ProductTableProps> = ({ ...props }) => {
             <Table className="">
               <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
                 <tr>
-                  {colName.map((item, key) => {
+                  {columnHeaders.map((item, key) => {
                     return (
                       <TableHead
                         key={key}

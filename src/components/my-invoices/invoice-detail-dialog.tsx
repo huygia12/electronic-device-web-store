@@ -6,21 +6,21 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { HTMLAttributes, useMemo } from "react";
-import { InvoiceFullJoin } from "@/types/model";
+import { Invoice } from "@/types/model";
 import { invoiceService } from "@/services";
 import { formatDateTime } from "@/utils/helpers";
-import Badge from "../ui/badge";
+import Badge from "@/components/ui/badge";
 import { InvoiceStatus } from "@/types/enum";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { ProductInInvoice } from "@/components/common";
 import { cn } from "@/lib/utils";
-import OrderCancelDialog from "./order-cancel-dialog";
+import InvoiceCancelDialog from "./cancel-dialog";
 
 interface InvoiceDetailDialogProps extends HTMLAttributes<HTMLDivElement> {
   disableAction?: boolean;
-  invoice: InvoiceFullJoin;
-  updateInvoice: (invoice: InvoiceFullJoin) => void;
+  invoice: Invoice;
+  updateInvoice: (invoice: Invoice) => void;
 }
 
 const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
@@ -35,7 +35,7 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
   const payOrder = async () => {
     const toastID = toast.loading("Đang xử lý...");
     try {
-      const paymentUrl = await invoiceService.apis.payOrder(
+      const paymentUrl = await invoiceService.apis.payInvoice(
         props.invoice.invoiceID
       );
 
@@ -55,7 +55,7 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
 
     toast.promise(updateInvoice, {
       loading: "Đang xử lý...",
-      success: (invoice: InvoiceFullJoin) => {
+      success: (invoice: Invoice) => {
         props.updateInvoice(invoice);
         return "Hủy đơn hàng thành công!";
       },
@@ -125,7 +125,7 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
             >
               Thanh toán
             </Button>
-            <OrderCancelDialog handleConfirm={abortOrder}>
+            <InvoiceCancelDialog handleConfirm={abortOrder}>
               <Button
                 disabled={invoiceService.getUserButtonDisabled(
                   "cancel",
@@ -135,7 +135,7 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
               >
                 Hủy đơn hàng
               </Button>
-            </OrderCancelDialog>
+            </InvoiceCancelDialog>
           </span>
         </div>
       </DialogContent>

@@ -37,7 +37,6 @@ const ChangeOrderStatus: FC<ChangeOrderStatusProps> = ({ ...props }) => {
 
   const confirmSelection = () => {
     props.setInvoiceState(pendingValue!);
-    // setIsDialogOpen(false);
   };
 
   const cancelSelection = () => {

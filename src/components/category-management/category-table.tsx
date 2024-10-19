@@ -12,13 +12,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Category } from "@/types/model";
 import { FC, HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
-import { Optional } from "@/utils/declare";
 
 const colName: string[] = ["STT", "MÃ DANH MỤC", "TÊN DANH MỤC", "SỐ SẢN PHẨM"];
 
 interface CategoryTableProps extends HTMLAttributes<HTMLDivElement> {
   categories: Category[];
-  selectedCategory: Optional<Category>;
+  selectedCategory: Category | undefined;
   setSelectedCategory: (category: Category) => void;
 }
 

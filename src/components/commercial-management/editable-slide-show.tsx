@@ -22,13 +22,13 @@ import SlideWrapper from "./slide-wrapper";
 import { cn } from "@/lib/utils";
 import { createPortal } from "react-dom";
 import { useDropzone } from "react-dropzone";
-import { SlideCreation } from "@/types/api";
+import { SlideInsertionPayload } from "@/types/payload";
 import { FileImagePlaceholder } from "../common";
 import { retrieveImageUrl } from "@/utils/helpers";
 
 interface SlideShowProps extends HTMLAttributes<HTMLDivElement> {
-  slides: (Slide | SlideCreation)[];
-  editSlides: Dispatch<SetStateAction<(Slide | SlideCreation)[]>>;
+  slides: (Slide | SlideInsertionPayload)[];
+  editSlides: Dispatch<SetStateAction<(Slide | SlideInsertionPayload)[]>>;
 }
 
 const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
@@ -36,9 +36,9 @@ const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
     () => props.slides.map((slide) => slide.index),
     [props.slides]
   );
-  const [activeSlide, setActiveSlide] = useState<Slide | SlideCreation | null>(
-    null
-  );
+  const [activeSlide, setActiveSlide] = useState<
+    Slide | SlideInsertionPayload | null
+  >(null);
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {

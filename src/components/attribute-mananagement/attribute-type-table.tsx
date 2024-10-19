@@ -12,13 +12,12 @@ import { Attribute } from "@/types/model";
 import { FC, HTMLAttributes } from "react";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Optional } from "@/utils/declare";
 
-const typeColsName: string[] = ["STT", "THUỘC TÍNH"];
+const columnHeaders: string[] = ["STT", "THUỘC TÍNH"];
 
 interface AttributeTypeTableProps extends HTMLAttributes<HTMLDivElement> {
   attributes: Attribute[];
-  selectedAttribute: Optional<Attribute>;
+  selectedAttribute: Attribute | undefined;
   handleSelectAttribute: (attribute: Attribute) => void;
 }
 
@@ -43,7 +42,7 @@ const AttributeTypeTable: FC<AttributeTypeTableProps> = ({ ...props }) => {
           <Table>
             <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
               <tr>
-                {typeColsName.map((item, key) => {
+                {columnHeaders.map((item, key) => {
                   return (
                     <TableHead
                       key={key}

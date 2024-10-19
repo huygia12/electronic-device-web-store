@@ -15,7 +15,7 @@ import { NavLink } from "react-router-dom";
 import { buttonVariants } from "@/utils/constants";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FC, HTMLAttributes } from "react";
-import { ProductSummary } from "@/types/api";
+import { ProductSummary } from "@/types/payload";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 

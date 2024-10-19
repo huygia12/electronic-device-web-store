@@ -12,13 +12,12 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDateTime } from "@/utils/helpers";
 import { User } from "@/types/model";
-import Badge from "../ui/badge";
+import Badge from "@/components/ui/badge";
 import { userService } from "@/services";
 import { cn } from "@/lib/utils";
-import { Optional } from "@/utils/declare";
 import { Role } from "@/types/enum";
 
-const colName: string[] = [
+const columnHeaders = [
   "STT",
   "TÊN",
   "SỐ LIÊN LẠC",
@@ -30,7 +29,7 @@ const colName: string[] = [
 
 interface UserTableProps extends HTMLAttributes<HTMLTableElement> {
   users: User[];
-  selectedUser: Optional<User>;
+  selectedUser: User | undefined;
   setSelectedUser: (user: User) => void;
   handleBanUser: (value: boolean) => void;
 }
@@ -46,7 +45,7 @@ const UserTable: FC<UserTableProps> = ({ ...props }) => {
           <Table>
             <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
               <tr>
-                {colName.map((item, key) => {
+                {columnHeaders.map((item, key) => {
                   return (
                     <TableHead
                       key={key}

@@ -15,7 +15,6 @@ import { useDropzone } from "react-dropzone";
 import { retrieveImageUrl } from "@/utils/helpers";
 import { Button } from "@/components/ui/button";
 import { storeService } from "@/services";
-import { Nullable } from "@/utils/declare";
 import { toast } from "sonner";
 import { Banner } from "@/types/component";
 
@@ -27,7 +26,7 @@ interface SideBannerProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const SideBanner: FC<SideBannerProps> = ({ ...props }) => {
-  const [displayImage, setDisplayImage] = useState<Nullable<string>>(
+  const [displayImage, setDisplayImage] = useState<string | null>(
     props.banner.prevBanner
   );
   const setNewBannerFile = (
