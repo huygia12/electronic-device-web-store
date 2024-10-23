@@ -1,4 +1,4 @@
-import { axiosInstance, reqConfig } from "@/config";
+import { axiosInstance } from "@/config";
 import firebaseService from "./firebase";
 import { Store } from "@/types/model";
 
@@ -34,14 +34,10 @@ const storeService = {
           path = `${path}?prevBannerUrl=${prevBanner}`;
         }
 
-        await axiosInstance.patch<{ info: string }>(
-          path,
-          {
-            newBanner: bannerUrl,
-            position: position,
-          },
-          reqConfig
-        );
+        await axiosInstance.patch<{ info: string }>(path, {
+          newBanner: bannerUrl,
+          position: position,
+        });
 
         return bannerUrl;
       } catch (error) {

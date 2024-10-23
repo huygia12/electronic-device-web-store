@@ -1,5 +1,5 @@
 import { CartItem, Invoice } from "@/types/model";
-import { axiosInstance, reqConfig } from "@/config/axios-config";
+import { axiosInstance } from "@/config/axios-config";
 import { InvoiceStatus, PaymentMethod } from "@/types/enum";
 import {
   InvoiceInsertionPayload,
@@ -61,16 +61,14 @@ const invoiceService = {
     ): Promise<Invoice> => {
       const res = await axiosInstance.post<{ info: Invoice }>(
         `${invoiceEndPoint}`,
-        orderPayload,
-        reqConfig
+        orderPayload
       );
 
       return res.data.info;
     },
     payInvoice: async (invoiceID: string): Promise<string> => {
       const res = await axiosInstance.patch<{ info: string }>(
-        `${invoiceEndPoint}/${invoiceID}/payment`,
-        reqConfig
+        `${invoiceEndPoint}/${invoiceID}/payment`
       );
 
       return res.data.info;
@@ -89,8 +87,7 @@ const invoiceService = {
           status: params.status,
           paymentID: params.paymentID,
           payment: params.payment,
-        },
-        reqConfig
+        }
       );
 
       return res.data.info;

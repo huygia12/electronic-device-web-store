@@ -144,21 +144,21 @@ const AppClientHeader: FC = () => {
               />
             </DropdownAvatar>
           ) : (
-            <div className="space-x-2 text-[1.1rem] flex justify-end">
+            <div className="space-x-2 text-[1.1rem] flex justify-end ml-auto">
               <NavLink
-                className="hover_text-primary-foreground hover_font-semibold"
+                className="hover_text-primary-foreground hover_font-semibold text-nowrap"
                 to="/login"
                 unstable_viewTransition={true}
               >
-                Đăng nhập
+                Đăng Nhập
               </NavLink>
               <span>/</span>
               <NavLink
-                className="hover_text-primary-foreground hover_font-semibold"
+                className="hover_text-primary-foreground hover_font-semibold text-nowrap"
                 to="/signup"
                 unstable_viewTransition={true}
               >
-                Đăng ký
+                Đăng Ký
               </NavLink>
             </div>
           )}

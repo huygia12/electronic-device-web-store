@@ -1,5 +1,5 @@
 import { Category } from "@/types/model";
-import { axiosInstance, reqConfig } from "@/config";
+import { axiosInstance } from "@/config";
 
 const categoryEndpoint = "/categories";
 
@@ -21,8 +21,7 @@ const categoryService = {
         `${categoryEndpoint}`,
         {
           categoryName: name,
-        },
-        reqConfig
+        }
       );
 
       return response.data.info;
@@ -35,16 +34,14 @@ const categoryService = {
         `${categoryEndpoint}/${categoryID}`,
         {
           categoryName: newName,
-        },
-        reqConfig
+        }
       );
 
       return response.data.info;
     },
     deleteCategory: async (categoryID: string) => {
       const response = await axiosInstance.delete(
-        `${categoryEndpoint}/${categoryID}`,
-        reqConfig
+        `${categoryEndpoint}/${categoryID}`
       );
 
       return response;

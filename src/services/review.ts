@@ -1,5 +1,5 @@
 import { Review, ReviewFullJoin } from "@/types/model";
-import { axiosInstance, reqConfig } from "@/config";
+import { axiosInstance } from "@/config";
 
 const reviewEndpoint = "/reviews";
 
@@ -12,7 +12,7 @@ const reviewService = {
       }
       const res = await axiosInstance.get<{
         info: ReviewFullJoin[];
-      }>(path, reqConfig);
+      }>(path);
       return res.data.info;
     },
   },

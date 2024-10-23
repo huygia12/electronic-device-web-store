@@ -28,7 +28,7 @@ const HomepageMenu: FC<HomepageMenuProps> = ({ ...props }) => {
         props.className
       )}
     >
-      <h1 className="bg-theme space-x-1 flex items-center text-[1rem] font-semibold pt-4 pb-4 pl-2">
+      <h1 className="bg-theme space-x-1 flex items-center text-[0.9rem] font-semibold pt-4 pb-4 pl-2">
         <SwatchBook />
         <span>DANH MỤC SẢN PHẨM</span>
       </h1>
