@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { axiosInstance, reqConfig } from "@/config";
+import { axiosInstance } from "@/config";
 import { Attribute, AttributeOption } from "@/types/model";
 import { ProductAttributesFormProps } from "@/utils/schema";
 
@@ -26,8 +26,7 @@ const attributeService = {
         attributeEndPoint,
         {
           typeValue: name,
-        },
-        reqConfig
+        }
       );
       return response.data.info;
     },
@@ -39,16 +38,14 @@ const attributeService = {
         `${attributeEndPoint}/${typeID}`,
         {
           typeValue: newName,
-        },
-        reqConfig
+        }
       );
 
       return response.data.info;
     },
     deleteAttributeType: async (typeID: string): Promise<AxiosResponse> => {
       const response = await axiosInstance.delete(
-        `${attributeEndPoint}/${typeID}`,
-        reqConfig
+        `${attributeEndPoint}/${typeID}`
       );
 
       return response;
@@ -61,8 +58,7 @@ const attributeService = {
         `${attributeEndPoint}/${typeID}/options`,
         {
           optionValue: option,
-        },
-        reqConfig
+        }
       );
 
       return response.data.info;
@@ -76,15 +72,13 @@ const attributeService = {
         `${attributeEndPoint}/${typeID}/options/${optionID}`,
         {
           optionValue: newName,
-        },
-        reqConfig
+        }
       );
       return response.data.info;
     },
     deleteAttributeOption: async (typeID: string, optionID: string) => {
       const response = await axiosInstance.delete(
-        `${attributeEndPoint}/${typeID}/options/${optionID}`,
-        reqConfig
+        `${attributeEndPoint}/${typeID}/options/${optionID}`
       );
       return response;
     },

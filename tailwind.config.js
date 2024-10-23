@@ -107,7 +107,7 @@ module.exports = {
         shake: "shake 1s ease-in-out",
       },
       width: {
-        myLayout: "90rem",
+        myLayout: "84rem",
         adminLayout: "110rem",
       },
       boxShadow: {

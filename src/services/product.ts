@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { axiosInstance, reqConfig } from "@/config";
+import { axiosInstance } from "@/config";
 import { Args } from "@/utils/helpers";
 import { ProductSummary } from "@/types/payload";
 import { Product } from "@/types/model";
@@ -75,8 +75,7 @@ const productService = {
 
       //Delete product
       const resOfDelete = await axiosInstance.delete(
-        `${productEndPoint}/${productID}`,
-        reqConfig
+        `${productEndPoint}/${productID}`
       );
 
       if (deepClean) {
@@ -116,8 +115,7 @@ const productService = {
 
       const res = await axiosInstance.post(
         `${productEndPoint}`,
-        productPayload,
-        reqConfig
+        productPayload
       );
 
       return res;
@@ -148,8 +146,7 @@ const productService = {
 
       const res = await axiosInstance.put(
         `${productEndPoint}/${productID}`,
-        productPayload,
-        reqConfig
+        productPayload
       );
 
       for (const item of removedItem) {

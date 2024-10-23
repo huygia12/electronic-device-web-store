@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { axiosInstance, reqConfig } from "@/config/axios-config";
+import { axiosInstance } from "@/config/axios-config";
 import { UserUpdatePayload } from "@/types/payload";
 import { User } from "@/types/model";
 import { SignupFormProps } from "@/utils/schema";
@@ -82,8 +82,7 @@ const userService = {
         {
           ...data,
           avatar: avatarUrl,
-        },
-        reqConfig
+        }
       );
       return res.data.info;
     },
@@ -125,10 +124,7 @@ const userService = {
       return res.data.info;
     },
     deleteUser: async (userID: string): Promise<AxiosResponse> => {
-      const res = await axiosInstance.delete(
-        `${userEndPoint}/${userID}`,
-        reqConfig
-      );
+      const res = await axiosInstance.delete(`${userEndPoint}/${userID}`);
       return res;
     },
   },

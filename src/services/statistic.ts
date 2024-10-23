@@ -1,5 +1,5 @@
 import { InvoiceStatistic, Statistic } from "@/types/payload";
-import { axiosInstance, reqConfig } from "@/config";
+import { axiosInstance } from "@/config";
 import { getTheFollowingDay } from "@/utils/helpers";
 
 const statisticEndpoint = "/statistic";
@@ -8,8 +8,7 @@ const statisticService = {
   apis: {
     getStatistic: async (): Promise<Statistic> => {
       const res = await axiosInstance.get<{ info: Statistic }>(
-        `${statisticEndpoint}`,
-        reqConfig
+        `${statisticEndpoint}`
       );
 
       return res.data.info;

@@ -1,4 +1,4 @@
-import { axiosInstance, reqConfig } from "@/config";
+import { axiosInstance } from "@/config";
 import { Provider } from "@/types/model";
 
 const providerEndpoint = "/providers";
@@ -21,8 +21,7 @@ const providerService = {
         `${providerEndpoint}`,
         {
           providerName: name,
-        },
-        reqConfig
+        }
       );
 
       return response.data.info;
@@ -35,16 +34,14 @@ const providerService = {
         `${providerEndpoint}/${providerID}`,
         {
           providerName: newName,
-        },
-        reqConfig
+        }
       );
 
       return response.data.info;
     },
     deleteProvider: async (providerID: string) => {
       const response = await axiosInstance.delete(
-        `${providerEndpoint}/${providerID}`,
-        reqConfig
+        `${providerEndpoint}/${providerID}`
       );
 
       return response;
