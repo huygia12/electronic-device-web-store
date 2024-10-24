@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { axiosInstance } from "@/config";
+import { axiosInstance, reqConfig } from "@/config";
 import { LoginFormProps } from "@/utils/schema";
 import { BaseUser } from "@/types/model";
 import { jwtDecode } from "jwt-decode";
@@ -11,7 +11,10 @@ const authService = {
   apis: {
     refreshToken: async (): Promise<string | undefined> => {
       try {
-        const res = await axiosInstance.get(`${userEndpoint}/refresh`);
+        const res = await axiosInstance.get(
+          `${userEndpoint}/refresh`,
+          reqConfig
+        );
 
         const accessToken: string | undefined = res.data.info.accessToken;
 
@@ -21,10 +24,14 @@ const authService = {
       }
     },
     login: async (data: LoginFormProps): Promise<string> => {
-      const res = await axiosInstance.post(`${userEndpoint}/login`, {
-        email: data.email.trim(),
-        password: data.password.trim(),
-      });
+      const res = await axiosInstance.post(
+        `${userEndpoint}/login`,
+        {
+          email: data.email.trim(),
+          password: data.password.trim(),
+        },
+        reqConfig
+      );
 
       const accessToken: string | undefined = res.data.info.accessToken;
       if (!accessToken) {
@@ -35,7 +42,10 @@ const authService = {
       return accessToken;
     },
     logout: async (): Promise<AxiosResponse> => {
-      const res = await axiosInstance.delete(`${userEndpoint}/logout`);
+      const res = await axiosInstance.delete(
+        `${userEndpoint}/logout`,
+        reqConfig
+      );
 
       return res;
     },

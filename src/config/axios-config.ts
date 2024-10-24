@@ -1,9 +1,14 @@
 import { authService } from "@/services";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { fromUnixTime, isAfter } from "date-fns";
 import { InvalidTokenError, jwtDecode } from "jwt-decode";
 
-const apiUrl = `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}`;
+const localHost = "http://127.0.0.1";
+const serverUrl =
+  import.meta.env.VITE_API_SERVER_URL ||
+  `${localHost}:${import.meta.env.VITE_API_SERVER_PORT}`;
+
+const apiUrl = `${serverUrl}/${import.meta.env.VITE_API_VERSION}`;
 
 export const axiosInstance = axios.create({
   baseURL: apiUrl,
@@ -11,8 +16,11 @@ export const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true,
 });
+
+export const reqConfig: AxiosRequestConfig = {
+  withCredentials: true, // Include credentials in requests
+};
 
 axiosInstance.interceptors.request.use(async (config) => {
   let accessToken: string | null = authService.token.getAccessToken();

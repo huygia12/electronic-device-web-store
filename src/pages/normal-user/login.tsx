@@ -129,7 +129,7 @@ const Login: FC = () => {
             <div className="text-red-600 mt-4">{errors.root.message}</div>
           )}
           <div className="mt-4 text-center text-lg">
-            Bạn đã có tài khoản? &nbsp;
+            Bạn chưa có tài khoản? &nbsp;
             <NavLink to="/signup" className="underline hover_text-primary">
               Đăng ký
             </NavLink>
