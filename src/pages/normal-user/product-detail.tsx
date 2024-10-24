@@ -125,7 +125,9 @@ const ProductDetailPage: FC = () => {
             Mô Tả Sản Phẩm
           </AccordionTrigger>
           <AccordionContent className="py-4 px-10 !border-x-2 border-slate-200 text-[0.9rem] contain-content">
-            {product.description}
+            <div
+              dangerouslySetInnerHTML={{ __html: product.description || "" }}
+            ></div>
           </AccordionContent>
         </AccordionItem>
 

@@ -1,6 +1,11 @@
 import { BlinkProvider, CartProvider } from "@/context";
-import React, { useEffect } from "react";
-import { Outlet, useNavigation, useRouteLoaderData } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  Outlet,
+  useNavigation,
+  useRouteLoaderData,
+  useSearchParams,
+} from "react-router-dom";
 import { Toaster, toast } from "sonner";
 import {
   ScrollToTop,
@@ -24,6 +29,30 @@ const UserLayout: React.FC = () => {
   const { setNumberOfShippingInvoice: setNumberOfRequestingInvoice } =
     useMyInvoice();
   const { currentUser } = useCurrentUser();
+  const [searchParams] = useSearchParams();
+  const [paidSuccess, setPaidSuccess] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkRoutingParams = async () => {
+      const paidInvoiceID: string | null = searchParams.get("paidInvoiceID");
+      if (paidInvoiceID) {
+        setPaidSuccess(true);
+      }
+    };
+
+    checkRoutingParams();
+  }, [searchParams]);
+
+  useEffect(() => {
+    const checkPaid = async () => {
+      if (paidSuccess) {
+        toast.success("Thanh toán đơn hàng thành công!");
+        setPaidSuccess(false);
+      }
+    };
+
+    checkPaid();
+  }, [paidSuccess]);
 
   useEffect(() => {
     const handleBanned = async (payload: { userID: string }) => {

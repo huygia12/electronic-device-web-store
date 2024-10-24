@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Invoice } from "@/types/model";
 import { FC, useEffect, useRef, useState } from "react";
-import { useRouteLoaderData, useSearchParams } from "react-router-dom";
+import { useRouteLoaderData } from "react-router-dom";
 import { InvoiceTable } from "@/components/my-invoices";
 import { CustomPagination, InvoiceUpperBar } from "@/components/common";
 import { getPages } from "@/utils/helpers";
@@ -17,7 +17,6 @@ const PersonalInvoices: FC = () => {
     totalInvoices: number;
   };
   const { currentUser } = useCurrentUser();
-  const [searchParams] = useSearchParams();
   const [invoices, setInvoices] = useState<Invoice[]>(initData.invoices);
   const [totalPages, setTotalPages] = useState<number>(
     getPages(initData.totalInvoices)
@@ -31,29 +30,6 @@ const PersonalInvoices: FC = () => {
     id: string | number;
     state: boolean;
   } | null>();
-  const [paidSuccess, setPaidSuccess] = useState<boolean>(false);
-
-  useEffect(() => {
-    const checkRoutingParams = async () => {
-      const paidInvoiceID: string | null = searchParams.get("paidInvoiceID");
-      if (paidInvoiceID) {
-        setPaidSuccess(true);
-      }
-    };
-
-    checkRoutingParams();
-  }, [searchParams]);
-
-  useEffect(() => {
-    const checkPaid = async () => {
-      if (paidSuccess) {
-        toast.success("Thanh toán đơn hàng thành công!");
-        setPaidSuccess(false);
-      }
-    };
-
-    checkPaid();
-  }, [paidSuccess]);
 
   useEffect(() => {
     if (toasting.current === undefined) {
