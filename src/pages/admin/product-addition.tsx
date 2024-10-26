@@ -157,8 +157,8 @@ const ProductAddition: FC = () => {
   };
 
   return (
-    <>
-      <h1 className="text-4xl font-extrabold mt-8 mb-10">Thêm sản phẩm</h1>
+    <div className="my-8">
+      <h1 className="text-4xl font-extrabold mb-10">Thêm sản phẩm</h1>
       <form onSubmit={handleSubmit(handleFormSubmission)}>
         {/** PRODUCT */}
         <ProductAdditionSection
@@ -188,7 +188,7 @@ const ProductAddition: FC = () => {
         />
 
         {/** BUTTONS */}
-        <div className="flex justify-between">
+        <div className="mt-8 flex justify-between">
           <span className="space-x-4 flex">
             <Button
               variant="positive"
@@ -226,7 +226,7 @@ const ProductAddition: FC = () => {
           </span>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

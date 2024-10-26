@@ -32,33 +32,33 @@ const StatisticChart: FC<StatisticChartProps> = ({ ...props }) => {
   );
 
   return (
-    <Card className={cn("rounded-2xl shadow-lg w-full px-10", props.className)}>
-      <CardHeader className="py-6 px-10 flex flex-col items-stretch space-y-0 border-b p-0 sm_flex-row">
-        <div className="flex flex-1 flex-col justify-center gap-1 py-5 sm_py-6">
+    <Card className={cn("rounded-2xl shadow-lg w-full px-6", props.className)}>
+      <CardHeader className="border-b p-0 flex-row">
+        <div className="flex flex-1 flex-col justify-center gap-1">
           {activeChart === "revenue" ? (
             <>
-              <CardTitle>Doanh thu</CardTitle>
+              <CardTitle>Doanh Thu</CardTitle>
               <CardDescription>
-                Doanh thu từng ngày trong tháng {new Date().getMonth() + 1}
+                {`Doanh thu trong tháng ${new Date().getMonth() + 1} (đơn vị VNĐ)`}
               </CardDescription>
             </>
           ) : (
             <>
-              <CardTitle>Đơn hàng</CardTitle>
+              <CardTitle>Đơn Hàng</CardTitle>
               <CardDescription>
-                Số đơn hàng từng ngày trong tháng {new Date().getMonth() + 1}
+                Số đơn hàng trong tháng {new Date().getMonth() + 1}
               </CardDescription>
             </>
           )}
         </div>
-        <div className="flex">
+        <div className="flex !mt-0">
           {["revenue", "order"].map((key) => {
             const chart = key as keyof typeof chartConfig;
             return (
               <button
                 key={chart}
                 data-active={activeChart === chart}
-                className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even_border-l data-[active=true]_bg-muted/100 sm_border-l sm_border-t-0 sm_px-8 sm_py-6"
+                className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even_border-l data-[active=true]_bg-muted/100 sm_border-l"
                 onClick={() => setActiveChart(chart)}
               >
                 <span className="text-xs text-muted-foreground">
@@ -72,7 +72,7 @@ const StatisticChart: FC<StatisticChartProps> = ({ ...props }) => {
           })}
         </div>
       </CardHeader>
-      <CardContent className="sm_py-16">
+      <CardContent className="px-0 py-2">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[20rem] w-full"
@@ -90,16 +90,15 @@ const StatisticChart: FC<StatisticChartProps> = ({ ...props }) => {
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
-              tickLine={false}
-              axisLine={false}
+              tickLine={true}
+              axisLine={true}
               tickMargin={8}
-              minTickGap={32}
+              minTickGap={20}
               tickFormatter={(value) => getDayOfMonthString(new Date(value))}
             />
             <ChartTooltip
               content={
                 <ChartTooltipContent
-                  className="min-w-[10rem]"
                   labelFormatter={(value) => getDateString(new Date(value))}
                 />
               }

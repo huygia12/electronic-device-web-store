@@ -1,32 +1,29 @@
 import React, { HTMLAttributes } from "react";
-import { NavLink } from "react-router-dom";
 import { CarouselItem } from "@/components/ui/carousel";
 import CustomImage from "@/components/common/custom-image";
+import { useCustomNavigate } from "@/hooks";
+import { cn } from "@/lib/utils";
 
 interface SlideShowProps extends HTMLAttributes<HTMLDivElement> {
   src: string;
   alt: string;
+  imageCss?: string;
   link?: string;
 }
 
 const SlideShow: React.FC<SlideShowProps> = ({ className, ...props }) => {
+  const { navigate } = useCustomNavigate();
+
   return (
-    <CarouselItem className={className}>
-      {props.link ? (
-        <NavLink to={props.link} unstable_viewTransition>
-          <CustomImage
-            src={props.src}
-            alt={props.alt}
-            className="h-[27rem] w-max object-fill rounded-xl mx-auto"
-          />
-        </NavLink>
-      ) : (
-        <CustomImage
-          src={props.src}
-          alt={props.alt}
-          className="h-[27rem] w-max object-fill rounded-xl mx-auto"
-        />
-      )}
+    <CarouselItem className={cn("overflow-hidden", className)}>
+      <CustomImage
+        src={props.src}
+        onClick={() =>
+          props.link && navigate(props.link, { unstable_viewTransition: true })
+        }
+        alt={props.alt}
+        className={cn("object-fill rounded-xl mx-auto", props.imageCss)}
+      />
     </CarouselItem>
   );
 };

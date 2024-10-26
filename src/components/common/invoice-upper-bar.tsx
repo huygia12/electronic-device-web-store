@@ -33,7 +33,7 @@ const HeaderBar: FC<HeaderBarProps> = ({ ...props }) => {
         }
       >
         <SelectTrigger className="w-[18rem] h-[3rem]">
-          <SelectValue className="" placeholder="Trạng Thái Đơn Hàng" />
+          <SelectValue placeholder="Trạng Thái Đơn Hàng" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value={InvoiceStatus.NEW}>Đang Chờ Duyệt</SelectItem>

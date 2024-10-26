@@ -14,7 +14,7 @@ const ClientSection = () => {
         <Input
           type="email"
           placeholder="Nhập email của bạn"
-          className="w-[30rem] rounded-r-none focus_mr-1"
+          className="w-[30rem] rounded-r-none text-gray-500 text-lg placeholder_text-sm focus_mr-1"
         />
         <Button
           variant="negative"

@@ -27,45 +27,32 @@ const statisticService = {
   ): InvoiceStatistic[] => {
     const now = new Date();
     let dayInMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    let lastDayInChartData: string | null = null;
+    let dateHolder;
+    const statistic: InvoiceStatistic[] = [];
 
-    const statistic = chartData.reduce<InvoiceStatistic[]>((prev, curr) => {
-      while (dayInMonth.getDate() < new Date(curr.date).getDate()) {
-        prev.push({
-          date: dayInMonth.toISOString(),
+    while (dayInMonth <= now) {
+      const searchingResult = chartData.find(
+        (d) => new Date(d.date).getDate() === dayInMonth.getDate()
+      ); //Find if the date iterator had figures or not
+      if (searchingResult) {
+        dateHolder = new Date(searchingResult.date);
+        dateHolder.setUTCHours(17);
+        dateHolder.setDate(dateHolder.getDate() - 1); //Because when it is casted to ISOString, the date will be add to 1
+        statistic.push({
+          ...searchingResult,
+          date: dateHolder.toISOString(),
+        });
+      } else {
+        dateHolder = new Date(dayInMonth);
+        dateHolder.setDate(dateHolder.getDate());
+        statistic.push({
           revenue: 0,
           order: 0,
+          date: dateHolder.toISOString(),
         });
-
-        dayInMonth = getTheFollowingDay(dayInMonth);
       }
 
-      prev.push(curr);
-      lastDayInChartData = curr.date;
-
-      return prev;
-    }, []);
-
-    dayInMonth = getTheFollowingDay(dayInMonth);
-    while (dayInMonth.getDate() < now.getDate()) {
-      statistic.push({
-        date: dayInMonth.toISOString(),
-        revenue: 0,
-        order: 0,
-      });
-
       dayInMonth = getTheFollowingDay(dayInMonth);
-    }
-
-    if (
-      lastDayInChartData! &&
-      new Date(lastDayInChartData).getDate() < now.getDate()
-    ) {
-      statistic.push({
-        date: dayInMonth.toISOString(),
-        revenue: 0,
-        order: 0,
-      });
     }
 
     return statistic;

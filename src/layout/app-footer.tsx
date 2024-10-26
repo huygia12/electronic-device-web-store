@@ -15,7 +15,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ className }) => {
       )}
     >
       <div className="w-3/4 my-5">
-        <div className="grid-flow-row grid grid-cols-5">
+        <div className="grid grid-cols-2 gap-10 lg_grid-cols-3 2xl_grid-cols-5">
           <div className="flex flex-col space-y-4 col-span-2">
             <span className="font-extrabold text-lg">VỀ HGSHOP</span>
             <span>© 2024 Công ty Cổ phần đầu tư công nghệ</span>
@@ -79,20 +79,20 @@ const AppFooter: React.FC<AppFooterProps> = ({ className }) => {
             </span>
           </div>
 
-          <div className="flex flex-col space-y-8">
-            <span className="flex flex-col">
+          <div className="flex space-x-14 2xl_flex-col 2xl_space-y-8 col-span-2 2xl_col-span-1 2xl_space-x-0">
+            <div className="flex flex-col">
               <span className="font-extrabold text-lg mb-2">
                 ĐƠN VỊ VẬN CHUYỂN
               </span>
               <span>
                 <img src="/ghn.webp" alt="ghn" className="w-14" />
               </span>
-            </span>
+            </div>
             <span className="flex flex-col">
               <span className="font-extrabold text-lg mb-2">
                 CÁCH THỨC THANH TOÁN
               </span>
-              <span className="flex space-x-2">
+              <span className="grid grid-cols-2 md_grid-cols-3 gap-2 2xl_grid-cols-4">
                 <img
                   src="/master-card.webp"
                   alt="master-card"

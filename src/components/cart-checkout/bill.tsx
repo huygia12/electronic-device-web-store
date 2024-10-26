@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { FC, HTMLAttributes, useMemo } from "react";
 import { cartService } from "@/services";
 import { CartItem } from "@/types/model";
+import { cn } from "@/lib/utils";
 
 interface BillProps extends HTMLAttributes<HTMLDivElement> {
   cartItems: CartItem[] | undefined;
@@ -36,7 +37,7 @@ const Bill: FC<BillProps> = ({ ...props }) => {
   );
 
   return (
-    <section className="rounded-md">
+    <section className={cn("rounded-md", props.className)}>
       <Card className="shadow-lg">
         <CardHeader className="px-4">
           <CardTitle className="mb-4">ĐƠN HÀNG</CardTitle>
@@ -59,12 +60,12 @@ const Bill: FC<BillProps> = ({ ...props }) => {
             </>
           )}
           <div className="flex justify-between">
-            <span>Tổng tiền giảm giá</span>
+            <span>Tiền giảm giá</span>
             <del>{totalDiscountAmount.toLocaleString() + "đ"}</del>
           </div>
           <Separator className="border-dashed" />
           <div className="flex justify-between items-center font-semibold">
-            <span className="text-primary text-xl">Tổng thanh toán</span>
+            <span className="text-primary text-base">Tổng thanh toán</span>
             <span>{props.totalMoney.toLocaleString() + "đ"}</span>
           </div>
         </CardContent>
@@ -78,7 +79,7 @@ const Bill: FC<BillProps> = ({ ...props }) => {
             Hoàn thành đơn hàng
           </Button>
           {props.shippingFee && (
-            <div className="mt-10 text-[0.8rem] ">
+            <div className="mt-5 text-[0.8rem] ">
               <span className="font-semibold">
                 <span className="text-red-600 ">*</span>
                 Ghi chú:

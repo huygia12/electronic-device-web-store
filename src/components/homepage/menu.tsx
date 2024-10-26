@@ -24,7 +24,7 @@ const HomepageMenu: FC<HomepageMenuProps> = ({ ...props }) => {
     <div
       id="category_menu"
       className={cn(
-        "bg-white shadow-general w-1/6 min-h-full rounded-lg overflow-hidden",
+        "bg-white shadow-general min-h-full rounded-lg overflow-y-auto",
         props.className
       )}
     >

@@ -33,8 +33,9 @@ const formatDateTime = (dateString: string): string => {
 
 const getDayOfMonthString = (date: Date): string => {
   const day = date.getDate();
+  const month = date.getMonth() + 1;
 
-  return `ngày ${day}`;
+  return `${day}/${month}`;
 };
 
 const getDateString = (date: Date): string => {

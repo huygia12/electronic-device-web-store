@@ -5,29 +5,41 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { slides } from "@/pages/data";
 import Autoplay from "embla-carousel-autoplay";
-import { useRef } from "react";
+import { FC, HTMLAttributes, useRef } from "react";
+import { Slide } from "@/types/model";
+import { SlideInsertionPayload } from "@/types/payload";
+import { cn } from "@/lib/utils";
 
-const BannerSection = () => {
+interface BannerSectionProps extends HTMLAttributes<HTMLDivElement> {
+  slides: (Slide | SlideInsertionPayload)[];
+  disableNavigation?: boolean;
+}
+
+const BannerSection: FC<BannerSectionProps> = ({
+  disableNavigation = false,
+  ...props
+}) => {
   const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
 
   return (
-    <div className="grid grid-cols-3 gap-3 w-5/6">
+    <div className={cn("grid grid-cols-3 gap-3", props.className)}>
       <Carousel
         plugins={[plugin.current]}
         onMouseEnter={plugin.current.stop}
         onMouseLeave={plugin.current.play}
-        className="w-full col-span-2 row-span-2 rounded-xl shadow-neutral-500 shadow-md"
+        className="col-span-2 row-span-2 rounded-xl shadow-neutral-500 shadow-md"
       >
         <CarouselContent>
-          {slides.map((item, index) => {
+          {props.slides.map((item, index) => {
             return (
               <SlideShow
-                src={item.src}
-                alt={item.alt}
                 key={index}
-                link={item.link}
+                src={item.url}
+                alt={item.url}
+                link={!disableNavigation && item.ref ? item.ref : undefined}
+                className="h-full"
+                imageCss="h-[20.8rem] 4xl_h-[24.8rem]"
               />
             );
           })}

@@ -16,12 +16,12 @@ import { invoiceService } from "@/services";
 import { formatDateTime } from "@/utils/helpers";
 import InvoiceDetailDialog from "./invoice-detail-dialog";
 import { Separator } from "@/components/ui/separator";
+import TableContextMenu from "../common/table-context-menu";
 
 const columnHeaders = [
   "TÊN ĐẶT HÀNG",
   "ID ĐƠN HÀNG",
-  "NGÀY ĐẶT HÀNG",
-  "SỐ MẶT HÀNG",
+  "NGÀY ĐẶT",
   "TỔNG TIỀN",
   "TRẠNG THÁI",
   "THAO TÁC",
@@ -48,7 +48,7 @@ const InvoiceTable: FC<OrderTableProps> = ({ className, ...props }) => {
               return (
                 <TableHead
                   key={key}
-                  className=" text-center text-black font-extrabold text-[1rem]"
+                  className="text-nowrap text-center text-black font-extrabold text-[1rem]"
                 >
                   {item}
                 </TableHead>
@@ -59,23 +59,34 @@ const InvoiceTable: FC<OrderTableProps> = ({ className, ...props }) => {
         <TableBody>
           {props.invoices.map((invoice, index) => (
             <TableRow key={index}>
-              <TableCell className="text-center text-base">
+              <TableCell
+                className="text-center text-base
+              "
+              >
                 {invoice.userName}
               </TableCell>
               <TableCell className="text-center text-base">
-                {invoice.invoiceID}
+                <TableContextMenu textToCopy={invoice.invoiceID}>
+                  {invoice.invoiceID}
+                </TableContextMenu>
               </TableCell>
-              <TableCell className="text-center text-base">
+              <TableCell className="text-center text-base xl_text-nowrap">
                 {formatDateTime(`${invoice.createdAt}`)}
               </TableCell>
-              <TableCell className="text-center text-base">{`${invoice.invoiceProducts.length} sản phẩm`}</TableCell>
               <TableCell className="text-center text-base">{`${invoiceService.getTotalBill(invoice).toLocaleString()}đ`}</TableCell>
               <TableCell className="text-center">
-                <Badge className="bg-green-500 text-white py-2 px-4 text-sm hover_bg-green-500">
+                <Badge
+                  className={cn(
+                    `text-white px-2 text-sm hover_!${invoiceService.getInvoiceStatusColor(
+                      invoice.status
+                    )}`,
+                    invoiceService.getInvoiceStatusColor(invoice.status)
+                  )}
+                >
                   {invoiceService.getInvoiceStatus(invoice.status)}
                 </Badge>
               </TableCell>
-              <TableCell className="flex items-center justify-center space-x-2">
+              <TableCell className="my-auto">
                 <InvoiceDetailDialog
                   invoice={invoice}
                   updateInvoice={updateInvoice}

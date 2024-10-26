@@ -12,7 +12,7 @@ import {
   TooltipTrigger,
   Tooltip,
 } from "@/components/ui/tooltip";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { FC, HTMLAttributes } from "react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,7 +23,7 @@ const columnHeaders = [
   "STT",
   "ẢNH SẢN PHẨM",
   "TÊN SẢN PHẨM",
-  "KÍCH THƯỚC(dài/rộng/cao)",
+  "(DÀI/RỘNG/CAO)",
   "KHỐI LƯỢNG",
   "DANH MỤC",
   "NHÀ PHÂN PHỐI",
@@ -38,18 +38,18 @@ interface ProductTableProps extends HTMLAttributes<HTMLDivElement> {
 
 const ProductTable: FC<ProductTableProps> = ({ ...props }) => {
   return (
-    <Card className={cn("rounded-2xl shadow-lg flex-1", props.className)}>
+    <Card className={cn("rounded-2xl shadow-lg", props.className)}>
       <CardContent className="flex flex-col p-4 h-[60vh]">
         {props.products.length !== 0 ? (
-          <ScrollArea className="relative h-[60vh]">
-            <Table className="">
+          <ScrollArea className="relative h-[60vh] pr-3 pb-3">
+            <Table>
               <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
                 <tr>
                   {columnHeaders.map((item, key) => {
                     return (
                       <TableHead
                         key={key}
-                        className=" text-center text-black font-extrabold text-[1rem]"
+                        className="text-nowrap text-center text-black font-extrabold text-[1rem]"
                       >
                         {item}
                       </TableHead>
@@ -114,6 +114,7 @@ const ProductTable: FC<ProductTableProps> = ({ ...props }) => {
                 </tr>
               </TableBody>
             </Table>
+            <ScrollBar orientation="horizontal" />
           </ScrollArea>
         ) : (
           <div className="flex flex-col items-center">

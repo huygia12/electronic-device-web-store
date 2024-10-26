@@ -1,7 +1,6 @@
 import {
   SideBanner,
   EditableSlideShow,
-  BannerSection,
 } from "@/components/commercial-management";
 import { FC, useState } from "react";
 import { editingSlides } from "../data";
@@ -10,7 +9,7 @@ import { SlideInsertionPayload } from "@/types/payload";
 import { Banner } from "@/types/component";
 import { useRouteLoaderData } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { HomepageMenu } from "@/components/homepage";
+import { BannerSection, HomepageMenu } from "@/components/homepage";
 
 const StoreManagement: FC = () => {
   const store = useRouteLoaderData("store_management") as Store;
@@ -29,7 +28,7 @@ const StoreManagement: FC = () => {
   return (
     <div className="mb-20">
       <div className="mt-10 flex justify-between mb-6 pb-4 border-b-2 border-gray-500 border-dashed">
-        <h1 className="text-4xl font-extrabold">Quản lý cửa hàng, Quảng cáo</h1>
+        <h1 className="text-2xl font-extrabold">Quản lý cửa hàng, Quảng cáo</h1>
         <span className="space-x-4">
           <Button variant="positive">Lưu thay đổi</Button>
           {preview ? (
@@ -43,7 +42,7 @@ const StoreManagement: FC = () => {
           )}
         </span>
       </div>
-      <div className="flex justify-between">
+      <div className="flex justify-between gap-4">
         <SideBanner
           banner={leftBanner}
           setBanner={setLeftBanner}
@@ -52,12 +51,16 @@ const StoreManagement: FC = () => {
           modifiable={!preview}
         />
         {preview ? (
-          <section className="flex flex-row space-x-3">
-            <HomepageMenu providers={undefined} categories={undefined} />
+          <section className="flex flex-row max-h-[40.8rem] space-x-3">
+            <HomepageMenu
+              className="hidden 2xl_block"
+              providers={undefined}
+              categories={undefined}
+            />
             <BannerSection
-              className="w-[70rem]"
               slides={slides}
               disableNavigation={true}
+              className="2xl_w-4/5 auto-rows-[10rem] 4xl_auto-rows-[12rem]"
             />
           </section>
         ) : (

@@ -160,8 +160,8 @@ const UserManagement: FC = () => {
   };
 
   return (
-    <div>
-      <SearchBox className="mt-8 mb-4" setSearchText={setSearchText} />
+    <div className="my-8">
+      <SearchBox className="mb-4" setSearchText={setSearchText} />
 
       <div className="flex gap-4">
         <UserTable
@@ -169,7 +169,7 @@ const UserManagement: FC = () => {
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
           handleBanUser={handleBanUser}
-          className="flex-1"
+          className="flex-1 w-1" // set width to make flex work ????
         />
 
         <UserTools

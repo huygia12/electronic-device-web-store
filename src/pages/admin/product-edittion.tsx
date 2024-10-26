@@ -186,8 +186,8 @@ const ProductEdittion: FC = () => {
   };
 
   return (
-    <>
-      <h1 className="text-4xl font-extrabold mt-8 mb-10">Sửa sản phẩm</h1>
+    <div className="my-10">
+      <h1 className="text-4xl font-extrabold mb-10">Sửa sản phẩm</h1>
       <form onSubmit={handleSubmit(handleFormSubmission)}>
         {/** PRODUCT */}
         <ProductEdittionSection
@@ -262,7 +262,7 @@ const ProductEdittion: FC = () => {
           </span>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

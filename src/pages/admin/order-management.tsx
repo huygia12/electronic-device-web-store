@@ -59,17 +59,16 @@ const OrderManagement: FC = () => {
   }, [searchText, selectedStatus, currentPage]);
 
   return (
-    <div>
+    <div className="my-8">
       {/** TABLE */}
       <InvoiceUpperBar
         searchPlaceholder="Tìm kiếm theo tên khách hàng..."
         setSelectedStatus={setSelectedStatus}
         setSearchText={setSearchText}
-        className="mt-8"
       />
 
       <Card className="rounded-2xl shadow-lg mt-4 mb-4">
-        <CardHeader className="py-6 px-10">
+        <CardHeader className="py-6">
           <CardTitle className="text-8">Quản lý đơn hàng</CardTitle>
         </CardHeader>
         <CardContent className="px-6 pb-4 h-[60vh]">

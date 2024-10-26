@@ -41,7 +41,7 @@ const Bill: FC<HTMLAttributes<HTMLDivElement>> = () => {
           </span>
         </div>
         <div className="flex justify-between">
-          <span>Tổng tiền giảm giá</span>
+          <span>Tiền giảm giá</span>
           <del>
             {cartService.getTotalDiscountAmount(itemsInLocal).toLocaleString() +
               "đ"}
@@ -49,7 +49,7 @@ const Bill: FC<HTMLAttributes<HTMLDivElement>> = () => {
         </div>
         <Separator className="border-dashed" />
         <div className="flex justify-between items-center font-semibold">
-          <span className="text-primary text-xl">Tổng thanh toán</span>
+          <span className="text-primary text-base">Tổng thanh toán</span>
           <span>
             {(
               cartService.getTotalAmount(itemsInLocal) -

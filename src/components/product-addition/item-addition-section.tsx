@@ -20,12 +20,12 @@ interface ItemAdditionProps extends HTMLAttributes<HTMLUListElement> {
 
 const ItemAdditionSection: FC<ItemAdditionProps> = ({ ...props }) => {
   return (
-    <ul className="mb-8">
+    <ul>
       {Array.from({ length: props.itemQuantity }).map((_, parentIndex) => {
         return (
           <li
             key={parentIndex}
-            className="grid grid-cols-2 gap-8 border-stone-200 border-2 rounded-xl p-5 mt-10"
+            className="grid grid-cols-1 lg_grid-cols-2 gap-8 border-stone-200 border-2 rounded-xl p-5 mt-10"
           >
             <div className="flex flex-col gap-2">
               <Label

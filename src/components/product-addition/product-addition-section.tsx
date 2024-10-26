@@ -63,7 +63,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-2 gap-8 mb-8">
+    <div className="grid grid-cols-1 2xl_grid-cols-2 2xl_gap-8">
       {/** LEFT */}
       <div className="grid gap-4 grid-cols-3">
         {/** PRODUCT NAME */}
@@ -89,7 +89,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
         {/** GURANTEE TIME SPAN */}
         <div className="space-y-2">
           <Label htmlFor="gurantee" className="text-lg font-extrabold">
-            Thời hạn bảo hành(tháng)
+            Hạn bảo hành(tháng)
             <span className="text-red-600 ">*</span>
           </Label>
           <Input
@@ -360,7 +360,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
         </div>
         {/** PRODUCT ATTRIBUTES */}
         <ScrollArea className="col-span-3">
-          <div className="flex py-6 space-x-2">
+          <div className="flex pb-6 space-x-2">
             {props.productAttributesAddition.map((productAttribute, index) => (
               <Badge
                 variant="outline"

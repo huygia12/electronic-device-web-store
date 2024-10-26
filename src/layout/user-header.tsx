@@ -42,7 +42,7 @@ const AppClientHeader: FC = () => {
     <header className="w-full flex flex-col sticky top-0 z-50 shadow-xl">
       {/** UPPER */}
       <div className="flex justify-around bg-third">
-        <div className="flex justify-between w-myLayout text-[0.8rem] py-2">
+        <div className="flex justify-between text-[0.8rem] py-2 w-lg 2xl_w-xl 3xl_w-2xl">
           <span className="flex items-center ">
             <TfiHeadphoneAlt className="pr-2" size={20} />
             Gọi mua hàng: &nbsp;
@@ -65,25 +65,25 @@ const AppClientHeader: FC = () => {
       </div>
 
       {/** UNDER */}
-      <div className="bg-theme h-[5rem] shadow-md flex justify-center ">
-        <div className="w-myLayout items-center grid grid-cols-10">
+      <div className="bg-theme h-[5rem] w-full shadow-md flex justify-center ">
+        <div className="items-center grid grid-cols-10 w-lg 2xl_w-xl 3xl_w-2xl">
           {/** WEBSITE LOGO */}
           <NavLink to="/" className="col-span-2" unstable_viewTransition>
             <img src="/logo.svg.png" alt="logo" className="h-12" />
           </NavLink>
 
           {/** SEARCH BAR AND OTHERS */}
-          <div className="col-span-6 grid grid-cols-6 items-center">
+          <div className="pr-10 gap-14 col-span-6 flex 2xl_grid 2xl_grid-cols-6 2xl_gap-0 3xl_pr-0 items-center">
             <button
               onClick={handleGoToMenu}
-              className="w-36 bg-theme-softer text-gray-700 rounded-md px-2 flex h-10 items-center hover_bg-yellow-400"
+              className="hidden 2xl_flex w-36 bg-theme-softer text-gray-700 rounded-md px-2 h-10 items-center hover_bg-yellow-400 text-nowrap"
             >
-              <AlignJustify className="mr-4" /> Danh Mục
+              <AlignJustify className="mr-2" /> Danh Mục
             </button>
 
-            <SearchBar className="ml-10 col-span-3" />
+            <SearchBar className="w-full 2xl_ml-10 2xl_col-span-3" />
 
-            <div className="col-span-2 flex flex-row items-center space-x-[2rem] ml-20">
+            <div className="2xl_col-span-2 2xl_ml-20 flex flex-row items-center space-x-[1.5rem]">
               <NavLink
                 to="/cart/view"
                 className="relative"
@@ -119,6 +119,13 @@ const AppClientHeader: FC = () => {
                 item={{
                   name: "Tài Khoản Của Tôi",
                   src: `/users/${currentUser.userID}`,
+                  visible: true,
+                }}
+              />
+              <DropMenuLinkItem
+                item={{
+                  name: "Đơn Hàng Của Tôi",
+                  src: `/users/${currentUser.userID}/orders`,
                   visible: true,
                 }}
               />

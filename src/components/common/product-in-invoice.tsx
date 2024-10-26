@@ -42,7 +42,7 @@ const ProductInInvoice: FC<ProductInOrder> = ({ ...props }) => {
               {columnHeaders.map((title, index) => {
                 return (
                   <TableHead
-                    className=" text-center text-black font-extrabold text-[1rem]"
+                    className="text-nowrap text-center text-black font-extrabold text-[1rem]"
                     key={index}
                   >
                     {title}

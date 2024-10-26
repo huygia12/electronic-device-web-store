@@ -68,7 +68,7 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="flex">
+        <form className="flex gap-4">
           <input hidden type="text" autoComplete="username" />
           <div className="flex relative">
             <Label htmlFor="old-password" className="text-lg my-auto w-[14rem]">
@@ -96,7 +96,7 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
               )}
             </button>
           </div>
-          <div className="flex ml-auto relative mr-20">
+          <div className="flex ml-auto relative">
             <Label htmlFor="new-password" className="text-lg my-auto w-[14rem]">
               Mật khẩu mới
               <span className="text-red-600 ">*</span>

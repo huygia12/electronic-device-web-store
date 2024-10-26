@@ -216,7 +216,7 @@ const CartCheckout: FC = () => {
     <div className="">
       <form
         onSubmit={handleSubmit(handleShippingFormSubmission)}
-        className="grid grid-cols-4 w-full gap-4"
+        className="flex flex-col 3xl_grid 3xl_grid-cols-4 w-full gap-4"
       >
         <ShippingInputs
           register={register}
@@ -230,6 +230,7 @@ const CartCheckout: FC = () => {
           selectedProvince={province}
           selectedDistrict={district}
           selectedWard={ward}
+          className="col-span-3"
         />
 
         {/** BILL */}

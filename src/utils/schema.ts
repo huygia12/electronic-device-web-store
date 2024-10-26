@@ -60,13 +60,10 @@ const validateFiles = () =>
       return checkImageSize;
     }, SchemaResponse.IMAGE_FILE_OVER_FLOW);
 
-const validateFile = (optional: boolean = false) =>
+const validateFile = () =>
   z
     .instanceof(FileList)
-    .refine(
-      (files) => optional || files.length > 0,
-      SchemaResponse.AT_LEAST_ONE_IMAGE
-    )
+    .refine((files) => files.length > 0, SchemaResponse.AT_LEAST_ONE_IMAGE)
     .refine(
       (files) => (files[0] ? files[0].type.includes("image") : true),
       SchemaResponse.IMAGE_FILE_INVALID
@@ -83,7 +80,7 @@ const inputFormPreprocess = (schema: z.ZodTypeAny) =>
 
 const UserSchema = z.object({
   userName: notBlankString(),
-  avatar: inputFormPreprocess(validateFile(true)),
+  avatar: inputFormPreprocess(validateFile().optional()),
   phoneNumber: z
     .string()
     .refine((value) => {
@@ -109,7 +106,7 @@ const SignupSchema = z.object({
   retypePassword: z
     .string()
     .min(6, { message: SchemaResponse.PASSWORD_INVALID }),
-  avatar: inputFormPreprocess(validateFile(true)),
+  avatar: inputFormPreprocess(validateFile().optional()),
   phoneNumber: z
     .string()
     .refine((value) => {
@@ -184,7 +181,6 @@ const AttributeTypeSchema = z.object({
   typeValue: z.string().min(0, { message: "String cannot be blank" }),
 });
 
-//TODO:
 const validateUnionOfArrayStringAndFileList = () =>
   z
     .union([z.array(z.string()), z.instanceof(FileList)])

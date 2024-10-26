@@ -1,5 +1,5 @@
 import { FC, HTMLAttributes } from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import {
   Table,
@@ -24,7 +24,7 @@ const columnHeaders = [
   "NGÀY ĐĂNG KÝ",
   "EMAIL",
   "VAI TRÒ",
-  "KHÓA NGƯỜI DÙNG",
+  "KHÓA TÀI KHOẢN",
 ];
 
 interface UserTableProps extends HTMLAttributes<HTMLTableElement> {
@@ -37,11 +37,11 @@ interface UserTableProps extends HTMLAttributes<HTMLTableElement> {
 const UserTable: FC<UserTableProps> = ({ ...props }) => {
   return (
     <Card className={cn("rounded-2xl shadow-lg", props.className)}>
-      <CardHeader className="py-6 px-10">
+      <CardHeader className="py-6">
         <CardTitle className="text-8">Danh sách khách hàng</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col px-6 pb-4">
-        <ScrollArea className="relavtive h-[58vh]">
+      <CardContent className="flex flex-col px-4">
+        <ScrollArea className="relavtive h-[58vh] pr-3 pb-3">
           <Table>
             <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
               <tr>
@@ -49,7 +49,7 @@ const UserTable: FC<UserTableProps> = ({ ...props }) => {
                   return (
                     <TableHead
                       key={key}
-                      className=" text-center text-black font-extrabold text-[1rem]"
+                      className="text-nowrap text-center text-black font-extrabold text-[1rem]"
                     >
                       {item}
                     </TableHead>
@@ -77,14 +77,14 @@ const UserTable: FC<UserTableProps> = ({ ...props }) => {
                   <TableCell className="text-center text-base">
                     {user.phoneNumber}
                   </TableCell>
-                  <TableCell className="text-center text-base">
+                  <TableCell className="text-center text-base 2xl_text-nowrap">
                     {formatDateTime(`${user.createdAt}`)}
                   </TableCell>
                   <TableCell className="text-center text-base">
                     {user.email}
                   </TableCell>
                   <TableCell className="text-center text-base">
-                    <Badge className="bg-blue-500 text-white text-base h-8 hover_!bg-blue-500">
+                    <Badge className="bg-blue-500 text-white text-base text-nowrap h-8 hover_!bg-blue-500">
                       {userService.getRoleToDisplay(user.role)}
                     </Badge>
                   </TableCell>
@@ -99,6 +99,7 @@ const UserTable: FC<UserTableProps> = ({ ...props }) => {
               ))}
             </TableBody>
           </Table>
+          <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </CardContent>
     </Card>

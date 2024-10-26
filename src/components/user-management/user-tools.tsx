@@ -30,7 +30,7 @@ interface UserToolsProps extends HTMLAttributes<HTMLDivElement> {
 const UserTools: FC<UserToolsProps> = ({ ...props }) => {
   return (
     <Card className={cn("rounded-xl shadow-lg", props.className)}>
-      <CardContent className="p-4 space-y-4 flex flex-col contain-content">
+      <CardContent className="p-4 space-y-4 flex flex-col">
         {/** add button */}
         <AddUserDialog handleAddUser={props.handleAddUser}>
           <Button variant="positive" className="text-xl">
