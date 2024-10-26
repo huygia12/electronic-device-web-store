@@ -18,7 +18,6 @@ interface FilterToolsProps extends HTMLAttributes<HTMLDivElement> {
   onSortSelection: (value: Sort) => void;
   onPriceRangeChange: (value: number[]) => void;
   onSaleFilterChange: (value: boolean) => void;
-  onFilter: () => void;
 }
 
 const FilterProductTools: FC<FilterToolsProps> = ({ ...props }) => {
@@ -71,8 +70,13 @@ const FilterProductTools: FC<FilterToolsProps> = ({ ...props }) => {
   };
 
   return (
-    <div className="flex bg-slate-200 rounded-lg px-4 py-6">
-      <span className="flex gap-3">
+    <div
+      className={cn(
+        "flex bg-slate-200 rounded-lg px-4 py-4 4xl_py-6",
+        props.className
+      )}
+    >
+      <span className="grid grid-cols-2 4xl_flex gap-3">
         <Button
           variant="dashed"
           value={Sort.ASC}
@@ -117,7 +121,7 @@ const FilterProductTools: FC<FilterToolsProps> = ({ ...props }) => {
           </SelectContent>
         </Select>
       </span>
-      <span className="flex-1 flex items-center px-8">
+      <span className="self-center flex-1 flex items-center px-8">
         <Label className="text-md font-extrabold text-nowrap">
           Khoảng giá: &nbsp;
         </Label>
@@ -129,13 +133,6 @@ const FilterProductTools: FC<FilterToolsProps> = ({ ...props }) => {
           onValueChange={props.onPriceRangeChange}
         />
       </span>
-      <Button
-        onClick={() => props.onFilter()}
-        variant="neutral"
-        className="ml-15"
-      >
-        Lọc
-      </Button>
     </div>
   );
 };

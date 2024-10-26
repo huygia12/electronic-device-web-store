@@ -12,7 +12,7 @@ interface StatisticCardProps extends HTMLAttributes<HTMLDivElement> {
 const StatisticCard: FC<StatisticCardProps> = ({ ...props }) => {
   return (
     <Card className="min-w-[200px] rounded-2xl shadow-lg">
-      <CardHeader className="flex flex-row items-center justify-between px-5 pt-4 pb-2">
+      <CardHeader className="rounded-t-xl flex flex-row items-center justify-between px-5 pt-4 pb-2">
         <CardTitle className="text-[1rem] max-w-[80%] truncate ...">
           {props.name}
         </CardTitle>

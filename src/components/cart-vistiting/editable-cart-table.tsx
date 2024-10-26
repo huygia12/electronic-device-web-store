@@ -71,7 +71,7 @@ const EditableCartTable: FC<HTMLAttributes<HTMLDivElement>> = ({
   return (
     <section
       className={cn(
-        "col-span-3 flex flex-col border-2 border-slate-2 rounded-md shadow-md",
+        "flex flex-col border-2 border-slate-2 rounded-md shadow-md p-4",
         props.className
       )}
     >
@@ -114,7 +114,7 @@ const EditableCartTable: FC<HTMLAttributes<HTMLDivElement>> = ({
                           className="max-h-20"
                         />
                       </TableCell>
-                      <TableCell className="text-center text-base max-w-[15rem] truncate hover_underline hover_text-primary">
+                      <TableCell className="text-center text-base max-w-[13rem] truncate hover_underline hover_text-primary">
                         <NavLink
                           to={"/products/" + prod.productID}
                           unstable_viewTransition

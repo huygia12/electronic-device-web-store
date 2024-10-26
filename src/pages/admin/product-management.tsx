@@ -107,7 +107,7 @@ const ProductManagement: FC = () => {
   };
 
   return (
-    <div className="mt-8">
+    <div className="my-8">
       {/**Search */}
       <UpperBar
         categories={categories}
@@ -120,17 +120,16 @@ const ProductManagement: FC = () => {
         handleRefreshFilter={handleRefreshFilter}
       />
 
-      <div className="flex gap-4">
+      <div className="mt-4 flex gap-4">
         {/** Table */}
         <ProductTable
-          className="mt-4"
+          className="flex-1 w-1"
           products={products}
           selectedProduct={selectedProduct}
           setSelectedProduct={setSelectedProduct}
         />
 
         <ProductTools
-          className="mt-4"
           setDeepCleanProductID={setDeepCleanProductID}
           selectedProduct={selectedProduct}
           handleDeleteProduct={handleDeleteProduct}

@@ -39,17 +39,23 @@ const TopSaleCollection: FC<TopSaleCollectionProps> = ({ ...props }) => {
         <CarouselContent className="px-2 pb-6 pt-4">
           {props.products
             ? props.products.map((product, index) => (
-                <CarouselItem key={index} className="basis-1/5">
+                <CarouselItem
+                  key={index}
+                  className="basis-1/3 md_basis-1/4 4xl_basis-1/5"
+                >
                   <CardProduct product={product} className="shadow-none" />
                 </CarouselItem>
               ))
             : Array.from({ length: 20 }).map((_, index) => (
-                <CarouselItem key={index} className="basis-1/5">
+                <CarouselItem
+                  key={index}
+                  className="basis-1/3 md_basis-1/4 4xl_basis-1/5"
+                >
                   <CardSkeleton />
                 </CarouselItem>
               ))}
         </CarouselContent>
-        <CarouselPrevious className="top-[-1rem] left-[91%] w-10 bg-primary border-2 border-red-600" />
+        <CarouselPrevious className="top-[-1rem] left-[87%] 2xl_left-[89%] 4xl_left-[91%] w-10 bg-primary border-2 border-red-600" />
         <CarouselNext className="top-[-1rem] right-[2rem] w-10 bg-primary border-2 border-red-600" />
       </Carousel>
       <div className="pb-6 w-full flex items-center justify-around">

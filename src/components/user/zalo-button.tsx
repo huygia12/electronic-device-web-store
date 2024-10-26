@@ -1,6 +1,7 @@
-import { FC, useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
+import { FC, HTMLAttributes, useEffect, useRef } from "react";
 
-const ZaloButton: FC = () => {
+const ZaloButton: FC<HTMLAttributes<HTMLAnchorElement>> = ({ ...props }) => {
   const linkzalo = useRef(
     `https://chat.zalo.me/?phone=${import.meta.env.VITE_ZALO_PHONE_NUMBER}`
   );
@@ -17,7 +18,7 @@ const ZaloButton: FC = () => {
 
   return (
     <a href={linkzalo.current} target="_blank">
-      <div className="fixed bottom-28 right-5">
+      <div className={cn("fixed", props.className)}>
         <div className="fcta-zalo-nen-nut bg-blue-600 text-white w-12 h-12 rounded-full">
           <div className="fcta-zalo-ben-trong-nut flex items-center justify-center text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <svg

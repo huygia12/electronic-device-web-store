@@ -1,17 +1,9 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FC, HTMLAttributes } from "react";
 import { User } from "@/types/model";
 import { formatDateTime } from "@/utils/helpers";
-import { NavLink } from "react-router-dom";
 
 interface NewCustomerTableProps extends HTMLAttributes<HTMLDivElement> {
   newCustomers: User[];
@@ -29,29 +21,28 @@ const NewCustomerTable: FC<NewCustomerTableProps> = ({ ...props }) => {
         <ScrollArea className="h-[20rem] px-4">
           {props.newCustomers.map((customer, index) => {
             return (
-              <Card key={index} className="mb-4 flex flex-row py-4">
-                <CardHeader className="p-4">
-                  <Avatar>
-                    <AvatarImage src={customer.avatar || undefined} />
-                    <AvatarFallback>avt</AvatarFallback>
-                  </Avatar>
-                </CardHeader>
-                <CardContent className="col-span-3 p-0 w-full max-w-60 h-full my-auto">
-                  <div className="font-extrabold text-[1.1rem] truncate">
-                    {customer.userName}
+              <Card key={index} className="mb-4 flex flex-row">
+                <CardContent className="col-span-3 p-4 w-full h-full my-auto">
+                  <div className="flex items-center gap-4">
+                    <Avatar className="w-14 h-14">
+                      <AvatarImage src={customer.avatar || undefined} />
+                      <AvatarFallback>avt</AvatarFallback>
+                    </Avatar>
+                    <span className="flex flex-col gap-1">
+                      <span className="flex justify-between gap-1">
+                        <span className="font-extrabold text-[1.1rem] max-w-32 truncate">
+                          {customer.userName}
+                        </span>
+                        <em className="font-extralight text-sm self-end">
+                          {customer.email}
+                        </em>
+                      </span>
+                      <span className="font-extralight text-sm">
+                        {`Đã gia nhập ${formatDateTime(`${customer.createdAt}`)}`}
+                      </span>
+                    </span>
                   </div>
-                  {`Đã gia nhập ${formatDateTime(`${customer.createdAt}`)}`}
                 </CardContent>
-                <CardFooter className="p-0 px-5 flex">
-                  <NavLink to="#">
-                    <Button
-                      variant="neutral"
-                      className=" w-[6.2rem] h-[2rem] !text-sm !rounded-full hover_underline"
-                    >
-                      Xem chi tiết
-                    </Button>
-                  </NavLink>
-                </CardFooter>
               </Card>
             );
           })}

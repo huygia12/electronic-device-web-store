@@ -13,6 +13,7 @@ import useCurrentUser from "@/hooks/use-current-user";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { ShippingFormProps } from "@/utils/schema";
 import { District, Province, Ward } from "@/types/payload";
+import { cn } from "@/lib/utils";
 
 interface ShippingInputsProps extends HTMLAttributes<HTMLDivElement> {
   register: UseFormRegister<ShippingFormProps>;
@@ -32,7 +33,12 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
   const { currentUser } = useCurrentUser();
 
   return (
-    <section className="grid grid-cols-3 gap-4 col-span-3 border-2 border-slate-2 rounded-md p-4 shadow-lg">
+    <section
+      className={cn(
+        "grid grid-cols-3 gap-4 border-2 border-slate-2 rounded-md p-4 shadow-lg",
+        props.className
+      )}
+    >
       <h1 className="text-2xl font-semibold col-span-3">THÔNG TIN GIAO HÀNG</h1>
       {/** ACCOUNT NAME */}
       <div className="space-y-1">

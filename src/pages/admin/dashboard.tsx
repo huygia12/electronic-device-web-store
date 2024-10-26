@@ -35,7 +35,7 @@ const Dashboard: FC = () => {
   return (
     <div className="flex flex-col py-8">
       {/** 5 Statistic Card */}
-      <div className="grid grid-cols-4 gap-8 mb-8">
+      <div className="grid grid-cols-2 lg_grid-cols-4 gap-4 mb-8">
         <StatisticCard
           name="DOANH THU"
           icon={DollarSign}
@@ -73,7 +73,7 @@ const Dashboard: FC = () => {
       {/** Order Preview */}
       {statistic.orders.length > 0 && (
         <Card className="rounded-2xl shadow-lg mb-8">
-          <CardHeader className="py-6 px-10">
+          <CardHeader className="py-6 px-6">
             <CardTitle className="text-8">Đơn hàng cần xác nhận</CardTitle>
           </CardHeader>
           <CardContent className="px-6">

@@ -66,14 +66,21 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{props.children}</DialogTrigger>
-      <DialogContent className="min-w-[90rem]">
+      <DialogContent className="min-w-lg 3xl_min-w-2xl">
         <DialogHeader>
           <DialogTitle className="border-b-2 pb-4 border-dashed border-slate-500 flex justify-between">
             <span className="text-3xl font-light">Thông Tin Đơn Hàng</span>
             <span className="mr-4 space-x-4 flex items-center">
               <span>{props.invoice.invoiceID}</span>
-              <Badge className="bg-green-500 rounded-md text-white py-1 px-4 text-lg hover_bg-green-500">
-                {invoiceService.getInvoiceStatus(invoiceState)}
+              <Badge
+                className={cn(
+                  `rounded-md text-white py-1 px-4 text-lg hover_!${invoiceService.getInvoiceStatusColor(
+                    props.invoice.status
+                  )}`,
+                  invoiceService.getInvoiceStatusColor(props.invoice.status)
+                )}
+              >
+                {invoiceService.getInvoiceStatus(props.invoice.status)}
               </Badge>
             </span>
           </DialogTitle>

@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Category, Product, Provider } from "@/types/model";
-import { LAPTOP_ID, PHONE_ID } from "@/pages/data";
+import { LAPTOP_ID, PHONE_ID, editingSlides } from "@/pages/data";
 import { productService, providerService } from "@/services";
 import categoryService from "@/services/category";
 import {
@@ -61,19 +61,23 @@ const Homepage: FC = () => {
 
   return (
     <main>
-      <section className="flex flex-row max-h-[40.8rem] space-x-3 mb-[4rem]">
+      <section className="flex flex-row max-h-[40.8rem] space-x-3">
         <HomepageMenu
           providers={providers}
           categories={categories}
-          className={cn(isBlink && "animate-shake")}
+          className={cn("w-1/5", isBlink && "animate-shake")}
         />
-        <BannerSection />
+        <BannerSection
+          slides={editingSlides}
+          className="w-4/5 auto-rows-[10rem] 4xl_auto-rows-[12rem]"
+        />
       </section>
 
       <TopSaleCollection
         to={`/products?categoryID=${PHONE_ID}&saleArrange=true`}
         headerTitle="⚡ KHUYẾN MẠI ĐIỆN THOẠI SHOCK NHẤT 🔥"
         products={onSalePhones}
+        className="mt-14"
       />
 
       <NormalCollection

@@ -132,6 +132,16 @@ const invoiceService = {
 
     return invoiceStatus;
   },
+  getInvoiceStatusColor: (status: InvoiceStatus): string => {
+    let color: string;
+    if (status === InvoiceStatus.NEW) color = "bg-gray-500";
+    else if (status === InvoiceStatus.PAYMENT_WAITING) color = "bg-green-500";
+    else if (status === InvoiceStatus.SHIPPING) color = "bg-orange-500";
+    else if (status === InvoiceStatus.DONE) color = "bg-blue-500";
+    else color = "bg-red-500";
+
+    return color;
+  },
   getInvoiceStatusLevel: (invoiceStatus: InvoiceStatus): number => {
     return invoiceStatus === InvoiceStatus.NEW
       ? 1

@@ -11,7 +11,7 @@ import { HTMLAttributes } from "react";
 import { Button } from "@/components/ui/button";
 import Badge from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { invoiceService } from "@/services";
 import { formatDateTime } from "@/utils/helpers";
 import OrderDetailDialog from "./order-detail-dialog";
@@ -20,7 +20,7 @@ import { Separator } from "@/components/ui/separator";
 const columnHeaders: string[] = [
   "KHÁCH HÀNG",
   "ID ĐƠN HÀNG",
-  "NGÀY ĐẶT HÀNG",
+  "NGÀY ĐẶT",
   "SỐ MẶT HÀNG",
   "TỔNG TIỀN",
   "TRẠNG THÁI",
@@ -48,7 +48,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
               return (
                 <TableHead
                   key={key}
-                  className=" text-center text-black font-extrabold text-[1rem]"
+                  className="text-nowrap text-center text-black font-extrabold text-[1rem]"
                 >
                   {item}
                 </TableHead>
@@ -56,7 +56,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
             })}
           </tr>
         </TableHeader>
-        <TableBody>
+        <TableBody className="p-0">
           {props.orders.map((invoice, index) => (
             <TableRow key={index}>
               <TableCell className="text-center text-base">
@@ -65,17 +65,24 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
               <TableCell className="text-center text-base">
                 {invoice.invoiceID}
               </TableCell>
-              <TableCell className="text-center text-base">
+              <TableCell className="text-center text-base xl_text-nowrap">
                 {formatDateTime(`${invoice.createdAt}`)}
               </TableCell>
               <TableCell className="text-center text-base">{`${invoice.invoiceProducts.length} sản phẩm`}</TableCell>
               <TableCell className="text-center text-base">{`${invoiceService.getTotalBill(invoice).toLocaleString()}đ`}</TableCell>
               <TableCell className="text-center">
-                <Badge className="bg-green-500 text-white py-2 px-4 text-sm hover_bg-green-500">
+                <Badge
+                  className={cn(
+                    `text-white px-2 text-sm whitespace-normal break-words w-[8rem] hover_!${invoiceService.getInvoiceStatusColor(
+                      invoice.status
+                    )}`,
+                    invoiceService.getInvoiceStatusColor(invoice.status)
+                  )}
+                >
                   {invoiceService.getInvoiceStatus(invoice.status)}
                 </Badge>
               </TableCell>
-              <TableCell className="flex items-center justify-center space-x-2">
+              <TableCell>
                 <OrderDetailDialog
                   invoice={invoice}
                   updateInvoice={updateInvoice}
@@ -94,6 +101,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
           </tr>
         </TableBody>
       </Table>
+      <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
 };

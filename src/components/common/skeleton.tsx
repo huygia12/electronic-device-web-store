@@ -45,22 +45,22 @@ const CardSkeleton: React.FC<HTMLAttributes<HTMLDivElement>> = ({
   return (
     <Card
       className={cn(
-        "shadow-xl w-full transition ease-out duration-300 hover_scale-105 relative flex flex-col justify-between h-full",
+        "shadow-lg w-full transition ease-out duration-300 hover_scale-105 relative flex flex-col justify-between h-full",
         className
       )}
       {...props}
     >
-      <BaseSkeleton className="w-full rounded-none h-[18rem] mt-0" />
-      <CardHeader className="p-1.5 mt-20">
+      <BaseSkeleton className="w-full rounded-none h-[11rem] 4xl_h-[13rem] mt-0" />
+      <CardHeader className="px-3 py-0">
         <CardTitle className="text-[1.1rem] hover_underline hover_text-primary-foreground">
-          <BaseSkeleton className="w-5/6" />
+          <BaseSkeleton className="w-full" />
         </CardTitle>
       </CardHeader>
-      <CardContent className="py-2">
-        <BaseSkeleton className="w-full h-[5rem]" />
+      <CardContent className="px-3">
+        <BaseSkeleton className="w-full h-[4rem]" />
         <BaseSkeleton className="w-full" />
-        <div className="w-full flex justify-between">
-          <BaseSkeleton className="w-1/5 mx-0" />
+        <div className="w-full space-x-2 flex justify-between">
+          <BaseSkeleton className="w-2/5 mx-0" />
           <BaseSkeleton className="w-3/5 mx-0" />
         </div>
       </CardContent>

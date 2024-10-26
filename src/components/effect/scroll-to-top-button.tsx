@@ -25,7 +25,7 @@ const ScrollToTopButton: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
   return (
     <button
       className={cn(
-        "hidden fixed bottom-5 right-4 w-14 h-14 rounded-full bg-transparent shadow-general text-slate-500",
+        "hidden fixed w-14 h-14 rounded-full bg-slate-50 shadow-general text-slate-500",
         showButton && "flex justify-center items-center",
         className
       )}

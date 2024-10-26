@@ -23,12 +23,18 @@ const NormalCollection: FC<NormalCollectionProps> = ({ ...props }) => {
       <ProductCollection>
         {props.products
           ? props.products.map((product, index) => (
-              <CarouselItem key={index} className="basis-1/5">
+              <CarouselItem
+                key={index}
+                className="basis-1/3 md_basis-1/4 4xl_basis-1/5"
+              >
                 <ProductCard product={product} className="" />
               </CarouselItem>
             ))
           : Array.from({ length: 20 }).map((_, index) => (
-              <CarouselItem key={index} className="basis-1/5">
+              <CarouselItem
+                key={index}
+                className="basis-1/3 md_basis-1/4 4xl_basis-1/5"
+              >
                 <CardSkeleton />
               </CarouselItem>
             ))}

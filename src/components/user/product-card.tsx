@@ -43,21 +43,21 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
         to={"/products/" + props.product.productID}
         unstable_viewTransition
       >
-        <div className="h-[15rem] mb-10">
+        <div className="pt-2">
           <CustomImage
             src={currentItem.thump}
             alt={currentItem.itemID}
-            className="h-[16rem] m-auto"
+            className="h-[10rem] 4xl_h-[12rem] m-auto"
           />
         </div>
-        <CardHeader className="p-1.5 mt-6">
-          <CardTitle className="text-[1rem] hover_underline hover_text-primary-foreground">
+        <CardHeader className="px-1.5 !space-y-0 !py-0 mt-3">
+          <CardTitle className="text-[1rem] hover_underline hover_text-primary-foreground line-clamp-2">
             {props.product.productName}
           </CardTitle>
         </CardHeader>
       </NavLink>
-      <CardContent className="p-2">
-        <ScrollArea className="mb-5 py-1 pr-1 shadow-inner rounded-sm bg-secondary flex flex-wrap max-h-[7rem] h-[5rem] overflow-y-auto">
+      <CardContent className="p-1">
+        <ScrollArea className="py-1 pr-1 shadow-inner rounded-sm bg-secondary flex flex-wrap max-h-[6rem] h-[4rem] overflow-y-auto">
           {props.product.productAttributes.map((attr, index) => {
             return (
               <CardTag
@@ -67,7 +67,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
             );
           })}
         </ScrollArea>
-        <div className="flex flex-row flex-wrap items-baseline justify-between">
+        <div className="mt-2 flex flex-row flex-wrap items-baseline justify-between">
           <div className="text-[1.3rem] font-extrabold text-primary-foreground truncate ...">
             {`${applyDiscount(
               currentItem.price,
@@ -86,15 +86,15 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
             className="absolute top-0 left-[-1rem]"
           />
         )}
-        <div className="w-full flex items-center justify-around mt-4">
+        <div className="w-full flex items-center space-x-2 2xl_justify-between mt-2">
           <ProductDialog product={props.product}>
-            <Button variant="neutral">
+            <Button variant="neutral" className="w-1/4">
               <ShoppingBasket />
             </Button>
           </ProductDialog>
           <Button
             variant="negative"
-            className="flex gap-2 items-center"
+            className="w-3/4 flex gap-1 items-center"
             onClick={(e) => handleBuyClick(e)}
           >
             <Coins />

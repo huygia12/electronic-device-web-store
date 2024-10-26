@@ -24,7 +24,7 @@ const AdminHeader: FC = () => {
 
   return (
     <div className="w-full py-3 flex flex-col sticky top-0 z-50 bg-theme shadow-xl items-center">
-      <div className="w-adminLayout flex items-center justify-between">
+      <div className="w-sm md_w-md lg_w-lg xl_w-xl 2xl_w-2xl 4xl_w-3xl flex items-center justify-between">
         {/** NAV BAR */}
         <Sheet>
           <SheetTrigger asChild>

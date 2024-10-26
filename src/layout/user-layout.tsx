@@ -86,29 +86,28 @@ const UserLayout: React.FC = () => {
       <BlinkProvider>
         <ScrollToTop />
         <UserHeader />
-        <div className="flex justify-center space-x-10 w-full py-10 min-h-[70vh]">
+        <div className="flex justify-center w-full py-10 min-h-[70vh] gap-6 4xl_gap-10">
           <Banner
             bannerUrl={store.leftBanner}
-            className="sticky top-36 self-start"
+            className="sticky top-36 self-start hidden xl_block xl_w-36 xl_min-w-32 2xl_w-48 2xl_min-w-36"
           />
-          <div className="w-myLayout">
+          <div className="!ml-0 w-lg 2xl_w-xl 4xl_w-2xl">
             {navigation.state === "loading" ? <TopBarProgress /> : <Outlet />}
           </div>
           <Banner
             bannerUrl={store.rightBanner}
-            className="sticky top-36 self-start"
+            className="!ml-0 sticky top-36 self-start hidden xl_block xl_w-36 xl_min-w-32 2xl_w-48 2xl_min-w-36"
           />
         </div>
         <MailRegisterSection />
         <AppFooter />
-        <ZaloButton />
-        <ScrollToTopButton />
+        <ZaloButton className="bottom-28 right-5" />
+        <ScrollToTopButton className="bottom-5 right-4" />
         <Toaster
           richColors
           toastOptions={{
             className: "text-xl h-[5rem] right-10 bottom-5 ",
           }}
-          closeButton={true}
         />
       </BlinkProvider>
     </CartProvider>

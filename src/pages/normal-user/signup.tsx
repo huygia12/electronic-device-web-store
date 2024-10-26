@@ -36,6 +36,7 @@ const Signup: FC = () => {
   const handleSignupFormSubmission: SubmitHandler<SignupFormProps> = async (
     data
   ) => {
+    console.log(data);
     try {
       if (data.retypePassword != data.password) {
         setError("password", {

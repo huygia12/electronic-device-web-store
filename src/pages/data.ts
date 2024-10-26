@@ -1,15 +1,5 @@
 import { Slide } from "@/types/model";
 
-export const slides: { src: string; alt: string; link: string }[] = [
-  { src: "/slideShow1.png", alt: "slide1", link: "/products" },
-  { src: "/slideShow2.jpg", alt: "slide2", link: "/products" },
-  { src: "/slideShow3.png", alt: "slide3", link: "/products" },
-  { src: "/slideShow4.jpg", alt: "slide4", link: "/products" },
-  { src: "/slideShow5.jpg", alt: "slide5", link: "/products" },
-  { src: "/slideShow6.jpg", alt: "slide6", link: "/products" },
-  { src: "/slideShow7.jpg", alt: "slide7", link: "/products" },
-];
-
 export const editingSlides: Slide[] = [
   {
     url: "/slideShow1.png",

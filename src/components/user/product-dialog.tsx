@@ -32,7 +32,7 @@ import { toast } from "sonner";
 import { useCartProps } from "@/hooks";
 import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
-import { applyDiscount } from "@/utils/helpers";
+import { applyDiscount, isDiscount } from "@/utils/helpers";
 import { Error } from "@/types/component";
 
 interface ProductDialogProps extends HTMLAttributes<HTMLDivElement> {
@@ -104,7 +104,7 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="min-w-max">
+      <DialogContent className="min-w-lg 3xl_min-w-2xl pb-2">
         <DialogHeader>
           <DialogTitle>
             <span className="flex pb-4 gap-2 items-baseline">
@@ -117,14 +117,14 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
         </DialogHeader>
         <section className="grid grid-cols-2 gap-10">
           {/** LEFT SECTION */}
-          <div className="flex flex-col justify-center bg-red-00">
+          <div className="flex flex-col justify-center">
             <Carousel
               plugins={[plugin.current]}
               onMouseEnter={plugin.current.stop}
               onMouseLeave={plugin.current.play}
-              className="w-[40rem] mb-16"
+              className="w-full mb-10"
             >
-              <CarouselContent className="h-[30rem]">
+              <CarouselContent className="h-full">
                 {currentItem.itemImages.map((image, index) => {
                   return (
                     <SlideShow
@@ -139,12 +139,12 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
               <CarouselNext className="z-10 top-[13rem] right-0 h-[3rem] w-[3rem] !text-secondary-foreground hover_border-primary" />
             </Carousel>
 
-            <div className="mb-8 flex ml-4">
-              <span className="flex items-center text-[0.8rem] mr-10">
+            <div className="mb-8 flex space-x-6">
+              <span className="flex items-center text-[0.8rem] 3xl_text-nowrap">
                 <BadgeCheck className="text-primary mr-2" />
                 Hàng chính hãng - Bảo hành {props.product.warranty} tháng
               </span>
-              <span className="flex items-center text-[0.8rem]">
+              <span className="flex items-center text-[0.8rem] 3xl_text-nowrap">
                 <Truck className="text-primary mr-2" />
                 Miễn phí vận chuyển với đơn hàng trên 500k
               </span>
@@ -156,7 +156,11 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
             <div className="flex justify-between items-baseline mb-12 pb-4 border-b-2 border-dashed border-slate-300">
               <div className="space-x-4">
                 <span className="text-3xl font-semibold text-primary-foreground">{`${currentItem ? applyDiscount(currentItem?.price, currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
-                <del className="text-slate-500">{`${currentItem ? currentItem?.price.toLocaleString() : 0}đ`}</del>
+                {isDiscount(currentItem.discount) && (
+                  <del className="text-secondary-foreground">
+                    {`${currentItem.price.toLocaleString()}đ`}
+                  </del>
+                )}
               </div>
               <div className="flex gap-2">
                 {currentItem?.quantity ? "Còn hàng" : "Hết hàng"}
@@ -231,13 +235,13 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
               )}
               <DialogClose
                 className={cn(
-                  "mt-14 w-full flex items-center text-[1.2rem] min-h-12",
+                  "mt-4 w-full flex text-[1.2rem]",
                   buttonVariants({ variant: "neutral" })
                 )}
                 disabled={!checkDisableButton()}
                 onClick={(e) => handleAddToCart(e)}
               >
-                <ShoppingBasket /> &nbsp; Thêm vào giỏ hàng
+                <ShoppingBasket className="mr-2" /> &nbsp; Thêm vào giỏ hàng
               </DialogClose>
             </form>
           </div>

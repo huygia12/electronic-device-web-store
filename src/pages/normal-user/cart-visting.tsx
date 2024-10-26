@@ -9,10 +9,10 @@ const CartVisting: FC = () => {
     setPhaseID("1");
   }, [setPhaseID]);
   return (
-    <div className="grid grid-cols-4 w-full gap-4">
-      <EditableCartTable className="p-4" />
+    <div className="flex flex-col 3xl_grid 3xl_grid-cols-4 w-full gap-4">
+      <EditableCartTable className="3xl_col-span-3" />
 
-      <div>
+      <div className="">
         <Bill />
       </div>
     </div>

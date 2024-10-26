@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Attribute, Product } from "@/types/model";
 import { attributeService, productService } from "@/services";
 import { Sort } from "@/types/enum";
@@ -9,8 +9,10 @@ import {
 } from "@/components/product-filter";
 import { CustomPagination } from "@/components/common";
 import { getPages } from "@/utils/helpers";
+import { toast } from "sonner";
 
 const FilteredProductList: FC = () => {
+  const searchingDelay = useRef<number>(2000);
   const [products, setProducts] = useState<Product[]>();
   const [numberOfProducts, setNumberOfProducts] = useState<number>();
   const [currentPage, setCurrentPage] = useState<number>();
@@ -25,6 +27,10 @@ const FilteredProductList: FC = () => {
     () => (numberOfProducts ? getPages(numberOfProducts, 12) : 0),
     [numberOfProducts]
   );
+  const toasting = useRef<{
+    id: string | number;
+    state: boolean;
+  } | null>();
 
   const fetchProducts = useCallback(
     async (additionParams?: Record<string, string>) => {
@@ -35,6 +41,7 @@ const FilteredProductList: FC = () => {
       });
       setProducts(response.products);
       setNumberOfProducts(response.totalProducts);
+      window.scrollTo(0, 0);
     },
     [params]
   );
@@ -57,12 +64,25 @@ const FilteredProductList: FC = () => {
   }, []);
 
   useEffect(() => {
-    const getNextPage = () => {
-      fetchProducts({ currentPage: `${currentPage}` });
-    };
+    if (toasting.current === undefined) {
+      toasting.current = null;
+    } else {
+      if (!toasting.current?.state) {
+        toasting.current = { id: toast.loading("Đang xử lý..."), state: true };
+      }
+    }
 
-    getNextPage();
-  }, [currentPage]);
+    const delayDebounceFn = setTimeout(async () => {
+      try {
+        await fetchProducts({ currentPage: `${currentPage}` });
+      } finally {
+        toast.dismiss(toasting.current!.id);
+        toasting.current = null;
+      }
+    }, searchingDelay.current);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [recaculate, currentPage]);
 
   const handleSortSelectionEvent = (value: Sort) => {
     let filterKey, filterValue;
@@ -101,7 +121,6 @@ const FilteredProductList: FC = () => {
 
   const handleResetSelectedAttributeOption = () => {
     handleFilterChange([{ filterKey: "optionIDs", filterValue: undefined }]);
-    window.scrollTo(0, 0);
   };
 
   const handleSaleFilterChange = (value: boolean) => {
@@ -143,50 +162,47 @@ const FilteredProductList: FC = () => {
   };
 
   return (
-    <div>
-      <div className="grid grid-cols-4 gap-8">
+    <div className="grid grid-cols-4 gap-8">
+      <div>
+        <AttributeFilter
+          params={params}
+          attributes={attributes}
+          onReset={handleResetSelectedAttributeOption}
+          onOptionSelected={handleAttributeOptionSelection}
+          className="sticky top-36"
+        />
+      </div>
+
+      <div className="col-span-3 flex flex-col gap-6">
         <div>
-          <AttributeFilter
-            params={params}
-            attributes={attributes}
-            onReset={handleResetSelectedAttributeOption}
-            onOptionSelected={handleAttributeOptionSelection}
-            className="sticky top-36"
-          />
+          <h1 className="text-[1.6rem] font-semibold mb-[0.5rem]">
+            {numberOfProducts !== undefined ? (
+              <>
+                Kết Quả Lọc Cho: &nbsp;
+                <span className="text-[1.4rem] text-red-600 font-light">{`(${numberOfProducts} kết quả)`}</span>
+              </>
+            ) : (
+              <>Tìm Kiếm ...</>
+            )}
+          </h1>
+          <hr className="border-dashed border-[0.1rem] border-secondary-foreground" />
         </div>
 
-        <div className="col-span-3 flex flex-col gap-6">
-          <div>
-            <h1 className="text-[1.6rem] font-semibold mb-[0.5rem]">
-              {numberOfProducts !== undefined ? (
-                <>
-                  Kết Quả Lọc Cho:{" "}
-                  <span className="text-[1.4rem] text-red-600 font-light">{`(${numberOfProducts} kết quả)`}</span>
-                </>
-              ) : (
-                <>Tìm Kiếm ...</>
-              )}
-            </h1>
-            <hr className="border-dashed border-[0.1rem] border-secondary-foreground" />
-          </div>
+        <FilterProductTools
+          onSaleFilterChange={handleSaleFilterChange}
+          onPriceRangeChange={handlePriceRangeChange}
+          onSortSelection={handleSortSelectionEvent}
+        />
 
-          <FilterProductTools
-            onFilter={fetchProducts}
-            onSaleFilterChange={handleSaleFilterChange}
-            onPriceRangeChange={handlePriceRangeChange}
-            onSortSelection={handleSortSelectionEvent}
-          />
+        <ProductList products={products} className="col-span-3" />
 
-          <ProductList products={products} />
-
-          {/** Pagination */}
-          <CustomPagination
-            totalPages={totalPages}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            className="mt-auto"
-          />
-        </div>
+        {/** Pagination */}
+        <CustomPagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          className="mt-auto"
+        />
       </div>
     </div>
   );

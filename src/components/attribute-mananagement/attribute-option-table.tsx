@@ -33,7 +33,9 @@ const AttributeOptionTable: FC<AttributeOptionTableProps> = ({
 
   if (!attribute || attribute.attributeOptions.length === 0) {
     return (
-      <Card className="rounded-xl shadow-lg !max-h-[40.8rem] flex-1">
+      <Card
+        className={cn("rounded-xl shadow-lg !max-h-[40.8rem]", props.className)}
+      >
         <CardContent className="p-4 h-full">
           <div className="flex flex-col items-center">
             <img width={400} src="/empty-box.svg" alt="emptyCart" />
@@ -47,7 +49,9 @@ const AttributeOptionTable: FC<AttributeOptionTableProps> = ({
   }
 
   return (
-    <Card className="rounded-xl shadow-lg !max-h-[40.8rem] flex-1">
+    <Card
+      className={cn("rounded-xl shadow-lg !max-h-[40.8rem]", props.className)}
+    >
       <CardContent className="p-4 h-full">
         <ScrollArea className="relative h-[64vh]">
           <Table>

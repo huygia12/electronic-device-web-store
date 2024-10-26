@@ -190,10 +190,10 @@ const AttributeManagement: FC = () => {
   };
 
   return (
-    <div>
-      <SearchBox className="mt-8 mb-4" setSearchText={handleSearching} />
+    <div className="my-8">
+      <SearchBox className="mb-4" setSearchText={handleSearching} />
 
-      <div className="grid grid-cols-5 gap-4">
+      <div className="flex flex-col lg_grid lg_grid-cols-5 gap-4">
         {/** ATTRIBUTE TYPE */}
         <div className="col-span-3 flex gap-4">
           <AttributeTypeTools
@@ -204,7 +204,7 @@ const AttributeManagement: FC = () => {
           />
 
           <AttributeTypeTable
-            className="flex-1"
+            className="w-full"
             attributes={attributeService.getSearchingResult(
               searchText,
               attributes
@@ -215,12 +215,13 @@ const AttributeManagement: FC = () => {
         </div>
 
         {/** ATTRIBUTE OPTION */}
-        <div className="col-span-2 flex gap-4">
+        <div className="col-span-2 flex gap-4 flex-row-reverse lg_flex-row min-w-0">
           <AttributeOptionTable
             attributes={attributes}
             selectedAttribute={selectedAttribute}
             selectedAttributeOption={selectedAttributeOption}
             setSelectedAttributeOption={setSelectedAttributeOption}
+            className="w-full"
           />
 
           <AttributeOptionTools

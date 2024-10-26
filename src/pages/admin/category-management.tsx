@@ -84,8 +84,8 @@ const CategoryManagement: FC = () => {
   };
 
   return (
-    <section>
-      <SearchBox className="mt-8 mb-4" setSearchText={setSearchText} />
+    <div className="my-8">
+      <SearchBox className="mb-4" setSearchText={setSearchText} />
 
       {/** Table */}
       <div className="flex gap-4">
@@ -106,7 +106,7 @@ const CategoryManagement: FC = () => {
           handleDeleteCategory={handleDeleteCategory}
         />
       </div>
-    </section>
+    </div>
   );
 };
 
