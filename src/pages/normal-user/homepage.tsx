@@ -91,6 +91,7 @@ const Homepage: FC = () => {
         to={`/products?categoryID=${LAPTOP_ID}&saleArrange=true`}
         headerTitle="⚡ KHUYẾN MẠI MÁY TÍNH SHOCK NHẤT 🔥"
         products={onSaleLaptops}
+        className="mt-14"
       />
 
       <NormalCollection
