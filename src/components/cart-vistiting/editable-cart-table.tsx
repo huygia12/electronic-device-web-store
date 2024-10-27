@@ -117,6 +117,7 @@ const EditableCartTable: FC<HTMLAttributes<HTMLDivElement>> = ({
                       <TableCell className="text-center text-base max-w-[13rem] truncate hover_underline hover_text-primary">
                         <NavLink
                           to={"/products/" + prod.productID}
+                          target="_blank"
                           unstable_viewTransition
                         >
                           {prod.productName}

@@ -12,6 +12,7 @@ import { applyDiscount, getDiscount } from "@/utils/helpers";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { CartItem } from "@/types/model";
+import { NavLink } from "react-router-dom";
 
 const columnHeaders = [
   "STT",
@@ -67,10 +68,17 @@ const ProductInCart: FC<ProductInCartProps> = ({ ...props }) => {
                         className="max-h-20 mx-auto"
                       />
                     </TableCell>
-                    <TableCell className="text-center text-base max-w-[15rem] truncate">
-                      {product.productName}
-                      <br />
-                      {`${product.storage} | ${product.color}`}
+
+                    <TableCell className="text-center text-base max-w-[15rem] truncate hover_underline hover_text-primary-foreground cursor-pointer">
+                      <NavLink
+                        to={"/products/" + product.productID}
+                        target="_blank"
+                        unstable_viewTransition
+                      >
+                        {product.productName}
+                        <br />
+                        {`${product.storage} | ${product.color}`}
+                      </NavLink>
                     </TableCell>
                     <TableCell className="text-center text-base">
                       {product.quantity}

@@ -69,7 +69,7 @@ const AppClientHeader: FC = () => {
         <div className="items-center grid grid-cols-10 w-lg 2xl_w-xl 3xl_w-2xl">
           {/** WEBSITE LOGO */}
           <NavLink to="/" className="col-span-2" unstable_viewTransition>
-            <img src="/logo.png" alt="logo" className="h-16" />
+            <img src="/logo.png" alt="logo" className="h-14" />
           </NavLink>
 
           {/** SEARCH BAR AND OTHERS */}

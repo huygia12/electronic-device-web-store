@@ -34,6 +34,7 @@ import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
 import { applyDiscount, isDiscount } from "@/utils/helpers";
 import { Error } from "@/types/component";
+import { NavLink } from "react-router-dom";
 
 interface ProductDialogProps extends HTMLAttributes<HTMLDivElement> {
   product: Product;
@@ -107,12 +108,15 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
       <DialogContent className="min-w-lg 3xl_min-w-2xl pb-2">
         <DialogHeader>
           <DialogTitle>
-            <span className="flex pb-4 gap-2 items-baseline">
-              <h1 className="text-3xl font-bold">
+            <NavLink
+              to={`/products/${props.product.productID}`}
+              className="flex pb-4 gap-2 items-baseline"
+            >
+              <h2 className="text-3xl font-bold cursor-pointer hover_underline">
                 {props.product.productName}
-              </h1>
+              </h2>
               <span className=" text-slate-500 text-[0.8rem]">{`(No.${currentItem.productCode})`}</span>
-            </span>
+            </NavLink>
           </DialogTitle>
         </DialogHeader>
         <section className="grid grid-cols-2 gap-10">

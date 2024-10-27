@@ -43,7 +43,7 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
         to={"/products/" + props.product.productID}
         unstable_viewTransition
       >
-        <div className="pt-2">
+        <div className="pt-2 h-[10rem] 4xl_h-[12rem]">
           <CustomImage
             src={currentItem.thump}
             alt={currentItem.itemID}

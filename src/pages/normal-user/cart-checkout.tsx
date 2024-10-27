@@ -206,7 +206,7 @@ const CartCheckout: FC = () => {
       success: () => {
         removeInvoice();
         navigate("/", { unstable_viewTransition: true });
-        return `Yêu cầu mua hàng thành công <br/> Đơn hàng đã được gửi tới admin!`;
+        return `Đơn hàng đã được gửi tới admin xem xét!`;
       },
       error: "Yêu cầu mua hàng thất bại!",
     });

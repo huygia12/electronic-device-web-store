@@ -180,7 +180,7 @@ const ProductEdittion: FC = () => {
       error: () => {
         toast.dismiss(toastID);
         productService.handleConsequencesIfCUProductFail(result.uploadedImage);
-        return "Thêm thất bại!";
+        return "Cập nhật thất bại!";
       },
     });
   };
