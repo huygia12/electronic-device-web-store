@@ -67,10 +67,6 @@ const userService = {
     ): Promise<User> => {
       let avatarUrl: string | undefined;
       if (avatarFile) {
-        currentUser.avatar &&
-          (await firebaseService.apis.deleteImageInFireBase(
-            currentUser.avatar
-          ));
         avatarUrl = await firebaseService.apis.insertImageToFireBase(
           avatarFile,
           `/users/${currentUser.userID}`
@@ -81,9 +77,18 @@ const userService = {
         `${userEndPoint}/${userID}`,
         {
           ...data,
+          phoneNumber:
+            data.phoneNumber?.trim()?.length == 0
+              ? undefined
+              : data.phoneNumber,
           avatar: avatarUrl,
         }
       );
+
+      if (avatarUrl && currentUser.avatar) {
+        firebaseService.apis.deleteImageInFireBase(currentUser.avatar);
+      }
+
       return res.data.info;
     },
     updatePassword: async (

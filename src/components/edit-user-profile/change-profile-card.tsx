@@ -40,28 +40,15 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
   const handleUserUpdateFormSubmission: SubmitHandler<UserFormProps> = async (
     data
   ) => {
+    let newAvatarUrl: string | undefined;
     try {
-      let avatar: string | undefined;
-      if (data.avatar[0]) {
-        currentUser?.avatar &&
-          (await firebaseService.apis.deleteImagesInFireBase([
-            currentUser?.avatar,
-          ]));
-        avatar = (
-          await firebaseService.apis.insertImagesToFireBase(
-            data.avatar,
-            `/users/${currentUser!.userID}`
-          )
-        )[0];
-      }
-
       const updatedUserInfor: User = await userService.apis.updateUser(
         currentUser!.userID,
         {
-          userName: data.userName,
-          email: data.email,
+          userName: data.userName.trim(),
+          email: data.email.trim(),
           phoneNumber: data.phoneNumber,
-          avatar: avatar,
+          avatar: newAvatarUrl,
         },
         currentUser!,
         avatarFiles[0]
@@ -78,6 +65,11 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
       } else {
         console.error("Unexpected error:", error);
       }
+
+      if (newAvatarUrl) {
+        firebaseService.apis.deleteImagesInFireBase([newAvatarUrl]);
+      }
+
       toast.error("Cập nhật thất bại!");
     }
   };
