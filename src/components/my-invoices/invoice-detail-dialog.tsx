@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { ProductInInvoice } from "@/components/common";
 import { cn } from "@/lib/utils";
 import InvoiceCancelDialog from "./cancel-dialog";
+import { ScrollArea } from "../ui/scroll-area";
 
 interface InvoiceDetailDialogProps extends HTMLAttributes<HTMLDivElement> {
   disableAction?: boolean;
@@ -70,9 +71,9 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{props.children}</DialogTrigger>
-      <DialogContent className="min-w-lg 3xl_min-w-2xl">
+      <DialogContent className="min-w-lg 3xl_min-w-2xl px-1 pb-0">
         <DialogHeader>
-          <DialogTitle className="border-b-2 pb-4 border-dashed border-slate-500 flex justify-between">
+          <DialogTitle className="border-b-2 pb-4 px-6 border-dashed border-slate-500 flex justify-between">
             <span className="text-3xl font-light">Thông Tin Đơn Hàng</span>
             <span className="mr-4 space-x-4 flex items-center">
               <span>{props.invoice.invoiceID}</span>
@@ -89,64 +90,81 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
             </span>
           </DialogTitle>
         </DialogHeader>
-        <div className="flex mt-4">
-          <div className="flex flex-col w-1/2">
-            <span className="text-xl font-semibold">Thông Tin Khách Hàng</span>
-            <span className="mt-2 ">{props.invoice.userName}</span>
-            <span className="mt-1 ">{`${props.invoice.detailAddress}, ${props.invoice.ward}, ${props.invoice.district}, ${props.invoice.province}`}</span>
-            <span className="mt-1 ">{props.invoice.email}</span>
-            <span className="mt-1 ">{props.invoice.phoneNumber}</span>
-          </div>
-          <div className="flex flex-col w-1/2 items-end">
-            <span className="text-xl font-semibold">
-              Phương Thức Thanh Toán
-            </span>
-            <span>{getInvoicePaymentMethod(props.invoice.payment)}</span>
-            <span className="text-xl mt-3 font-semibold">
-              Phương Thức Vận Chuyển
-            </span>
-            <span>Giao hàng nhanh</span>
-            <span className="text-xl mt-3 font-semibold">Ngày Đặt Hàng</span>
-            <span>{formatDateTime(`${props.invoice.createdAt}`)}</span>
-          </div>
-        </div>
-
-        <ProductInInvoice
-          products={props.invoice.invoiceProducts}
-          className="mt-10"
-        />
-
-        <div className="pt-4 flex items-center border-t-2 border-slate-500 border-dashed justify-between space-x-2">
-          <span>
-            <span className="text-2xl font-semibold mr-4">TỔNG TIỀN :</span>
-            <span className="text-2xl font-medium">{`${invoiceService.getTotalBill(props.invoice).toLocaleString()}đ`}</span>
-          </span>
-          <span
-            className={cn("ml-auto space-x-2", props.disableAction && "hidden")}
-          >
-            <Button
-              disabled={invoiceService.getUserButtonDisabled(
-                "accept",
-                invoiceState
+        <ScrollArea className="max-h-[40rem] px-6 mb-4">
+          <div className="flex">
+            <div className="flex flex-col w-1/2">
+              <span className="text-xl font-semibold">
+                Thông Tin Khách Hàng
+              </span>
+              <span className="mt-2 ">{props.invoice.userName}</span>
+              <span className="mt-1 ">{`${props.invoice.detailAddress}, ${props.invoice.ward}, ${props.invoice.district}, ${props.invoice.province}`}</span>
+              <span className="mt-1 ">{props.invoice.email}</span>
+              <span className="mt-1 ">SĐT: {props.invoice.phoneNumber}</span>
+            </div>
+            <div className="flex flex-col w-1/2 items-end">
+              <span className="text-xl font-semibold">
+                Phương Thức Thanh Toán
+              </span>
+              <span>{getInvoicePaymentMethod(props.invoice.payment)}</span>
+              <span className="text-xl mt-2 font-semibold">
+                Phương Thức Vận Chuyển
+              </span>
+              <span>Giao hàng nhanh</span>
+              <span className="text-xl mt-2 font-semibold">Phí vận chuyển</span>
+              <span>{`${props.invoice.shippingFee.toLocaleString()}đ`}</span>
+              <span className="text-xl mt-2 font-semibold">Ngày Đặt Hàng</span>
+              <span>{formatDateTime(`${props.invoice.createdAt}`)}</span>
+              {props.invoice.doneAt && (
+                <>
+                  <span className="text-xl mt-3 font-semibold">
+                    Ngày Hoàn Thành
+                  </span>
+                  <span>{formatDateTime(`${props.invoice.doneAt}`)}</span>
+                </>
               )}
-              variant="neutral"
-              onClick={payOrder}
+            </div>
+          </div>
+
+          <ProductInInvoice
+            products={props.invoice.invoiceProducts}
+            className="mt-10"
+          />
+
+          <div className="pt-4 flex items-center border-t-2 border-slate-500 border-dashed justify-between space-x-2">
+            <span>
+              <span className="text-2xl font-semibold mr-4">TỔNG TIỀN :</span>
+              <span className="text-2xl font-medium">{`${invoiceService.getTotalBill(props.invoice).toLocaleString()}đ`}</span>
+            </span>
+            <span
+              className={cn(
+                "ml-auto space-x-2",
+                props.disableAction && "hidden"
+              )}
             >
-              Thanh toán
-            </Button>
-            <InvoiceCancelDialog handleConfirm={abortOrder}>
               <Button
                 disabled={invoiceService.getUserButtonDisabled(
-                  "cancel",
+                  "accept",
                   invoiceState
                 )}
-                variant="negative"
+                variant="neutral"
+                onClick={payOrder}
               >
-                Hủy đơn hàng
+                Thanh toán
               </Button>
-            </InvoiceCancelDialog>
-          </span>
-        </div>
+              <InvoiceCancelDialog handleConfirm={abortOrder}>
+                <Button
+                  disabled={invoiceService.getUserButtonDisabled(
+                    "cancel",
+                    invoiceState
+                  )}
+                  variant="negative"
+                >
+                  Hủy đơn hàng
+                </Button>
+              </InvoiceCancelDialog>
+            </span>
+          </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

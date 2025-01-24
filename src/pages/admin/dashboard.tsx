@@ -41,10 +41,12 @@ const Dashboard: FC = () => {
           icon={DollarSign}
           content={statistic.revenue.today.toLocaleString() + "đ"}
           subContent={
-            getRatioString(
-              statistic.revenue.today,
-              statistic.revenue.yesterday
-            ) + " so với ngày hôm qua"
+            statistic.revenue.yesterday
+              ? getRatioString(
+                  statistic.revenue.today,
+                  statistic.revenue.yesterday
+                ) + " so với ngày hôm qua"
+              : ``
           }
         />
         <StatisticCard
@@ -52,10 +54,12 @@ const Dashboard: FC = () => {
           icon={ShoppingBag}
           content={`${statistic.invoices.today}`}
           subContent={
-            getNumberGapString(
-              statistic.invoices.today,
-              statistic.invoices.yesterday
-            ) + " so với ngày hôm qua"
+            statistic.invoices.yesterday
+              ? getNumberGapString(
+                  statistic.invoices.today,
+                  statistic.invoices.yesterday
+                ) + " so với ngày hôm qua"
+              : ``
           }
         />
         <StatisticCard

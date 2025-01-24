@@ -55,6 +55,7 @@ export interface Invoice {
   detailAddress: string;
   userID: string;
   createdAt: Date;
+  doneAt: Date | null;
   email: string;
   userName: string;
   note: string;

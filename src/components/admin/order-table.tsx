@@ -73,16 +73,14 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
               <TableCell className="text-center">
                 <Badge
                   className={cn(
-                    `text-white px-2 text-sm whitespace-normal break-words w-[8rem] hover_!${invoiceService.getInvoiceStatusColor(
-                      invoice.status
-                    )}`,
+                    `text-white px-2 text-sm whitespace-normal break-words max-w-[8rem]`,
                     invoiceService.getInvoiceStatusColor(invoice.status)
                   )}
                 >
                   {getInvoiceStatus(invoice.status)}
                 </Badge>
               </TableCell>
-              <TableCell>
+              <TableCell className="flex justify-center">
                 <OrderDetailDialog
                   invoice={invoice}
                   updateInvoice={updateInvoice}

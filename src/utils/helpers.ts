@@ -48,8 +48,7 @@ const getDateString = (date: Date): string => {
 };
 
 const getRatioString = (num1: number, num2: number): string => {
-  if (num2 === 0) return `+ 0%`;
-  const ratio: number = Math.abs(num1 - num2) / num2;
+  const ratio = ((Math.abs(num1 - num2) / num2) * 100).toFixed(2);
   return num1 < num2 ? `- ${ratio}%` : `+ ${ratio}%`;
 };
 

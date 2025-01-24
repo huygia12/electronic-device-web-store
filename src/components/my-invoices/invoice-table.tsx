@@ -77,7 +77,7 @@ const InvoiceTable: FC<OrderTableProps> = ({ className, ...props }) => {
               <TableCell className="text-center">
                 <Badge
                   className={cn(
-                    `text-white px-2 text-sm hover_!${invoiceService.getInvoiceStatusColor(
+                    `text-white px-2 text-sm whitespace-normal break-words max-w-[8rem] hover_!${invoiceService.getInvoiceStatusColor(
                       invoice.status
                     )}`,
                     invoiceService.getInvoiceStatusColor(invoice.status)
@@ -86,7 +86,7 @@ const InvoiceTable: FC<OrderTableProps> = ({ className, ...props }) => {
                   {getInvoiceStatus(invoice.status)}
                 </Badge>
               </TableCell>
-              <TableCell className="my-auto">
+              <TableCell className="flex justify-center">
                 <InvoiceDetailDialog
                   invoice={invoice}
                   updateInvoice={updateInvoice}
