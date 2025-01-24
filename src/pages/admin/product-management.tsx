@@ -139,8 +139,8 @@ const ProductManagement: FC = () => {
       {/** Pagination */}
       <CustomPagination
         totalPages={totalPages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        parentPageState={currentPage}
+        onPageChange={setCurrentPage}
       />
     </div>
   );

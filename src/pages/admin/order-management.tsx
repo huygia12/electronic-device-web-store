@@ -93,8 +93,8 @@ const OrderManagement: FC = () => {
       </Card>
 
       <CustomPagination
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        parentPageState={currentPage}
+        onPageChange={setCurrentPage}
         totalPages={totalPages}
       />
     </div>

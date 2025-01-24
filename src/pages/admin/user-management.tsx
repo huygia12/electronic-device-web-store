@@ -180,10 +180,7 @@ const UserManagement: FC = () => {
         />
       </div>
 
-      <CustomPagination
-        setCurrentPage={setCurrentPage}
-        totalPages={totalPages}
-      />
+      <CustomPagination onPageChange={setCurrentPage} totalPages={totalPages} />
     </div>
   );
 };

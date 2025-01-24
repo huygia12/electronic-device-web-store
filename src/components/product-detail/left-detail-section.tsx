@@ -28,7 +28,7 @@ const LeftProductDetailSection: FC<LeftProductDetailSectionProps> = ({
         plugins={[plugin.current]}
         onMouseEnter={plugin.current.stop}
         onMouseLeave={plugin.current.play}
-        className="w-[40rem] min-h-[25rem] mb-16"
+        className="max-w-[40rem] min-h-[25rem] mb-16"
       >
         <CarouselContent>
           {props.currentItem.itemImages.map((image, index) => {

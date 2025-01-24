@@ -8,83 +8,88 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
-import { FC, HTMLAttributes } from "react";
+import { FC, HTMLAttributes, useEffect, useState } from "react";
 
 interface CustomPaginationProps extends HTMLAttributes<HTMLDivElement> {
-  currentPage?: number;
-  setCurrentPage: (page: number) => void;
+  parentPageState?: number;
+  onPageChange: (page: number) => void;
   totalPages: number;
 }
 
 const CustomPagination: FC<CustomPaginationProps> = ({
-  currentPage = 1,
+  parentPageState: currentPage = 1,
   totalPages = 0,
   ...props
 }) => {
+  const [page, setPage] = useState<number>(1);
+
+  useEffect(() => {
+    if (currentPage !== page) {
+      setPage(currentPage);
+    }
+  }, [currentPage]);
+
   if (totalPages === 0) {
     return;
   }
 
+  const handlePageChange = (newPageNumber: number) => {
+    setPage(newPageNumber);
+    props.onPageChange(newPageNumber);
+  };
+
   return (
     <Pagination className={cn("mt-8", props.className)}>
       <PaginationContent>
-        {currentPage !== 1 && (
+        {page !== 1 && (
           <PaginationItem>
-            <PaginationPrevious
-              onClick={() => props.setCurrentPage(currentPage - 1)}
-            />
+            <PaginationPrevious onClick={() => handlePageChange(page - 1)} />
           </PaginationItem>
         )}
 
-        {currentPage > 2 && (
+        {page > 2 && (
           <PaginationItem>
-            <PaginationLink onClick={() => props.setCurrentPage(1)}>
+            <PaginationLink onClick={() => handlePageChange(1)}>
               1
             </PaginationLink>
           </PaginationItem>
         )}
 
-        {currentPage > 3 && <PaginationEllipsis />}
+        {page > 3 && <PaginationEllipsis />}
 
-        {currentPage > 1 && (
+        {page > 1 && (
           <PaginationItem>
-            <PaginationLink
-              onClick={() => props.setCurrentPage(currentPage - 1)}
-            >
-              {currentPage - 1}
+            <PaginationLink onClick={() => handlePageChange(page - 1)}>
+              {page - 1}
             </PaginationLink>
           </PaginationItem>
         )}
 
         <PaginationItem>
-          <PaginationLink isActive>{currentPage}</PaginationLink>
+          <PaginationLink isActive>{page}</PaginationLink>
         </PaginationItem>
 
-        {totalPages - currentPage > 0 && (
+        {totalPages - page > 0 && (
           <PaginationItem>
-            <PaginationLink
-              onClick={() => props.setCurrentPage(currentPage + 1)}
-            >
-              {currentPage + 1}
+            <PaginationLink onClick={() => handlePageChange(page + 1)}>
+              {page + 1}
             </PaginationLink>
           </PaginationItem>
         )}
 
-        {totalPages - currentPage > 2 && <PaginationEllipsis />}
+        {totalPages - page > 2 && <PaginationEllipsis />}
 
-        {totalPages - currentPage > 1 && (
+        {totalPages - page > 1 && (
           <PaginationItem>
-            <PaginationLink onClick={() => props.setCurrentPage(totalPages)}>
+            <PaginationLink onClick={() => handlePageChange(totalPages)}>
               {totalPages}
             </PaginationLink>
           </PaginationItem>
         )}
 
-        {currentPage !== totalPages && (
+        {page !== totalPages && (
           <PaginationItem>
-            <PaginationNext
-              onClick={() => props.setCurrentPage(currentPage + 1)}
-            />
+            <PaginationNext onClick={() => handlePageChange(page + 1)} />
           </PaginationItem>
         )}
       </PaginationContent>

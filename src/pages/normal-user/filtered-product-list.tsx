@@ -12,12 +12,11 @@ import { getPages } from "@/utils/helpers";
 import { toast } from "sonner";
 
 const FilteredProductList: FC = () => {
-  const searchingDelay = useRef<number>(2000);
+  const searchingDelay = useRef<number>(1000);
   const [products, setProducts] = useState<Product[]>();
   const [numberOfProducts, setNumberOfProducts] = useState<number>();
-  const [currentPage, setCurrentPage] = useState<number>();
   const [attributes, setAttributes] = useState<Attribute[]>();
-
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [filterChange, setFilterChange] = useState<boolean>(true);
   const params = useMemo(
     () => new URLSearchParams(window.location.search),
@@ -32,19 +31,15 @@ const FilteredProductList: FC = () => {
     state: boolean;
   } | null>();
 
-  const fetchProducts = useCallback(
-    async (additionParams?: Record<string, string>) => {
-      const records = Object.fromEntries([...params]);
-      const response = await productService.apis.getProductsFullJoin({
-        ...records,
-        ...additionParams,
-      });
-      setProducts(response.products);
-      setNumberOfProducts(response.totalProducts);
-      window.scrollTo(0, 0);
-    },
-    [params]
-  );
+  const fetchProducts = useCallback(async () => {
+    const records = Object.fromEntries([...params]);
+    const response = await productService.apis.getProductsFullJoin({
+      ...records,
+    });
+    setProducts(response.products);
+    setNumberOfProducts(response.totalProducts);
+    window.scrollTo(0, 0);
+  }, [params]);
 
   useEffect(() => {
     const setup = async () => {
@@ -56,8 +51,6 @@ const FilteredProductList: FC = () => {
         providerID: providerID || undefined,
       });
       setAttributes(attributeService.filterEmtyAttributeOptions(attributesRes));
-
-      fetchProducts();
     };
 
     setup();
@@ -74,7 +67,7 @@ const FilteredProductList: FC = () => {
 
     const delayDebounceFn = setTimeout(async () => {
       try {
-        await fetchProducts({ currentPage: `${currentPage}` });
+        await fetchProducts();
       } finally {
         toast.dismiss(toasting.current!.id);
         toasting.current = null;
@@ -82,7 +75,7 @@ const FilteredProductList: FC = () => {
     }, searchingDelay.current);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [filterChange, currentPage]);
+  }, [filterChange]);
 
   const handleSortSelectionEvent = (value: Sort) => {
     let filterKey, filterValue;
@@ -128,24 +121,41 @@ const FilteredProductList: FC = () => {
     if (!optionIsSelected) {
       selectedOptionIds.push(newSelectedOptionID);
     }
-    editQueryUrl([{ filterKey: "optionIDs", filterValue: selectedOptionIds }]);
+    setCurrentPage(1);
+    editQueryUrl([
+      { filterKey: "optionIDs", filterValue: selectedOptionIds },
+      { filterKey: "currentPage", filterValue: `${1}` },
+    ]);
   };
 
   const handleResetSelectedAttributeOption = () => {
-    editQueryUrl([{ filterKey: "optionIDs", filterValue: undefined }]);
+    setCurrentPage(1);
+    editQueryUrl([
+      { filterKey: "optionIDs", filterValue: undefined },
+      { filterKey: "currentPage", filterValue: `${1}` },
+    ]);
   };
 
   const handleSaleFilterChange = (value: boolean) => {
+    setCurrentPage(1);
     editQueryUrl([
       { filterKey: "sale", filterValue: value ? `${value}` : undefined },
+      { filterKey: "currentPage", filterValue: `${1}` },
     ]);
   };
 
   const handlePriceRangeChange = (values: number[]) => {
+    setCurrentPage(1);
     editQueryUrl([
       { filterKey: "minPrice", filterValue: `${values[0]}` },
       { filterKey: "maxPrice", filterValue: `${values[1]}` },
+      { filterKey: "currentPage", filterValue: `${1}` },
     ]);
+  };
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    editQueryUrl([{ filterKey: "currentPage", filterValue: `${pageNumber}` }]);
   };
 
   const editQueryUrl = (
@@ -210,10 +220,9 @@ const FilteredProductList: FC = () => {
 
         {/** Pagination */}
         <CustomPagination
+          parentPageState={currentPage}
           totalPages={totalPages}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          className="mt-auto"
+          onPageChange={(pageNumber) => handlePageChange(pageNumber)}
         />
       </div>
     </div>
