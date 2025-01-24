@@ -8,7 +8,11 @@ import {
 import { HTMLAttributes, useMemo } from "react";
 import { Invoice } from "@/types/model";
 import { invoiceService } from "@/services";
-import { formatDateTime } from "@/utils/helpers";
+import {
+  formatDateTime,
+  getInvoicePaymentMethod,
+  getInvoiceStatus,
+} from "@/utils/helpers";
 import Badge from "@/components/ui/badge";
 import { InvoiceStatus } from "@/types/enum";
 import { Button } from "@/components/ui/button";
@@ -80,7 +84,7 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
                   invoiceService.getInvoiceStatusColor(props.invoice.status)
                 )}
               >
-                {invoiceService.getInvoiceStatus(props.invoice.status)}
+                {getInvoiceStatus(props.invoice.status)}
               </Badge>
             </span>
           </DialogTitle>
@@ -97,9 +101,7 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
             <span className="text-xl font-semibold">
               Phương Thức Thanh Toán
             </span>
-            <span>
-              {invoiceService.getInvoicePaymentMethod(props.invoice.payment)}
-            </span>
+            <span>{getInvoicePaymentMethod(props.invoice.payment)}</span>
             <span className="text-xl mt-3 font-semibold">
               Phương Thức Vận Chuyển
             </span>

@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { invoiceService } from "@/services";
 import { Invoice } from "@/types/model";
-import { formatDateTime } from "@/utils/helpers";
+import { formatDateTime, getInvoiceStatus } from "@/utils/helpers";
 import { FC, FormEventHandler, useState } from "react";
 import { toast } from "sonner";
 
@@ -72,7 +72,7 @@ const InvoiceLookup: FC = () => {
           </div>
           <div className="flex justify-between">
             <span>Trạng Thái</span>
-            <span>{invoiceService.getInvoiceStatus(invoice.status)}</span>
+            <span>{getInvoiceStatus(invoice.status)}</span>
           </div>
         </div>
       ) : (

@@ -109,29 +109,6 @@ const invoiceService = {
       quantity: item.quantity,
     }));
   },
-  getInvoicePaymentMethod: (method: PaymentMethod): string => {
-    let paymentMethod: string;
-    if (method === PaymentMethod.BANKING)
-      paymentMethod = "Thanh Toán Bằng Chuyển Khoản";
-    else if (method === PaymentMethod.COD)
-      paymentMethod = "Thanh Toán Khi Nhận Hàng";
-    else paymentMethod = "Chưa Thanh Toán";
-
-    return paymentMethod;
-  },
-  getInvoiceStatus: (status: InvoiceStatus): string => {
-    let invoiceStatus: string;
-    if (status === InvoiceStatus.NEW) invoiceStatus = "Đang Chờ Duyệt";
-    else if (status === InvoiceStatus.PAYMENT_WAITING)
-      invoiceStatus = "Đang Chờ Thanh Toán";
-    else if (status === InvoiceStatus.SHIPPING)
-      invoiceStatus = "Đang Giao Hàng";
-    else if (status === InvoiceStatus.DONE)
-      invoiceStatus = "Giao Hàng Thành Công";
-    else invoiceStatus = "Đã Bị Hủy";
-
-    return invoiceStatus;
-  },
   getInvoiceStatusColor: (status: InvoiceStatus): string => {
     let color: string;
     if (status === InvoiceStatus.NEW) color = "bg-gray-500";

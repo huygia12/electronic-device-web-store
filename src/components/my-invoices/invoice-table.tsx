@@ -13,7 +13,7 @@ import Badge from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { invoiceService } from "@/services";
-import { formatDateTime } from "@/utils/helpers";
+import { formatDateTime, getInvoiceStatus } from "@/utils/helpers";
 import InvoiceDetailDialog from "./invoice-detail-dialog";
 import { Separator } from "@/components/ui/separator";
 import TableContextMenu from "../common/table-context-menu";
@@ -83,7 +83,7 @@ const InvoiceTable: FC<OrderTableProps> = ({ className, ...props }) => {
                     invoiceService.getInvoiceStatusColor(invoice.status)
                   )}
                 >
-                  {invoiceService.getInvoiceStatus(invoice.status)}
+                  {getInvoiceStatus(invoice.status)}
                 </Badge>
               </TableCell>
               <TableCell className="my-auto">

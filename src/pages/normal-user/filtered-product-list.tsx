@@ -18,10 +18,10 @@ const FilteredProductList: FC = () => {
   const [currentPage, setCurrentPage] = useState<number>();
   const [attributes, setAttributes] = useState<Attribute[]>();
 
-  const [recaculate, setRecaculate] = useState<boolean>(true);
+  const [filterChange, setFilterChange] = useState<boolean>(true);
   const params = useMemo(
     () => new URLSearchParams(window.location.search),
-    [recaculate]
+    [filterChange]
   );
   const totalPages = useMemo(
     () => (numberOfProducts ? getPages(numberOfProducts, 12) : 0),
@@ -82,7 +82,7 @@ const FilteredProductList: FC = () => {
     }, searchingDelay.current);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [recaculate, currentPage]);
+  }, [filterChange, currentPage]);
 
   const handleSortSelectionEvent = (value: Sort) => {
     let filterKey, filterValue;
@@ -158,7 +158,7 @@ const FilteredProductList: FC = () => {
     });
 
     window.history.replaceState({}, "", currentUrl);
-    setRecaculate((prevValue) => !prevValue);
+    setFilterChange((prevValue) => !prevValue);
   };
 
   return (

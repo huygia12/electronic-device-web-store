@@ -19,6 +19,7 @@ import { invoiceService } from "@/services";
 import { InvoiceStatus } from "@/types/enum";
 import { FC, HTMLAttributes, useState } from "react";
 import { buttonVariants } from "@/utils/constants";
+import { getInvoiceStatus } from "@/utils/helpers";
 
 interface ChangeOrderStatusProps extends HTMLAttributes<HTMLDivElement> {
   invoiceID: string;
@@ -108,7 +109,7 @@ const ChangeOrderStatus: FC<ChangeOrderStatusProps> = ({ ...props }) => {
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{`Chuyển trạng thái đơn hàng từ "${invoiceService.getInvoiceStatus(props.invoiceState)}" sang "${invoiceService.getInvoiceStatus(pendingValue!)}"`}</AlertDialogTitle>
+            <AlertDialogTitle>{`Chuyển trạng thái đơn hàng từ "${getInvoiceStatus(props.invoiceState)}" sang "${getInvoiceStatus(pendingValue!)}"`}</AlertDialogTitle>
             <AlertDialogDescription>
               Hành động sẽ trực tiếp thay đổi trạng thái đơn hàng và không thể
               hoàn tác.

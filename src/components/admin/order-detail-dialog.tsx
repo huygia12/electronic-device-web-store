@@ -8,7 +8,11 @@ import {
 import { HTMLAttributes, useMemo } from "react";
 import { Invoice } from "@/types/model";
 import { invoiceService } from "@/services";
-import { formatDateTime } from "@/utils/helpers";
+import {
+  formatDateTime,
+  getInvoicePaymentMethod,
+  getInvoiceStatus,
+} from "@/utils/helpers";
 import Badge from "@/components/ui/badge";
 import { InvoiceStatus } from "@/types/enum";
 import { Button } from "@/components/ui/button";
@@ -17,6 +21,8 @@ import ChangeOrderStatus from "./change-order-status";
 import ProductInInvoice from "@/components/common/product-in-invoice";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import excelService from "@/services/xlsx";
+import pdfService from "@/services/pdfService";
 
 interface OrderDetailDialogProps extends HTMLAttributes<HTMLDivElement> {
   invoice: Invoice;
@@ -65,7 +71,7 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
                   invoiceService.getInvoiceStatusColor(props.invoice.status)
                 )}
               >
-                {invoiceService.getInvoiceStatus(props.invoice.status)}
+                {getInvoiceStatus(props.invoice.status)}
               </Badge>
             </span>
           </DialogTitle>
@@ -76,20 +82,20 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
             <span className="mt-2 ">{props.invoice.userName}</span>
             <span className="mt-1 ">{`${props.invoice.detailAddress}, ${props.invoice.ward}, ${props.invoice.district}, ${props.invoice.province}`}</span>
             <span className="mt-1 ">{props.invoice.email}</span>
-            <span className="mt-1 ">{props.invoice.phoneNumber}</span>
+            <span className="mt-1 ">SĐT: {props.invoice.phoneNumber}</span>
           </div>
           <div className="flex flex-col w-1/2 items-end">
             <span className="text-xl font-semibold">
               Phương Thức Thanh Toán
             </span>
-            <span>
-              {invoiceService.getInvoicePaymentMethod(props.invoice.payment)}
-            </span>
-            <span className="text-xl mt-3 font-semibold">
+            <span>{getInvoicePaymentMethod(props.invoice.payment)}</span>
+            <span className="text-xl mt-2 font-semibold">
               Phương Thức Vận Chuyển
             </span>
             <span>Giao hàng nhanh</span>
-            <span className="text-xl mt-3 font-semibold">Ngày Đặt Hàng</span>
+            <span className="text-xl mt-2 font-semibold">Phí vận chuyển</span>
+            <span>{`${props.invoice.shippingFee.toLocaleString()}đ`}</span>
+            <span className="text-xl mt-2 font-semibold">Ngày Đặt Hàng</span>
             <span>{formatDateTime(`${props.invoice.createdAt}`)}</span>
           </div>
         </div>
@@ -112,10 +118,16 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
             <span className="text-2xl font-medium">{`${invoiceService.getTotalBill(props.invoice).toLocaleString()}đ`}</span>
           </span>
           <span className="ml-auto space-x-2">
-            <Button className="ml-auto bg-white !text-green-500 !border-green-500 border-2 text-base hover_!bg-green-500 hover_!text-white">
+            <Button
+              onClick={() => excelService.exportInvoice(props.invoice)}
+              className="ml-auto bg-white !text-green-500 !border-green-500 border-2 text-base hover_!bg-green-500 hover_!text-white"
+            >
               <Download className="mr-2" /> Xuất Tệp Excel
             </Button>
-            <Button className="ml-auto bg-white !text-red-500 !border-red-500 border-2 text-base hover_!bg-red-500 hover_!text-white">
+            <Button
+              onClick={() => pdfService.exportInvoice(props.invoice)}
+              className="ml-auto bg-white !text-red-500 !border-red-500 border-2 text-base hover_!bg-red-500 hover_!text-white"
+            >
               <Download className="mr-2" />
               Xuất Tệp PDF
             </Button>

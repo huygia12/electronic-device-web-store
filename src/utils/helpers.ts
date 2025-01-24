@@ -1,3 +1,4 @@
+import { InvoiceStatus, PaymentMethod } from "@/types/enum";
 import { ActionFunctionArgs, ParamParseKey, Params } from "react-router-dom";
 
 export interface Args extends ActionFunctionArgs {
@@ -91,6 +92,30 @@ const getTheFollowingDay = (date: Date): Date => {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
 };
 
+const getInvoiceStatus = (status: InvoiceStatus): string => {
+  let invoiceStatus: string;
+  if (status === InvoiceStatus.NEW) invoiceStatus = "Đang Chờ Duyệt";
+  else if (status === InvoiceStatus.PAYMENT_WAITING)
+    invoiceStatus = "Đang Chờ Thanh Toán";
+  else if (status === InvoiceStatus.SHIPPING) invoiceStatus = "Đang Giao Hàng";
+  else if (status === InvoiceStatus.DONE)
+    invoiceStatus = "Giao Hàng Thành Công";
+  else invoiceStatus = "Đã Bị Hủy";
+
+  return invoiceStatus;
+};
+
+const getInvoicePaymentMethod = (method: PaymentMethod): string => {
+  let paymentMethod: string;
+  if (method === PaymentMethod.BANKING)
+    paymentMethod = "Thanh Toán Bằng Chuyển Khoản";
+  else if (method === PaymentMethod.COD)
+    paymentMethod = "Thanh Toán Khi Nhận Hàng";
+  else paymentMethod = "Chưa Thanh Toán";
+
+  return paymentMethod;
+};
+
 export {
   formatDateTime,
   getRatioString,
@@ -105,4 +130,6 @@ export {
   getPages,
   getTheFollowingDay,
   getImageUrl,
+  getInvoiceStatus,
+  getInvoicePaymentMethod,
 };

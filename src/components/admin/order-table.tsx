@@ -13,7 +13,7 @@ import Badge from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { invoiceService } from "@/services";
-import { formatDateTime } from "@/utils/helpers";
+import { formatDateTime, getInvoiceStatus } from "@/utils/helpers";
 import OrderDetailDialog from "./order-detail-dialog";
 import { Separator } from "@/components/ui/separator";
 
@@ -79,7 +79,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
                     invoiceService.getInvoiceStatusColor(invoice.status)
                   )}
                 >
-                  {invoiceService.getInvoiceStatus(invoice.status)}
+                  {getInvoiceStatus(invoice.status)}
                 </Badge>
               </TableCell>
               <TableCell>
