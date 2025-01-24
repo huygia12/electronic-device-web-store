@@ -37,37 +37,39 @@ const AttributeFilter: FC<AttributeFilterProps> = ({ ...props }) => {
       <ul key={selectComponentKey} className="px-4">
         {props.attributes?.map((attr, parentIndex) => {
           return (
-            <li key={parentIndex} className="space-y-3 mb-8">
-              <h5 className="text-slate-700 font-extrabold">
-                {attr.typeValue}
-              </h5>
-              <Separator className="border-1 border-slate-400" />
-              <RadioGroup className="pl-4 space-y-2">
-                {attr.attributeOptions?.map((option, childIndex) => {
-                  return (
-                    <div
-                      key={childIndex}
-                      className="flex items-center space-x-2"
-                    >
-                      <RadioGroupItem
-                        checked={optionIDs.includes(option.optionID)}
-                        onClick={() =>
-                          props.onOptionSelected(option.optionID, attr)
-                        }
-                        value={option.optionID}
-                        id={`${parentIndex}${childIndex}`}
-                      />
-                      <Label
-                        htmlFor={`${parentIndex}${childIndex}`}
-                        className="text-slate-600 !my-0"
+            attr.attributeOptions.length > 0 && (
+              <li key={parentIndex} className="space-y-3 mb-8">
+                <h5 className="text-slate-700 font-extrabold">
+                  {attr.typeValue}
+                </h5>
+                <Separator className="border-1 border-slate-400" />
+                <RadioGroup className="pl-4 space-y-2">
+                  {attr.attributeOptions?.map((option, childIndex) => {
+                    return (
+                      <div
+                        key={childIndex}
+                        className="flex items-center space-x-2 cursor-pointer"
                       >
-                        {option.optionValue}
-                      </Label>
-                    </div>
-                  );
-                })}
-              </RadioGroup>
-            </li>
+                        <RadioGroupItem
+                          checked={optionIDs.includes(option.optionID)}
+                          onClick={() =>
+                            props.onOptionSelected(option.optionID, attr)
+                          }
+                          value={option.optionID}
+                          id={`${parentIndex}${childIndex}`}
+                        />
+                        <Label
+                          htmlFor={`${parentIndex}${childIndex}`}
+                          className="text-slate-600 !my-0 cursor-pointer"
+                        >
+                          {option.optionValue}
+                        </Label>
+                      </div>
+                    );
+                  })}
+                </RadioGroup>
+              </li>
+            )
           );
         })}
       </ul>

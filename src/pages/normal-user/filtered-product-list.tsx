@@ -94,49 +94,61 @@ const FilteredProductList: FC = () => {
       filterValue = value === Sort.ASC ? "ASC" : "DESC";
     } else {
       filterKey = name;
-      filterValue = value === Sort.ATOZ ? "ASC" : "DESC";
+      filterValue = value === Sort.ATOZ ? "DESC" : "ASC";
     }
-    handleFilterChange([
+    editQueryUrl([
       { filterKey, filterValue },
       { filterKey: filterKey === name ? price : name, filterValue: undefined },
     ]);
   };
 
   const handleAttributeOptionSelection = (
-    optionID: string,
+    newSelectedOptionID: string,
     attribute: Attribute
   ) => {
     //update selected options to url
     const currentFilter = params.get("optionIDs") || "";
-    let filterArray = currentFilter.split(",").filter(Boolean);
+    let selectedOptionIds: string[] = currentFilter.split(",").filter(Boolean);
+    let optionIsSelected = false;
 
-    if (!filterArray.includes(optionID)) {
-      filterArray = filterArray.filter(
-        (e) => !attributeService.findAttributeOption(attribute, e)
-      );
-      filterArray.push(optionID);
+    //clear all the previously selected options and
+    // also check if the selected option had already been selected or not
+    selectedOptionIds = selectedOptionIds.filter(
+      (prevSelectedAttributeOptionId) => {
+        if (prevSelectedAttributeOptionId === newSelectedOptionID) {
+          optionIsSelected = true;
+        }
+        return !attributeService.findAttributeOption(
+          attribute,
+          prevSelectedAttributeOptionId
+        );
+      }
+    );
+
+    if (!optionIsSelected) {
+      selectedOptionIds.push(newSelectedOptionID);
     }
-    handleFilterChange([{ filterKey: "optionIDs", filterValue: filterArray }]);
+    editQueryUrl([{ filterKey: "optionIDs", filterValue: selectedOptionIds }]);
   };
 
   const handleResetSelectedAttributeOption = () => {
-    handleFilterChange([{ filterKey: "optionIDs", filterValue: undefined }]);
+    editQueryUrl([{ filterKey: "optionIDs", filterValue: undefined }]);
   };
 
   const handleSaleFilterChange = (value: boolean) => {
-    handleFilterChange([
+    editQueryUrl([
       { filterKey: "sale", filterValue: value ? `${value}` : undefined },
     ]);
   };
 
   const handlePriceRangeChange = (values: number[]) => {
-    handleFilterChange([
+    editQueryUrl([
       { filterKey: "minPrice", filterValue: `${values[0]}` },
       { filterKey: "maxPrice", filterValue: `${values[1]}` },
     ]);
   };
 
-  const handleFilterChange = (
+  const editQueryUrl = (
     queryParams: {
       filterKey: string;
       filterValue: string | undefined | string[];
