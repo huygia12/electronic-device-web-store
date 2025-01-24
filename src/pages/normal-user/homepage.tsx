@@ -74,7 +74,7 @@ const Homepage: FC = () => {
       </section>
 
       <TopSaleCollection
-        to={`/products?categoryID=${PHONE_ID}&saleArrange=true`}
+        to={`/products?categoryID=${PHONE_ID}&sale=true&sortByPrice=DESC`}
         headerTitle="⚡ KHUYẾN MẠI ĐIỆN THOẠI SHOCK NHẤT 🔥"
         products={onSalePhones}
         className="mt-14"
@@ -88,7 +88,7 @@ const Homepage: FC = () => {
       />
 
       <TopSaleCollection
-        to={`/products?categoryID=${LAPTOP_ID}&saleArrange=true`}
+        to={`/products?categoryID=${LAPTOP_ID}&sale=true&sortByPrice=DESC`}
         headerTitle="⚡ KHUYẾN MẠI MÁY TÍNH SHOCK NHẤT 🔥"
         products={onSaleLaptops}
         className="mt-14"
