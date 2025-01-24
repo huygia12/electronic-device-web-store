@@ -126,7 +126,10 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
           Quận/Huyện
           <span className="text-red-600 ">*</span>
         </Label>
-        <Select onValueChange={(value) => props.handleDistrictChange(value)}>
+        <Select
+          value={props.selectedDistrict}
+          onValueChange={(value) => props.handleDistrictChange(value)}
+        >
           <SelectTrigger
             value={props.selectedDistrict}
             {...props.register("district")}
@@ -158,7 +161,10 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
           Phường/Xã
           <span className="text-red-600 ">*</span>
         </Label>
-        <Select onValueChange={(value) => props.handleWardChange(value)}>
+        <Select
+          value={props.selectedWard}
+          onValueChange={(value) => props.handleWardChange(value)}
+        >
           <SelectTrigger
             value={props.selectedWard}
             {...props.register("ward")}
@@ -188,6 +194,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
       <div className="col-span-3 space-y-1">
         <Label htmlFor="name" className="text-lg  ">
           Địa chỉ cụ thể
+          <span className="text-red-600 ">*</span>
         </Label>
         <Input
           {...props.register("detailAddress")}

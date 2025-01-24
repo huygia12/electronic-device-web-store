@@ -181,7 +181,6 @@ const CartCheckout: FC = () => {
     clearErrors("province");
   };
 
-  //TODO: handle reponse payload after submit order
   const handleShippingFormSubmission: SubmitHandler<ShippingFormProps> = async (
     data
   ) => {

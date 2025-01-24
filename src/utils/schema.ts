@@ -192,10 +192,10 @@ const ShippingSchema = z.object({
   phoneNumber: z
     .string()
     .regex(phoneNumberRegex, { message: "Số diện thoại không hợp lệ!" }),
-  province: z.string().min(0, { message: "Chưa chọn tỉnh/thành phố!" }),
-  district: z.string().min(0, { message: "Chưa chọn quận/huyện!" }),
-  ward: z.string().min(0, { message: "Chưa chọn huyện/xã!" }),
-  detailAddress: z.string({ message: "Chưa điền địa chỉ cụ thể!" }),
+  province: z.string().min(1, { message: "Chưa chọn tỉnh/thành phố!" }),
+  district: z.string().min(1, { message: "Chưa chọn quận/huyện!" }),
+  ward: z.string().min(1, { message: "Chưa chọn huyện/xã!" }),
+  detailAddress: z.string().min(1, { message: "Chưa điền địa chỉ cụ thể!" }),
   note: z.string().optional(),
 });
 
