@@ -1,4 +1,3 @@
-import { RiNotification2Fill } from "react-icons/ri";
 import { TbCategoryPlus } from "react-icons/tb";
 import { Package2 } from "lucide-react";
 import {
@@ -13,7 +12,6 @@ import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { AdminAccordion } from "@/components/admin";
-import { CounterLabel } from "@/components/user";
 import { navItems } from "@/utils/constants";
 import { useAuth, useCurrentUser } from "@/hooks";
 import { DropMenuLinkItem, DropdownAvatar } from "@/components/common";
@@ -71,13 +69,13 @@ const AdminHeader: FC = () => {
 
         {/** NOTIFICATION AND AVATAR */}
         <div className="flex items-center">
-          <div className="relative">
+          {/* <div className="relative">
             <RiNotification2Fill size={34} />
             <CounterLabel
               counter={6}
               className="left-[-0.9rem] top-[-1.1rem]"
             />
-          </div>
+          </div> */}
           <DropdownAvatar className="ml-10">
             <DropMenuLinkItem
               item={{

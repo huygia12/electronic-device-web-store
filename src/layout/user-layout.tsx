@@ -22,12 +22,13 @@ import useMyInvoice from "@/hooks/use-invoice";
 import { InvoiceStatus } from "@/types/enum";
 
 const UserLayout: React.FC = () => {
-  const store = useRouteLoaderData("userlayout") as Store;
+  const initData = useRouteLoaderData("userlayout") as {
+    store: Store;
+  };
   const navigation = useNavigation();
   const { socket } = useSocket();
   const { logout } = useAuth();
-  const { setNumberOfShippingInvoice: setNumberOfRequestingInvoice } =
-    useMyInvoice();
+  const { setNumberOfShippingInvoice } = useMyInvoice();
   const { currentUser } = useCurrentUser();
   const [searchParams] = useSearchParams();
   const [paidSuccess, setPaidSuccess] = useState<boolean>(false);
@@ -75,7 +76,7 @@ const UserLayout: React.FC = () => {
         userID: currentUser!.userID,
         status: InvoiceStatus.SHIPPING,
       });
-      setNumberOfRequestingInvoice(res.totalInvoices);
+      setNumberOfShippingInvoice(res.totalInvoices);
     };
 
     currentUser && initialize();
@@ -88,14 +89,14 @@ const UserLayout: React.FC = () => {
         <UserHeader />
         <div className="flex justify-center w-full py-10 min-h-[70vh] gap-6 4xl_gap-10">
           <Banner
-            bannerUrl={store.leftBanner}
+            bannerUrl={initData.store.leftBanner}
             className="sticky top-36 self-start hidden xl_block xl_w-36 xl_min-w-32 2xl_w-48 2xl_min-w-36"
           />
           <div className="!ml-0 w-lg 2xl_w-xl 4xl_w-2xl">
             {navigation.state === "loading" ? <TopBarProgress /> : <Outlet />}
           </div>
           <Banner
-            bannerUrl={store.rightBanner}
+            bannerUrl={initData.store.rightBanner}
             className="!ml-0 sticky top-36 self-start hidden xl_block xl_w-36 xl_min-w-32 2xl_w-48 2xl_min-w-36"
           />
         </div>

@@ -2,17 +2,15 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { FC, HTMLAttributes, useState } from "react";
 import { Button } from "@/components/ui/button";
 
-interface ImageOverViewProps extends HTMLAttributes<HTMLDivElement> {
+interface SlideOverviewProps extends HTMLAttributes<HTMLDivElement> {
   src: string;
   alt: string;
   reference?: string | null;
-  onUrlChange?: (value: string | undefined) => void;
+  onUrlChange?: (value: string | null) => void;
 }
 
-const ImageOverView: FC<ImageOverViewProps> = ({ ...props }) => {
-  const [text, setText] = useState<string | undefined>(
-    props.reference || undefined
-  );
+const SlideOverview: FC<SlideOverviewProps> = ({ ...props }) => {
+  const [text, setText] = useState<string>(props.reference || ``);
 
   return (
     <Dialog>
@@ -29,7 +27,7 @@ const ImageOverView: FC<ImageOverViewProps> = ({ ...props }) => {
           <Button
             onClick={() =>
               props.onUrlChange &&
-              props.onUrlChange(text && text.length > 0 ? text : undefined)
+              props.onUrlChange(text && text.length > 0 ? text : null)
             }
             variant="destructive"
             className="h-10"
@@ -42,4 +40,4 @@ const ImageOverView: FC<ImageOverViewProps> = ({ ...props }) => {
   );
 };
 
-export default ImageOverView;
+export default SlideOverview;

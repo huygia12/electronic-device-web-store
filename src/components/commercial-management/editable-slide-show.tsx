@@ -8,38 +8,32 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import {
-  Dispatch,
-  FC,
-  HTMLAttributes,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState,
-} from "react";
+import { FC, HTMLAttributes, useCallback, useMemo, useState } from "react";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import SlideWrapper from "./slide-wrapper";
 import { cn } from "@/lib/utils";
 import { createPortal } from "react-dom";
 import { useDropzone } from "react-dropzone";
-import { SlideInsertionPayload } from "@/types/payload";
+import { ImageToSlide } from "@/types/payload";
 import { FileImagePlaceholder } from "../common";
 import { retrieveImageUrl } from "@/utils/helpers";
-import { toast } from "sonner";
 
 interface SlideShowProps extends HTMLAttributes<HTMLDivElement> {
-  slides: (Slide | SlideInsertionPayload)[];
-  editSlides: Dispatch<SetStateAction<(Slide | SlideInsertionPayload)[]>>;
+  parentSlides: (Slide | ImageToSlide)[];
+  onSlideAddition: (slides: ImageToSlide) => void;
+  onSlideDeletion: (slideIndex: string) => void;
+  onRefChange: (value: string | null, index: number) => void;
+  onSlideMove: (slidesAfterMove: (Slide | ImageToSlide)[]) => void;
 }
 
 const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
-  const slideIds = useMemo(
-    () => props.slides.map((slide) => slide.index),
-    [props.slides]
+  const [slides, setSlides] = useState<(Slide | ImageToSlide)[]>(
+    props.parentSlides
   );
-  const [activeSlide, setActiveSlide] = useState<
-    Slide | SlideInsertionPayload | null
-  >(null);
+  const slideIds = useMemo(() => slides.map((slide) => slide.index), [slides]);
+  const [activeSlide, setActiveSlide] = useState<Slide | ImageToSlide | null>(
+    null
+  );
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -47,16 +41,28 @@ const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
       },
     })
   );
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    props.editSlides((prevSlides) => [
-      ...prevSlides,
-      {
-        file: acceptedFiles[0],
-        url: retrieveImageUrl(acceptedFiles[0]),
-        ref: null,
-        index: prevSlides.length + 1,
-      },
-    ]);
+    let newIndex: number = 1;
+    setSlides((prevSlides) => {
+      newIndex = prevSlides.length + 1;
+      return [
+        ...prevSlides,
+        {
+          file: acceptedFiles[0],
+          url: retrieveImageUrl(acceptedFiles[0]),
+          ref: null,
+          index: newIndex,
+        },
+      ];
+    });
+
+    props.onSlideAddition({
+      file: acceptedFiles[0],
+      url: retrieveImageUrl(acceptedFiles[0]),
+      ref: null,
+      index: newIndex,
+    });
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -74,7 +80,7 @@ const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
 
     if (active.id === over.id) return;
 
-    props.editSlides((prevSlides) => {
+    setSlides((prevSlides) => {
       const activeSlideIndex = prevSlides.findIndex(
         (slide) => slide.index === active.id
       );
@@ -83,28 +89,18 @@ const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
         (slide) => slide.index === over.id
       );
 
+      props.onSlideMove(
+        arrayMove(props.parentSlides, activeSlideIndex, overSlideIndex)
+      );
       return arrayMove(prevSlides, activeSlideIndex, overSlideIndex);
     });
   };
 
-  const handleUrlChange = (value: string | undefined, index: number) => {
-    props.editSlides((prevValue) =>
-      prevValue.map((slide) =>
-        slide.index === index
-          ? {
-              ...slide,
-              ref: value || null,
-            }
-          : slide
-      )
+  const handleDeleteSlide = (slideIndex: string) => {
+    setSlides((prevSlides) =>
+      prevSlides.filter((slide) => `${slide.index}` !== slideIndex)
     );
-    toast.success("Đổi liên kết thành công!");
-  };
-
-  const handleDeleteSlide = (slideID: string) => {
-    props.editSlides((prevSlides) =>
-      prevSlides.filter((slide) => `${slide.index}` !== slideID)
-    );
+    props.onSlideDeletion(slideIndex);
   };
 
   return (
@@ -120,12 +116,12 @@ const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
         onDragEnd={onDragEnd}
       >
         <SortableContext items={slideIds}>
-          {props.slides.map((slide) => (
+          {slides.map((slide) => (
             <SlideWrapper
               key={slide.index}
               slide={slide}
               handleDeleteSlide={handleDeleteSlide}
-              onUrlChange={(value) => handleUrlChange(value, slide.index)}
+              onUrlChange={(value) => props.onRefChange(value, slide.index)}
             />
           ))}
         </SortableContext>

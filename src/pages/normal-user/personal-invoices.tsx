@@ -24,7 +24,7 @@ const PersonalInvoices: FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchText, setSearchText] = useState<string>();
   const [selectedStatus, setSelectedStatus] = useState<InvoiceStatus>(
-    InvoiceStatus.NEW
+    InvoiceStatus.PAYMENT_WAITING
   );
   const toasting = useRef<{
     id: string | number;
@@ -70,10 +70,11 @@ const PersonalInvoices: FC = () => {
         searchPlaceholder="Tìm kiếm theo mã đơn hàng..."
         setSelectedStatus={setSelectedStatus}
         setSearchText={setSearchText}
+        defaultSelectedStatus={InvoiceStatus.PAYMENT_WAITING}
         className="mt-8"
       />
 
-      <Card className="rounded-2xl shadow-lg mt-4 mb-4">
+      <Card className="rounded-2xl shadow-lg my-4">
         <CardContent className="px-6 pb-4 h-[60vh]">
           {invoices.length !== 0 ? (
             <InvoiceTable

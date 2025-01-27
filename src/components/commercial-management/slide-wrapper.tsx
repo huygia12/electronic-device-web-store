@@ -5,13 +5,13 @@ import { retrieveImageUrl } from "@/utils/helpers";
 import { Slide } from "@/types/model";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
-import { SlideInsertionPayload } from "@/types/payload";
-import ImageOverView from "./image-overview";
+import { ImageToSlide } from "@/types/payload";
+import SlideOverview from "./image-overview";
 
 interface SlideWrapperProps extends HTMLAttributes<HTMLDivElement> {
-  slide: Slide | SlideInsertionPayload;
+  slide: Slide | ImageToSlide;
   handleDeleteSlide: (slideID: string) => void;
-  onUrlChange?: (value: string | undefined) => void;
+  onUrlChange?: (value: string | null) => void;
 }
 
 const SlideWrapper: FC<SlideWrapperProps> = ({ className, ...props }) => {
@@ -38,7 +38,7 @@ const SlideWrapper: FC<SlideWrapperProps> = ({ className, ...props }) => {
       style={{ transition, transform: CSS.Transform.toString(transform) }}
       className={cn("relative", isDragging && "opacity-40", className)}
     >
-      <ImageOverView
+      <SlideOverview
         src={props.slide.url}
         alt="sideBanner"
         reference={props.slide.ref}
@@ -49,7 +49,7 @@ const SlideWrapper: FC<SlideWrapperProps> = ({ className, ...props }) => {
           alt="slide"
           className="rounded-lg "
         />
-      </ImageOverView>
+      </SlideOverview>
       {!isDragging && (
         <RemoveIcon
           onClick={() => props.handleDeleteSlide(`${props.slide.index}`)}

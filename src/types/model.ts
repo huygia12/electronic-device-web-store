@@ -167,10 +167,8 @@ export interface BaseUser {
 
 //Slide
 export interface Slide {
-  slideID: string;
   url: string;
   ref: string | null;
-  storeID: string;
   index: number;
 }
 
@@ -184,5 +182,4 @@ export interface Store {
   email: string | null;
   leftBanner: string | null;
   rightBanner: string | null;
-  slideShows?: Slide[];
 }

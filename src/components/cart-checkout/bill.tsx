@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 interface BillProps extends HTMLAttributes<HTMLDivElement> {
   cartItems: CartItem[] | undefined;
   shippingFee: number | null;
-  shippingTime: number;
+  shippingTime: number | null;
   totalMoney: number;
 }
 
@@ -78,7 +78,7 @@ const Bill: FC<BillProps> = ({ ...props }) => {
           >
             Hoàn thành đơn hàng
           </Button>
-          {props.shippingFee && (
+          {props.shippingTime != null && (
             <div className="mt-5 text-[0.8rem] ">
               <span className="font-semibold">
                 <span className="text-red-600 ">*</span>

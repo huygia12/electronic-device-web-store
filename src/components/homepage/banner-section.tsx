@@ -8,11 +8,11 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import { FC, HTMLAttributes, useRef } from "react";
 import { Slide } from "@/types/model";
-import { SlideInsertionPayload } from "@/types/payload";
+import { ImageToSlide } from "@/types/payload";
 import { cn } from "@/lib/utils";
 
 interface BannerSectionProps extends HTMLAttributes<HTMLDivElement> {
-  slides: (Slide | SlideInsertionPayload)[];
+  slides: (Slide | ImageToSlide)[];
   disableNavigation?: boolean;
 }
 
@@ -38,7 +38,7 @@ const BannerSection: FC<BannerSectionProps> = ({
                 src={item.url}
                 alt={item.url}
                 link={!disableNavigation && item.ref ? item.ref : undefined}
-                className="h-full"
+                className={cn("h-full", item.ref && "cursor-pointer")}
                 imageCss="h-[20.8rem] 4xl_h-[24.8rem]"
               />
             );

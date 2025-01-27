@@ -12,6 +12,7 @@ import { FC, HTMLAttributes } from "react";
 
 interface HeaderBarProps extends HTMLAttributes<HTMLDivElement> {
   searchPlaceholder?: string;
+  defaultSelectedStatus?: InvoiceStatus;
   setSearchText: (text: string) => void;
   setSelectedStatus: (status: InvoiceStatus) => void;
 }
@@ -28,6 +29,7 @@ const HeaderBar: FC<HeaderBarProps> = ({ ...props }) => {
       />
 
       <Select
+        defaultValue={props.defaultSelectedStatus}
         onValueChange={(value) =>
           props.setSelectedStatus(value as InvoiceStatus)
         }

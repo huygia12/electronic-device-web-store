@@ -71,7 +71,7 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{props.children}</DialogTrigger>
-      <DialogContent className="min-w-lg 3xl_min-w-2xl px-1 pb-0">
+      <DialogContent className="min-w-lg 3xl_min-w-2xl max-h-screen px-1 pb-0">
         <DialogHeader>
           <DialogTitle className="border-b-2 pb-4 px-6 border-dashed border-slate-500 flex justify-between">
             <span className="text-3xl font-light">Thông Tin Đơn Hàng</span>
@@ -90,7 +90,7 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
             </span>
           </DialogTitle>
         </DialogHeader>
-        <ScrollArea className="max-h-[40rem] px-6 mb-4">
+        <ScrollArea className="px-6 mb-4 max-h-[70vh] 2xl_max-h-[80vh] 3xl_max-h-[90vh]">
           <div className="flex">
             <div className="flex flex-col w-1/2">
               <span className="text-xl font-semibold">

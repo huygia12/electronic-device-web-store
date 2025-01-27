@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
-import { Category, Product, Provider } from "@/types/model";
-import { LAPTOP_ID, PHONE_ID, editingSlides } from "@/pages/data";
+import { Category, Product, Provider, Slide } from "@/types/model";
+import { LAPTOP_ID, PHONE_ID } from "@/pages/data";
 import { productService, providerService } from "@/services";
 import categoryService from "@/services/category";
 import {
@@ -11,8 +11,12 @@ import {
 } from "@/components/homepage";
 import { cn } from "@/lib/utils";
 import { useBlink } from "@/hooks";
+import { useRouteLoaderData } from "react-router-dom";
 
 const Homepage: FC = () => {
+  const initData = useRouteLoaderData("userlayout") as {
+    slides: Slide[];
+  };
   const [providers, setProviders] = useState<Provider[]>();
   const [categories, setCategories] = useState<Category[]>();
   const [phonesData, setPhonesData] = useState<Product[]>();
@@ -68,7 +72,7 @@ const Homepage: FC = () => {
           className={cn("w-1/5", isBlink && "animate-shake")}
         />
         <BannerSection
-          slides={editingSlides}
+          slides={initData.slides}
           className="w-4/5 auto-rows-[10rem] 4xl_auto-rows-[12rem]"
         />
       </section>
