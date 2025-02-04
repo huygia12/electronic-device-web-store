@@ -3,15 +3,26 @@ import { FiShoppingBag } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import { TfiHeadphoneAlt } from "react-icons/tfi";
 import { AlignJustify, PackageSearch } from "lucide-react";
-import { useAuth, useBlink, useCartProps, useCustomNavigate } from "@/hooks";
+import {
+  useAuth,
+  useBlink,
+  useCartProps,
+  useCustomNavigate,
+  useSocket,
+} from "@/hooks";
 import { toast } from "sonner";
 import { CounterLabel } from "@/components/user";
-import { Role } from "@/types/enum";
-import { DropMenuLinkItem, DropdownAvatar } from "@/components/common";
-import { FC } from "react";
+import { InvoiceStatus, Role } from "@/types/enum";
+import {
+  DropMenuLinkItem,
+  DropdownAvatar,
+  NotificationItem,
+  NotificationSection,
+} from "@/components/common";
+import { FC, useEffect, useState } from "react";
 import useCurrentUser from "@/hooks/use-current-user";
 import SearchBar from "@/components/user/search-bar";
-import useMyInvoice from "@/hooks/use-invoice";
+import { invoiceService } from "@/services";
 
 const navComponents: { title: string; path: string }[] = [
   { title: "Trang Chủ", path: "/" },
@@ -25,7 +36,81 @@ const AppClientHeader: FC = () => {
   const { currentUser } = useCurrentUser();
   const { navigate, location } = useCustomNavigate();
   const { makeBlink } = useBlink();
-  const { numberOfShippingInvoice } = useMyInvoice();
+  const [numberOfShippingInvoice, setNumberOfShippingInvoice] =
+    useState<number>(0);
+  const [numberOfAbortedOrders, setNumberOfAbortedOrders] = useState<
+    number | null
+  >(null);
+  const [numberOfDoneOrders, setNumberOfDoneOrders] = useState<number | null>(
+    null
+  );
+  const [numberOfPaymentWaitingOrders, setNumberOfPaymentWaittingOrders] =
+    useState<number | null>(null);
+  const { socket } = useSocket();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const today = new Date();
+
+      let response = await invoiceService.apis.countInvoices({
+        status: InvoiceStatus.SHIPPING,
+        userID: currentUser!.userID,
+      });
+      setNumberOfShippingInvoice(response);
+
+      response = await invoiceService.apis.countInvoices({
+        status: InvoiceStatus.PAYMENT_WAITING,
+        userID: currentUser!.userID,
+      });
+      setNumberOfPaymentWaittingOrders(response ? response : null);
+
+      response = await invoiceService.apis.countInvoices({
+        status: InvoiceStatus.DONE,
+        userID: currentUser!.userID,
+        date: today,
+      });
+      setNumberOfDoneOrders(response ? response : null);
+
+      response = await invoiceService.apis.countInvoices({
+        status: InvoiceStatus.ABORT,
+        userID: currentUser!.userID,
+        date: today,
+      });
+      setNumberOfAbortedOrders(response ? response : null);
+    };
+
+    currentUser && fetchData();
+  }, []);
+
+  useEffect(() => {
+    const updateNumberOfOrders = async (payload: {
+      numberOfNewInvoices: number;
+      newStatus: InvoiceStatus;
+    }) => {
+      switch (payload.newStatus) {
+        case InvoiceStatus.SHIPPING:
+          setNumberOfShippingInvoice(payload.numberOfNewInvoices);
+          break;
+        case InvoiceStatus.DONE:
+          setNumberOfDoneOrders(payload.numberOfNewInvoices);
+          break;
+        case InvoiceStatus.ABORT:
+          setNumberOfAbortedOrders(payload.numberOfNewInvoices);
+          break;
+        case InvoiceStatus.PAYMENT_WAITING:
+          setNumberOfPaymentWaittingOrders(payload.numberOfNewInvoices);
+          break;
+        default:
+          break;
+      }
+    };
+
+    socket?.on("invoice:update-status", updateNumberOfOrders);
+
+    return () => {
+      socket?.off("invoice:update-status", updateNumberOfOrders);
+    };
+  }, []);
 
   const handleGoToMenu = () => {
     const targetPath = "/";
@@ -92,23 +177,54 @@ const AppClientHeader: FC = () => {
                 <FiShoppingBag size={36} />
                 <CounterLabel counter={itemsInLocal.length} />
               </NavLink>
-              {currentUser && (
+
+              {currentUser ? (
+                <>
+                  <NavLink
+                    to={`/users/${currentUser.userID}/orders?status=${InvoiceStatus.SHIPPING}`}
+                    className="relative"
+                    unstable_viewTransition
+                  >
+                    <LiaShippingFastSolid size={42} />
+                    <CounterLabel counter={numberOfShippingInvoice} />
+                  </NavLink>
+
+                  <NotificationSection>
+                    {numberOfPaymentWaitingOrders ? (
+                      <NotificationItem
+                        imageUrl="/pay-order.avif"
+                        title="ĐƠN HÀNG CẦN THANH TOÁN"
+                        description={`Bạn có ${numberOfPaymentWaitingOrders} đơn hàng đang cần thanh toán, xem ngay.`}
+                        to={`users/${currentUser.userID}/orders?status=${InvoiceStatus.PAYMENT_WAITING}`}
+                      />
+                    ) : undefined}
+                    {numberOfDoneOrders ? (
+                      <NotificationItem
+                        imageUrl="/accept-order.jpg"
+                        title="ĐƠN HÀNG GIAO THÀNH CÔNG"
+                        description={`Bạn có ${numberOfDoneOrders} đơn hàng đã giao thành công trong hôm nay, xem ngay.`}
+                        to={`users/${currentUser.userID}/orders?status=${InvoiceStatus.DONE}`}
+                      />
+                    ) : undefined}
+                    {numberOfAbortedOrders ? (
+                      <NotificationItem
+                        imageUrl="/deny-order.jpg"
+                        title="ĐƠN HÀNG BỊ HỦY"
+                        description={`Bạn có ${numberOfAbortedOrders} đơn hàng đã bị hủy trong hôm nay, xem ngay.`}
+                        to={`users/${currentUser.userID}/orders?status=${InvoiceStatus.ABORT}`}
+                      />
+                    ) : undefined}
+                  </NotificationSection>
+                </>
+              ) : (
                 <NavLink
-                  to={`/users/${currentUser.userID}/orders`}
+                  to="/lookup"
                   className="relative"
                   unstable_viewTransition
                 >
-                  <LiaShippingFastSolid size={42} />
-                  <CounterLabel counter={numberOfShippingInvoice} />
+                  <PackageSearch size={38} />
                 </NavLink>
               )}
-              <NavLink
-                to="/lookup"
-                className="relative"
-                unstable_viewTransition
-              >
-                <PackageSearch size={38} />
-              </NavLink>
             </div>
           </div>
 
@@ -125,7 +241,7 @@ const AppClientHeader: FC = () => {
               <DropMenuLinkItem
                 item={{
                   name: "Đơn Hàng Của Tôi",
-                  src: `/users/${currentUser.userID}/orders`,
+                  src: `/users/${currentUser.userID}/orders?status=${InvoiceStatus.NEW}`,
                   visible: true,
                 }}
               />

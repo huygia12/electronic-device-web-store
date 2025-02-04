@@ -68,7 +68,7 @@ const storeService = {
     },
     updateSlidesImage: async (
       storeID: string,
-      prevSlide: Slide[],
+      prevSlides: Slide[],
       newSlides: (Slide | ImageToSlide)[]
     ): Promise<boolean> => {
       const payload: Slide[] = [];
@@ -104,7 +104,7 @@ const storeService = {
         );
 
         //delete all slides which are not contained in the newer slider
-        prevSlide.forEach((slide) => {
+        prevSlides.forEach((slide) => {
           if (payload.findIndex((e) => e.url === slide.url) === -1) {
             firebaseService.apis.deleteImageInFireBase(slide.url);
           }
@@ -114,7 +114,6 @@ const storeService = {
       } catch (error) {
         console.error("Unexpected error:", error);
         if (newBannerUrls) {
-          console.debug("delete from firebase urls : ", newBannerUrls);
           firebaseService.apis.deleteImagesInFireBase(newBannerUrls);
         }
         return false;

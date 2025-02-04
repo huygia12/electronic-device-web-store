@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import excelService from "@/services/xlsx";
 import pdfService from "@/services/pdfService";
 import { ScrollArea } from "../ui/scroll-area";
+import { useSocket } from "@/hooks";
 
 interface OrderDetailDialogProps extends HTMLAttributes<HTMLDivElement> {
   invoice: Invoice;
@@ -38,6 +39,7 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
     () => props.invoice.status,
     [props.invoice]
   );
+  const { socket } = useSocket();
 
   const setInvoiceStatus = (status: InvoiceStatus) => {
     const updateInvoice = invoiceService.apis.upateInvoice(
@@ -49,6 +51,10 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
       loading: "Đang xử lý...",
       success: (invoice: Invoice) => {
         props.updateInvoice(invoice);
+        socket?.emit(`invoice:update-status`, {
+          userID: invoice.userID,
+          newStatus: invoice.status,
+        });
         return "Cập nhật trạng thái đơn hàng thành công!";
       },
       error: "Cập nhật trạng thái đơn hàng thất bại!",
@@ -58,7 +64,7 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{props.children}</DialogTrigger>
-      <DialogContent className="min-w-lg 3xl_min-w-2xl px-1 pb-0">
+      <DialogContent className="min-w-lg 3xl_min-w-2xl max-h-screen px-1 pb-0">
         <DialogHeader>
           <DialogTitle className="border-b-2 pb-4 px-6 border-dashed border-slate-500 flex justify-between">
             <span className="text-3xl font-light">Thông Tin Đơn Hàng</span>
@@ -77,7 +83,7 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
             </span>
           </DialogTitle>
         </DialogHeader>
-        <ScrollArea className="max-h-[40rem] px-6 mb-4">
+        <ScrollArea className="px-6 mb-4 max-h-[70vh] 2xl_max-h-[80vh]">
           <div className="flex">
             <div className="flex flex-col w-1/2">
               <span className="text-xl font-semibold">
@@ -101,14 +107,22 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
               <span>{`${props.invoice.shippingFee.toLocaleString()}đ`}</span>
               <span className="text-xl mt-2 font-semibold">Ngày Đặt Hàng</span>
               <span>{formatDateTime(`${props.invoice.createdAt}`)}</span>
-              {props.invoice.doneAt && (
-                <>
-                  <span className="text-xl mt-3 font-semibold">
-                    Ngày Hoàn Thành
-                  </span>
-                  <span>{formatDateTime(`${props.invoice.doneAt}`)}</span>
-                </>
-              )}
+              {props.invoice.doneAt &&
+                props.invoice.status === InvoiceStatus.DONE && (
+                  <>
+                    <span className="text-xl mt-3 font-semibold">
+                      Ngày Hoàn Thành
+                    </span>
+                    <span>{formatDateTime(`${props.invoice.doneAt}`)}</span>
+                  </>
+                )}
+              {props.invoice.doneAt &&
+                props.invoice.status === InvoiceStatus.ABORT && (
+                  <>
+                    <span className="text-xl mt-3 font-semibold">Ngày Hủy</span>
+                    <span>{formatDateTime(`${props.invoice.doneAt}`)}</span>
+                  </>
+                )}
             </div>
           </div>
 

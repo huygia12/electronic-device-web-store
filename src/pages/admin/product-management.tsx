@@ -13,7 +13,7 @@ import { CustomPagination } from "@/components/common";
 import { getPages } from "@/utils/helpers";
 
 const ProductManagement: FC = () => {
-  const searchingDelay = useRef<number>(2000);
+  const searchingDelay = useRef<number>(500);
   const initData = useRouteLoaderData("product_management") as {
     products: ProductSummary[];
     totalProducts: number;
@@ -30,6 +30,7 @@ const ProductManagement: FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>();
   const [selectedProvider, setSelectedProvider] = useState<string>();
   const [currentPage, setCurrentPage] = useState<number>();
+  const [displayPage, setDisplayPage] = useState<number>(1);
   const toasting = useRef<{
     id: string | number;
     state: boolean;
@@ -65,6 +66,7 @@ const ProductManagement: FC = () => {
             currentPage: currentPage,
           });
 
+        setDisplayPage(currentPage || 1);
         setProducts(res.products);
         setTotalPages(getPages(res.totalProducts));
       } finally {
@@ -101,9 +103,25 @@ const ProductManagement: FC = () => {
   };
 
   const handleRefreshFilter = () => {
+    setCurrentPage(1);
     setSelectedProduct(undefined);
     setSelectedCategory(undefined);
     setSelectedProvider(undefined);
+  };
+
+  const handleSelectCategory = (categoryId: string) => {
+    setCurrentPage(1);
+    setSelectedCategory(categoryId);
+  };
+
+  const handleSelectProvider = (providerId: string) => {
+    setCurrentPage(1);
+    setSelectedProvider(providerId);
+  };
+
+  const handleSearch = (searchText: string) => {
+    setCurrentPage(1);
+    setSearchingQuery(searchText);
   };
 
   return (
@@ -112,11 +130,11 @@ const ProductManagement: FC = () => {
       <UpperBar
         categories={categories}
         providers={providers}
-        setSearchingInput={setSearchingQuery}
+        setSearchingInput={handleSearch}
         selectedCategory={selectedCategory}
         selectedProvider={selectedProvider}
-        setSelectedCategory={setSelectedCategory}
-        setSelectedProvider={setSelectedProvider}
+        setSelectedCategory={handleSelectCategory}
+        setSelectedProvider={handleSelectProvider}
         handleRefreshFilter={handleRefreshFilter}
       />
 
@@ -127,6 +145,8 @@ const ProductManagement: FC = () => {
           products={products}
           selectedProduct={selectedProduct}
           setSelectedProduct={setSelectedProduct}
+          currentPage={displayPage}
+          limitPerPage={10}
         />
 
         <ProductTools
@@ -139,7 +159,7 @@ const ProductManagement: FC = () => {
       {/** Pagination */}
       <CustomPagination
         totalPages={totalPages}
-        parentPageState={currentPage}
+        parentPageState={displayPage}
         onPageChange={setCurrentPage}
       />
     </div>

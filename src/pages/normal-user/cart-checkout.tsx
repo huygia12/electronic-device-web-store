@@ -1,5 +1,10 @@
 import { District, Province, ShippingService, Ward } from "@/types/payload";
-import { useCartProps, useCurrentUser, useCustomNavigate } from "@/hooks";
+import {
+  useCartProps,
+  useCurrentUser,
+  useCustomNavigate,
+  useSocket,
+} from "@/hooks";
 import { FC, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,6 +34,7 @@ const CartCheckout: FC = () => {
     cartService.getTotalAmount(itemsInLocal) -
       cartService.getTotalDiscountAmount(itemsInLocal)
   );
+  const { socket } = useSocket();
 
   const {
     register,
@@ -206,6 +212,7 @@ const CartCheckout: FC = () => {
       loading: "Đang xử lý...",
       success: () => {
         removeInvoice();
+        socket?.emit("invoice:new");
         navigate("/", { unstable_viewTransition: true });
         return `Đơn hàng đã được gửi tới admin xem xét!`;
       },

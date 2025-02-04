@@ -12,22 +12,31 @@ import { Label } from "@/components/ui/label";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios, { HttpStatusCode } from "axios";
+import axios, { AxiosError, HttpStatusCode } from "axios";
 import { LoadingSpinner } from "@/components/effect";
 import { LoginFormProps, LoginSchema } from "@/utils/schema";
-import { FC } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/hooks";
+import { ForgotPasswordDialog } from "@/components/login";
+import { z } from "zod";
+import { userService } from "@/services";
+import { toast } from "sonner";
 
 const Login: FC = () => {
   const {
     register,
     handleSubmit,
     setError,
+    clearErrors,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormProps>({
     resolver: zodResolver(LoginSchema),
   });
   const { login } = useAuth();
+  const [openForgotPasswordDialog, setOpenForgotPasswordDialog] =
+    useState<boolean>(false);
+  const timeout = useRef<NodeJS.Timeout>();
 
   const handleLoginFormSubmission: SubmitHandler<LoginFormProps> = async (
     data
@@ -58,6 +67,51 @@ const Login: FC = () => {
       }
     }
   };
+
+  const handleForgotPasswordClick = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+    const email = getValues(`email`);
+    const emailSchema = z.string().email();
+    const result = emailSchema.safeParse(email);
+
+    if (!result.success) {
+      setOpenForgotPasswordDialog(false);
+      setError(`email`, { message: "Email không hợp lệ!" });
+      return;
+    }
+
+    try {
+      await userService.apis.generateOTP(email);
+      timeout.current = setTimeout(
+        () => {
+          setOpenForgotPasswordDialog(false);
+          toast.info("Mã OTP đã hết hạn!");
+        },
+        2 * 60 * 1000 // 2 minutes
+      );
+
+      setOpenForgotPasswordDialog(true);
+      clearErrors();
+    } catch (e) {
+      if (e instanceof AxiosError) {
+        if (e.response?.status == HttpStatusCode.NotFound) {
+          setError(`email`, { message: "Email chưa đăng ký!" });
+        } else {
+          setError(`root`, { message: "Tải khoản hiện không thể gửi mã OTP!" });
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+      }
+    };
+  });
 
   return (
     <form
@@ -104,12 +158,19 @@ const Login: FC = () => {
             {errors.password && (
               <div className="text-red-600">{errors.password.message}</div>
             )}
-            <NavLink
-              to="/login"
-              className="text-lg underline hover_text-blue-500 self-end"
+            <ForgotPasswordDialog
+              isOpen={openForgotPasswordDialog}
+              email={getValues(`email`)}
+              className="self-end"
+              setIsOpen={setOpenForgotPasswordDialog}
             >
-              Quên mật khẩu
-            </NavLink>
+              <button
+                className="text-lg underline hover_text-blue-500 focus-visible_outline-none"
+                onClick={handleForgotPasswordClick}
+              >
+                Quên mật khẩu
+              </button>
+            </ForgotPasswordDialog>
           </div>
         </CardContent>
         <CardFooter className="flex flex-col justify-center">

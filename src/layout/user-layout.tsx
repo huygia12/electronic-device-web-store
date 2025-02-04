@@ -16,10 +16,7 @@ import { MailRegisterSection, UserHeader, AppFooter } from ".";
 import { ZaloButton } from "@/components/user";
 import { Banner } from "@/components/common";
 import { Store } from "@/types/model";
-import { useAuth, useCurrentUser, useSocket } from "@/hooks";
-import { authService, invoiceService } from "@/services";
-import useMyInvoice from "@/hooks/use-invoice";
-import { InvoiceStatus } from "@/types/enum";
+import { useAuth, useSocket } from "@/hooks";
 
 const UserLayout: React.FC = () => {
   const initData = useRouteLoaderData("userlayout") as {
@@ -28,8 +25,6 @@ const UserLayout: React.FC = () => {
   const navigation = useNavigation();
   const { socket } = useSocket();
   const { logout } = useAuth();
-  const { setNumberOfShippingInvoice } = useMyInvoice();
-  const { currentUser } = useCurrentUser();
   const [searchParams] = useSearchParams();
   const [paidSuccess, setPaidSuccess] = useState<boolean>(false);
 
@@ -56,11 +51,9 @@ const UserLayout: React.FC = () => {
   }, [paidSuccess]);
 
   useEffect(() => {
-    const handleBanned = async (payload: { userID: string }) => {
-      if (authService.getUser()?.userID === payload.userID) {
-        toast.info("Tài khoản của bạn đã bị khóa!");
-        await logout();
-      }
+    const handleBanned = async () => {
+      toast.info("Tài khoản của bạn đã bị khóa!");
+      await logout();
     };
 
     socket?.on("user:ban", handleBanned);
@@ -68,18 +61,6 @@ const UserLayout: React.FC = () => {
     return () => {
       socket?.off("user:ban", handleBanned);
     };
-  }, []);
-
-  useEffect(() => {
-    const initialize = async () => {
-      const res = await invoiceService.apis.getInvoices({
-        userID: currentUser!.userID,
-        status: InvoiceStatus.SHIPPING,
-      });
-      setNumberOfShippingInvoice(res.totalInvoices);
-    };
-
-    currentUser && initialize();
   }, []);
 
   return (

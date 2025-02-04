@@ -8,17 +8,53 @@ import {
 } from "@/components/ui/sheet";
 import { NavLink } from "react-router-dom";
 import { toast } from "sonner";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { AdminAccordion } from "@/components/admin";
 import { navItems } from "@/utils/constants";
-import { useAuth, useCurrentUser } from "@/hooks";
-import { DropMenuLinkItem, DropdownAvatar } from "@/components/common";
+import { useAuth, useCurrentUser, useSocket } from "@/hooks";
+import {
+  DropMenuLinkItem,
+  DropdownAvatar,
+  NotificationItem,
+  NotificationSection,
+} from "@/components/common";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { InvoiceStatus } from "@/types/enum";
+import { invoiceService } from "@/services";
 
 const AdminHeader: FC = () => {
   const { logout } = useAuth();
   const { currentUser } = useCurrentUser();
+  const [numberOfNewOrders, setNumberOfNewOrders] = useState<number | null>(
+    null
+  );
+  const { socket } = useSocket();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await invoiceService.apis.countInvoices({
+        status: InvoiceStatus.NEW,
+      });
+      setNumberOfNewOrders(response ? response : null);
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const updateNumberOfNewOrders = async (payload: {
+      numberOfNewInvoices: number;
+    }) => {
+      setNumberOfNewOrders(payload.numberOfNewInvoices);
+    };
+
+    socket?.on("invoice:new", updateNumberOfNewOrders);
+
+    return () => {
+      socket?.off("invoice:new", updateNumberOfNewOrders);
+    };
+  }, []);
 
   return (
     <div className="w-full py-3 flex flex-col sticky top-0 z-50 bg-theme shadow-xl items-center">
@@ -69,13 +105,17 @@ const AdminHeader: FC = () => {
 
         {/** NOTIFICATION AND AVATAR */}
         <div className="flex items-center">
-          {/* <div className="relative">
-            <RiNotification2Fill size={34} />
-            <CounterLabel
-              counter={6}
-              className="left-[-0.9rem] top-[-1.1rem]"
-            />
-          </div> */}
+          <NotificationSection>
+            {numberOfNewOrders ? (
+              <NotificationItem
+                imageUrl="/new-product.png"
+                title="ĐƠN HÀNG MỚI"
+                description={`Bạn có ${numberOfNewOrders} đơn hàng đang chờ được duyệt, xem ngay.`}
+                to={`/admin/invoices?status=${InvoiceStatus.NEW}`}
+              />
+            ) : undefined}
+          </NotificationSection>
+
           <DropdownAvatar className="ml-10">
             <DropMenuLinkItem
               item={{

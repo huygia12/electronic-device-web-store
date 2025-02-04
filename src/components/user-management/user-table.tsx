@@ -32,6 +32,8 @@ interface UserTableProps extends HTMLAttributes<HTMLTableElement> {
   selectedUser: User | undefined;
   setSelectedUser: (user: User) => void;
   handleBanUser: (value: boolean) => void;
+  limitPerPage: number;
+  currentPage: number;
 }
 
 const UserTable: FC<UserTableProps> = ({ ...props }) => {
@@ -69,7 +71,7 @@ const UserTable: FC<UserTableProps> = ({ ...props }) => {
                   onClick={() => props.setSelectedUser(user)}
                 >
                   <TableCell className="text-center text-base">
-                    {index + 1}
+                    {(props.currentPage - 1) * props.limitPerPage + index + 1}
                   </TableCell>
                   <TableCell className="text-center text-base">
                     {user.userName}

@@ -25,7 +25,7 @@ const ProviderTable: FC<ProviderTableProps> = ({ ...props }) => {
   if (props.providers.length === 0) {
     return (
       <Card className={cn("rounded-xl shadow-lg", props.className)}>
-        <CardContent className="flex flex-col p-4 h-[60vh]">
+        <CardContent className="flex flex-col p-4 h-[60vh] min-h-fit">
           <div className="flex flex-col items-center">
             <img width={500} src="/empty-box.svg" alt="emptyCart" />
             <span className="text-xl font-medium text-slate-500 mb-10">

@@ -9,7 +9,7 @@ import {
   HomePage,
   InvoiceLookup,
   Login,
-  OrderManagement,
+  InvoiceManagement,
   PageNotFound,
   PersonalInvoice,
   ProductAddition,
@@ -89,7 +89,7 @@ const routes = createBrowserRouter([
               {
                 path: "orders",
                 id: "user_invoices",
-                loader: invoiceService.apis.getMyInvoices,
+                loader: invoiceService.apis.getPersonalInvoices,
                 element: (
                   <ProtectedRoute>
                     <PersonalInvoice />
@@ -176,8 +176,8 @@ const routes = createBrowserRouter([
       {
         path: "invoices",
         id: "invoice_management",
-        loader: invoiceService.apis.getInvoices,
-        element: <OrderManagement />,
+        loader: () => invoiceService.apis.getInvoices({}),
+        element: <InvoiceManagement />,
       },
       {
         path: "store",

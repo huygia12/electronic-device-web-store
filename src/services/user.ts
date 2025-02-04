@@ -132,6 +132,23 @@ const userService = {
       const res = await axiosInstance.delete(`${userEndPoint}/${userID}`);
       return res;
     },
+    generateOTP: async (email: string): Promise<AxiosResponse> => {
+      const res = await axiosInstance.post(`${userEndPoint}/forgot-password`, {
+        email: email,
+      });
+      return res;
+    },
+    verifyOTP: async (email: string, otp: string): Promise<boolean> => {
+      const res = await axiosInstance.post<{ info: { result: boolean } }>(
+        `${userEndPoint}/verify-otp`,
+        {
+          email: email,
+          otp: otp,
+        }
+      );
+
+      return res.data.info.result;
+    },
   },
   getRoleToDisplay: (role: Role) => {
     return role === Role.ADMIN ? "Admin" : "Khách hàng";

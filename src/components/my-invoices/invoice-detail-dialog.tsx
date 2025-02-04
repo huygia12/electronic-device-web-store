@@ -21,6 +21,7 @@ import { ProductInInvoice } from "@/components/common";
 import { cn } from "@/lib/utils";
 import InvoiceCancelDialog from "./cancel-dialog";
 import { ScrollArea } from "../ui/scroll-area";
+import { useSocket } from "@/hooks";
 
 interface InvoiceDetailDialogProps extends HTMLAttributes<HTMLDivElement> {
   disableAction?: boolean;
@@ -36,6 +37,7 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
     () => props.invoice.status,
     [props.invoice]
   );
+  const { socket } = useSocket();
 
   const payOrder = async () => {
     const toastID = toast.loading("Đang xử lý...");
@@ -62,6 +64,10 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
       loading: "Đang xử lý...",
       success: (invoice: Invoice) => {
         props.updateInvoice(invoice);
+        socket?.emit(`invoice:update-status`, {
+          userID: invoice.userID,
+          newStatus: invoice.status,
+        });
         return "Hủy đơn hàng thành công!";
       },
       error: "Hủy đơn hàng thất bại!",
@@ -90,7 +96,7 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
             </span>
           </DialogTitle>
         </DialogHeader>
-        <ScrollArea className="px-6 mb-4 max-h-[70vh] 2xl_max-h-[80vh] 3xl_max-h-[90vh]">
+        <ScrollArea className="px-6 mb-4 max-h-[70vh] 2xl_max-h-[80vh]">
           <div className="flex">
             <div className="flex flex-col w-1/2">
               <span className="text-xl font-semibold">
@@ -114,14 +120,22 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
               <span>{`${props.invoice.shippingFee.toLocaleString()}đ`}</span>
               <span className="text-xl mt-2 font-semibold">Ngày Đặt Hàng</span>
               <span>{formatDateTime(`${props.invoice.createdAt}`)}</span>
-              {props.invoice.doneAt && (
-                <>
-                  <span className="text-xl mt-3 font-semibold">
-                    Ngày Hoàn Thành
-                  </span>
-                  <span>{formatDateTime(`${props.invoice.doneAt}`)}</span>
-                </>
-              )}
+              {props.invoice.doneAt &&
+                props.invoice.status === InvoiceStatus.DONE && (
+                  <>
+                    <span className="text-xl mt-3 font-semibold">
+                      Ngày Hoàn Thành
+                    </span>
+                    <span>{formatDateTime(`${props.invoice.doneAt}`)}</span>
+                  </>
+                )}
+              {props.invoice.doneAt &&
+                props.invoice.status === InvoiceStatus.ABORT && (
+                  <>
+                    <span className="text-xl mt-3 font-semibold">Ngày Hủy</span>
+                    <span>{formatDateTime(`${props.invoice.doneAt}`)}</span>
+                  </>
+                )}
             </div>
           </div>
 

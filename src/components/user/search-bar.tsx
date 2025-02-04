@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { applyDiscount, isDiscount } from "@/utils/helpers";
 
 const SearchBar: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
-  const searchingDelay = useRef<number>(1000);
+  const searchingDelay = useRef<number>(500);
   const [seachText, setSearchText] = useState<string>();
   const [products, setProducts] = useState<ProductSummary[]>();
   const { navigate } = useCustomNavigate();

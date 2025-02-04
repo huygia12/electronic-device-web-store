@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { InvoiceStatus } from "@/types/enum";
+import { getInvoiceStatus } from "@/utils/helpers";
 import { FC, HTMLAttributes } from "react";
 
 interface HeaderBarProps extends HTMLAttributes<HTMLDivElement> {
@@ -29,7 +30,7 @@ const HeaderBar: FC<HeaderBarProps> = ({ ...props }) => {
       />
 
       <Select
-        defaultValue={props.defaultSelectedStatus}
+        value={props.defaultSelectedStatus}
         onValueChange={(value) =>
           props.setSelectedStatus(value as InvoiceStatus)
         }
@@ -38,17 +39,11 @@ const HeaderBar: FC<HeaderBarProps> = ({ ...props }) => {
           <SelectValue placeholder="Trạng Thái Đơn Hàng" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={InvoiceStatus.NEW}>Đang Chờ Duyệt</SelectItem>
-          <SelectItem value={InvoiceStatus.PAYMENT_WAITING}>
-            Đã Duyệt
-          </SelectItem>
-          <SelectItem value={InvoiceStatus.SHIPPING}>
-            Đang Vận Chuyển
-          </SelectItem>
-          <SelectItem value={InvoiceStatus.DONE}>
-            Giao Hàng Thành Công
-          </SelectItem>
-          <SelectItem value={InvoiceStatus.ABORT}>Đã Hủy</SelectItem>
+          {Object.keys(InvoiceStatus).map((e) => (
+            <SelectItem key={e} value={e}>
+              {getInvoiceStatus(e as InvoiceStatus)}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </div>

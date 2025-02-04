@@ -1,8 +1,10 @@
 import { InvoiceStatus, PaymentMethod } from "@/types/enum";
+import { Slide } from "@/types/model";
 import { ActionFunctionArgs, ParamParseKey, Params } from "react-router-dom";
 
 export interface Args extends ActionFunctionArgs {
   params: Params<ParamParseKey<string>>;
+  request: Request;
 }
 
 const rowsPerPage = 10;
@@ -54,7 +56,7 @@ const getRatioString = (num1: number, num2: number): string => {
 
 const getNumberGapString = (num1: number, num2: number): string => {
   const gap: number = Math.abs(num1 - num2);
-  return num1 < num2 ? `- ${gap}%` : `+ ${gap}%`;
+  return num1 < num2 ? `- ${gap}` : `+ ${gap}`;
 };
 
 const retrieveImageUrl = (image: unknown): string => {
@@ -115,6 +117,10 @@ const getInvoicePaymentMethod = (method: PaymentMethod): string => {
   return paymentMethod;
 };
 
+const sortBannerInSlides = (slides: Slide[]) => {
+  return slides.sort((a, b) => a.index - b.index);
+};
+
 export {
   formatDateTime,
   getRatioString,
@@ -131,4 +137,5 @@ export {
   getImageUrl,
   getInvoiceStatus,
   getInvoicePaymentMethod,
+  sortBannerInSlides,
 };

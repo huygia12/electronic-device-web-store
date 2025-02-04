@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Invoice } from "@/types/model";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 import { InvoiceTable } from "@/components/my-invoices";
 import { CustomPagination, InvoiceUpperBar } from "@/components/common";
@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { useCurrentUser } from "@/hooks";
 
 const PersonalInvoices: FC = () => {
-  const searchingDelay = useRef<number>(2000);
+  const searchingDelay = useRef<number>(500);
   const initData = useRouteLoaderData("user_invoices") as {
     invoices: Invoice[];
     totalInvoices: number;
@@ -22,14 +22,20 @@ const PersonalInvoices: FC = () => {
     getPages(initData.totalInvoices)
   );
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchText, setSearchText] = useState<string>();
-  const [selectedStatus, setSelectedStatus] = useState<InvoiceStatus>(
-    InvoiceStatus.PAYMENT_WAITING
-  );
+  const [selectedStatus, setSelectedStatus] = useState<InvoiceStatus>(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const status: string | null = searchParams.get("status");
+    return status ? (status as InvoiceStatus) : InvoiceStatus.PAYMENT_WAITING;
+  });
   const toasting = useRef<{
     id: string | number;
     state: boolean;
   } | null>();
+  const [filterChange, setFilterChange] = useState<boolean>(true);
+  const params = useMemo(
+    () => new URLSearchParams(window.location.search),
+    [filterChange]
+  );
 
   useEffect(() => {
     if (toasting.current === undefined) {
@@ -42,12 +48,11 @@ const PersonalInvoices: FC = () => {
 
     const delayDebounceFn = setTimeout(async () => {
       try {
+        const records = Object.fromEntries([...params]);
         const res: { invoices: Invoice[]; totalInvoices: number } =
           await invoiceService.apis.getInvoices({
+            ...records,
             userID: currentUser!.userID,
-            invoiceID: searchText,
-            currentPage: currentPage,
-            status: selectedStatus,
           });
 
         setInvoices(res.invoices);
@@ -59,7 +64,48 @@ const PersonalInvoices: FC = () => {
     }, searchingDelay.current);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchText, selectedStatus, currentPage, currentUser]);
+  }, [currentUser, params]);
+
+  const handleStatusSelectionEvent = (value: InvoiceStatus) => {
+    setCurrentPage(1);
+    setSelectedStatus(value);
+    editQueryUrl([{ filterKey: "status", filterValue: `${value}` }]);
+  };
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    editQueryUrl([{ filterKey: "currentPage", filterValue: `${pageNumber}` }]);
+  };
+
+  const handleSearchTextChange = (value: string) => {
+    setCurrentPage(1);
+    editQueryUrl([{ filterKey: "invoiceID", filterValue: `${value}` }]);
+  };
+
+  const editQueryUrl = (
+    queryParams: {
+      filterKey: string;
+      filterValue: string | undefined | string[];
+    }[]
+  ) => {
+    const currentUrl = new URL(window.location.href);
+
+    queryParams.forEach((queryParam) => {
+      if (queryParam.filterValue) {
+        currentUrl.searchParams.set(
+          queryParam.filterKey,
+          typeof queryParam.filterValue === "string"
+            ? queryParam.filterValue
+            : queryParam.filterValue.join(",")
+        );
+      } else {
+        currentUrl.searchParams.delete(queryParam.filterKey);
+      }
+    });
+
+    window.history.replaceState({}, "", currentUrl);
+    setFilterChange((prevValue) => !prevValue);
+  };
 
   return (
     <div>
@@ -68,14 +114,14 @@ const PersonalInvoices: FC = () => {
       </h1>
       <InvoiceUpperBar
         searchPlaceholder="Tìm kiếm theo mã đơn hàng..."
-        setSelectedStatus={setSelectedStatus}
-        setSearchText={setSearchText}
-        defaultSelectedStatus={InvoiceStatus.PAYMENT_WAITING}
+        setSelectedStatus={handleStatusSelectionEvent}
+        setSearchText={handleSearchTextChange}
+        defaultSelectedStatus={selectedStatus}
         className="mt-8"
       />
 
       <Card className="rounded-2xl shadow-lg my-4">
-        <CardContent className="px-6 pb-4 h-[60vh]">
+        <CardContent className="px-6 pb-4 h-[60vh] min-h-fit">
           {invoices.length !== 0 ? (
             <InvoiceTable
               invoices={invoices}
@@ -95,7 +141,7 @@ const PersonalInvoices: FC = () => {
 
       <CustomPagination
         parentPageState={currentPage}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
         totalPages={totalPages}
       />
     </div>

@@ -9,28 +9,26 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { FC, HTMLAttributes, useCallback, useMemo, useState } from "react";
-import { SortableContext, arrayMove } from "@dnd-kit/sortable";
+import { SortableContext } from "@dnd-kit/sortable";
 import SlideWrapper from "./slide-wrapper";
 import { cn } from "@/lib/utils";
 import { createPortal } from "react-dom";
 import { useDropzone } from "react-dropzone";
 import { ImageToSlide } from "@/types/payload";
 import { FileImagePlaceholder } from "../common";
-import { retrieveImageUrl } from "@/utils/helpers";
 
 interface SlideShowProps extends HTMLAttributes<HTMLDivElement> {
-  parentSlides: (Slide | ImageToSlide)[];
-  onSlideAddition: (slides: ImageToSlide) => void;
+  originSlides: (Slide | ImageToSlide)[];
+  onSlideAddition: (newImage: File) => void;
   onSlideDeletion: (slideIndex: string) => void;
-  onRefChange: (value: string | null, index: number) => void;
-  onSlideMove: (slidesAfterMove: (Slide | ImageToSlide)[]) => void;
+  onSlideMove: (a: number, b: number) => void;
 }
 
 const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
-  const [slides, setSlides] = useState<(Slide | ImageToSlide)[]>(
-    props.parentSlides
+  const slideIds = useMemo(
+    () => props.originSlides.map((slide) => slide.index),
+    [props.originSlides]
   );
-  const slideIds = useMemo(() => slides.map((slide) => slide.index), [slides]);
   const [activeSlide, setActiveSlide] = useState<Slide | ImageToSlide | null>(
     null
   );
@@ -43,26 +41,7 @@ const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
   );
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    let newIndex: number = 1;
-    setSlides((prevSlides) => {
-      newIndex = prevSlides.length + 1;
-      return [
-        ...prevSlides,
-        {
-          file: acceptedFiles[0],
-          url: retrieveImageUrl(acceptedFiles[0]),
-          ref: null,
-          index: newIndex,
-        },
-      ];
-    });
-
-    props.onSlideAddition({
-      file: acceptedFiles[0],
-      url: retrieveImageUrl(acceptedFiles[0]),
-      ref: null,
-      index: newIndex,
-    });
+    props.onSlideAddition(acceptedFiles[0]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -80,26 +59,10 @@ const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
 
     if (active.id === over.id) return;
 
-    setSlides((prevSlides) => {
-      const activeSlideIndex = prevSlides.findIndex(
-        (slide) => slide.index === active.id
-      );
-
-      const overSlideIndex = prevSlides.findIndex(
-        (slide) => slide.index === over.id
-      );
-
-      props.onSlideMove(
-        arrayMove(props.parentSlides, activeSlideIndex, overSlideIndex)
-      );
-      return arrayMove(prevSlides, activeSlideIndex, overSlideIndex);
-    });
+    props.onSlideMove(Number(active.id) - 1, Number(over.id) - 1);
   };
 
   const handleDeleteSlide = (slideIndex: string) => {
-    setSlides((prevSlides) =>
-      prevSlides.filter((slide) => `${slide.index}` !== slideIndex)
-    );
     props.onSlideDeletion(slideIndex);
   };
 
@@ -116,12 +79,14 @@ const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
         onDragEnd={onDragEnd}
       >
         <SortableContext items={slideIds}>
-          {slides.map((slide) => (
+          {props.originSlides.map((slide, index) => (
             <SlideWrapper
-              key={slide.index}
+              key={index + 1}
               slide={slide}
               handleDeleteSlide={handleDeleteSlide}
-              onUrlChange={(value) => props.onRefChange(value, slide.index)}
+              onUrlChange={(value) => {
+                slide.ref = value ? value : "";
+              }}
             />
           ))}
         </SortableContext>
@@ -132,6 +97,9 @@ const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
               <SlideWrapper
                 slide={activeSlide}
                 handleDeleteSlide={handleDeleteSlide}
+                onUrlChange={(value) => {
+                  activeSlide.ref = value ? value : "";
+                }}
               />
             )}
           </DragOverlay>,

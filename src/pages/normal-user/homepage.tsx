@@ -12,6 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useBlink } from "@/hooks";
 import { useRouteLoaderData } from "react-router-dom";
+import { sortBannerInSlides } from "@/utils/helpers";
 
 const Homepage: FC = () => {
   const initData = useRouteLoaderData("userlayout") as {
@@ -72,7 +73,7 @@ const Homepage: FC = () => {
           className={cn("w-1/5", isBlink && "animate-shake")}
         />
         <BannerSection
-          slides={initData.slides}
+          slides={sortBannerInSlides(initData.slides) as Slide[]}
           className="w-4/5 auto-rows-[10rem] 4xl_auto-rows-[12rem]"
         />
       </section>

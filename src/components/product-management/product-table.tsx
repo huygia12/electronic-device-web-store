@@ -34,14 +34,16 @@ interface ProductTableProps extends HTMLAttributes<HTMLDivElement> {
   products: ProductSummary[];
   selectedProduct?: ProductSummary;
   setSelectedProduct: (product: ProductSummary) => void;
+  currentPage: number;
+  limitPerPage: number;
 }
 
 const ProductTable: FC<ProductTableProps> = ({ ...props }) => {
   return (
     <Card className={cn("rounded-2xl shadow-lg", props.className)}>
-      <CardContent className="flex flex-col p-4 h-[60vh]">
+      <CardContent className="flex flex-col p-4 h-[60vh] min-h-fit">
         {props.products.length !== 0 ? (
-          <ScrollArea className="relative h-[60vh] pr-3 pb-3">
+          <ScrollArea className="relative pr-3 pb-3 h-[60vh]">
             <Table>
               <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
                 <tr>
@@ -69,7 +71,7 @@ const ProductTable: FC<ProductTableProps> = ({ ...props }) => {
                     onClick={() => props.setSelectedProduct(product)}
                   >
                     <TableCell className="text-center text-base">
-                      {index + 1}
+                      {(props.currentPage - 1) * props.limitPerPage + index + 1}
                     </TableCell>
                     <TableCell>
                       <img

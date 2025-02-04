@@ -73,7 +73,9 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
               <TableCell className="text-center">
                 <Badge
                   className={cn(
-                    `text-white px-2 text-sm whitespace-normal break-words max-w-[8rem]`,
+                    `text-white px-2 text-sm whitespace-normal break-words max-w-[8rem] hover_!${invoiceService.getInvoiceStatusColor(
+                      invoice.status
+                    )}`,
                     invoiceService.getInvoiceStatusColor(invoice.status)
                   )}
                 >

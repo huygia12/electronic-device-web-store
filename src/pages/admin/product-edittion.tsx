@@ -165,7 +165,6 @@ const ProductEdittion: FC = () => {
       result.items,
       removedItem
     );
-    console.log(result.uploadedImage);
 
     toast.dismiss(toastID);
     toast.promise(updateProduct, {

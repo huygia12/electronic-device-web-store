@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, HTMLAttributes, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 interface SlideOverviewProps extends HTMLAttributes<HTMLDivElement> {
@@ -10,10 +10,15 @@ interface SlideOverviewProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const SlideOverview: FC<SlideOverviewProps> = ({ ...props }) => {
-  const [text, setText] = useState<string>(props.reference || ``);
+  const [text, setText] = useState<string>(props.reference || "");
+  const [open, setOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    setText(props.reference || "");
+  }, [props.src]);
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{props.children}</DialogTrigger>
       <DialogContent className="min-w-[50%] p-10 border-transparent bg-transparent shadow-none text-primary-softer">
         <img src={props.src} alt={props.alt} className="mx-auto max-h-[80vh]" />
@@ -25,10 +30,11 @@ const SlideOverview: FC<SlideOverviewProps> = ({ ...props }) => {
             onChange={(e) => setText(e.target.value)}
           />
           <Button
-            onClick={() =>
+            onClick={() => {
               props.onUrlChange &&
-              props.onUrlChange(text && text.length > 0 ? text : null)
-            }
+                props.onUrlChange(text && text.length > 0 ? text : null);
+              setOpen(false);
+            }}
             variant="destructive"
             className="h-10"
           >

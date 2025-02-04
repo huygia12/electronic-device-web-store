@@ -9,8 +9,10 @@ import { Banner } from "@/types/component";
 import { useRouteLoaderData } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BannerSection, HomepageMenu } from "@/components/homepage";
-// import { storeService } from "@/services";
-// import { toast } from "sonner";
+import { retrieveImageUrl, sortBannerInSlides } from "@/utils/helpers";
+import { arraySwap } from "@dnd-kit/sortable";
+import { storeService } from "@/services";
+import { toast } from "sonner";
 
 const StoreManagement: FC = () => {
   const initData = useRouteLoaderData("store_management") as {
@@ -26,43 +28,51 @@ const StoreManagement: FC = () => {
     prevBanner: initData.store.rightBanner,
   });
   const [preview, setPreview] = useState(false);
-  const [slides, setSlides] = useState<(Slide | ImageToSlide)[]>(
-    initData.slides.sort((a, b) => a.index - b.index)
-  );
+  const [slides, setSlides] = useState<(Slide | ImageToSlide)[]>([
+    ...(sortBannerInSlides(initData.slides) as Slide[]),
+  ]);
 
   const handleSaveSlides = async () => {
+    console.log(`init slides `, initData.slides);
     console.log(`slides `, slides);
-    // const toastId = toast.loading("Đang xử lý...");
-    // const result = await storeService.apis.updateSlidesImage(
-    //   initData.store.storeID,
-    //   initData.slides,
-    //   slides
-    // );
-    // toast.dismiss(toastId);
-    // if (result) {
-    //   toast.success("Thay đổi thành công!");
-    // } else {
-    //   toast.error("Thay đổi thất bại!");
-    // }
+    const toastId = toast.loading("Đang xử lý...");
+    const result = await storeService.apis.updateSlidesImage(
+      initData.store.storeID,
+      initData.slides,
+      slides
+    );
+    toast.dismiss(toastId);
+    if (result) {
+      toast.success("Thay đổi thành công!");
+    } else {
+      toast.error("Thay đổi thất bại!");
+    }
   };
 
-  const handleAddSlide = (slide: ImageToSlide) => {
-    setSlides((prevSlides) => [...prevSlides, slide]);
+  const handleAddSlide = (newImage: File) => {
+    setSlides((prevSlides) => [
+      ...prevSlides,
+      {
+        file: newImage,
+        url: retrieveImageUrl(newImage),
+        ref: null,
+        index: prevSlides.length + 1,
+      },
+    ]);
   };
 
   const handleDeleteSlide = (slideIndex: string) => {
-    setSlides((prevSlides) =>
-      prevSlides.filter((slide) => `${slide.index}` !== slideIndex)
-    );
+    const newSlides = slides.filter((slide) => `${slide.index}` !== slideIndex);
+    for (let i = 0; i < newSlides.length; i++) {
+      newSlides[i].index = i + 1;
+    }
+    setSlides(newSlides);
   };
 
-  const handleRefChange = (value: string | null, index: number) => {
-    slides[index].ref = value;
-  };
-
-  const handleSlideMove = (newSlides: (ImageToSlide | Slide)[]) => {
-    for (let i = 0; i < slides.length; i++) {
-      newSlides[i].index = i;
+  const handleSlideMove = (a: number, b: number) => {
+    const newSlides = arraySwap(slides, a, b);
+    for (let i = 0; i < newSlides.length; i++) {
+      newSlides[i].index = i + 1;
     }
     setSlides(newSlides);
   };
@@ -110,11 +120,10 @@ const StoreManagement: FC = () => {
         ) : (
           <EditableSlideShow
             className="flex-1"
-            parentSlides={slides}
+            originSlides={slides}
             onSlideAddition={handleAddSlide}
             onSlideDeletion={handleDeleteSlide}
             onSlideMove={handleSlideMove}
-            onRefChange={handleRefChange}
           />
         )}
         <SideBanner

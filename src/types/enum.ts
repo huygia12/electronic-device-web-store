@@ -5,10 +5,10 @@ enum Role {
 
 enum InvoiceStatus {
   NEW = "NEW",
+  PAYMENT_WAITING = "PAYMENT_WAITING",
   SHIPPING = "SHIPPING",
   DONE = "DONE",
   ABORT = "ABORT",
-  PAYMENT_WAITING = "PAYMENT_WAITING",
 }
 
 enum PaymentMethod {

@@ -12,7 +12,7 @@ import { useSocket } from "@/hooks";
 import { SocketEmitError } from "@/types/socket";
 
 const UserManagement: FC = () => {
-  const searchingDelay = useRef<number>(2000);
+  const searchingDelay = useRef<number>(500);
   const initData = useRouteLoaderData("user_management") as {
     users: User[];
     totalUsers: number;
@@ -23,6 +23,7 @@ const UserManagement: FC = () => {
   );
   const [selectedUser, setSelectedUser] = useState<User | undefined>();
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [displayPage, setDisplayPage] = useState<number>(1);
   const [searchText, setSearchText] = useState<string>();
   const toasting = useRef<{
     id: string | number;
@@ -48,6 +49,7 @@ const UserManagement: FC = () => {
           });
 
         setUsers(res.users);
+        setDisplayPage(currentPage);
         setTotalPages(getPages(res.totalUsers));
       } finally {
         toast.dismiss(toasting.current!.id);
@@ -159,9 +161,14 @@ const UserManagement: FC = () => {
     );
   };
 
+  const handleSearch = (searchText: string) => {
+    setCurrentPage(1);
+    setSearchText(searchText);
+  };
+
   return (
     <div className="my-8">
-      <SearchBox className="mb-4" setSearchText={setSearchText} />
+      <SearchBox className="mb-4" setSearchText={handleSearch} />
 
       <div className="flex gap-4">
         <UserTable
@@ -169,6 +176,8 @@ const UserManagement: FC = () => {
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
           handleBanUser={handleBanUser}
+          currentPage={displayPage}
+          limitPerPage={10}
           className="flex-1 w-1" // set width to make flex work ????
         />
 
@@ -180,7 +189,11 @@ const UserManagement: FC = () => {
         />
       </div>
 
-      <CustomPagination onPageChange={setCurrentPage} totalPages={totalPages} />
+      <CustomPagination
+        parentPageState={displayPage}
+        onPageChange={setCurrentPage}
+        totalPages={totalPages}
+      />
     </div>
   );
 };

@@ -12,7 +12,7 @@ import { getPages } from "@/utils/helpers";
 import { toast } from "sonner";
 
 const FilteredProductList: FC = () => {
-  const searchingDelay = useRef<number>(1000);
+  const searchingDelay = useRef<number>(500);
   const [products, setProducts] = useState<Product[]>();
   const [numberOfProducts, setNumberOfProducts] = useState<number>();
   const [attributes, setAttributes] = useState<Attribute[]>();
@@ -222,7 +222,7 @@ const FilteredProductList: FC = () => {
         <CustomPagination
           parentPageState={currentPage}
           totalPages={totalPages}
-          onPageChange={(pageNumber) => handlePageChange(pageNumber)}
+          onPageChange={handlePageChange}
         />
       </div>
     </div>

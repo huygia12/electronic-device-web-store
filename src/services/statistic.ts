@@ -31,12 +31,12 @@ const statisticService = {
 
     while (dayInMonth <= now) {
       const searchingResult = chartData.find(
-        (d) => new Date(d.date).getDate() + 1 === dayInMonth.getDate() //Because it is ISO, so it must add 1
+        (d) => new Date(d.date).getDate() === dayInMonth.getDate() //Because it is ISO, so it must add 1
       ); //Find if the date iterator had figures or not
       if (searchingResult) {
         dateHolder = new Date(searchingResult.date);
         dateHolder.setUTCHours(17);
-        dateHolder.setDate(dateHolder.getDate());
+        dateHolder.setDate(dateHolder.getDate() - 1);
         statistic.push({
           ...searchingResult,
           date: dateHolder.toISOString(),

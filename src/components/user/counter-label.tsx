@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import React, { HTMLAttributes } from "react";
 
 interface CounterLabelProps extends HTMLAttributes<HTMLDivElement> {
-  counter: number;
+  counter?: number;
 }
 
 const defaultStyle: string =

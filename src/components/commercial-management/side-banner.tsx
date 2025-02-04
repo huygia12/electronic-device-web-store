@@ -68,7 +68,7 @@ const SideBanner: FC<SideBannerProps> = ({ modifiable = true, ...props }) => {
         error: "Cập nhật banner thất bại!",
       });
     } else {
-      console.debug(`banner value must be File or null`);
+      console.warn(`banner value must be image file or null`);
     }
   };
 

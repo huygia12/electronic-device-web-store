@@ -2,15 +2,15 @@ import { OrderTable } from "@/components/admin";
 import { CustomPagination, InvoiceUpperBar } from "@/components/common";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Invoice } from "@/types/model";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 import { InvoiceStatus } from "@/types/enum";
 import { toast } from "sonner";
 import { invoiceService } from "@/services";
 import { getPages } from "@/utils/helpers";
 
-const OrderManagement: FC = () => {
-  const searchingDelay = useRef<number>(2000);
+const InvoiceManagement: FC = () => {
+  const searchingDelay = useRef<number>(500);
   const initData = useRouteLoaderData("invoice_management") as {
     invoices: Invoice[];
     totalInvoices: number;
@@ -20,7 +20,6 @@ const OrderManagement: FC = () => {
     getPages(initData.totalInvoices)
   );
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchText, setSearchText] = useState<string>();
   const [selectedStatus, setSelectedStatus] = useState<InvoiceStatus>(
     InvoiceStatus.NEW
   );
@@ -28,6 +27,23 @@ const OrderManagement: FC = () => {
     id: string | number;
     state: boolean;
   } | null>();
+  const [filterChange, setFilterChange] = useState<boolean>(true);
+  const params = useMemo(
+    () => new URLSearchParams(window.location.search),
+    [filterChange]
+  );
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const status: string | null = searchParams.get("status");
+
+    if (
+      status &&
+      Object.keys(InvoiceStatus).includes(status as InvoiceStatus)
+    ) {
+      setSelectedStatus(status as InvoiceStatus);
+    }
+  }, []);
 
   useEffect(() => {
     if (toasting.current === undefined) {
@@ -40,11 +56,10 @@ const OrderManagement: FC = () => {
 
     const delayDebounceFn = setTimeout(async () => {
       try {
+        const records = Object.fromEntries([...params]);
         const res: { invoices: Invoice[]; totalInvoices: number } =
           await invoiceService.apis.getInvoices({
-            searching: searchText,
-            currentPage: currentPage,
-            status: selectedStatus,
+            ...records,
           });
 
         setInvoices(res.invoices);
@@ -56,22 +71,64 @@ const OrderManagement: FC = () => {
     }, searchingDelay.current);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchText, selectedStatus, currentPage]);
+  }, [params]);
+
+  const handleStatusSelectionEvent = (value: InvoiceStatus) => {
+    setCurrentPage(1);
+    setSelectedStatus(value);
+    editQueryUrl([{ filterKey: "status", filterValue: `${value}` }]);
+  };
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    editQueryUrl([{ filterKey: "currentPage", filterValue: `${pageNumber}` }]);
+  };
+
+  const handleSearchTextChange = (value: string) => {
+    setCurrentPage(1);
+    editQueryUrl([{ filterKey: "searching", filterValue: `${value}` }]);
+  };
+
+  const editQueryUrl = (
+    queryParams: {
+      filterKey: string;
+      filterValue: string | undefined | string[];
+    }[]
+  ) => {
+    const currentUrl = new URL(window.location.href);
+
+    queryParams.forEach((queryParam) => {
+      if (queryParam.filterValue) {
+        currentUrl.searchParams.set(
+          queryParam.filterKey,
+          typeof queryParam.filterValue === "string"
+            ? queryParam.filterValue
+            : queryParam.filterValue.join(",")
+        );
+      } else {
+        currentUrl.searchParams.delete(queryParam.filterKey);
+      }
+    });
+
+    window.history.replaceState({}, "", currentUrl);
+    setFilterChange((prevValue) => !prevValue);
+  };
 
   return (
     <div className="my-8">
       {/** TABLE */}
       <InvoiceUpperBar
         searchPlaceholder="Tìm kiếm theo tên khách hàng..."
-        setSelectedStatus={setSelectedStatus}
-        setSearchText={setSearchText}
+        setSelectedStatus={handleStatusSelectionEvent}
+        setSearchText={handleSearchTextChange}
+        defaultSelectedStatus={selectedStatus}
       />
 
       <Card className="rounded-2xl shadow-lg mt-4 mb-4">
         <CardHeader className="py-6">
           <CardTitle className="text-8">Quản lý đơn hàng</CardTitle>
         </CardHeader>
-        <CardContent className="px-6 pb-4 h-[60vh]">
+        <CardContent className="px-6 pb-4 h-[60vh] min-h-fit">
           {invoices.length !== 0 ? (
             <OrderTable
               orders={invoiceService.getInvoiceAfterFilterStatus(
@@ -94,11 +151,11 @@ const OrderManagement: FC = () => {
 
       <CustomPagination
         parentPageState={currentPage}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
         totalPages={totalPages}
       />
     </div>
   );
 };
 
-export default OrderManagement;
+export default InvoiceManagement;
