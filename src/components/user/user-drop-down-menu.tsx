@@ -8,10 +8,7 @@ import { cn } from "@/lib/utils";
 
 interface UserDropDownMenuProps extends HTMLAttributes<HTMLDivElement> {}
 
-const UserDropDownMenu: React.FC<UserDropDownMenuProps> = ({
-  className,
-  ...props
-}) => {
+const UserDropDownMenu: React.FC<UserDropDownMenuProps> = ({ className }) => {
   const { logout } = useAuth();
   const { currentUser } = useCurrentUser();
 
