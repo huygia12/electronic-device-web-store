@@ -21,12 +21,15 @@ interface HeaderBarProps extends HTMLAttributes<HTMLDivElement> {
 const HeaderBar: FC<HeaderBarProps> = ({ ...props }) => {
   return (
     <div
-      className={cn("flex flex-row items-center space-x-4 ", props.className)}
+      className={cn(
+        "flex flex-col gap-2 xs_flex-row items-center ",
+        props.className
+      )}
     >
       <SearchBox
         setSearchText={props.setSearchText}
         placeholder={props.searchPlaceholder}
-        className="flex-1"
+        className="flex-1 w-full"
       />
 
       <Select
@@ -35,7 +38,7 @@ const HeaderBar: FC<HeaderBarProps> = ({ ...props }) => {
           props.setSelectedStatus(value as InvoiceStatus)
         }
       >
-        <SelectTrigger className="w-[18rem] h-[3rem]">
+        <SelectTrigger className="w-full xs_w-[14rem] h-[3rem]">
           <SelectValue placeholder="Trạng Thái Đơn Hàng" />
         </SelectTrigger>
         <SelectContent>

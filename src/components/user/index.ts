@@ -9,3 +9,7 @@ export { default as ZaloButton } from "./zalo-button";
 export { default as ProductInCart } from "./product-in-cart";
 export { default as HorizontalProductCard } from "./horizontal-product-card";
 export { default as PriceRangeSlide } from "./price-range-slider";
+export { default as UserDropDownMenu } from "./user-drop-down-menu";
+export { default as UserSideBar } from "./user-side-bar";
+export { default as SearchBar } from "./search-bar";
+export { default as SearchBarPopUp } from "./search-bar-pop-up";

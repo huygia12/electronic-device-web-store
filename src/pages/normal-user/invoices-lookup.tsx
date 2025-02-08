@@ -3,7 +3,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { invoiceService } from "@/services";
 import { Invoice } from "@/types/model";
-import { formatDateTime, getInvoiceStatus } from "@/utils/helpers";
+import {
+  formatDateTime,
+  getInvoicePaymentMethod,
+  getInvoiceStatus,
+} from "@/utils/helpers";
 import { FC, FormEventHandler, useState } from "react";
 import { toast } from "sonner";
 
@@ -30,10 +34,10 @@ const InvoiceLookup: FC = () => {
 
   return (
     <div>
-      <h1 className="text-[1.8rem] font-semibold text-center mb-8">
+      <h1 className="text-[1.8rem] font-semibold text-center mb-8 px-10">
         Tra Cứu Trạng Thái Đơn Hàng
       </h1>
-      <form className="max-w-[50rem] mx-auto" onSubmit={handleSearch}>
+      <form className="w-[80vw] mlg_w-[50rem] mx-auto" onSubmit={handleSearch}>
         <Label htmlFor="invoice_id" className="font-semibold text-[1rem]">
           Mã Đơn Hàng
         </Label>
@@ -54,25 +58,61 @@ const InvoiceLookup: FC = () => {
       </form>
 
       {invoice ? (
-        <div className="space-y-2 rounded-md border-2 border-stone-200 p-10 pt-5 max-w-[50rem] mx-auto shadow-lg mt-14">
-          <h2 className="text-center text-xl font-semibold mb-8">
+        <div className="space-y-2 rounded-md border-2 border-stone-200 px-2 py-4 w-[80vw] text-sm xs_text-base xs_p-10 mlg_w-[50rem] mx-auto shadow-lg mt-14">
+          <h2 className="text-center !text-xl font-semibold mb-8">
             Thông tin đơn hàng
           </h2>
           <div className="flex justify-between">
-            <span>Mã Đơn Hàng</span>
-            <span>{invoice.invoiceID}</span>
+            <span className="font-semibold">Khách Hàng</span>
+            <span className="text-end">{invoice.userName}</span>
           </div>
           <div className="flex justify-between">
-            <span>Khách Hàng</span>
-            <span>{invoice.userName}</span>
+            <span className="font-semibold">Ngày Đặt Hàng</span>
+            <span className="text-end">
+              {formatDateTime(`${invoice.createdAt}`)}
+            </span>
           </div>
           <div className="flex justify-between">
-            <span>Ngày Đặt Hàng</span>
-            <span>{formatDateTime(`${invoice.createdAt}`)}</span>
+            <span className="font-semibold">Số Sản Phẩm</span>
+            <span className="text-end">
+              {invoice.invoiceProducts.length} sản phẩm
+            </span>
           </div>
           <div className="flex justify-between">
-            <span>Trạng Thái</span>
-            <span>{getInvoiceStatus(invoice.status)}</span>
+            <span className="font-semibold">Phương Thức Thanh Toán</span>
+            <span className="text-end">
+              {getInvoicePaymentMethod(invoice.payment)}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-semibold">Trạng Thái</span>
+            <span className="text-end">{getInvoiceStatus(invoice.status)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-semibold">Phí Vận Chuyển</span>
+            <span className="text-end">{`${invoice.shippingFee.toLocaleString()}đ`}</span>
+          </div>
+          {invoice.doneAt && (
+            <div className="flex justify-between">
+              <span className="font-semibold">Ngày Hoàn Thành</span>
+              <span className="text-end">
+                {formatDateTime(`${invoice.doneAt}`)}
+              </span>
+            </div>
+          )}
+          {invoice.note && (
+            <div className="flex justify-between">
+              <span className="font-semibold">Ghi Chú</span>
+              <span>{formatDateTime(`${invoice.note}`)}</span>
+            </div>
+          )}
+          <div className="flex justify-between">
+            <span className="font-semibold">Nơi Giao Hàng</span>
+            <span className="flex flex-col items-end md_flex-row">
+              <span>{`${invoice.ward},`} </span>
+              <span>{`${invoice.district},`}</span>
+              <span>{`${invoice.province}`}</span>
+            </span>
           </div>
         </div>
       ) : (

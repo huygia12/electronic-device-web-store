@@ -75,7 +75,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
   };
 
   return (
-    <Card className="w-full pb-10">
+    <Card className="w-[90vw] xl_w-full pb-10">
       <CardHeader>
         <CardTitle>Hồ sơ của tôi</CardTitle>
         <CardDescription>
@@ -85,12 +85,12 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
       <CardContent>
         <form
           onSubmit={handleSubmit(handleUserUpdateFormSubmission)}
-          className="grid grid-cols-3 gap-10"
+          className="flex flex-col-reverse sm_grid sm_grid-cols-3 gap-10"
         >
           <div className="col-span-2 flex flex-col gap-4">
             <div>
               <div className="flex">
-                <Label htmlFor="name" className="text-lg my-auto w-[20rem]">
+                <Label htmlFor="name" className="text-lg my-auto w-[15rem]">
                   Họ và tên
                   <span className="text-red-600 ">*</span>
                 </Label>
@@ -111,7 +111,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
             </div>
             <div>
               <div className="flex">
-                <Label htmlFor="email" className="text-lg my-auto w-[20rem]">
+                <Label htmlFor="email" className="text-lg my-auto w-[15rem]">
                   Email
                   <span className="text-red-600 ">*</span>
                 </Label>
@@ -134,7 +134,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
               <div className="flex">
                 <Label
                   htmlFor="phoneNumber"
-                  className="text-lg my-auto w-[20rem]"
+                  className="text-lg my-auto w-[15rem]"
                 >
                   Số điện thoại:
                 </Label>
@@ -175,9 +175,9 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
           </div>
 
           <div className="col-span-1 flex gap-8">
-            <Separator orientation="vertical" />
+            <Separator orientation="vertical" className="hidden sm_block" />
             <div className="flex flex-col w-full">
-              <Avatar className="size-[12rem] mx-auto">
+              <Avatar className="size-[8rem] xl_size-[12rem] mx-auto">
                 <AvatarImage
                   src={
                     (avatarFiles && getImageUrl(avatarFiles[0])) ||
@@ -192,7 +192,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
                 type="file"
                 {...register("avatar")}
                 accept="image/*"
-                className="mx-auto mt-14 min-w-[14rem]"
+                className="mx-auto mt-4 w-[14rem] sm_w-[12vw] xl_w-[14rem]"
               />
               <span className="flex flex-col mt-6 mx-auto text-sm text-muted-foreground">
                 <span>Dung lượng tối đa 1MB</span>

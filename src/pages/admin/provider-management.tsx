@@ -82,8 +82,20 @@ const ProviderManagement = () => {
   };
 
   return (
-    <div className="my-8">
-      <SearchBox className="mb-4" setSearchText={setSearchText} />
+    <div className="my-8 mx-auto w-[90vw] lgg_w-max">
+      <ProviderTools
+        selectedProvider={selectedProvider}
+        handleAddProvider={handleAddProvider}
+        handleUpdateProvider={handleUpdateProvider}
+        handleDeleteProvider={handleDeleteProvider}
+        className="mb-4 block md_hidden"
+      />
+
+      <SearchBox
+        placeholder="Tìm kiếm theo tên..."
+        className="mb-4"
+        setSearchText={setSearchText}
+      />
 
       {/** Table */}
       <div className="flex gap-4">
@@ -99,6 +111,7 @@ const ProviderManagement = () => {
           handleAddProvider={handleAddProvider}
           handleUpdateProvider={handleUpdateProvider}
           handleDeleteProvider={handleDeleteProvider}
+          className="hidden md_block"
         />
       </div>
     </div>

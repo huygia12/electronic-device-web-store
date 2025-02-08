@@ -11,9 +11,8 @@ const AdminLayout: React.FC = () => {
       <ScrollToTop />
       <AdminHeader />
       <main className="flex min-h-[80vh] h-max w-full flex-col">
-        <div className="mx-auto w-sm md_w-md lg_w-lg xl_w-xl 2xl_w-2xl 4xl_w-3xl ">
-          {navigation.state === "loading" ? <TopBarProgress /> : <Outlet />}
-        </div>
+        {/* <div className="mx-auto w-[90vw] lgg_w-md lg_w-lg xl_w-xl 2xl_w-2xl 4xl_w-3xl "> */}
+        {navigation.state === "loading" ? <TopBarProgress /> : <Outlet />}
       </main>
       <AppFooter className="bg-theme-softer" />
       <Toaster

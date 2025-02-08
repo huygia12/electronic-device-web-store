@@ -9,23 +9,13 @@ import {
 import { Invoice } from "@/types/model";
 import { FC, HTMLAttributes } from "react";
 import { Button } from "@/components/ui/button";
-import Badge from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { invoiceService } from "@/services";
-import { formatDateTime, getInvoiceStatus } from "@/utils/helpers";
+import { formatDateTime } from "@/utils/helpers";
 import InvoiceDetailDialog from "./invoice-detail-dialog";
 import { Separator } from "@/components/ui/separator";
 import TableContextMenu from "../common/table-context-menu";
-
-const columnHeaders = [
-  "TÊN ĐẶT HÀNG",
-  "ID ĐƠN HÀNG",
-  "NGÀY ĐẶT",
-  "TỔNG TIỀN",
-  "TRẠNG THÁI",
-  "THAO TÁC",
-];
 
 interface OrderTableProps extends HTMLAttributes<HTMLDivElement> {
   invoices: Invoice[];
@@ -44,28 +34,30 @@ const InvoiceTable: FC<OrderTableProps> = ({ className, ...props }) => {
       <Table>
         <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
           <tr>
-            {columnHeaders.map((item, key) => {
-              return (
-                <TableHead
-                  key={key}
-                  className="text-nowrap text-center text-black font-extrabold text-[1rem]"
-                >
-                  {item}
-                </TableHead>
-              );
-            })}
+            <TableHead className="text-nowrap text-center text-black font-extrabold text-[1rem]">
+              TÊN ĐẶT HÀNG
+            </TableHead>
+            <TableHead className="text-nowrap text-center text-black font-extrabold text-[1rem] hidden lg_table-cell">
+              MÃ ĐƠN HÀNG
+            </TableHead>
+            <TableHead className="text-nowrap text-center text-black font-extrabold text-[1rem]">
+              NGÀY ĐẶT
+            </TableHead>
+            <TableHead className="text-nowrap text-center text-black font-extrabold text-[1rem] hidden md_table-cell">
+              TỔNG TIỀN
+            </TableHead>
+            <TableHead className="text-nowrap text-center text-black font-extrabold text-[1rem]">
+              THAO TÁC
+            </TableHead>
           </tr>
         </TableHeader>
         <TableBody>
           {props.invoices.map((invoice, index) => (
             <TableRow key={index}>
-              <TableCell
-                className="text-center text-base
-              "
-              >
+              <TableCell className="text-center text-base">
                 {invoice.userName}
               </TableCell>
-              <TableCell className="text-center text-base">
+              <TableCell className="text-center text-base hidden lg_table-cell">
                 <TableContextMenu textToCopy={invoice.invoiceID}>
                   {invoice.invoiceID}
                 </TableContextMenu>
@@ -73,19 +65,7 @@ const InvoiceTable: FC<OrderTableProps> = ({ className, ...props }) => {
               <TableCell className="text-center text-base xl_text-nowrap">
                 {formatDateTime(`${invoice.createdAt}`)}
               </TableCell>
-              <TableCell className="text-center text-base">{`${invoiceService.getTotalBill(invoice).toLocaleString()}đ`}</TableCell>
-              <TableCell className="text-center">
-                <Badge
-                  className={cn(
-                    `text-white px-2 text-sm whitespace-normal break-words max-w-[8rem] hover_!${invoiceService.getInvoiceStatusColor(
-                      invoice.status
-                    )}`,
-                    invoiceService.getInvoiceStatusColor(invoice.status)
-                  )}
-                >
-                  {getInvoiceStatus(invoice.status)}
-                </Badge>
-              </TableCell>
+              <TableCell className="text-center text-base hidden md_table-cell">{`${invoiceService.getTotalBill(invoice).toLocaleString()}đ`}</TableCell>
               <TableCell className="flex justify-center">
                 <InvoiceDetailDialog
                   invoice={invoice}

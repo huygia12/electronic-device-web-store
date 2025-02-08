@@ -19,7 +19,7 @@ const NotificationItem: FC<NotificationItemProps> = ({ ...props }) => {
         props.to ? "cursor-pointer hover_bg-slate-200" : ""
       )}
     >
-      <CardContent className="col-span-3 p-4 w-full h-full my-auto">
+      <CardContent className="col-span-3 p-2 sms_p-4 w-[18rem] sms_w-full h-full my-auto">
         <NavLink
           to={props.to || ``}
           unstable_viewTransition
@@ -28,16 +28,16 @@ const NotificationItem: FC<NotificationItemProps> = ({ ...props }) => {
             props.to ? "" : "cursor-default"
           )}
         >
-          <Avatar className="w-14 h-14">
+          <Avatar className="size-10 md_size-14">
             <AvatarImage src={props.imageUrl} />
             <AvatarFallback>avt</AvatarFallback>
           </Avatar>
           <span className="flex flex-col gap-1">
             <span className="flex flex-col justify-between gap-1">
-              <span className="font-extrabold text-[1.1rem]">
+              <span className="font-extrabold text-sm md_text-[1.1rem]">
                 {props.title}
               </span>
-              <em className="font-extralight text-sm self-end">
+              <em className="font-extralight text-xs md_text-sm self-end">
                 {props.description}
               </em>
             </span>

@@ -8,7 +8,7 @@ import { useCustomNavigate } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { applyDiscount, isDiscount } from "@/utils/helpers";
 
-const SearchBar: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
+const SearchBarPopUp: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
   const searchingDelay = useRef<number>(500);
   const [seachText, setSearchText] = useState<string>();
   const [products, setProducts] = useState<ProductSummary[]>();
@@ -68,25 +68,34 @@ const SearchBar: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
   };
 
   return (
-    <div ref={wrapperRef} className={cn("relative h-10", props.className)}>
-      <Search className="absolute top-1/2 left-3 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-      <Input
-        placeholder="Tìm kiếm..."
-        onFocus={() => setProductsVisibility(true)}
-        onChange={(e) => handleSearchInputChange(e)}
-        className="h-full text-xl placeholder_italic w-full rounded-lg bg-background pl-8"
+    <div
+      ref={wrapperRef}
+      className={cn("relative w-fit my-auto", props.className)}
+    >
+      <Search
+        onClick={() => setProductsVisibility((prevValue) => !prevValue)}
+        className=" bg-white rounded-full p-2 size-10 text-muted-foreground border-2 border-primary"
       />
-      {typing && (
-        <LoadingSpinner
-          size={22}
-          className="text-muted-foreground absolute top-0 bottom-0 right-3 m-auto"
-        />
+      {productsVisibility && (
+        <div className="absolute h-10 top-12 right-1/2 transform translate-x-1/2">
+          <Input
+            placeholder="Tìm kiếm..."
+            onChange={(e) => handleSearchInputChange(e)}
+            className="h-full text-xl placeholder_italic w-[60vw] rounded-lg bg-background shadow-general"
+          />
+          {typing && (
+            <LoadingSpinner
+              size={22}
+              className="text-muted-foreground absolute top-0 bottom-0 right-3 m-auto"
+            />
+          )}
+        </div>
       )}
       {products &&
         productsVisibility &&
         !typing &&
         (products.length > 0 ? (
-          <ul className="absolute flex flex-wrap gap-2 mt-4 right-1/2 transform translate-x-1/2 bg-white opacity-95 rounded-lg px-2 py-2 shadow-general">
+          <ul className="absolute flex flex-wrap gap-2 top-24 right-1/2 transform translate-x-1/2 bg-white opacity-95 rounded-lg p-2 shadow-general">
             {products.map((product) => (
               <li
                 key={product.productID}
@@ -98,7 +107,7 @@ const SearchBar: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
                   alt={product.productName}
                   className="w-12 h-12 rounded-md object-cover"
                 />
-                <span className="ml-2 w-[45vw] xl_w-[40rem] text-md truncate">
+                <span className="ml-2 w-[40vw] lg_w-[40rem] text-md truncate">
                   {product.productName}
                 </span>
                 <span className="ml-2 text-sm text-red-700">
@@ -116,7 +125,7 @@ const SearchBar: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
             ))}
           </ul>
         ) : (
-          <div className="flex flex-col items-center bg-white opacity-90 mt-2 rounded-lg p-10 shadow-general">
+          <div className="absolute top-24 right-1/2 transform translate-x-1/2 items-center w-max bg-white opacity-90 rounded-lg p-10 shadow-general">
             <img
               width={200}
               src="/no-product-found.png"
@@ -128,4 +137,4 @@ const SearchBar: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
   );
 };
 
-export default SearchBar;
+export default SearchBarPopUp;

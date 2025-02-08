@@ -77,12 +77,12 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{props.children}</DialogTrigger>
-      <DialogContent className="min-w-lg 3xl_min-w-2xl max-h-screen px-1 pb-0">
+      <DialogContent className="min-w-[90vw] 3xl_min-w-2xl max-h-screen px-1 pb-0">
         <DialogHeader>
           <DialogTitle className="border-b-2 pb-4 px-6 border-dashed border-slate-500 flex justify-between">
             <span className="text-3xl font-light">Thông Tin Đơn Hàng</span>
             <span className="mr-4 space-x-4 flex items-center">
-              <span>{props.invoice.invoiceID}</span>
+              <span className="hidden xl_block">{props.invoice.invoiceID}</span>
               <Badge
                 className={cn(
                   `rounded-md text-white py-1 px-4 text-lg hover_!${invoiceService.getInvoiceStatusColor(
@@ -97,16 +97,25 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
           </DialogTitle>
         </DialogHeader>
         <ScrollArea className="px-6 mb-4 max-h-[70vh] 2xl_max-h-[80vh]">
-          <div className="flex">
+          <div className="flex w-full">
             <div className="flex flex-col w-1/2">
               <span className="text-xl font-semibold">
                 Thông Tin Khách Hàng
               </span>
-              <span className="mt-2 ">{props.invoice.userName}</span>
-              <span className="mt-1 ">{`${props.invoice.detailAddress}, ${props.invoice.ward}, ${props.invoice.district}, ${props.invoice.province}`}</span>
-              <span className="mt-1 ">{props.invoice.email}</span>
-              <span className="mt-1 ">SĐT: {props.invoice.phoneNumber}</span>
+              <span className="mt-1">{props.invoice.userName}</span>
+              <span className="mt-1 flex pr-0">
+                <span>{`${props.invoice.ward},`} </span>
+                <span>{`${props.invoice.district},`}</span>
+                <span>{`${props.invoice.province}`}</span>
+              </span>
+              <span className="mt-1">{props.invoice.email}</span>
+              <span className="mt-1">SĐT: {props.invoice.phoneNumber}</span>
+              <span className="mt-2 flex-col flex xl_hidden">
+                <span className="text-xl font-semibold">Mã Đơn Hàng</span>
+                <span className="mt-1">{props.invoice.invoiceID}</span>
+              </span>
             </div>
+
             <div className="flex flex-col w-1/2 items-end">
               <span className="text-xl font-semibold">
                 Phương Thức Thanh Toán
@@ -178,6 +187,7 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
               </InvoiceCancelDialog>
             </span>
           </div>
+          {/* <ScrollBar orientation="horizontal" /> */}
         </ScrollArea>
       </DialogContent>
     </Dialog>

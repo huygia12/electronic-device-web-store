@@ -118,14 +118,14 @@ const Login: FC = () => {
       onSubmit={handleSubmit(handleLoginFormSubmission)}
       className="w-full h-full flex justify-around"
     >
-      <Card className="min-w-[30rem] max my-auto shadow-slate-400">
-        <CardHeader className="mb-5">
+      <Card className="w-[80vw] sms_w-[30rem] max my-auto shadow-slate-400">
+        <CardHeader>
           <CardTitle className="text-4xl mb-2 h-full">Đăng nhập</CardTitle>
           <CardDescription>
             Nhập email đã đăng ký để đăng nhập vào tài khoản của bạn.
           </CardDescription>
         </CardHeader>
-        <CardContent className="grid gap-8">
+        <CardContent className="grid gap-4">
           <div className="grid gap-2 ">
             <Label htmlFor="email" className="font-extrabold text-lg">
               Email
@@ -191,7 +191,10 @@ const Login: FC = () => {
           )}
           <div className="mt-4 text-center text-lg">
             Bạn chưa có tài khoản? &nbsp;
-            <NavLink to="/signup" className="underline hover_text-primary">
+            <NavLink
+              to="/signup"
+              className="underline text-nowrap hover_text-primary"
+            >
               Đăng ký
             </NavLink>
           </div>

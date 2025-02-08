@@ -136,9 +136,13 @@ module.exports = {
         "3xl": "98rem",
       },
       screens: {
+        xss: "400px",
         xs: "480px",
+        sms: "560px",
         sm: "640px",
         md: "768px",
+        mlg: "840px",
+        lgg: "920px",
         lg: "1024px",
         xl: "1280px",
         "2xl": "1452px",

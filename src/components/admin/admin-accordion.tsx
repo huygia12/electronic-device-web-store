@@ -24,11 +24,11 @@ const AdminAccordion: FC<AdminAccordionProps> = ({ className, ...props }) => {
               <NavLink
                 key={index}
                 to={subItem.url}
-                className="text-[1rem] text-secondary-foreground hover_text-primary"
+                className="text-[0.9rem] md_text-[1rem] text-secondary-foreground hover_text-primary"
               >
-                <SheetClose className="flex items-center pl-10 pb-5 gap-2">
+                <SheetClose className="flex items-center pl-7 pb-5 gap-2">
                   <subItem.icon />
-                  <span> {subItem.name} </span>
+                  <span className="text-nowrap"> {subItem.name} </span>
                 </SheetClose>
               </NavLink>
             );

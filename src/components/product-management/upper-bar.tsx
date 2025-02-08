@@ -37,7 +37,7 @@ const UpperBar: FC<UpperBarProps> = ({ ...props }) => {
         <Search className="absolute left-4 top-3 h-6 w-6 text-muted-foreground" />
         <Input
           type="search"
-          placeholder="Tìm kiếm..."
+          placeholder="Tìm kiếm theo tên..."
           className="h-full text-lg w-full rounded-md bg-background pl-14 focus-visible_!ring-0 focus-visible_!ring-offset-0"
           onChange={(e) => props.setSearchingInput(e.target.value)}
         />

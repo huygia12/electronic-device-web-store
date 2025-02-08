@@ -1,5 +1,5 @@
 import { ChartConfig } from "@/components/ui/chart";
-import { AdminNavItem, Phase } from "@/types/component";
+import { SidebarItem, Phase } from "@/types/component";
 import { cva } from "class-variance-authority";
 import {
   Home,
@@ -76,7 +76,7 @@ const buttonVariants = cva(
   }
 );
 
-const navItems: AdminNavItem[] = [
+const navItems: SidebarItem[] = [
   {
     name: "Bảng điều khiển",
     url: "/admin",
@@ -130,7 +130,7 @@ const navItems: AdminNavItem[] = [
   },
   {
     name: "Đơn hàng",
-    url: "/admin/invoices",
+    url: "/admin/invoices?status=NEW",
     icon: PackageSearch,
     hasChild: false,
     children: [],

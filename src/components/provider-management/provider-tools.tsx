@@ -16,6 +16,7 @@ import { Plus, SquarePen, Trash2 } from "lucide-react";
 import { FC, HTMLAttributes } from "react";
 import { Provider } from "@/types/model";
 import ProviderDialog from "./provider-dialog";
+import { cn } from "@/lib/utils";
 
 interface ProviderToolsProps extends HTMLAttributes<HTMLDivElement> {
   selectedProvider: Provider | undefined;
@@ -24,15 +25,15 @@ interface ProviderToolsProps extends HTMLAttributes<HTMLDivElement> {
   handleDeleteProvider: () => void;
 }
 
-const ProviderTools: FC<ProviderToolsProps> = ({ ...props }) => {
+const ProviderTools: FC<ProviderToolsProps> = ({ className, ...props }) => {
   return (
-    <Card className="rounded-xl shadow-lg">
-      <CardContent className="p-4 space-y-4 contain-content">
+    <Card className={cn("rounded-md shadow-lg", className)}>
+      <CardContent className="p-4 contain-content flex items-center flex-row gap-4 md_flex-col">
         <ProviderDialog
           dialogTitle="Thêm nhà phân phối mới"
           handleDialogAcceptEvent={props.handleAddProvider}
         >
-          <Button className="" variant="positive">
+          <Button variant="positive" className="text-xl">
             <Plus />
           </Button>
         </ProviderDialog>
@@ -63,7 +64,7 @@ const ProviderTools: FC<ProviderToolsProps> = ({ ...props }) => {
                     tác.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter>
+                <AlertDialogFooter className="flex-row-reverse gap-2">
                   <AlertDialogAction
                     onClick={props.handleDeleteProvider}
                     className={buttonVariants({
@@ -79,8 +80,8 @@ const ProviderTools: FC<ProviderToolsProps> = ({ ...props }) => {
           </>
         ) : (
           <>
-            <SquarePen className="mx-4 !mt-6" />
-            <Trash2 className="mx-4 !mt-6" />
+            <SquarePen className="mx-4 md_!mt-6" />
+            <Trash2 className="mx-4 md_!mt-6" />
           </>
         )}
       </CardContent>

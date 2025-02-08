@@ -34,17 +34,17 @@ const StatisticChart: FC<StatisticChartProps> = ({ ...props }) => {
   return (
     <Card className={cn("rounded-2xl shadow-lg w-full px-6", props.className)}>
       <CardHeader className="border-b p-0 flex-row">
-        <div className="flex flex-1 flex-col justify-center gap-1">
+        <div className="flex flex-1 flex-col justify-center gap-1 py-2">
           {activeChart === "revenue" ? (
             <>
-              <CardTitle>Doanh Thu</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-lg md_text-2xl">Doanh Thu</CardTitle>
+              <CardDescription className="text-xs md_text-sm">
                 {`Doanh thu trong tháng ${new Date().getMonth() + 1} (đơn vị VNĐ)`}
               </CardDescription>
             </>
           ) : (
             <>
-              <CardTitle>Đơn Hàng</CardTitle>
+              <CardTitle className="text-lg md_text-2xl">Đơn Hàng</CardTitle>
               <CardDescription>
                 Số đơn hàng trong tháng {new Date().getMonth() + 1}
               </CardDescription>
@@ -58,13 +58,13 @@ const StatisticChart: FC<StatisticChartProps> = ({ ...props }) => {
               <button
                 key={chart}
                 data-active={activeChart === chart}
-                className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even_border-l data-[active=true]_bg-muted/100 sm_border-l"
+                className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-2 py-4 text-left even_border-l data-[active=true]_bg-muted/100 sm_border-l md_px-6"
                 onClick={() => setActiveChart(chart)}
               >
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs md_text-lg text-muted-foreground">
                   {chartConfig[chart].label}
                 </span>
-                <span className="text-lg font-bold leading-none sm_text-3xl">
+                <span className="font-bold leading-none text-xl md_text-3xl">
                   {total[key as keyof typeof total].toLocaleString()}
                 </span>
               </button>

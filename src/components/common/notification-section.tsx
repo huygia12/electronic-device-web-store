@@ -2,7 +2,9 @@ import React, { FC, HTMLAttributes, useEffect, useRef, useState } from "react";
 import { RiNotification2Fill } from "react-icons/ri";
 import { cn } from "@/lib/utils";
 
-interface NotificationSection extends HTMLAttributes<HTMLDivElement> {}
+interface NotificationSection extends HTMLAttributes<HTMLDivElement> {
+  triangleCSS?: string;
+}
 
 const NotificationSection: FC<NotificationSection> = ({ ...props }) => {
   const [visible, setVisible] = useState<boolean>(false);
@@ -35,11 +37,9 @@ const NotificationSection: FC<NotificationSection> = ({ ...props }) => {
   );
 
   return (
-    <div
-      ref={notificationSectionRef}
-      className={cn("relative", props.className)}
-    >
+    <div ref={notificationSectionRef} className="relative">
       <RiNotification2Fill
+        id="header-guide-step-2"
         size={34}
         onClick={() => setVisible((prevValue) => !prevValue)}
         className="cursor-pointer relative"
@@ -51,11 +51,17 @@ const NotificationSection: FC<NotificationSection> = ({ ...props }) => {
       <div
         onClick={() => setVisible(false)}
         className={cn(
-          "absolute w-max bg-white shadow-2xl -right-2 top-12 rounded-xl",
+          "absolute w-max bg-white shadow-2xl top-12 rounded-xl",
+          props.className,
           visible ? `block` : `hidden`
         )}
       >
-        <div className="absolute -top-6 right-3 border-[12px] border-white border-t-transparent border-r-transparent border-l-transparent" />
+        <div
+          className={cn(
+            "absolute -top-6 border-[12px] border-white border-t-transparent border-r-transparent border-l-transparent",
+            props.triangleCSS
+          )}
+        />
         {hasChildren ? (
           props.children
         ) : (

@@ -10,7 +10,7 @@ import { NavLink } from "react-router-dom";
 import { toast } from "sonner";
 import { FC, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { AdminAccordion } from "@/components/admin";
+import { AdminAccordion, AdminHeaderIntroGuide } from "@/components/admin";
 import { navItems } from "@/utils/constants";
 import { useAuth, useCurrentUser, useSocket } from "@/hooks";
 import {
@@ -58,11 +58,11 @@ const AdminHeader: FC = () => {
 
   return (
     <div className="w-full py-3 flex flex-col sticky top-0 z-50 bg-theme shadow-xl items-center">
-      <div className="w-sm md_w-md lg_w-lg xl_w-xl 2xl_w-2xl 4xl_w-3xl flex items-center justify-between">
+      <div className="w-[90vw] lg_w-lg xl_w-xl 2xl_w-2xl 4xl_w-3xl flex items-center justify-between">
         {/** NAV BAR */}
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon">
+            <Button id="header-guide-step-1" variant="ghost" size="icon">
               <TbCategoryPlus size={55} />
             </Button>
           </SheetTrigger>
@@ -71,28 +71,28 @@ const AdminHeader: FC = () => {
               <div className="group flex h-16 w-16 items-center justify-center rounded-full bg-theme">
                 <Package2 className="h-10 w-10 transition-all group-hover_scale-110" />
               </div>
-              <ScrollArea className="h-[100vh] px-3">
+              <ScrollArea className="h-[100vh]">
                 {navItems.map((item, index) =>
                   item.hasChild ? (
                     <AdminAccordion key={index} subItems={item.children}>
-                      <div className="flex text-[1.1rem] items-center gap-2 px-2.5 text-muted-foreground hover_text-primary-foreground">
+                      <div className="flex text-[0.9rem] md_text-[1.1rem] items-center gap-2 px-2.5 text-muted-foreground hover_text-primary-foreground">
                         <span>
-                          <item.icon className="h-5 w-5" />
+                          <item.icon className="size-6" />
                         </span>
-                        <span>{item.name}</span>
+                        <span className="text-nowrap">{item.name}</span>
                       </div>
                     </AdminAccordion>
                   ) : (
                     <div key={index}>
                       <NavLink
                         to={item.url}
-                        className="flex text-[1.1rem] border-b py-4 px-2.5"
+                        className="flex text-[0.9rem] md_text-[1.1rem] border-b py-4 px-2.5"
                       >
                         <SheetClose className="flex items-center gap-2 text-muted-foreground hover_text-primary-foreground">
                           <span>
-                            <item.icon className="h-5 w-5" />
+                            <item.icon className="size-6" />
                           </span>
-                          <span>{item.name}</span>
+                          <span className="text-nowrap">{item.name}</span>
                         </SheetClose>
                       </NavLink>
                     </div>
@@ -105,7 +105,10 @@ const AdminHeader: FC = () => {
 
         {/** NOTIFICATION AND AVATAR */}
         <div className="flex items-center">
-          <NotificationSection>
+          <NotificationSection
+            triangleCSS="right-[12.35rem] xss_right-[11.35rem] md_right-1/2 md_transform md_translate-x-1/2"
+            className="-right-48 xss_-right-44 md_right-1/2 md_transform md_translate-x-1/2"
+          >
             {numberOfNewOrders ? (
               <NotificationItem
                 imageUrl="/new-product.png"
@@ -116,7 +119,7 @@ const AdminHeader: FC = () => {
             ) : undefined}
           </NotificationSection>
 
-          <DropdownAvatar className="ml-10">
+          <DropdownAvatar className="ml-4 mlg_ml-10">
             <DropMenuLinkItem
               item={{
                 name: "Tài Khoản Của Tôi",
@@ -146,6 +149,8 @@ const AdminHeader: FC = () => {
             />
           </DropdownAvatar>
         </div>
+
+        <AdminHeaderIntroGuide />
       </div>
     </div>
   );

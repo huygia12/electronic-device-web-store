@@ -27,10 +27,10 @@ interface UserToolsProps extends HTMLAttributes<HTMLDivElement> {
   handleAddUser: (formProps: SignupFormProps, avatarFile?: File) => void;
 }
 
-const UserTools: FC<UserToolsProps> = ({ ...props }) => {
+const UserTools: FC<UserToolsProps> = ({ className, ...props }) => {
   return (
-    <Card className={cn("rounded-xl shadow-lg", props.className)}>
-      <CardContent className="p-4 space-y-4 flex flex-col">
+    <Card className={cn("rounded-md shadow-lg", className)}>
+      <CardContent className="p-4 contain-content flex items-center flex-row gap-4 md_flex-col">
         {/** add button */}
         <AddUserDialog handleAddUser={props.handleAddUser}>
           <Button variant="positive" className="text-xl">
@@ -65,7 +65,7 @@ const UserTools: FC<UserToolsProps> = ({ ...props }) => {
                     hiện không thể hoàn tác.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter>
+                <AlertDialogFooter className="flex-row-reverse gap-2">
                   <AlertDialogAction
                     onClick={props.handleDeleteUser}
                     className={buttonVariants({
@@ -81,8 +81,8 @@ const UserTools: FC<UserToolsProps> = ({ ...props }) => {
           </>
         ) : (
           <>
-            <SquarePen className="mx-4 !mt-6" />
-            <Trash2 className="mx-4 !mt-6" />
+            <SquarePen className="mx-4 md_!mt-6" />
+            <Trash2 className="mx-4 md_!mt-6" />
           </>
         )}
       </CardContent>

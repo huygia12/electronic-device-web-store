@@ -60,7 +60,7 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
   };
 
   return (
-    <Card className="w-full pb-4">
+    <Card className="w-[90vw] xl_w-full pb-4">
       <CardHeader>
         <CardTitle>Thay đổi mật khẩu</CardTitle>
         <CardDescription>
@@ -68,8 +68,7 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="flex gap-4">
-          <input hidden type="text" autoComplete="username" />
+        <form className="flex gap-4 flex-col lg_flex-row">
           <div className="flex relative">
             <Label htmlFor="old-password" className="text-lg my-auto w-[14rem]">
               Mật khẩu cũ
@@ -83,7 +82,7 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
               onChange={(e) => setOldPassword(e.target.value)}
             />
             <button
-              className="absolute text-muted-foreground right-2 bottom-2"
+              className="absolute text-muted-foreground right-2 top-1/2 transform -translate-y-5 xss_-translate-y-1/2"
               onClick={(e) => {
                 e.preventDefault();
                 setOldPasswordVisible(!oldPasswordVisible);
@@ -96,7 +95,7 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
               )}
             </button>
           </div>
-          <div className="flex ml-auto relative">
+          <div className="flex relative lg_ml-auto">
             <Label htmlFor="new-password" className="text-lg my-auto w-[14rem]">
               Mật khẩu mới
               <span className="text-red-600 ">*</span>
@@ -109,7 +108,7 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
               onChange={(e) => setNewPassword(e.target.value)}
             />
             <button
-              className="absolute text-muted-foreground right-2 bottom-2"
+              className="absolute text-muted-foreground right-2 top-1/2 transform -translate-y-5 xss_-translate-y-1/2"
               onClick={(e) => {
                 e.preventDefault();
                 setNewPasswordVisible(!newPasswordVisible);

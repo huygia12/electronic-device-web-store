@@ -84,8 +84,20 @@ const CategoryManagement: FC = () => {
   };
 
   return (
-    <div className="my-8">
-      <SearchBox className="mb-4" setSearchText={setSearchText} />
+    <div className="my-8 mx-auto w-[90vw] lgg_w-max">
+      <CategoryTools
+        selectedCategory={selectedCategory}
+        handleAddCategory={handleAddCategory}
+        handleUpdateCategory={handleUpdateCategory}
+        handleDeleteCategory={handleDeleteCategory}
+        className="mb-4 block md_hidden"
+      />
+
+      <SearchBox
+        placeholder="Tìm kiếm theo tên..."
+        className="mb-4"
+        setSearchText={setSearchText}
+      />
 
       {/** Table */}
       <div className="flex gap-4">
@@ -104,6 +116,7 @@ const CategoryManagement: FC = () => {
           handleAddCategory={handleAddCategory}
           handleUpdateCategory={handleUpdateCategory}
           handleDeleteCategory={handleDeleteCategory}
+          className="hidden md_block"
         />
       </div>
     </div>

@@ -108,8 +108,8 @@ const PersonalInvoices: FC = () => {
   };
 
   return (
-    <div>
-      <h1 className="text-[1.8rem] font-semibold text-center mb-8">
+    <div className="flex flex-col items-center">
+      <h1 className="text-[1.8rem] font-semibold text-center mb-2">
         Đơn Hàng Của Bạn
       </h1>
       <InvoiceUpperBar
@@ -117,10 +117,10 @@ const PersonalInvoices: FC = () => {
         setSelectedStatus={handleStatusSelectionEvent}
         setSearchText={handleSearchTextChange}
         defaultSelectedStatus={selectedStatus}
-        className="mt-8"
+        className="mt-8 w-[90vw] xl_w-full"
       />
 
-      <Card className="rounded-2xl shadow-lg my-4">
+      <Card className="rounded-lg shadow-lg my-4 w-[90vw] xl_w-full">
         <CardContent className="px-6 pb-4 h-[60vh] min-h-fit">
           {invoices.length !== 0 ? (
             <InvoiceTable

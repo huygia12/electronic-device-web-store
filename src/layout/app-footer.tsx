@@ -15,8 +15,8 @@ const AppFooter: React.FC<AppFooterProps> = ({ className }) => {
       )}
     >
       <div className="w-3/4 my-5">
-        <div className="grid grid-cols-2 gap-10 lg_grid-cols-3 2xl_grid-cols-5">
-          <div className="flex flex-col space-y-4 col-span-2">
+        <div className="flex flex-col gap-10 sms_grid sms_grid-cols-2 lg_grid-cols-3 2xl_grid-cols-5">
+          <div className="flex flex-col space-y-4 sms_col-span-2">
             <span className="font-extrabold text-lg">VỀ HGSHOP</span>
             <span>© 2024 Công ty Cổ phần đầu tư công nghệ</span>
             <span>
@@ -108,7 +108,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ className }) => {
 
         <div className="border-t-slate-300 border-t-2 mt-10 pt-5 flex justify-between items-center">
           <span className="flex items-center space-x-2">
-            <span className="font-semibold text-base">
+            <span className="font-semibold text-base hidden sms_block">
               LIÊN HỆ VỚI CHÚNG TÔI
             </span>
             <a href={url} target="_blank">

@@ -167,8 +167,20 @@ const UserManagement: FC = () => {
   };
 
   return (
-    <div className="my-8">
-      <SearchBox className="mb-4" setSearchText={handleSearch} />
+    <div className="my-8 mx-auto w-[90vw] lgg_w-max">
+      <UserTools
+        selectedUser={selectedUser}
+        handleAddUser={handleAddUser}
+        handleUpdateUser={handleUpdateUser}
+        handleDeleteUser={handleDeleteUser}
+        className="mb-4 block md_hidden"
+      />
+
+      <SearchBox
+        placeholder="Tìm kiếm theo tên, số điện thoại, email..."
+        className="mb-4"
+        setSearchText={handleSearch}
+      />
 
       <div className="flex gap-4">
         <UserTable
@@ -178,7 +190,7 @@ const UserManagement: FC = () => {
           handleBanUser={handleBanUser}
           currentPage={displayPage}
           limitPerPage={10}
-          className="flex-1 w-1" // set width to make flex work ????
+          className="flex-1"
         />
 
         <UserTools
@@ -186,6 +198,7 @@ const UserManagement: FC = () => {
           handleAddUser={handleAddUser}
           handleUpdateUser={handleUpdateUser}
           handleDeleteUser={handleDeleteUser}
+          className="hidden md_block"
         />
       </div>
 

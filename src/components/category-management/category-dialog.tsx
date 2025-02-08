@@ -50,7 +50,7 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
           <DialogHeader>
             <DialogTitle>{props.dialogTitle}</DialogTitle>
           </DialogHeader>
-          <div className="grid grid-cols-5 items-center gap-10">
+          <div className="grid grid-cols-5 items-center gap-4">
             <Label htmlFor="name" className="col-span-2 text-right text-lg">
               Danh mục
             </Label>
@@ -63,7 +63,7 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
               onChange={(e) => handleInputEvent(e)}
             />
           </div>
-          <DialogFooter>
+          <DialogFooter className="flex-row-reverse gap-2">
             <DialogClose
               type="submit"
               disabled={isDisable}

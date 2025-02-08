@@ -24,8 +24,8 @@ const ClientSection = () => {
 
   return (
     <section className="bg-theme-softer flex flex-col items-center py-6 font-extrabold text-primary-foreground space-y-2">
-      <div className="flex items-center">
-        <BsSendExclamation className="mr-2 text-primary-foreground" size={22} />
+      <div className="flex items-center px-4">
+        <BsSendExclamation className="mr-2 text-primary-foreground size-16 sms_size-10 md_size-6" />
         ĐĂNG KÝ NHẬN EMAIL THÔNG BÁO KHUYẾN MẠI HOẶC ĐỂ ĐƯỢC TƯ VẤN MIỄN PHÍ
       </div>
       <div className="flex">
@@ -34,7 +34,7 @@ const ClientSection = () => {
           value={guestEmail}
           onChange={(e) => setGuestEmail(e.target.value)}
           placeholder="Nhập email của bạn"
-          className="w-[30rem] rounded-r-none text-gray-500 text-lg placeholder_text-sm focus_mr-1"
+          className="w-[70vw] sms_w-[30rem] rounded-r-none text-gray-500 text-lg placeholder_text-sm focus_mr-1"
         />
         <Button
           variant="negative"

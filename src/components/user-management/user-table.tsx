@@ -73,7 +73,7 @@ const UserTable: FC<UserTableProps> = ({ ...props }) => {
                   <TableCell className="text-center text-base">
                     {(props.currentPage - 1) * props.limitPerPage + index + 1}
                   </TableCell>
-                  <TableCell className="text-center text-base">
+                  <TableCell className="text-center text-base w-[6vw] max-w-[14rem] truncate">
                     {user.userName}
                   </TableCell>
                   <TableCell className="text-center text-base">

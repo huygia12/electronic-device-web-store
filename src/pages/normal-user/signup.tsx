@@ -77,15 +77,15 @@ const Signup: FC = () => {
       onSubmit={handleSubmit((data) => handleSignupFormSubmission(data))}
       className="w-full h-full flex justify-around"
     >
-      <Card className="mx-auto min-w-[30rem] my-auto shadow-slate-400 shadow-sm">
-        <CardHeader className="mb-5">
+      <Card className="w-[80vw] sms_w-[30rem] m-auto shadow-slate-400 shadow-sm">
+        <CardHeader>
           <CardTitle className="text-4xl mb-2">Đăng ký</CardTitle>
           <CardDescription>
             Nhập thông tin của bạn để tạo tài khoản
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-8">
+          <div className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="first-name" className="font-extrabold text-lg">
                 Họ và tên
@@ -120,7 +120,7 @@ const Signup: FC = () => {
               )}
             </div>
             <div>
-              <div className="flex gap-4">
+              <div className="flex flex-col sms_flex-row gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="password" className="font-extrabold text-lg">
                     Mật khẩu
@@ -211,7 +211,10 @@ const Signup: FC = () => {
           </div>
           <div className="mt-4 text-center text-lg">
             Bạn đã có tài khoản? &nbsp;
-            <NavLink to="/login" className="underline hover_text-primary">
+            <NavLink
+              to="/login"
+              className="underline text-nowrap hover_text-primary"
+            >
               Đăng nhập
             </NavLink>
           </div>

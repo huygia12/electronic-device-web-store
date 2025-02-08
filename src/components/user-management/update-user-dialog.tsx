@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes } from "react";
+import { FC, HTMLAttributes, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -36,6 +36,14 @@ const UpdateUserDialog: FC<UserDialogProps> = ({ className, ...props }) => {
     resolver: zodResolver(UserSchema),
   });
   const avatarFiles = watch("avatar");
+
+  useEffect(() => {
+    if (props.user) {
+      setValue("userName", props.user.userName);
+      setValue("email", props.user.email);
+      setValue("phoneNumber", props.user.phoneNumber || undefined);
+    }
+  }, [props.user]);
 
   const handleFormSubmission: SubmitHandler<UserFormProps> = async (data) => {
     props.handleUpdateUser(data, avatarFiles?.[0]);
