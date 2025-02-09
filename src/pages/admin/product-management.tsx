@@ -125,7 +125,15 @@ const ProductManagement: FC = () => {
   };
 
   return (
-    <div className="my-8">
+    <div className="my-8 mx-auto w-[90vw] lgg_w-max">
+      <ProductTools
+        setDeepCleanProductID={setDeepCleanProductID}
+        selectedProduct={selectedProduct}
+        handleDeleteProduct={handleDeleteProduct}
+        handleRefreshFilter={handleRefreshFilter}
+        className="mb-4 block lgg_hidden"
+      />
+
       {/**Search */}
       <UpperBar
         categories={categories}
@@ -141,7 +149,7 @@ const ProductManagement: FC = () => {
       <div className="mt-4 flex gap-4">
         {/** Table */}
         <ProductTable
-          className="flex-1 w-1"
+          className="flex-1"
           products={products}
           selectedProduct={selectedProduct}
           setSelectedProduct={setSelectedProduct}
@@ -153,6 +161,8 @@ const ProductManagement: FC = () => {
           setDeepCleanProductID={setDeepCleanProductID}
           selectedProduct={selectedProduct}
           handleDeleteProduct={handleDeleteProduct}
+          handleRefreshFilter={handleRefreshFilter}
+          className="hidden lgg_block"
         />
       </div>
 

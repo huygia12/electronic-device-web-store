@@ -9,23 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { formatDateTime } from "@/utils/helpers";
 import { User } from "@/types/model";
 import Badge from "@/components/ui/badge";
 import { userService } from "@/services";
 import { cn } from "@/lib/utils";
 import { Role } from "@/types/enum";
-
-const columnHeaders = [
-  "STT",
-  "TÊN",
-  "SỐ LIÊN LẠC",
-  "NGÀY ĐĂNG KÝ",
-  "EMAIL",
-  "VAI TRÒ",
-  "KHÓA TÀI KHOẢN",
-];
 
 interface UserTableProps extends HTMLAttributes<HTMLTableElement> {
   users: User[];
@@ -38,25 +28,33 @@ interface UserTableProps extends HTMLAttributes<HTMLTableElement> {
 
 const UserTable: FC<UserTableProps> = ({ ...props }) => {
   return (
-    <Card className={cn("rounded-2xl shadow-lg", props.className)}>
-      <CardHeader className="py-6">
-        <CardTitle className="text-8">Danh sách khách hàng</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col px-4">
-        <ScrollArea className="relavtive h-[58vh] pr-3 pb-3">
+    <Card className={cn("rounded-md shadow-lg", props.className)}>
+      <CardContent className="flex flex-col px-0 xss_px-4">
+        <ScrollArea className="relavtive h-[58vh] pb-3">
           <Table>
             <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
-              <tr>
-                {columnHeaders.map((item, key) => {
-                  return (
-                    <TableHead
-                      key={key}
-                      className="text-nowrap text-center text-black font-extrabold text-[1rem]"
-                    >
-                      {item}
-                    </TableHead>
-                  );
-                })}
+              <tr className="text-nowrap text-black text-xs md_text-[1rem]">
+                <TableHead className="text-center font-extrabold">
+                  STT
+                </TableHead>
+                <TableHead className="text-center font-extrabold">
+                  TÊN
+                </TableHead>
+                <TableHead className="text-center font-extrabold hidden 2xl_table-cell">
+                  SỐ LIÊN LẠC
+                </TableHead>
+                <TableHead className="text-center font-extrabold hidden sms_table-cell">
+                  NGÀY ĐĂNG KÝ
+                </TableHead>
+                <TableHead className="text-center font-extrabold hidden xl_table-cell">
+                  EMAIL
+                </TableHead>
+                <TableHead className="text-center font-extrabold">
+                  VAI TRÒ
+                </TableHead>
+                <TableHead className="text-center font-extrabold">
+                  KHÓA TK
+                </TableHead>
               </tr>
             </TableHeader>
             <TableBody>
@@ -64,30 +62,33 @@ const UserTable: FC<UserTableProps> = ({ ...props }) => {
                 <TableRow
                   key={index}
                   className={cn(
-                    "cursor-pointer",
+                    "cursor-pointer text-xs md_text-base",
                     props.selectedUser?.userID === user.userID &&
                       "bg-theme-softer"
                   )}
                   onClick={() => props.setSelectedUser(user)}
                 >
-                  <TableCell className="text-center text-base">
+                  <TableCell className="text-center">
                     {(props.currentPage - 1) * props.limitPerPage + index + 1}
                   </TableCell>
-                  <TableCell className="text-center text-base w-[6vw] max-w-[14rem] truncate">
+                  <TableCell className="text-center max-w-[8rem] md_max-w-[14rem] truncate">
                     {user.userName}
                   </TableCell>
-                  <TableCell className="text-center text-base">
+                  <TableCell className="text-center hidden 2xl_table-cell">
                     {user.phoneNumber}
                   </TableCell>
-                  <TableCell className="text-center text-base 2xl_text-nowrap">
+                  <TableCell className="text-center lg_text-nowrap hidden sms_table-cell">
                     {formatDateTime(`${user.createdAt}`)}
                   </TableCell>
-                  <TableCell className="text-center text-base">
+                  <TableCell className="text-center hidden xl_table-cell">
                     {user.email}
                   </TableCell>
-                  <TableCell className="text-center text-base">
-                    <Badge className="bg-blue-500 text-white text-base text-nowrap h-8 hover_!bg-blue-500">
+                  <TableCell className="text-center">
+                    <Badge className="bg-blue-500 text-white text-nowrap h-8 hidden hover_!bg-blue-500 xs_flex xs_justify-center">
                       {userService.getRoleToDisplay(user.role)}
+                    </Badge>
+                    <Badge className="bg-blue-500 text-white text-nowrap h-8 flex justify-center hover_!bg-blue-500 xs_hidden">
+                      {userService.getRoleToDisplayInShort(user.role)}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-center">

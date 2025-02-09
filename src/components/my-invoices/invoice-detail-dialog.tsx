@@ -187,7 +187,6 @@ const InvoiceDetailDialog: React.FC<InvoiceDetailDialogProps> = ({
               </InvoiceCancelDialog>
             </span>
           </div>
-          {/* <ScrollBar orientation="horizontal" /> */}
         </ScrollArea>
       </DialogContent>
     </Dialog>

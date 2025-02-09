@@ -93,12 +93,11 @@ const ProviderManagement = () => {
 
       <SearchBox
         placeholder="Tìm kiếm theo tên..."
-        className="mb-4"
         setSearchText={setSearchText}
       />
 
-      {/** Table */}
-      <div className="flex gap-4">
+      <div className="mt-4 flex gap-4">
+        {/** Table */}
         <ProviderTable
           className="flex-1"
           selectedProvider={selectedProvider}

@@ -32,28 +32,32 @@ const UpperBar: FC<UpperBarProps> = ({ ...props }) => {
   }, [props.selectedCategory, props.selectedProvider]);
 
   return (
-    <div className="flex space-x-4">
-      <span className="relative h-[3rem] flex-1">
+    <div className="flex gap-4 flex-col md_flex-row">
+      <div className="relative h-[3rem] flex-1 text-sm md_text-lg">
         <Search className="absolute left-4 top-3 h-6 w-6 text-muted-foreground" />
         <Input
           type="search"
-          placeholder="Tìm kiếm theo tên..."
-          className="h-full text-lg w-full rounded-md bg-background pl-14 focus-visible_!ring-0 focus-visible_!ring-offset-0"
+          placeholder="Tìm kiếm..."
+          className="py-3 md_py-0 h-full w-full rounded-md bg-background pl-14 focus-visible_!ring-0 focus-visible_!ring-offset-0 placeholder_italic"
           onChange={(e) => props.setSearchingInput(e.target.value)}
         />
-      </span>
+      </div>
 
-      <span className="flex items-center space-x-4">
+      <span className="grid grid-cols-2 md_flex items-center gap-4">
         <Select
           key={categoryKey}
           onValueChange={(value) => props.setSelectedCategory(value)}
         >
-          <SelectTrigger className="w-[12rem] h-full">
+          <SelectTrigger className="w-full md_w-[12rem] h-full text-sm md_text-base">
             <SelectValue placeholder="Phân loại" />
           </SelectTrigger>
           <SelectContent>
             {props.categories.map((category, index) => (
-              <SelectItem key={index} value={category.categoryID}>
+              <SelectItem
+                key={index}
+                value={category.categoryID}
+                className="text-sm md_text-base"
+              >
                 {category.categoryName}
               </SelectItem>
             ))}
@@ -64,12 +68,16 @@ const UpperBar: FC<UpperBarProps> = ({ ...props }) => {
           key={providerKey}
           onValueChange={(value) => props.setSelectedProvider(value)}
         >
-          <SelectTrigger key={providerKey} className="w-[12rem] h-full">
+          <SelectTrigger className="w-full md_w-[12rem] h-full text-sm md_text-base">
             <SelectValue placeholder="Nhà cung cấp" />
           </SelectTrigger>
           <SelectContent>
             {props.providers.map((provider, index) => (
-              <SelectItem key={index} value={provider.providerID}>
+              <SelectItem
+                key={index}
+                value={provider.providerID}
+                className="text-sm md_text-base"
+              >
                 {provider.providerName}
               </SelectItem>
             ))}
@@ -78,7 +86,7 @@ const UpperBar: FC<UpperBarProps> = ({ ...props }) => {
 
         <Button
           variant="destructive"
-          className="h-full"
+          className="h-full text-sm hidden md_block md_text-base"
           onClick={props.handleRefreshFilter}
         >
           Làm mới

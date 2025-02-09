@@ -173,11 +173,11 @@ const UserManagement: FC = () => {
         handleAddUser={handleAddUser}
         handleUpdateUser={handleUpdateUser}
         handleDeleteUser={handleDeleteUser}
-        className="mb-4 block md_hidden"
+        className="mb-4 block lg_hidden"
       />
 
       <SearchBox
-        placeholder="Tìm kiếm theo tên, số điện thoại, email..."
+        placeholder="Tìm kiếm theo tên, sđt, email..."
         className="mb-4"
         setSearchText={handleSearch}
       />
@@ -198,7 +198,7 @@ const UserManagement: FC = () => {
           handleAddUser={handleAddUser}
           handleUpdateUser={handleUpdateUser}
           handleDeleteUser={handleDeleteUser}
-          className="hidden md_block"
+          className="hidden lg_block"
         />
       </div>
 

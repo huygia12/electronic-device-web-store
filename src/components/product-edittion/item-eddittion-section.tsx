@@ -47,17 +47,18 @@ const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
   };
 
   return (
-    <ul className="mb-8">
+    <ul>
       {Array.from({ length: props.itemQuantity }).map((_, parentIndex) => {
         return (
           <li
             key={parentIndex}
-            className="grid grid-cols-1 lg_grid-cols-2 gap-8 border-stone-200 border-2 rounded-xl p-5 mt-10"
+            className="grid grid-cols-1 lg_grid-cols-2 gap-8 border-stone-200 border-2 rounded-xl p-5 mt-10 text-sm md_text-lg"
           >
+            {/** PRODUCT THUMP */}
             <div className="flex flex-col gap-2">
               <Label
                 htmlFor={`thump-${parentIndex}`}
-                className="text-lg font-extrabold"
+                className="font-extrabold"
               >
                 Ảnh tiêu đề
                 <span className="text-red-600 ">*</span>
@@ -85,10 +86,11 @@ const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
                 />
               </ImageOverView>
             </div>
+            {/** PRODUCT IMAGES */}
             <div className="overflow-auto flex flex-col gap-2">
               <Label
                 htmlFor={`product-imgs-${parentIndex}`}
-                className="text-lg font-extrabold"
+                className="font-extrabold"
               >
                 Ảnh sản phẩm
                 <span className="text-red-600 ">*</span>
@@ -124,11 +126,12 @@ const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
                 })}
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-4">
+
+            <div className="grid gap-4 grid-cols-2 sms_grid-cols-3 lg_grid-cols-6 lg_col-span-2">
               <div className="space-y-2">
                 <Label
                   htmlFor={`price-${parentIndex}`}
-                  className="text-lg font-extrabold"
+                  className="font-extrabold"
                 >
                   Giá tiền(VNĐ)
                   <span className="text-red-600 ">*</span>
@@ -140,7 +143,7 @@ const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
                   id={`price-${parentIndex}`}
                   type="number"
                   autoComplete={"off"}
-                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                  className="border-2 border-stone-400 min-h-12 focus_border-none"
                 />
                 {props.errors.productItems?.[parentIndex]?.price && (
                   <div className="text-red-600 pt-2">
@@ -151,7 +154,7 @@ const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
               <div className="space-y-2">
                 <Label
                   htmlFor={`quantity-${parentIndex}`}
-                  className="text-lg font-extrabold"
+                  className="font-extrabold"
                 >
                   Số lượng
                   <span className="text-red-600 ">*</span>
@@ -165,7 +168,7 @@ const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
                   id={`quantity-${parentIndex}`}
                   type="number"
                   autoComplete={"off"}
-                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                  className="border-2 border-stone-400 min-h-12 focus_border-none"
                 />
                 {props.errors.productItems?.[parentIndex]?.quantity && (
                   <div className="text-red-600 pt-2">
@@ -176,7 +179,7 @@ const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
               <div className="space-y-2">
                 <Label
                   htmlFor={`code-${parentIndex}`}
-                  className="text-lg font-extrabold"
+                  className="font-extrabold"
                 >
                   Mã sản phẩm
                   <span className="text-red-600 ">*</span>
@@ -188,7 +191,7 @@ const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
                   id={`code-${parentIndex}`}
                   type="text"
                   autoComplete={"off"}
-                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                  className="border-2 border-stone-400 min-h-12 focus_border-none"
                 />
                 {props.errors.productItems?.[parentIndex]?.productCode && (
                   <div className="text-red-600 pt-2">
@@ -196,12 +199,10 @@ const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
                   </div>
                 )}
               </div>
-            </div>
-            <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label
                   htmlFor={`discount-${parentIndex}`}
-                  className="text-lg font-extrabold"
+                  className="font-extrabold"
                 >
                   Giảm giá(%)
                 </Label>
@@ -214,7 +215,7 @@ const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
                   min={0}
                   type="number"
                   autoComplete={"off"}
-                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                  className="border-2 border-stone-400 min-h-12 focus_border-none"
                 />
                 {props.errors.productItems?.[parentIndex]?.discount && (
                   <div className="text-red-600 pt-2">
@@ -225,7 +226,7 @@ const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
               <div className="space-y-2">
                 <Label
                   htmlFor={`color-${parentIndex}`}
-                  className="text-lg font-extrabold"
+                  className="font-extrabold"
                 >
                   Màu
                   <span className="text-red-600 ">*</span>
@@ -237,7 +238,7 @@ const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
                   id={`color-${parentIndex}`}
                   type="text"
                   autoComplete={"off"}
-                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                  className="border-2 border-stone-400 min-h-12 focus_border-none"
                 />
                 {props.errors.productItems?.[parentIndex]?.color && (
                   <div className="text-red-600 pt-2">
@@ -248,7 +249,7 @@ const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
               <div className="space-y-2">
                 <Label
                   htmlFor={`capacity-${parentIndex}`}
-                  className="text-lg font-extrabold"
+                  className="font-extrabold"
                 >
                   Dung lượng
                 </Label>
@@ -259,7 +260,7 @@ const ItemEdittionSection: FC<ItemEdittionProps> = ({ ...props }) => {
                   id={`capacity-${parentIndex}`}
                   type="text"
                   autoComplete={"off"}
-                  className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                  className="border-2 border-stone-400 min-h-12 focus_border-none"
                 />
                 {props.errors.productItems?.[parentIndex]?.storage && (
                   <div className="text-red-600 pt-2">

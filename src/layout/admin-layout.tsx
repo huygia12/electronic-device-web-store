@@ -18,7 +18,8 @@ const AdminLayout: React.FC = () => {
       <Toaster
         richColors
         toastOptions={{
-          className: "text-xl h-[4rem] right-10 bottom-5",
+          className:
+            "right-10 bottom-5 text-sm h-[3rem] md_text-xl md_h-[4rem]",
         }}
       />
     </>

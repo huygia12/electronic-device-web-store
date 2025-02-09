@@ -19,17 +19,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ProductSummary } from "@/types/payload";
 import { cn } from "@/lib/utils";
 
-const columnHeaders = [
-  "STT",
-  "ẢNH SẢN PHẨM",
-  "TÊN SẢN PHẨM",
-  "(DÀI/RỘNG/CAO)",
-  "KHỐI LƯỢNG",
-  "DANH MỤC",
-  "NHÀ PHÂN PHỐI",
-  "BẢO HÀNH",
-];
-
 interface ProductTableProps extends HTMLAttributes<HTMLDivElement> {
   products: ProductSummary[];
   selectedProduct?: ProductSummary;
@@ -40,23 +29,38 @@ interface ProductTableProps extends HTMLAttributes<HTMLDivElement> {
 
 const ProductTable: FC<ProductTableProps> = ({ ...props }) => {
   return (
-    <Card className={cn("rounded-2xl shadow-lg", props.className)}>
-      <CardContent className="flex flex-col p-4 h-[60vh] min-h-fit">
+    <Card className={cn("rounded-md shadow-lg", props.className)}>
+      <CardContent className="flex flex-col p-0 h-[60vh] min-h-fit xs_p-4 xs_pt-0">
         {props.products.length !== 0 ? (
-          <ScrollArea className="relative pr-3 pb-3 h-[60vh]">
+          <ScrollArea className="relative pb-3 h-[60vh]">
             <Table>
               <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
-                <tr>
-                  {columnHeaders.map((item, key) => {
-                    return (
-                      <TableHead
-                        key={key}
-                        className="text-nowrap text-center text-black font-extrabold text-[1rem]"
-                      >
-                        {item}
-                      </TableHead>
-                    );
-                  })}
+                <tr className="text-nowrap text-black text-sm md_text-[1rem]">
+                  <TableHead className="text-center font-extrabold">
+                    STT
+                  </TableHead>
+                  <TableHead className="text-center font-extrabold">
+                    <span className="hidden xl_block">ẢNH SẢN PHẨM</span>
+                    <span className="block xl_hidden">ẢNH</span>
+                  </TableHead>
+                  <TableHead className="text-center font-extrabold">
+                    TÊN SẢN PHẨM
+                  </TableHead>
+                  <TableHead className="text-center font-extrabold hidden 2xl_table-cell">
+                    (DÀI/RỘNG/CAO)
+                  </TableHead>
+                  <TableHead className="text-center font-extrabold hidden 3xl_table-cell">
+                    KHỐI LƯỢNG
+                  </TableHead>
+                  <TableHead className="text-center font-extrabold hidden sms_table-cell">
+                    DANH MỤC
+                  </TableHead>
+                  <TableHead className="text-center font-extrabold hidden md_table-cell">
+                    NHÀ PHÂN PHỐI
+                  </TableHead>
+                  <TableHead className="text-center font-extrabold hidden xl_table-cell">
+                    BẢO HÀNH
+                  </TableHead>
                 </tr>
               </TableHeader>
               <TableBody className="">
@@ -64,13 +68,13 @@ const ProductTable: FC<ProductTableProps> = ({ ...props }) => {
                   <TableRow
                     key={index}
                     className={cn(
-                      "cursor-pointer",
+                      "cursor-pointer text-sm md_text-base",
                       props.selectedProduct?.productID === product.productID &&
                         "bg-theme-softer"
                     )}
                     onClick={() => props.setSelectedProduct(product)}
                   >
-                    <TableCell className="text-center text-base">
+                    <TableCell className="text-center">
                       {(props.currentPage - 1) * props.limitPerPage + index + 1}
                     </TableCell>
                     <TableCell>
@@ -80,11 +84,11 @@ const ProductTable: FC<ProductTableProps> = ({ ...props }) => {
                         className="w-12 h-12 mx-auto rounded-md object-cover"
                       />
                     </TableCell>
-                    <TableCell className="text-center text-base">
+                    <TableCell className="text-center">
                       <TooltipProvider>
-                        <Tooltip>
+                        <Tooltip delayDuration={500}>
                           <TooltipTrigger>
-                            <div className="max-w-80 truncate">
+                            <div className="max-w-52 md_max-w-72 truncate">
                               {product.productName}
                             </div>
                           </TooltipTrigger>
@@ -92,19 +96,19 @@ const ProductTable: FC<ProductTableProps> = ({ ...props }) => {
                         </Tooltip>
                       </TooltipProvider>
                     </TableCell>
-                    <TableCell className="text-center text-base">
+                    <TableCell className="text-center hidden 2xl_table-cell">
                       {`${product.length}cm/${product.width}cm/${product.height}cm`}
                     </TableCell>
-                    <TableCell className="text-center text-base">
+                    <TableCell className="text-center hidden 3xl_table-cell">
                       {`${product.weight}gram`}
                     </TableCell>
-                    <TableCell className="text-center text-base">
+                    <TableCell className="text-center hidden sms_table-cell">
                       {product.category.categoryName}
                     </TableCell>
-                    <TableCell className="text-center text-base">
+                    <TableCell className="text-center hidden md_table-cell">
                       {product.provider.providerName}
                     </TableCell>
-                    <TableCell className="text-center text-base">
+                    <TableCell className="text-center hidden xl_table-cell">
                       {`${product.warranty} tháng`}
                     </TableCell>
                   </TableRow>

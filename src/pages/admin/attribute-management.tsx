@@ -190,7 +190,7 @@ const AttributeManagement: FC = () => {
   };
 
   return (
-    <div className="my-8">
+    <div className="my-8 mx-auto w-[90vw] lgg_w-max">
       <SearchBox className="mb-4" setSearchText={handleSearching} />
 
       <div className="flex flex-col lg_grid lg_grid-cols-5 gap-4">

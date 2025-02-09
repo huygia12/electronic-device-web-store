@@ -15,7 +15,7 @@ const SearchBox: FC<SearchBoxProps> = ({ ...props }) => {
       <Input
         type="search"
         placeholder={props.placeholder || "Tìm kiếm..."}
-        className="h-full text-sm md_text-lg w-full rounded-md bg-background pl-14 focus-visible_!ring-0 focus-visible_!ring-offset-0"
+        className="h-full text-sm md_text-lg w-full rounded-md bg-background placeholder_italic pl-14 focus-visible_!ring-0 focus-visible_!ring-offset-0"
         onChange={(e) => props.setSearchText(e.target.value)}
       />
     </div>

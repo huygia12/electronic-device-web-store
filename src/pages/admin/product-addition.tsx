@@ -19,6 +19,7 @@ import {
   ProductAdditionSection,
   ProductItemAdditionSection,
 } from "@/components/product-addition";
+import { LoadingSpinner } from "@/components/effect";
 
 const ProductAddition: FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -157,9 +158,12 @@ const ProductAddition: FC = () => {
   };
 
   return (
-    <div className="my-8">
+    <div className="my-8 mx-auto w-[90vw] lgg_w-max">
       <h1 className="text-4xl font-extrabold mb-10">Thêm sản phẩm</h1>
-      <form onSubmit={handleSubmit(handleFormSubmission)}>
+      <form
+        onSubmit={handleSubmit(handleFormSubmission)}
+        className="w-[90vw] max-w-[100rem]"
+      >
         {/** PRODUCT */}
         <ProductAdditionSection
           errors={errors}
@@ -189,27 +193,30 @@ const ProductAddition: FC = () => {
 
         {/** BUTTONS */}
         <div className="mt-8 flex justify-between">
-          <span className="space-x-4 flex">
+          {/*LEFT */}
+          <span className="flex gap-2 mr-2">
             <Button
               variant="positive"
-              className="text-xl"
+              className="text-sm md_text-xl"
               onClick={(e) => handleAddItem(e)}
             >
-              Thêm
+              <span className="hidden xss_inline">Thêm</span>
               <Plus />
             </Button>
             <Button
               variant="negative"
               className={cn(
-                "text-xl hidden",
+                "text-sm md_text-xl hidden",
                 productItemsAddition.length > 1 && "flex"
               )}
               onClick={(e) => handleDeleteItem(e)}
             >
-              Xóa
+              <span className="hidden xss_inline">Xóa</span>
               <Trash2 />
             </Button>
           </span>
+
+          {/*RIGHT */}
           <span className="space-x-4 flex items-center">
             {errors.root && (
               <div className="text-red-600">{errors.root?.message}</div>
@@ -218,10 +225,16 @@ const ProductAddition: FC = () => {
               type="submit"
               disabled={isSubmitting}
               variant="neutral"
-              className="text-xl"
+              className="text-sm md_text-xl"
             >
-              Thêm sản phẩm
-              <Plus />
+              {!isSubmitting ? (
+                <>
+                  Thêm sản phẩm
+                  <Plus />
+                </>
+              ) : (
+                <LoadingSpinner size={26} className="text-white" />
+              )}
             </Button>
           </span>
         </div>

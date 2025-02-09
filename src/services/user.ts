@@ -153,6 +153,9 @@ const userService = {
   getRoleToDisplay: (role: Role) => {
     return role === Role.ADMIN ? "Admin" : "Khách hàng";
   },
+  getRoleToDisplayInShort: (role: Role) => {
+    return role === Role.ADMIN ? "AD" : "KH";
+  },
   addUser: (user: User, users: User[]) => {
     return [user, ...users];
   },
