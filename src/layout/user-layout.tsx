@@ -73,7 +73,7 @@ const UserLayout: React.FC = () => {
             bannerUrl={initData.store.leftBanner}
             className="sticky top-36 self-start hidden xl_block xl_w-36 xl_min-w-32 2xl_w-48 2xl_min-w-36"
           />
-          <div className="!ml-0 w-full xl_w-lg 2xl_w-xl 4xl_w-2xl">
+          <div className="!ml-0 w-[90vw] xl_w-lg 2xl_w-xl 4xl_w-2xl">
             {navigation.state === "loading" ? <TopBarProgress /> : <Outlet />}
           </div>
           <Banner

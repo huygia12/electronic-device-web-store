@@ -14,7 +14,7 @@ const EditProfile: FC = () => {
   useLayoutEffect(() => setCurrentUser(user), []);
 
   return (
-    <div className="flex flex-col items-center gap-10">
+    <div className="flex flex-col items-center gap-10 mx-auto w-[90vw] lgg_w-max">
       <ChangeProfileCard />
 
       <ChangePasswordCard />

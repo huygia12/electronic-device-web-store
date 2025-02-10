@@ -119,7 +119,7 @@ const AppClientHeader: FC = () => {
     <header className="w-full flex flex-col sticky top-0 z-50 shadow-xl">
       {/** UPPER */}
       <div className="flex justify-around bg-third">
-        <div className="flex flex-row justify-between gap-2 text-[0.8rem] px-4 py-2 w-lg 2xl_w-xl 3xl_w-2xl">
+        <div className="flex flex-row justify-between gap-2 text-[0.8rem] py-2 w-[90vw] 2xl_w-xl 3xl_w-2xl">
           <span className="flex items-center ">
             <TfiHeadphoneAlt className="pr-2" size={20} />
             Gọi mua hàng: &nbsp;
@@ -143,7 +143,7 @@ const AppClientHeader: FC = () => {
 
       {/** UNDER */}
       <div className="bg-theme h-[5rem] w-full shadow-md flex justify-center ">
-        <div className="flex items-center p-4 lg-p-0 w-lg 2xl_w-xl 3xl_w-2xl">
+        <div className="flex items-center w-[90vw] 2xl_w-xl 3xl_w-2xl">
           {/** WEBSITE LOGO */}
           <NavLink to="/" unstable_viewTransition>
             <img src="/logo.png" alt="logo" className="h-10 xs_h-12 lg_h-14" />
@@ -158,8 +158,8 @@ const AppClientHeader: FC = () => {
               <AlignJustify className="mr-2" /> Danh Mục
             </button>
 
-            <SearchBar className="hidden sms_block 2xl_ml-10 2xl_col-span-3" />
-            <SearchBarPopUp className="block sms_hidden ml-auto" />
+            <SearchBar className="hidden sm_block 2xl_ml-10 2xl_col-span-3" />
+            <SearchBarPopUp className="block sm_hidden ml-auto" />
 
             <div className="items-center space-x-[1.5rem] flex flex-row ml-4 2xl_col-span-2 2xl_ml-20">
               <NavLink

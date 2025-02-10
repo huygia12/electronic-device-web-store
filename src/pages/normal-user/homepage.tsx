@@ -66,15 +66,18 @@ const Homepage: FC = () => {
 
   return (
     <main>
-      <section className="flex flex-row max-h-[40.8rem] space-x-3">
+      <section className="flex flex-row max-h-[40.8rem] gap-3">
         <HomepageMenu
           providers={providers}
           categories={categories}
-          className={cn("w-1/5", isBlink && "animate-shake")}
+          className={cn(
+            "hidden sm_block sm_w-[40%] md_w-[30%] 3xl_w-1/5",
+            isBlink && "animate-shake"
+          )}
         />
         <BannerSection
           slides={sortBannerInSlides(initData.slides) as Slide[]}
-          className="w-4/5 auto-rows-[10rem] 4xl_auto-rows-[12rem]"
+          className="w-full"
         />
       </section>
 

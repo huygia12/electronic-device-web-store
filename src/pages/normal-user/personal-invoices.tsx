@@ -121,7 +121,7 @@ const PersonalInvoices: FC = () => {
       />
 
       <Card className="rounded-lg shadow-lg my-4 w-[90vw] xl_w-full">
-        <CardContent className="px-6 pb-4 h-[60vh] min-h-fit">
+        <CardContent className="px-0 xss_px-4 pb-4 h-[60vh] min-h-fit">
           {invoices.length !== 0 ? (
             <InvoiceTable
               invoices={invoices}

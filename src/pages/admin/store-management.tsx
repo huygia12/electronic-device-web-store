@@ -33,8 +33,6 @@ const StoreManagement: FC = () => {
   ]);
 
   const handleSaveSlides = async () => {
-    console.log(`init slides `, initData.slides);
-    console.log(`slides `, slides);
     const toastId = toast.loading("Đang xử lý...");
     const result = await storeService.apis.updateSlidesImage(
       initData.store.storeID,
@@ -78,34 +76,51 @@ const StoreManagement: FC = () => {
   };
 
   return (
-    <div className="mb-20">
-      <div className="mt-10 flex justify-between mb-6 pb-4 border-b-2 border-gray-500 border-dashed">
+    <div className="my-8 mx-auto w-[90vw] lgg_max-w-[98rem]">
+      {/** BUTTONS */}
+      <div className="flex justify-between mb-6 pb-4 border-b-2 border-gray-500 border-dashed flex-col gap-10 md_flex-row">
         <h1 className="text-2xl font-extrabold">Quản lý cửa hàng, Quảng cáo</h1>
-        <span className="space-x-4">
-          <Button onClick={handleSaveSlides} variant="positive">
+        <span className="space-x-4 self-end">
+          <Button
+            className="text-sm md_text-base"
+            onClick={handleSaveSlides}
+            variant="positive"
+          >
             Lưu thay đổi
           </Button>
           {preview ? (
-            <Button variant="negative" onClick={() => setPreview(false)}>
+            <Button
+              className="text-sm md_text-base"
+              variant="negative"
+              onClick={() => setPreview(false)}
+            >
               Bỏ xem
             </Button>
           ) : (
-            <Button variant="neutral" onClick={() => setPreview(true)}>
+            <Button
+              className="text-sm md_text-base"
+              variant="neutral"
+              onClick={() => setPreview(true)}
+            >
               Xem trước
             </Button>
           )}
         </span>
       </div>
-      <div className="flex justify-between gap-4">
+
+      <div className="flex justify-between gap-0 sms_gap-4">
+        {/** LEFT */}
         <SideBanner
           banner={leftBanner}
           setBanner={setLeftBanner}
           storeID={initData.store.storeID}
           position="left"
           modifiable={!preview}
+          className="hidden md_block"
         />
+        {/** CENTER */}
         {preview ? (
-          <section className="flex flex-row max-h-[40.8rem] space-x-3">
+          <section className="flex flex-row max-h-[40.8rem] gap-3">
             <HomepageMenu
               className="hidden 2xl_block 2xl_w-1/5"
               providers={undefined}
@@ -114,7 +129,7 @@ const StoreManagement: FC = () => {
             <BannerSection
               slides={slides}
               disableNavigation={true}
-              className="2xl_w-4/5 auto-rows-[10rem] 4xl_auto-rows-[12rem]"
+              className="2xl_w-4/5"
             />
           </section>
         ) : (
@@ -126,12 +141,14 @@ const StoreManagement: FC = () => {
             onSlideMove={handleSlideMove}
           />
         )}
+        {/** RIGHT */}
         <SideBanner
           banner={rightBanner}
           setBanner={setRightBanner}
           storeID={initData.store.storeID}
           position="right"
           modifiable={!preview}
+          className="hidden md_block"
         />
       </div>
     </div>

@@ -1,21 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { FC, HTMLAttributes } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, SquarePen, Trash2 } from "lucide-react";
 import { Attribute } from "@/types/model";
-import { buttonVariants } from "@/utils/constants";
-import AttributeDialog from "./attribute-dialog";
+import TypeDialog from "./type-dialog";
+import TypeDeletionDialog from "./type-deletion-dialog";
 
 interface AttributeTypeProps extends HTMLAttributes<HTMLDivElement> {
   selectedAttribute: Attribute | undefined;
@@ -26,19 +15,19 @@ interface AttributeTypeProps extends HTMLAttributes<HTMLDivElement> {
 
 const AttributeTypeTools: FC<AttributeTypeProps> = ({ ...props }) => {
   return (
-    <Card className="rounded-xl shadow-lg">
+    <Card className="rounded-md shadow-lg">
       <CardContent className="p-4 space-y-4 contain-content">
-        <AttributeDialog
+        <TypeDialog
           dialogTitle="Thêm thuộc tính mới"
           handleDialogAcceptEvent={props.handleAddAttributeType}
         >
           <Button className="" variant="positive">
             <Plus />
           </Button>
-        </AttributeDialog>
+        </TypeDialog>
         {props.selectedAttribute ? (
           <>
-            <AttributeDialog
+            <TypeDialog
               attribute={props.selectedAttribute}
               dialogTitle="Sửa tên thuộc tính"
               handleDialogAcceptEvent={props.handleUpdateAttributeType}
@@ -46,36 +35,12 @@ const AttributeTypeTools: FC<AttributeTypeProps> = ({ ...props }) => {
               <Button variant="neutral">
                 <SquarePen />
               </Button>
-            </AttributeDialog>
+            </TypeDialog>
 
             {/** Attribute deletion dialog */}
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="negative">
-                  <Trash2 />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Bạn muốn xóa?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Hành động này sẽ trực tiếp xóa thuộc tính của sản phẩm và
-                    không thể hoàn tác.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogAction
-                    onClick={props.handleDeleteAttributeType}
-                    className={buttonVariants({
-                      variant: "negative",
-                    })}
-                  >
-                    Xóa
-                  </AlertDialogAction>
-                  <AlertDialogCancel className="mt-0">Hủy</AlertDialogCancel>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <TypeDeletionDialog
+              onDeletionAccept={props.handleDeleteAttributeType}
+            />
           </>
         ) : (
           <>

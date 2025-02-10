@@ -134,7 +134,6 @@ const ProductManagement: FC = () => {
         className="mb-4 block lgg_hidden"
       />
 
-      {/**Search */}
       <UpperBar
         categories={categories}
         providers={providers}

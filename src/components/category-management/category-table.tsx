@@ -23,7 +23,7 @@ const CategoryTable: FC<CategoryTableProps> = ({ ...props }) => {
   if (props.categories.length === 0) {
     return (
       <Card className={cn("rounded-md shadow-lg ", props.className)}>
-        <CardContent className="flex flex-col p-4 h-[60vh] min-h-fit">
+        <CardContent className="flex flex-col p-0 xss_p-4 h-[60vh] min-h-fit">
           <div className="flex flex-col items-center">
             <img width={500} src="/empty-box.svg" alt="emptyCart" />
             <span className="text-base md_text-xl font-medium text-slate-500 mb-10">
@@ -37,7 +37,7 @@ const CategoryTable: FC<CategoryTableProps> = ({ ...props }) => {
 
   return (
     <Card className={cn("rounded-md shadow-lg", props.className)}>
-      <CardContent className="flex flex-col p-4">
+      <CardContent className="flex flex-col p-0 xss_p-4">
         <ScrollArea className="relative h-[56vh]">
           <Table>
             <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">

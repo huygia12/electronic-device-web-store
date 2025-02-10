@@ -33,13 +33,11 @@ const AttributeOptionTable: FC<AttributeOptionTableProps> = ({
 
   if (!attribute || attribute.attributeOptions.length === 0) {
     return (
-      <Card
-        className={cn("rounded-xl shadow-lg !max-h-[40.8rem]", props.className)}
-      >
-        <CardContent className="p-4 h-full">
+      <Card className={cn("rounded-md shadow-lg", props.className)}>
+        <CardContent className="p-0 xss_p-4 h-[58vh]">
           <div className="flex flex-col items-center">
             <img width={400} src="/empty-box.svg" alt="emptyCart" />
-            <span className="text-xl font-medium text-slate-500">
+            <span className="text-base md_text-xl font-medium text-slate-500">
               Chưa có giá trị nào!
             </span>
           </div>
@@ -49,20 +47,15 @@ const AttributeOptionTable: FC<AttributeOptionTableProps> = ({
   }
 
   return (
-    <Card
-      className={cn("rounded-xl shadow-lg !max-h-[40.8rem]", props.className)}
-    >
-      <CardContent className="p-4 h-full">
-        <ScrollArea className="relative h-[64vh]">
+    <Card className={cn("rounded-md shadow-lg", props.className)}>
+      <CardContent className="p-0 xss_p-4 h-full">
+        <ScrollArea className="relative h-[58vh]">
           <Table>
             <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
-              <tr>
+              <tr className="text-black text-sm md_text-[1rem]">
                 {optionColsName.map((item, key) => {
                   return (
-                    <TableHead
-                      key={key}
-                      className=" text-center text-black font-extrabold text-[1rem]"
-                    >
+                    <TableHead key={key} className="text-center font-extrabold">
                       {item}
                     </TableHead>
                   );
@@ -74,16 +67,14 @@ const AttributeOptionTable: FC<AttributeOptionTableProps> = ({
                 <TableRow
                   onClick={() => props.setSelectedAttributeOption(option)}
                   className={cn(
-                    "cursor-pointer",
+                    "cursor-pointer text-sm md_text-base",
                     props.selectedAttributeOption?.optionID ===
                       option.optionID && "bg-theme-softer"
                   )}
                   key={index}
                 >
-                  <TableCell className="text-center text-base">
-                    {index + 1}
-                  </TableCell>
-                  <TableCell className="text-center text-base">
+                  <TableCell className="text-center">{index + 1}</TableCell>
+                  <TableCell className="text-center">
                     {option.optionValue}
                   </TableCell>
                 </TableRow>

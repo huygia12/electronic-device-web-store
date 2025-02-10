@@ -22,14 +22,14 @@ const HeaderBar: FC<HeaderBarProps> = ({ ...props }) => {
   return (
     <div
       className={cn(
-        "flex flex-col gap-2 xs_flex-row items-center ",
+        "flex flex-col gap-4 sms_flex-row items-center ",
         props.className
       )}
     >
       <SearchBox
         setSearchText={props.setSearchText}
         placeholder={props.searchPlaceholder}
-        className="flex-1 w-full"
+        className="w-full sms_flex-1"
       />
 
       <Select
@@ -38,12 +38,12 @@ const HeaderBar: FC<HeaderBarProps> = ({ ...props }) => {
           props.setSelectedStatus(value as InvoiceStatus)
         }
       >
-        <SelectTrigger className="w-full xs_w-[14rem] h-[3rem]">
+        <SelectTrigger className="w-full h-[3rem] text-sm sms_w-[14rem] md_text-base">
           <SelectValue placeholder="Trạng Thái Đơn Hàng" />
         </SelectTrigger>
         <SelectContent>
           {Object.keys(InvoiceStatus).map((e) => (
-            <SelectItem key={e} value={e}>
+            <SelectItem key={e} value={e} className="text-sm md_text-base">
               {getInvoiceStatus(e as InvoiceStatus)}
             </SelectItem>
           ))}

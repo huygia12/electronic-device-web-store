@@ -43,10 +43,10 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
             <TableHead className="font-extrabold text-center">
               NGÀY ĐẶT
             </TableHead>
-            <TableHead className="font-extrabold text-center">
+            <TableHead className="font-extrabold text-center hidden xss_table-cell">
               SỐ MẶT HÀNG
             </TableHead>
-            <TableHead className="font-extrabold text-center">
+            <TableHead className="font-extrabold text-center hidden sms_table-cell">
               TỔNG TIỀN
             </TableHead>
             <TableHead className="font-extrabold text-center hidden xl_table-cell">
@@ -68,8 +68,8 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
               <TableCell className="xl_text-nowrap">
                 {formatDateTime(`${invoice.createdAt}`)}
               </TableCell>
-              <TableCell>{`${invoice.invoiceProducts.length} sản phẩm`}</TableCell>
-              <TableCell>{`${invoiceService.getTotalBill(invoice).toLocaleString()}đ`}</TableCell>
+              <TableCell className="hidden xss_table-cell">{`${invoice.invoiceProducts.length} sản phẩm`}</TableCell>
+              <TableCell className="hidden sms_table-cell">{`${invoiceService.getTotalBill(invoice).toLocaleString()}đ`}</TableCell>
               <TableCell className="hidden xl_table-cell">
                 <Badge
                   className={cn(

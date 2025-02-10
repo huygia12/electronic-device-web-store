@@ -17,12 +17,13 @@ import { Button } from "@/components/ui/button";
 import { storeService } from "@/services";
 import { toast } from "sonner";
 import { Banner } from "@/types/component";
+import { RefreshCcwDot } from "lucide-react";
 
 interface SideBannerProps extends HTMLAttributes<HTMLDivElement> {
   banner: Banner;
   setBanner: Dispatch<SetStateAction<Banner>>;
   storeID: string;
-  position: string;
+  position: "left" | "right";
   modifiable?: boolean;
 }
 
@@ -85,7 +86,7 @@ const SideBanner: FC<SideBannerProps> = ({ modifiable = true, ...props }) => {
   return (
     <div className={props.className}>
       {displayImage ? (
-        <div className="relative w-[12rem]">
+        <div className="relative w-[20vw] sm_w-[15vw] lgg_w-[10vw] max-w-[12rem]">
           <CustomImage
             src={displayImage}
             alt="sideBanner"
@@ -94,24 +95,36 @@ const SideBanner: FC<SideBannerProps> = ({ modifiable = true, ...props }) => {
           {modifiable && <RemoveIcon onClick={handleRemoveButton} />}
         </div>
       ) : (
-        <div className="w-[12rem]" {...getRootProps()}>
+        <div
+          className="w-[20vw] sm_w-[15vw] lgg_w-[10vw] max-w-[12rem]"
+          {...getRootProps()}
+        >
           <input {...getInputProps()} />{" "}
           <FileImagePlaceholder
             isDragActive={isDragActive}
-            className="min-h-[36rem]"
+            className="min-h-[20rem]"
           />
         </div>
       )}
       {modifiable && (
-        <div className="flex justify-between mt-2">
+        <div className="flex justify-between mt-2 gap-2 flex-col 3xl_flex-row">
           {props.banner.newBanner !== undefined && (
-            <Button variant="positive" onClick={handleSaveButton}>
+            <Button
+              variant="positive"
+              onClick={handleSaveButton}
+              className="text-sm md_text-base"
+            >
               Lưu
             </Button>
           )}
           {props.banner.newBanner !== undefined && (
-            <Button variant="negative" onClick={handleResetButton}>
-              Hoàn tác
+            <Button
+              variant="negative"
+              onClick={handleResetButton}
+              className="text-sm md_text-base"
+            >
+              <RefreshCcwDot className="xs_hidden" />
+              <span className="hidden xs_inline">Hoàn tác</span>
             </Button>
           )}
         </div>

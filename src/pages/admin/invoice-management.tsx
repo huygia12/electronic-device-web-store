@@ -1,6 +1,6 @@
 import { OrderTable } from "@/components/admin";
 import { CustomPagination, InvoiceUpperBar } from "@/components/common";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Invoice } from "@/types/model";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
@@ -115,7 +115,7 @@ const InvoiceManagement: FC = () => {
   };
 
   return (
-    <div className="my-8">
+    <div className="my-8 mx-auto w-[90vw] lgg_max-w-max">
       {/** TABLE */}
       <InvoiceUpperBar
         searchPlaceholder="Tìm kiếm theo tên khách hàng..."
@@ -124,11 +124,8 @@ const InvoiceManagement: FC = () => {
         defaultSelectedStatus={selectedStatus}
       />
 
-      <Card className="rounded-2xl shadow-lg mt-4 mb-4">
-        <CardHeader className="py-6">
-          <CardTitle className="text-8">Quản lý đơn hàng</CardTitle>
-        </CardHeader>
-        <CardContent className="px-6 pb-4 h-[60vh] min-h-fit">
+      <Card className="rounded-md shadow-lg mt-4 mb-4">
+        <CardContent className="h-[60vh] min-h-fit px-0 xs_px-4">
           {invoices.length !== 0 ? (
             <OrderTable
               orders={invoiceService.getInvoiceAfterFilterStatus(

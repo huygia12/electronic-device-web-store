@@ -13,16 +13,13 @@ import { buttonVariants } from "@/utils/constants";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
-interface AttibuteDialogProps extends HTMLAttributes<HTMLFormElement> {
+interface TypeDialogProps extends HTMLAttributes<HTMLFormElement> {
   attribute?: Attribute;
   dialogTitle: string;
   handleDialogAcceptEvent: (name: string) => void;
 }
 
-const AttributeDialog: React.FC<AttibuteDialogProps> = ({
-  className,
-  ...props
-}) => {
+const TypeDialog: React.FC<TypeDialogProps> = ({ className, ...props }) => {
   const [name, setName] = useState<string>(props.attribute?.typeValue ?? "");
   const [isDisable, setIsDisable] = useState(true);
 
@@ -50,8 +47,8 @@ const AttributeDialog: React.FC<AttibuteDialogProps> = ({
           <DialogHeader>
             <DialogTitle>{props.dialogTitle}</DialogTitle>
           </DialogHeader>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right text-lg">
+          <div className="grid grid-cols-4 items-center gap-4 text-sm md_text-lg">
+            <Label htmlFor="name" className="text-right">
               Thuộc tính
             </Label>
             <Input
@@ -63,7 +60,7 @@ const AttributeDialog: React.FC<AttibuteDialogProps> = ({
               className="col-span-3"
             />
           </div>
-          <DialogFooter>
+          <DialogFooter className="flex-row-reverse gap-2">
             <DialogClose
               type="submit"
               disabled={isDisable}
@@ -84,4 +81,4 @@ const AttributeDialog: React.FC<AttibuteDialogProps> = ({
   );
 };
 
-export default AttributeDialog;
+export default TypeDialog;

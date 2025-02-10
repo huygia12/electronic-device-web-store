@@ -87,10 +87,10 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
           onSubmit={handleSubmit(handleUserUpdateFormSubmission)}
           className="flex flex-col-reverse sm_grid sm_grid-cols-3 gap-10"
         >
-          <div className="col-span-2 flex flex-col gap-4">
+          <div className="col-span-2 flex flex-col gap-4 text-sm md_text-lg">
             <div>
               <div className="flex">
-                <Label htmlFor="name" className="text-lg my-auto w-[15rem]">
+                <Label htmlFor="name" className="my-auto w-[15rem]">
                   Họ và tên
                   <span className="text-red-600 ">*</span>
                 </Label>
@@ -100,7 +100,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
                   type="text"
                   defaultValue={currentUser?.userName}
                   placeholder="Nguyễn Văn A"
-                  className="h-full text-lg"
+                  className="h-full"
                 />
               </div>
               {errors.userName && (
@@ -111,7 +111,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
             </div>
             <div>
               <div className="flex">
-                <Label htmlFor="email" className="text-lg my-auto w-[15rem]">
+                <Label htmlFor="email" className=" my-auto w-[15rem]">
                   Email
                   <span className="text-red-600 ">*</span>
                 </Label>
@@ -121,7 +121,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
                   type="text"
                   defaultValue={currentUser?.email}
                   placeholder="abc@gmail.com"
-                  className="h-full text-lg"
+                  className="h-full "
                 />
               </div>
               {errors.email && (
@@ -132,10 +132,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
             </div>
             <div>
               <div className="flex">
-                <Label
-                  htmlFor="phoneNumber"
-                  className="text-lg my-auto w-[15rem]"
-                >
+                <Label htmlFor="phoneNumber" className=" my-auto w-[15rem]">
                   Số điện thoại:
                 </Label>
                 <Input
@@ -143,7 +140,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
                   {...register("phoneNumber")}
                   defaultValue={currentUser?.phoneNumber || undefined}
                   placeholder="+84"
-                  className="h-full text-lg"
+                  className="h-full "
                 />
               </div>
               {errors.phoneNumber && (

@@ -6,10 +6,10 @@ import { AttributeOption, Attribute } from "@/types/model";
 import { attributeService } from "@/services";
 import {
   AttributeOptionTable,
+  AttributeOptionTools,
   AttributeTypeTable,
+  AttributeTypeTools,
 } from "@/components/attribute-mananagement";
-import AttributeTypeTools from "@/components/attribute-mananagement/attribute-type-tools";
-import AttributeOptionTools from "@/components/attribute-mananagement/attribute-option-tools";
 import { SearchBox } from "@/components/common";
 
 const AttributeManagement: FC = () => {
@@ -190,12 +190,12 @@ const AttributeManagement: FC = () => {
   };
 
   return (
-    <div className="my-8 mx-auto w-[90vw] lgg_w-max">
+    <div className="my-8 mx-auto w-[90vw] lgg_max-w-max">
       <SearchBox className="mb-4" setSearchText={handleSearching} />
 
-      <div className="flex flex-col lg_grid lg_grid-cols-5 gap-4">
+      <div className="flex flex-col gap-4 mlg_grid mlg_grid-cols-2 lg_grid-cols-5">
         {/** ATTRIBUTE TYPE */}
-        <div className="col-span-3 flex gap-4">
+        <div className="flex gap-4 lg_col-span-3">
           <AttributeTypeTools
             selectedAttribute={selectedAttribute}
             handleAddAttributeType={handleAddAttributeType}
@@ -204,7 +204,7 @@ const AttributeManagement: FC = () => {
           />
 
           <AttributeTypeTable
-            className="w-full"
+            className="flex-1"
             attributes={attributeService.getSearchingResult(
               searchText,
               attributes
@@ -215,13 +215,13 @@ const AttributeManagement: FC = () => {
         </div>
 
         {/** ATTRIBUTE OPTION */}
-        <div className="col-span-2 flex gap-4 flex-row-reverse lg_flex-row min-w-0">
+        <div className="flex gap-4 lg_col-span-2">
           <AttributeOptionTable
+            className="flex-1"
             attributes={attributes}
             selectedAttribute={selectedAttribute}
             selectedAttributeOption={selectedAttributeOption}
             setSelectedAttributeOption={setSelectedAttributeOption}
-            className="w-full"
           />
 
           <AttributeOptionTools
