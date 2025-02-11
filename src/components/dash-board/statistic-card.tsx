@@ -13,7 +13,7 @@ const StatisticCard: FC<StatisticCardProps> = ({ ...props }) => {
   return (
     <Card className="min-w-[5rem] rounded-2xl shadow-lg">
       <CardHeader className="rounded-t-xl flex flex-row items-center justify-between px-5 pt-4 pb-2">
-        <CardTitle className="text-xs md_text-[1rem] max-w-[80%]">
+        <CardTitle className="text-xs md_text-base max-w-[80%]">
           {props.name}
         </CardTitle>
         <span className="ml-2 place-items-start">
@@ -21,7 +21,7 @@ const StatisticCard: FC<StatisticCardProps> = ({ ...props }) => {
         </span>
       </CardHeader>
       <CardContent className="flex flex-col px-6 pb-4">
-        <div className="text-[1rem]  md_text-[2rem] font-extrabold truncate ...">
+        <div className="text-base  md_text-[2rem] font-extrabold truncate ...">
           {props.content}
         </div>
         <div className="max-w truncate ...">{props.subContent}</div>

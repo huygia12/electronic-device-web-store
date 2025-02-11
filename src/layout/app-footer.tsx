@@ -14,7 +14,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ className }) => {
         className
       )}
     >
-      <div className="w-3/4 my-5">
+      <div className="w-3/4 my-5 text-sm md_text-base">
         <div className="flex flex-col gap-10 sms_grid sms_grid-cols-2 lg_grid-cols-3 2xl_grid-cols-5">
           <div className="flex flex-col space-y-4 sms_col-span-2">
             <span className="font-extrabold text-lg">VỀ HGSHOP</span>

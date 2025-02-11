@@ -35,7 +35,7 @@ const ProductTable: FC<ProductTableProps> = ({ ...props }) => {
           <ScrollArea className="relative pb-3 h-[60vh]">
             <Table>
               <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
-                <tr className="text-nowrap text-black text-sm md_text-[1rem]">
+                <tr className="text-nowrap text-black text-sm md_text-base">
                   <TableHead className="text-center font-extrabold">
                     STT
                   </TableHead>

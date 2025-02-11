@@ -119,7 +119,7 @@ const AppClientHeader: FC = () => {
     <header className="w-full flex flex-col sticky top-0 z-50 shadow-xl">
       {/** UPPER */}
       <div className="flex justify-around bg-third">
-        <div className="flex flex-row justify-between gap-2 text-[0.8rem] py-2 w-[90vw] 2xl_w-xl 3xl_w-2xl">
+        <div className="flex flex-row justify-between gap-2 text-[0.8rem] py-2 w-[95vw] xl_w-xl 3xl_w-2xl">
           <span className="flex items-center ">
             <TfiHeadphoneAlt className="pr-2" size={20} />
             Gọi mua hàng: &nbsp;
@@ -143,7 +143,7 @@ const AppClientHeader: FC = () => {
 
       {/** UNDER */}
       <div className="bg-theme h-[5rem] w-full shadow-md flex justify-center ">
-        <div className="flex items-center w-[90vw] 2xl_w-xl 3xl_w-2xl">
+        <div className="flex items-center w-[95vw] xl_w-xl 3xl_w-2xl">
           {/** WEBSITE LOGO */}
           <NavLink to="/" unstable_viewTransition>
             <img src="/logo.png" alt="logo" className="h-10 xs_h-12 lg_h-14" />
@@ -153,13 +153,13 @@ const AppClientHeader: FC = () => {
           <div className="px-4 flex-1 flex gap-4 2xl_grid 2xl_grid-cols-6 2xl_gap-0">
             <button
               onClick={handleGoToMenu}
-              className="hidden lg_flex w-36 bg-theme-softer text-gray-700 rounded-md px-2 h-10 items-center hover_bg-yellow-400 text-nowrap"
+              className="ml-auto hidden lg_flex w-36 bg-theme-softer text-gray-700 rounded-md px-2 h-10 items-center hover_bg-yellow-400 text-nowrap"
             >
               <AlignJustify className="mr-2" /> Danh Mục
             </button>
 
-            <SearchBar className="hidden sm_block 2xl_ml-10 2xl_col-span-3" />
-            <SearchBarPopUp className="block sm_hidden ml-auto" />
+            <SearchBar className="hidden mlg_block 2xl_ml-10 2xl_col-span-3" />
+            <SearchBarPopUp className="block mlg_hidden ml-auto" />
 
             <div className="items-center space-x-[1.5rem] flex flex-row ml-4 2xl_col-span-2 2xl_ml-20">
               <NavLink

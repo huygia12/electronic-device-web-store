@@ -157,7 +157,7 @@ const phases: Phase[] = [
   },
   {
     id: "3",
-    title: "Hoàn Thành Đơn Hàng",
+    title: "Hoàn Thành",
     icon: PackageCheck,
   },
 ];

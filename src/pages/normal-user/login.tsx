@@ -136,6 +136,7 @@ const Login: FC = () => {
               {...register("email")}
               type="email"
               placeholder="abc@gmail.com"
+              defaultValue="huy@gmail.com"
               autoComplete="email"
               className="text-lg"
             />
@@ -152,6 +153,7 @@ const Login: FC = () => {
               id="password"
               {...register("password")}
               type="password"
+              defaultValue="huy123"
               autoComplete="new-password"
               className="text-lg"
             />

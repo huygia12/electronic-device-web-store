@@ -38,15 +38,15 @@ const NotificationSection: FC<NotificationSection> = ({ ...props }) => {
 
   return (
     <div ref={notificationSectionRef} className="relative">
-      <RiNotification2Fill
-        id="header-guide-step-2"
-        size={34}
-        onClick={() => setVisible((prevValue) => !prevValue)}
+      <span
         className="cursor-pointer relative"
-      />
-      {hasChildren ? (
-        <span className="-left-1 -top-1 absolute bg-destructive rounded-full w-5 h-5 border-amber-300 border-4" />
-      ) : undefined}
+        onClick={() => setVisible((prevValue) => !prevValue)}
+      >
+        <RiNotification2Fill id="header-guide-step-2" size={34} />
+        {hasChildren ? (
+          <span className="-left-1 -top-1 absolute bg-destructive rounded-full w-5 h-5 border-amber-300 border-4" />
+        ) : undefined}
+      </span>
 
       <div
         onClick={() => setVisible(false)}

@@ -8,11 +8,12 @@ const CartVisting: FC = () => {
   useEffect(() => {
     setPhaseID("1");
   }, [setPhaseID]);
-  return (
-    <div className="flex flex-col 3xl_grid 3xl_grid-cols-4 w-full gap-4">
-      <EditableCartTable className="3xl_col-span-3" />
 
-      <div className="">
+  return (
+    <div className="w-full gap-4 flex flex-col 4xl_grid 4xl_grid-cols-4">
+      <EditableCartTable className="4xl_col-span-3" />
+
+      <div>
         <Bill />
       </div>
     </div>

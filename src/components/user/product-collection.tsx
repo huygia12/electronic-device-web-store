@@ -23,7 +23,7 @@ const CollectionHeader: React.FC<CollectionHeaderProps> = ({
 
   return (
     <div className="flex flex-row items-center justify-between">
-      <span className="text-[1.8rem] font-extrabold border-l-primary border-l-4 pl-2">
+      <span className="text-[1.1rem] md_text-[1.5rem] mlg_text-[1.8rem] font-extrabold border-l-primary border-l-4 pl-2">
         {props.title}
       </span>
       <span className="flex items-center">
@@ -31,7 +31,7 @@ const CollectionHeader: React.FC<CollectionHeaderProps> = ({
         <Button
           onClick={() => navigate(props.url)}
           variant="negative"
-          className="flex flex-row items-center h-8 ml-[2rem]"
+          className="flex flex-row items-center h-8 ml-[2rem] text-sm md_text-base"
         >
           Xem tất cả &nbsp; <FaArrowRightLong />
         </Button>

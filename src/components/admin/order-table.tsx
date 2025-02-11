@@ -33,7 +33,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
     <ScrollArea className={cn("relative", className)}>
       <Table>
         <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
-          <tr className="text-nowrap text-xs md_text-[1rem] text-black">
+          <tr className="text-nowrap text-xs md_text-base text-black">
             <TableHead className="font-extrabold text-center">
               KHÁCH HÀNG
             </TableHead>

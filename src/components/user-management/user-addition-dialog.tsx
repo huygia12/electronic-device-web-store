@@ -59,7 +59,7 @@ const UserAdditionDialogg: React.FC<UserDialogProps> = ({
       <DialogTrigger asChild>{props.children}</DialogTrigger>
       <DialogContent className="max-w-[60rem] pr-2">
         <DialogHeader className="min-h-10 mb-2">
-          <DialogTitle className="text-xl md_text-[1.5rem]">
+          <DialogTitle className="text-xl md_text-2xl">
             Thêm hồ sơ khách hàng
           </DialogTitle>
         </DialogHeader>

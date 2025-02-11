@@ -52,7 +52,7 @@ const AttributeOptionTable: FC<AttributeOptionTableProps> = ({
         <ScrollArea className="relative h-[58vh]">
           <Table>
             <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
-              <tr className="text-black text-sm md_text-[1rem]">
+              <tr className="text-black text-sm md_text-base">
                 {optionColsName.map((item, key) => {
                   return (
                     <TableHead key={key} className="text-center font-extrabold">

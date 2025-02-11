@@ -38,14 +38,14 @@ const InvoiceLookup: FC = () => {
         Tra Cứu Trạng Thái Đơn Hàng
       </h1>
       <form className="w-[80vw] mlg_w-[50rem] mx-auto" onSubmit={handleSearch}>
-        <Label htmlFor="invoice_id" className="font-semibold text-[1rem]">
+        <Label htmlFor="invoice_id" className="font-semibold text-base">
           Mã Đơn Hàng
         </Label>
         <Input
           id="invoice_id"
           type="text"
           min={1}
-          className="mt-2 mb-4 text-[1rem]"
+          className="mt-2 mb-4 text-base"
           onChange={(e) => setSearchText(e.target.value)}
         />
         <Button

@@ -33,7 +33,7 @@ const UserTable: FC<UserTableProps> = ({ ...props }) => {
         <ScrollArea className="relavtive h-[58vh] pb-3">
           <Table>
             <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
-              <tr className="text-nowrap text-black text-xs md_text-[1rem]">
+              <tr className="text-nowrap text-black text-xs md_text-base">
                 <TableHead className="text-center font-extrabold">
                   STT
                 </TableHead>

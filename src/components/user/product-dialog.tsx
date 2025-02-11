@@ -105,28 +105,28 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="min-w-lg 3xl_min-w-2xl pb-2">
+      <DialogContent className="min-w-full lg_min-w-lg 3xl_min-w-2xl p-2 mlg_p-6">
         <DialogHeader>
           <DialogTitle>
             <NavLink
               to={`/products/${props.product.productID}`}
-              className="flex pb-4 gap-2 items-baseline"
+              className="flex gap-2 items-baseline flex-col xs_flex-row"
             >
-              <h2 className="text-3xl font-bold cursor-pointer hover_underline">
+              <h2 className="text-xl md_text-2xl font-bold cursor-pointer hover_underline">
                 {props.product.productName}
               </h2>
-              <span className=" text-slate-500 text-[0.8rem]">{`(No.${currentItem.productCode})`}</span>
+              <span className=" text-slate-500 text-xs md_text-[0.8rem]">{`(No.${currentItem.productCode})`}</span>
             </NavLink>
           </DialogTitle>
         </DialogHeader>
-        <section className="grid grid-cols-2 gap-10">
+        <section className="grid grid-cols-2 gap-10 items-start">
           {/** LEFT SECTION */}
           <div className="flex flex-col justify-center">
             <Carousel
               plugins={[plugin.current]}
               onMouseEnter={plugin.current.stop}
               onMouseLeave={plugin.current.play}
-              className="w-full mb-10"
+              className="w-fit mb-10"
             >
               <CarouselContent className="h-full">
                 {currentItem.itemImages.map((image, index) => {
@@ -135,15 +135,16 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
                       src={image.source}
                       key={index}
                       alt={image.imageID}
+                      imageCss="h-full max-h-[70vh]"
                     />
                   );
                 })}
               </CarouselContent>
-              <CarouselPrevious className="z-10 top-[13rem] left-0 h-[3rem] w-[3rem] !text-secondary-foreground hover_border-primary" />
-              <CarouselNext className="z-10 top-[13rem] right-0 h-[3rem] w-[3rem] !text-secondary-foreground hover_border-primary" />
+              <CarouselPrevious className="z-10 top-[50%] left-1 size-8 sm_size-10 lgg_size-12 !text-secondary-foreground hover_border-primary" />
+              <CarouselNext className="z-10 top-[50%] right-1 size-8 sm_size-10 lgg_size-12 !text-secondary-foreground hover_border-primary" />
             </Carousel>
 
-            <div className="mb-8 flex space-x-6">
+            <div className="flex gap-4 flex-col xl_flex-row">
               <span className="flex items-center text-[0.8rem] 3xl_text-nowrap">
                 <BadgeCheck className="text-primary mr-2" />
                 Hàng chính hãng - Bảo hành {props.product.warranty} tháng
@@ -157,9 +158,9 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
 
           {/** RIGHT SECTION */}
           <div>
-            <div className="flex justify-between items-baseline mb-12 pb-4 border-b-2 border-dashed border-slate-300">
-              <div className="space-x-4">
-                <span className="text-3xl font-semibold text-primary-foreground">{`${currentItem ? applyDiscount(currentItem?.price, currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
+            <div className="flex flex-col gap-2 lgg_flex-row justify-between items-baseline pb-4 border-b-2 border-dashed border-slate-300">
+              <div className="flex flex-col sms_flex-row sms_gap-2 items-baseline">
+                <span className="text-2xl md_text-3xl font-semibold text-primary-foreground">{`${currentItem ? applyDiscount(currentItem?.price, currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
                 {isDiscount(currentItem.discount) && (
                   <del className="text-secondary-foreground">
                     {`${currentItem.price.toLocaleString()}đ`}
@@ -176,16 +177,16 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
               </div>
             </div>
 
-            <form>
+            <form className="mt-4">
               <div className="text-lg font-semibold my-2">Chọn sản phẩm:</div>
-              <ScrollArea className="h-44 mb-8">
-                <ul className="width-full grid grid-cols-2 gap-1 mb-10">
+              <ScrollArea className="h-32 sms_h-44 mb-4">
+                <ul className="width-full grid grid-cols-1 lg_grid-cols-2 gap-1 mb-10">
                   {props.product.productItems.map((item, index) => {
                     return (
                       <li
                         key={index}
                         className={cn(
-                          "flex flex-row items-center justify-around p-2 rounded-md hover_bg-slate-200",
+                          "w-fit gap-2 flex flex-col xss_flex-row items-center justify-around p-2 rounded-md hover_bg-slate-200",
                           currentItem && currentItem.itemID === item.itemID
                             ? "bg-slate-200"
                             : "bg-slate-100"
@@ -204,17 +205,18 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
                             />
                             <label
                               htmlFor={index + ""}
-                              className="text-xl font-medium truncate"
+                              className="text-sm md_text-xl font-medium truncate"
                             >
                               {`${applyDiscount(item.price, item.discount ?? 0).toLocaleString()}đ`}
                             </label>
                           </span>
-                          <span className="truncate">{`${item.storage} | ${item.color}`}</span>
+                          <span className="truncate text-xs md_text-base">{`${item.storage} | ${item.color}`}</span>
                         </span>
+
                         <img
                           src={item.thump}
                           alt={item.itemID}
-                          className="h-[4rem] max-w-[5rem] border-secondary-foreground border-2 rounded-md"
+                          className="size-14 border-secondary-foreground border-2 rounded-md"
                         />
                       </li>
                     );
@@ -222,31 +224,33 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
                 </ul>
               </ScrollArea>
 
-              <Label htmlFor="quantity" className="text-lg font-semibold">
-                Số lượng:
-              </Label>
-              <Input
-                id="quantity"
-                type="number"
-                className="max-w-24 mt-2"
-                min={1}
-                max={currentItem.quantity > 1 ? currentItem.quantity : 1}
-                defaultValue={1}
-                onChange={(e) => handleQuantityInput(e)}
-              />
-              {quantityError && !quantityError.success && (
-                <div className="text-red-600 mt-4">{quantityError.message}</div>
-              )}
-              <DialogClose
-                className={cn(
-                  "mt-4 w-full flex text-[1.2rem]",
-                  buttonVariants({ variant: "neutral" })
+              <div className="text-sm md_text-lg space-y-2">
+                <Label htmlFor="quantity" className="font-semibold">
+                  Số lượng:
+                </Label>
+                <Input
+                  id="quantity"
+                  type="number"
+                  className="w-20"
+                  min={1}
+                  max={currentItem.quantity > 1 ? currentItem.quantity : 1}
+                  defaultValue={1}
+                  onChange={(e) => handleQuantityInput(e)}
+                />
+                {quantityError && !quantityError.success && (
+                  <div className="text-red-600">{quantityError.message}</div>
                 )}
-                disabled={!checkDisableButton()}
-                onClick={(e) => handleAddToCart(e)}
-              >
-                <ShoppingBasket className="mr-2" /> &nbsp; Thêm vào giỏ hàng
-              </DialogClose>
+                <DialogClose
+                  className={cn(
+                    "w-full flex text-sm md_text-xl !p-1",
+                    buttonVariants({ variant: "neutral" })
+                  )}
+                  disabled={!checkDisableButton()}
+                  onClick={(e) => handleAddToCart(e)}
+                >
+                  <ShoppingBasket className="mr" /> &nbsp; Thêm vào giỏ
+                </DialogClose>
+              </div>
             </form>
           </div>
         </section>

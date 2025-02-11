@@ -23,31 +23,36 @@ const HorizontalProductCard: React.FC<HorizontalProductCardProps> = ({
     <NavLink
       to={"/products/" + props.product.productID}
       unstable_viewTransition
-      className="grid grid-cols-2 w-full"
+      className="grid grid-cols-2 w-full relative"
     >
       <CustomImage
         src={currentItem.thump}
         alt={currentItem.itemID}
-        className="h-[8rem] justify-self-center align-self-center"
+        className="h-[5rem] md_h-[8rem] justify-self-center align-self-center"
       />
-      <div className="pr-10">
-        <h2 className="text-lg line-clamp-3">{props.product.productName}</h2>
+      <div className="pr-2 lgg_pr-10">
+        <h2 className="text-base md_text-lg line-clamp-3">
+          {props.product.productName}
+        </h2>
         <div className="flex flex-row flex-wrap items-baseline justify-between">
           <div className="mt-2">
-            <div className="text-[1.3rem] font-extrabold text-primary-foreground truncate ...">
+            <div className="text-lg md_text-[1.3rem] font-extrabold text-primary-foreground truncate ...">
               {`${applyDiscount(
                 currentItem.price,
                 currentItem.discount
               ).toLocaleString()}đ`}
             </div>
             {isDiscount(currentItem.discount) && (
-              <del className="text-[0.8rem] text-secondary-foreground">
+              <del className="text-sm md_text-[0.8rem] text-secondary-foreground">
                 {`${currentItem.price.toLocaleString()}đ`}
               </del>
             )}
           </div>
           {isDiscount(currentItem.discount) && (
-            <SaleTag percentage={`-${currentItem.discount}%`} />
+            <SaleTag
+              percentage={`-${currentItem.discount}%`}
+              className="absolute -top-2 left-0 2xl_static"
+            />
           )}
         </div>
       </div>

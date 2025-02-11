@@ -40,7 +40,7 @@ const Bill: FC<BillProps> = ({ ...props }) => {
     <section className={cn("rounded-md", props.className)}>
       <Card className="shadow-lg">
         <CardHeader className="px-4">
-          <CardTitle className="mb-4">ĐƠN HÀNG</CardTitle>
+          <CardTitle className="mb-4 text-xl md_text-2xl">ĐƠN HÀNG</CardTitle>
           <CardDescription>
             Thông tin giao hàng sẽ được tiếp nhận bởi dịch vụ chuyển phát GHN.
           </CardDescription>

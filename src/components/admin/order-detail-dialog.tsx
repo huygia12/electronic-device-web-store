@@ -169,7 +169,7 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ ...props }) => {
               </span>
               <span className="font-medium text-xl md_text-2xl">{`${invoiceService.getTotalBill(props.invoice).toLocaleString()}đ`}</span>
             </span>
-            <span className="mt-10 ml-auto space-x-2">
+            <span className="mt-10 ml-auto space-x-2 mlg_mt-0">
               <Button
                 onClick={() => excelService.exportInvoice(props.invoice)}
                 className="ml-auto bg-white !text-green-500 !border-green-500 border-2 hover_!bg-green-500 hover_!text-white text-sm md_text-base"

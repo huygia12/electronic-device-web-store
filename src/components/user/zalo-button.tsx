@@ -18,7 +18,7 @@ const ZaloButton: FC<HTMLAttributes<HTMLAnchorElement>> = ({ ...props }) => {
 
   return (
     <a href={linkzalo.current} target="_blank">
-      <div className={cn("fixed", props.className)}>
+      <div className={cn("fixed z-20", props.className)}>
         <div className="fcta-zalo-nen-nut bg-blue-600 text-white w-12 h-12 rounded-full">
           <div className="fcta-zalo-ben-trong-nut flex items-center justify-center text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <svg

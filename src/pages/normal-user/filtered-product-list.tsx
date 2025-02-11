@@ -12,7 +12,7 @@ import { getPages } from "@/utils/helpers";
 import { toast } from "sonner";
 
 const FilteredProductList: FC = () => {
-  const searchingDelay = useRef<number>(500);
+  const searchingDelay = useRef<number>(200);
   const [products, setProducts] = useState<Product[]>();
   const [numberOfProducts, setNumberOfProducts] = useState<number>();
   const [attributes, setAttributes] = useState<Attribute[]>();
@@ -184,8 +184,29 @@ const FilteredProductList: FC = () => {
   };
 
   return (
-    <div className="grid grid-cols-4 gap-8">
-      <div>
+    <div className="grid grid-cols-5 sms_grid-cols-4 gap-4">
+      <div className="block sm_hidden col-span-5 space-y-4">
+        <h1 className="text-2xl sm_text-[1.6rem] font-semibold">
+          {numberOfProducts !== undefined ? (
+            <>
+              Kết Quả Lọc Cho: &nbsp;
+              <span className="text-[1.4rem] text-red-600 font-light">{`(${numberOfProducts} kết quả)`}</span>
+            </>
+          ) : (
+            <>Tìm Kiếm ...</>
+          )}
+        </h1>
+
+        <FilterProductTools
+          onSaleFilterChange={handleSaleFilterChange}
+          onPriceRangeChange={handlePriceRangeChange}
+          onSortSelection={handleSortSelectionEvent}
+        />
+
+        <hr className="border-dashed border-[0.1rem] border-secondary-foreground" />
+      </div>
+
+      <div className="col-span-2 sms_col-span-1">
         <AttributeFilter
           params={params}
           attributes={attributes}
@@ -196,7 +217,7 @@ const FilteredProductList: FC = () => {
       </div>
 
       <div className="col-span-3 flex flex-col gap-6">
-        <div>
+        <div className="hidden sm_block">
           <h1 className="text-[1.6rem] font-semibold mb-[0.5rem]">
             {numberOfProducts !== undefined ? (
               <>
@@ -214,6 +235,7 @@ const FilteredProductList: FC = () => {
           onSaleFilterChange={handleSaleFilterChange}
           onPriceRangeChange={handlePriceRangeChange}
           onSortSelection={handleSortSelectionEvent}
+          className="hidden sm_flex"
         />
 
         <ProductList products={products} className="col-span-3" />

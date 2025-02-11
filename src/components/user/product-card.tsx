@@ -43,15 +43,15 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
         to={"/products/" + props.product.productID}
         unstable_viewTransition
       >
-        <div className="pt-2 h-[10rem] 4xl_h-[12rem]">
+        <div className="pt-2 h-fit">
           <CustomImage
             src={currentItem.thump}
             alt={currentItem.itemID}
-            className="h-[10rem] 4xl_h-[12rem] m-auto"
+            className="h-[9rem] xs_h-[7rem] md_h-[10rem] 4xl_h-[12rem] m-auto"
           />
         </div>
         <CardHeader className="px-1.5 !space-y-0 !py-0 mt-3">
-          <CardTitle className="text-[1rem] hover_underline hover_text-primary-foreground line-clamp-2">
+          <CardTitle className="text-sm md_text-base hover_underline hover_text-primary-foreground line-clamp-2">
             {props.product.productName}
           </CardTitle>
         </CardHeader>
@@ -63,19 +63,20 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
               <CardTag
                 key={index}
                 content={`${attr.attributeOption.attributeType.typeValue}: ${attr.attributeOption.optionValue}.`}
+                className="text-xs md_text-sm"
               />
             );
           })}
         </ScrollArea>
         <div className="mt-2 flex flex-row flex-wrap items-baseline justify-between">
-          <div className="text-[1.3rem] font-extrabold text-primary-foreground truncate ...">
+          <div className="text-base md_text-[1.3rem] font-extrabold text-primary-foreground truncate ...">
             {`${applyDiscount(
               currentItem.price,
               currentItem.discount
             ).toLocaleString()}đ`}
           </div>
           {isDiscount(currentItem.discount) && (
-            <del className="text-[0.8rem] text-secondary-foreground">
+            <del className="text-xs md_text-[0.8rem] text-secondary-foreground">
               {`${currentItem.price.toLocaleString()}đ`}
             </del>
           )}
@@ -86,15 +87,15 @@ const CardProduct: React.FC<CardProductProps> = ({ className, ...props }) => {
             className="absolute top-0 left-[-1rem]"
           />
         )}
-        <div className="w-full flex items-center space-x-2 2xl_justify-between mt-2">
+        <div className="w-full flex items-center gap-2 2xl_justify-between mt-2">
           <ProductDialog product={props.product}>
-            <Button variant="neutral" className="w-1/4">
+            <Button variant="neutral" className="w-1/4 !py-0 !px-2">
               <ShoppingBasket />
             </Button>
           </ProductDialog>
           <Button
             variant="negative"
-            className="w-3/4 flex gap-1 items-center"
+            className="text-xs md_text-base w-3/4 flex gap-1 items-center !py-0 !px-2"
             onClick={(e) => handleBuyClick(e)}
           >
             <Coins />

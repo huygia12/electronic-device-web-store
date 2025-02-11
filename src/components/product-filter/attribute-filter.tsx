@@ -31,19 +31,19 @@ const AttributeFilter: FC<AttributeFilterProps> = ({ ...props }) => {
 
   return (
     <div className={cn("flex flex-col", props.className)}>
-      <h2 className="w-full text-[1.4rem] font-extrabold pt-2 pb-4">
+      <h2 className="w-full text-xl sm_text-[1.4rem] font-extrabold pb-4">
         LỌC SẢN PHẨM
       </h2>
-      <ul key={selectComponentKey} className="px-4">
+      <ul key={selectComponentKey} className="">
         {props.attributes?.map((attr, parentIndex) => {
           return (
             attr.attributeOptions.length > 0 && (
               <li key={parentIndex} className="space-y-3 mb-8">
-                <h5 className="text-slate-700 font-extrabold">
+                <h5 className="text-slate-700 font-extrabold text-sm md_text-base">
                   {attr.typeValue}
                 </h5>
                 <Separator className="border-1 border-slate-400" />
-                <RadioGroup className="pl-4 space-y-2">
+                <RadioGroup className="pl-2 md_pl-4 space-y-2">
                   {attr.attributeOptions?.map((option, childIndex) => {
                     return (
                       <div
@@ -60,7 +60,7 @@ const AttributeFilter: FC<AttributeFilterProps> = ({ ...props }) => {
                         />
                         <Label
                           htmlFor={`${parentIndex}${childIndex}`}
-                          className="text-slate-600 !my-0 cursor-pointer"
+                          className="text-slate-600 !my-0 cursor-pointer text-xs md_text-base"
                         >
                           {option.optionValue}
                         </Label>

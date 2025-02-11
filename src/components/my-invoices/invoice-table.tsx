@@ -41,7 +41,7 @@ const InvoiceTable: FC<OrderTableProps> = ({ className, ...props }) => {
     <ScrollArea className={cn("relative", className)}>
       <Table>
         <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
-          <tr className="text-nowrap text-black text-sm md_text-[1rem]">
+          <tr className="text-nowrap text-black text-sm md_text-base">
             {columnHeaders.map((header, index) => {
               return (
                 <TableHead

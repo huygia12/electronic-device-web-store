@@ -22,6 +22,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import Badge from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 interface PersonalReviewBoxProps extends FormHTMLAttributes<HTMLFormElement> {
   product: Product;
@@ -80,6 +81,13 @@ const PersonalReviewBox = forwardRef<HTMLFormElement, PersonalReviewBoxProps>(
       );
     };
 
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        handleSubmit(handleAddReview);
+      }
+    };
+
     return (
       <form
         ref={ref}
@@ -103,20 +111,32 @@ const PersonalReviewBox = forwardRef<HTMLFormElement, PersonalReviewBoxProps>(
             <StarRating
               rating={ratingStarInput}
               handleRateChange={handleMakeStarRate}
+              disabled={props.replyToComment === null}
             />
-            <Label htmlFor="review" className="font-semibold">
-              {props.replyToComment ? (
-                <>
-                  {`Tiếp tục dưới bình luận của `}
-                  &nbsp;
-                  <Badge variant="secondary" className="text-base">
-                    {props.replyToComment.user.userName}
-                  </Badge>
-                </>
-              ) : (
-                "Đánh giá"
-              )}
-            </Label>
+            <span className="flex gap-2 items-center">
+              <Label htmlFor="review" className="font-semibold">
+                {props.replyToComment ? (
+                  <>
+                    {`Tiếp tục dưới bình luận của `}
+                    &nbsp;
+                    <Badge variant="secondary" className="text-base">
+                      {props.replyToComment.user.userName}
+                    </Badge>
+                  </>
+                ) : (
+                  "Đánh giá"
+                )}
+              </Label>
+              <span
+                className={cn(
+                  "md_text-base hover_underline cursor-pointer",
+                  props.replyToComment == null && "hidden"
+                )}
+                onClick={() => props.setReplyToComment(undefined)}
+              >
+                | Hủy
+              </span>
+            </span>
           </span>
         </div>
 
@@ -124,6 +144,7 @@ const PersonalReviewBox = forwardRef<HTMLFormElement, PersonalReviewBoxProps>(
           {...register(`reviewContent`)}
           id="review"
           className="px-4 mt-2 text-lg"
+          onKeyDown={handleKeyDown}
         />
 
         <Button variant="negative" className="ml-auto">

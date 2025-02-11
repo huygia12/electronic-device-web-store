@@ -41,7 +41,7 @@ const ProviderTable: FC<ProviderTableProps> = ({ ...props }) => {
         <ScrollArea className="relative h-[56vh]">
           <Table>
             <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
-              <tr className="text-black text-xs md_text-[1rem]">
+              <tr className="text-black text-xs md_text-base">
                 <TableHead className="text-center font-extrabold">
                   STT
                 </TableHead>

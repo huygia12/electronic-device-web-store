@@ -43,7 +43,7 @@ const ProductInInvoice: FC<ProductInOrder> = ({ ...props }) => {
       >
         <Table>
           <TableHeader className="z-10 sticky top-0 border-b-2 bg-white shadow-lg">
-            <tr className="text-nowrap text-black text-sm md_text-[1rem]">
+            <tr className="text-nowrap text-black text-sm md_text-base">
               {columnHeaders.map((e, index) => {
                 return (
                   <TableHead

@@ -13,6 +13,7 @@ import PriceRangeSlider from "@/components/user/price-range-slider";
 import { FC, HTMLAttributes, useMemo, useRef, useState } from "react";
 import { Sort } from "@/types/enum";
 import { useSearchParams } from "react-router-dom";
+import { ArrowUpDown } from "lucide-react";
 
 interface FilterToolsProps extends HTMLAttributes<HTMLDivElement> {
   onSortSelection: (value: Sort) => void;
@@ -72,11 +73,11 @@ const FilterProductTools: FC<FilterToolsProps> = ({ ...props }) => {
   return (
     <div
       className={cn(
-        "flex bg-slate-200 rounded-lg px-4 py-4 4xl_py-6",
+        "flex bg-slate-200 rounded-lg p-4 4xl_py-6 flex-col-reverse gap-4 lgg_flex-row",
         props.className
       )}
     >
-      <span className="grid grid-cols-2 4xl_flex gap-3">
+      <div className="grid grid-cols-2 4xl_flex gap-3">
         <Button
           variant="dashed"
           value={Sort.ASC}
@@ -105,26 +106,30 @@ const FilterProductTools: FC<FilterToolsProps> = ({ ...props }) => {
           value={alphabetSortValue}
           onValueChange={handleSortChange}
         >
-          <SelectTrigger className="w-[10rem] focus_ring-0 focus_ring-offset-0">
-            <SelectValue placeholder={"Sắp xếp theo tên"} />
+          <SelectTrigger className="focus_ring-0 focus_ring-offset-0">
+            <SelectValue
+              placeholder={
+                <span className="flex gap-2 text-sm md_text-base">
+                  <ArrowUpDown /> Theo tên
+                </span>
+              }
+            />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value={Sort.ATOZ} className="text-[1rem]">
+              <SelectItem value={Sort.ATOZ} className="text-sm md_text-base">
                 {`Tên từ A->Z`}
               </SelectItem>
               <SelectItem
                 value={Sort.ZTOA}
-                className="text-[1rem]"
+                className="text-sm md_text-base"
               >{`Tên từ Z->A`}</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
-      </span>
-      <span className="self-center flex-1 flex items-center px-8">
-        <Label className="text-md font-extrabold text-nowrap">
-          Khoảng giá: &nbsp;
-        </Label>
+      </div>
+      <div className="text-sm md_text-md self-center pr-4 flex-1 flex justify-between items-center flex-row mt-2 lgg_mt-0 lgg_flex-col lg_flex-row gap-4 lg_gap-0 w-full">
+        <Label className="font-extrabold text-nowrap">Khoảng giá: &nbsp;</Label>
         <PriceRangeSlider
           min={minPrice.current}
           max={maxPrice.current}
@@ -132,7 +137,7 @@ const FilterProductTools: FC<FilterToolsProps> = ({ ...props }) => {
           defaultValues={priceRangeValue}
           onValueChange={props.onPriceRangeChange}
         />
-      </span>
+      </div>
     </div>
   );
 };

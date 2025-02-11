@@ -35,28 +35,28 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
   return (
     <section
       className={cn(
-        "grid grid-cols-3 gap-4 border-2 border-slate-2 rounded-md p-4 shadow-lg",
+        "grid grid-cols-2 sm_grid-cols-3 gap-4 border-2 border-slate-2 rounded-md p-4 shadow-lg text-sm md_text-lg",
         props.className
       )}
     >
-      <h1 className="text-2xl font-semibold col-span-3">THÔNG TIN GIAO HÀNG</h1>
+      <h1 className="text-xl md_text-2xl font-semibold col-span-2 sm_col-span-3">
+        THÔNG TIN GIAO HÀNG
+      </h1>
       {/** ACCOUNT NAME */}
       <div className="space-y-1">
-        <Label htmlFor="name" className="text-lg">
-          Họ và tên
-        </Label>
+        <Label htmlFor="name">Họ và tên</Label>
         <Input
           id="name"
           type="text"
           disabled={true}
           value={currentUser?.userName}
           placeholder="abc"
-          className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+          className="border-2 border-stone-400  min-h-12 focus_border-none"
         />
       </div>
       {/** ACCOUNT EMAIL */}
       <div className="space-y-1">
-        <Label htmlFor="name" className="text-lg  ">
+        <Label htmlFor="name">
           Email
           <span className="text-red-600 ">*</span>
         </Label>
@@ -65,7 +65,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
           id="name"
           type="text"
           placeholder="abc@gmail.com"
-          className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+          className="border-2 border-stone-400  min-h-12 focus_border-none"
         />
         {props.errors.email && (
           <div className="text-red-600">{props.errors.email.message}</div>
@@ -73,7 +73,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
       </div>
       {/** ACCOUNT PHONE NUMBER */}
       <div className="space-y-1">
-        <Label htmlFor="name" className="text-lg  ">
+        <Label htmlFor="name">
           Số điện thoại
           <span className="text-red-600 ">*</span>
         </Label>
@@ -82,7 +82,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
           id="name"
           type="text"
           placeholder="+84"
-          className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+          className="border-2 border-stone-400  min-h-12 focus_border-none"
         />
         {props.errors.phoneNumber && (
           <div className="text-red-600">{props.errors.phoneNumber.message}</div>
@@ -90,7 +90,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
       </div>
       {/** PROVINCE */}
       <div className="space-y-1">
-        <Label htmlFor="category" className="text-lg  ">
+        <Label htmlFor="category">
           Tỉnh/Thành phố
           <span className="text-red-600 ">*</span>
         </Label>
@@ -98,7 +98,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
           <SelectTrigger
             value={props.selectedProvince}
             {...props.register("province")}
-            className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+            className="border-2 border-stone-400  min-h-12 focus_border-none"
           >
             <SelectValue id="category" className="p-0" />
           </SelectTrigger>
@@ -108,7 +108,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
                 <SelectItem
                   key={index}
                   value={province.ProvinceID + ""}
-                  className="max-w-[30rem] truncate"
+                  className="max-w-[30rem] truncate text-sm md_text-lg"
                 >
                   {province.ProvinceName}
                 </SelectItem>
@@ -122,7 +122,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
       </div>
       {/** DISTRICT */}
       <div className="space-y-1">
-        <Label htmlFor="category" className="text-lg  ">
+        <Label htmlFor="category">
           Quận/Huyện
           <span className="text-red-600 ">*</span>
         </Label>
@@ -133,7 +133,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
           <SelectTrigger
             value={props.selectedDistrict}
             {...props.register("district")}
-            className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+            className="border-2 border-stone-400  min-h-12 focus_border-none"
           >
             <SelectValue id="category" className="p-0" />
           </SelectTrigger>
@@ -143,7 +143,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
                 <SelectItem
                   key={index}
                   value={district.DistrictID + ""}
-                  className="max-w-[30rem] truncate"
+                  className="max-w-[30rem] truncate text-sm md_text-lg"
                 >
                   {district.DistrictName}
                 </SelectItem>
@@ -157,7 +157,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
       </div>
       {/** WARD */}
       <div className="space-y-1">
-        <Label htmlFor="category" className="text-lg  ">
+        <Label htmlFor="category">
           Phường/Xã
           <span className="text-red-600 ">*</span>
         </Label>
@@ -168,7 +168,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
           <SelectTrigger
             value={props.selectedWard}
             {...props.register("ward")}
-            className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+            className="border-2 border-stone-400  min-h-12 focus_border-none"
           >
             <SelectValue id="category" className="p-0" />
           </SelectTrigger>
@@ -178,7 +178,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
                 <SelectItem
                   key={index}
                   value={ward.WardCode}
-                  className="max-w-[30rem] truncate"
+                  className="max-w-[30rem] truncate text-sm md_text-lg"
                 >
                   {ward.WardName}
                 </SelectItem>
@@ -191,8 +191,8 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
         )}
       </div>
       {/** DETAIL ADDRESS */}
-      <div className="col-span-3 space-y-1">
-        <Label htmlFor="name" className="text-lg  ">
+      <div className="col-span-2 sm_col-span-3 space-y-1">
+        <Label htmlFor="name">
           Địa chỉ cụ thể
           <span className="text-red-600 ">*</span>
         </Label>
@@ -200,7 +200,7 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
           {...props.register("detailAddress")}
           id="name"
           type="text"
-          className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+          className="border-2 border-stone-400  min-h-12 focus_border-none"
         />
         {props.errors.detailAddress && (
           <div className="text-red-600">
@@ -209,14 +209,14 @@ const ShippingInputs: FC<ShippingInputsProps> = ({ ...props }) => {
         )}
       </div>
       {/** NOTION */}
-      <div className="col-span-3 space-y-1">
-        <Label htmlFor="desc" className="text-lg">
+      <div className="col-span-2 sm_col-span-3 space-y-1">
+        <Label htmlFor="desc" className="">
           Ghi chú đơn hàng
         </Label>
         <Textarea
           {...props.register("note")}
           id="desc"
-          className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+          className="border-2 border-stone-400  min-h-12 focus_border-none"
         />
       </div>
     </section>

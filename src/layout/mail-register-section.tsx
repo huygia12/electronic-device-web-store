@@ -23,9 +23,9 @@ const ClientSection = () => {
   };
 
   return (
-    <section className="bg-theme-softer flex flex-col items-center py-6 font-extrabold text-primary-foreground space-y-2">
+    <section className="text-sm md_text-base bg-theme-softer flex flex-col items-center py-6 font-extrabold text-primary-foreground space-y-2">
       <div className="flex items-center px-4">
-        <BsSendExclamation className="mr-2 text-primary-foreground size-16 sms_size-10 md_size-6" />
+        <BsSendExclamation className="mr-2 text-primary-foreground size-14 sms_size-10 md_size-6" />
         ĐĂNG KÝ NHẬN EMAIL THÔNG BÁO KHUYẾN MẠI HOẶC ĐỂ ĐƯỢC TƯ VẤN MIỄN PHÍ
       </div>
       <div className="flex">
