@@ -83,11 +83,12 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     } catch (error) {
       console.error(`Response data: ${error}`);
     } finally {
-      authService.token.removeAccessToken();
-      socket?.emit(`user:leave`, { userID: currentUser!.userID });
-      if (currentUser!.role == Role.ADMIN) {
+      const user = authService.getUser();
+      socket?.emit(`user:leave`, { userID: user!.userID });
+      if (user!.role == Role.ADMIN) {
         socket?.emit(`admin:leave`);
       }
+      authService.token.removeAccessToken();
       setCurrentUser(null);
       navigate("/login", { state: { from: "/logout" } });
     }
