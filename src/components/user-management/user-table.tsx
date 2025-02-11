@@ -94,7 +94,7 @@ const UserTable: FC<UserTableProps> = ({ ...props }) => {
                   <TableCell className="text-center">
                     <Switch
                       disabled={user.role === Role.ADMIN}
-                      defaultChecked={user.isBanned || false}
+                      checked={user.isBanned ?? false}
                       onCheckedChange={props.handleBanUser}
                     />
                   </TableCell>
