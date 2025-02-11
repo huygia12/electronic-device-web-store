@@ -140,10 +140,15 @@ const UserManagement: FC = () => {
   };
 
   const handleBanUser = (value: boolean) => {
+    if (!selectedUser) {
+      toast.error("Vui lòng chọn người dùng trước!");
+      return;
+    }
+
     socket?.emit(
       `user:ban`,
       {
-        userID: selectedUser!.userID,
+        userID: selectedUser.userID,
         banned: value,
       },
       (error: SocketEmitError | undefined) => {
@@ -158,6 +163,10 @@ const UserManagement: FC = () => {
           toast.success(response);
         }
       }
+    );
+
+    setUsers(
+      userService.updateUserBanStatus(selectedUser.userID, users, value)
     );
   };
 

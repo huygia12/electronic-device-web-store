@@ -162,6 +162,16 @@ const userService = {
   updateUser: (user: User, users: User[]) => {
     return [user, ...users.filter((e) => e.userID !== user.userID)];
   },
+  updateUserBanStatus: (userID: string, users: User[], banStatus: boolean) => {
+    return [
+      ...users.map((e) => {
+        if (e.userID === userID) return { ...e, isBanned: banStatus };
+        else {
+          return e;
+        }
+      }),
+    ];
+  },
   deleteUser: (user: User, users: User[]) => {
     return [...users.filter((e) => e.userID !== user.userID)];
   },
