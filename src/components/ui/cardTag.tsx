@@ -15,7 +15,7 @@ const CardTag: React.FC<CardTagProps> = ({ className, ...props }) => {
       )}
       {...props}
     >
-      <span className="ml-5 flex text-[0.8rem] relative">
+      <span className="ml-5 flex relative">
         <Dot size={30} className="absolute left-[-1.5rem] top-[-0.3rem]" />
         {props.content}
       </span>

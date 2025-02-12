@@ -70,6 +70,14 @@ const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
     <div
       className={cn("grid sm_grid-cols-2 lg_grid-cols-3 gap-6 px-4", className)}
     >
+      <div className="sm_col-span-2 lg_col-span-3" {...getRootProps()}>
+        <input {...getInputProps()} />
+        <FileImagePlaceholder
+          isDragActive={isDragActive}
+          className="h-[20vw] max-h-[16rem]"
+        />
+      </div>
+
       <DndContext
         sensors={sensors}
         onDragStart={onDragStart}
@@ -103,14 +111,6 @@ const EditableSlideShow: FC<SlideShowProps> = ({ className, ...props }) => {
           document.body
         )}
       </DndContext>
-
-      <div className="sm_col-span-2 lg_col-span-3" {...getRootProps()}>
-        <input {...getInputProps()} />
-        <FileImagePlaceholder
-          isDragActive={isDragActive}
-          className="h-[20rem]"
-        />
-      </div>
     </div>
   );
 };

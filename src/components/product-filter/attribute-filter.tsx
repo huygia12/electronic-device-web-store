@@ -31,7 +31,7 @@ const AttributeFilter: FC<AttributeFilterProps> = ({ ...props }) => {
 
   return (
     <div className={cn("flex flex-col", props.className)}>
-      <h2 className="w-full text-xl sm_text-[1.4rem] font-extrabold pb-4">
+      <h2 className="w-full text-lg sm_text-[1.4rem] font-extrabold pb-4">
         LỌC SẢN PHẨM
       </h2>
       <ul key={selectComponentKey} className="">

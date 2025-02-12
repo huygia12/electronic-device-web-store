@@ -140,8 +140,8 @@ const ProductDialog: React.FC<ProductDialogProps> = ({
                   );
                 })}
               </CarouselContent>
-              <CarouselPrevious className="z-10 top-[50%] left-1 size-8 sm_size-10 lgg_size-12 !text-secondary-foreground hover_border-primary" />
-              <CarouselNext className="z-10 top-[50%] right-1 size-8 sm_size-10 lgg_size-12 !text-secondary-foreground hover_border-primary" />
+              <CarouselPrevious className="z-10 top-[50%] left-1 size-8 sm_size-10 lgg_size-12 bg-transparent !text-gray-500" />
+              <CarouselNext className="z-10 top-[50%] right-1 size-8 sm_size-10 lgg_size-12 bg-transparent !text-gray-500" />
             </Carousel>
 
             <div className="flex gap-4 flex-col xl_flex-row">

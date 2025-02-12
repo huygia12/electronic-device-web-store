@@ -55,7 +55,7 @@ const ProviderDialog: React.FC<ProviderDialogProps> = ({
               htmlFor="name"
               className="col-span-2 text-right text-lg text-nowrap"
             >
-              Nhà phân phối
+              Nhà sản xuất
             </Label>
             <Input
               type="text"

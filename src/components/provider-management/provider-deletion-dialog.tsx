@@ -32,7 +32,7 @@ const ProviderDeletionDialog: FC<ProviderDeletionDialogProps> = ({
         <AlertDialogHeader>
           <AlertDialogTitle>Bạn muốn xóa?</AlertDialogTitle>
           <AlertDialogDescription>
-            Hành động này sẽ trực tiếp xóa nhãn hàng và không thể hoàn tác.
+            Hành động này sẽ trực tiếp xóa nhà sản xuất và không thể hoàn tác.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-row-reverse gap-2">

@@ -61,7 +61,7 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ ...props }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{props.children}</DialogTrigger>
-      <DialogContent className="mlg_min-w-max max-h-screen px-0 pb-0">
+      <DialogContent className="mlg_min-w-max max-h-screen px-2 pb-0">
         <DialogHeader>
           <DialogTitle className="border-b-2 pb-4 px-6 border-dashed border-slate-500 flex justify-between">
             <span className="font-light text-xl md_text-2xl mlg_text-3xl">
@@ -84,7 +84,7 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ ...props }) => {
             </span>
           </DialogTitle>
         </DialogHeader>
-        <ScrollArea className="px-6 mb-4 max-h-[70vh] 2xl_max-h-[80vh]">
+        <ScrollArea className="mb-4 max-h-[70vh] 2xl_max-h-[80vh]">
           <div className="flex flex-col mlg_flex-row">
             <div className="flex flex-col mlg_w-1/2">
               <div className="block mb-2 lgg_hidden">

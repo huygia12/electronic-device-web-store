@@ -17,6 +17,30 @@ import { formatDateTime, getInvoiceStatus } from "@/utils/helpers";
 import OrderDetailDialog from "./order-detail-dialog";
 import { Separator } from "@/components/ui/separator";
 
+const headers = [
+  { title: "KHÁCH HÀNG" },
+  {
+    title: "ID ĐƠN HÀNG",
+    css: "hidden lg_table-cell",
+  },
+  {
+    title: "NGÀY ĐẶT",
+  },
+  {
+    title: "SỐ MẶT HÀNG",
+  },
+  {
+    title: "THÀNH TIỀN",
+  },
+  {
+    title: "TRẠNG THÁI",
+    css: "hidden xl_table-cell",
+  },
+  {
+    title: "THAO TÁC",
+  },
+];
+
 interface OrderTableProps extends HTMLAttributes<HTMLDivElement> {
   orders: Invoice[];
   setOrders: (invoice: Invoice[]) => void;
@@ -34,27 +58,14 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
       <Table>
         <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
           <tr className="text-nowrap text-xs md_text-base text-black">
-            <TableHead className="font-extrabold text-center">
-              KHÁCH HÀNG
-            </TableHead>
-            <TableHead className="font-extrabold text-center hidden lg_table-cell">
-              ID ĐƠN HÀNG
-            </TableHead>
-            <TableHead className="font-extrabold text-center">
-              NGÀY ĐẶT
-            </TableHead>
-            <TableHead className="font-extrabold text-center hidden xss_table-cell">
-              SỐ MẶT HÀNG
-            </TableHead>
-            <TableHead className="font-extrabold text-center hidden sms_table-cell">
-              TỔNG TIỀN
-            </TableHead>
-            <TableHead className="font-extrabold text-center hidden xl_table-cell">
-              TRẠNG THÁI
-            </TableHead>
-            <TableHead className="font-extrabold text-center">
-              THAO TÁC
-            </TableHead>
+            {headers.map((header, index) => (
+              <TableHead
+                key={index}
+                className={cn("font-extrabold text-center", header.css)}
+              >
+                {header.title}
+              </TableHead>
+            ))}
           </tr>
         </TableHeader>
 
@@ -68,8 +79,8 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
               <TableCell className="xl_text-nowrap">
                 {formatDateTime(`${invoice.createdAt}`)}
               </TableCell>
-              <TableCell className="hidden xss_table-cell">{`${invoice.invoiceProducts.length} sản phẩm`}</TableCell>
-              <TableCell className="hidden sms_table-cell">{`${invoiceService.getTotalBill(invoice).toLocaleString()}đ`}</TableCell>
+              <TableCell>{`${invoice.invoiceProducts.length} sản phẩm`}</TableCell>
+              <TableCell>{`${invoiceService.getTotalBill(invoice).toLocaleString()}đ`}</TableCell>
               <TableCell className="hidden xl_table-cell">
                 <Badge
                   className={cn(

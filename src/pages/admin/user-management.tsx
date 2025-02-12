@@ -182,7 +182,7 @@ const UserManagement: FC = () => {
         handleAddUser={handleAddUser}
         handleUpdateUser={handleUpdateUser}
         handleDeleteUser={handleDeleteUser}
-        className="mb-4 block lg_hidden"
+        className="mb-4 block xl_hidden"
       />
 
       <SearchBox
@@ -207,7 +207,7 @@ const UserManagement: FC = () => {
           handleAddUser={handleAddUser}
           handleUpdateUser={handleUpdateUser}
           handleDeleteUser={handleDeleteUser}
-          className="hidden lg_block"
+          className="hidden xl_block"
         />
       </div>
 

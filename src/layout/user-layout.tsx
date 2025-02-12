@@ -83,8 +83,8 @@ const UserLayout: React.FC = () => {
         </div>
         <MailRegisterSection />
         <AppFooter />
-        <ZaloButton className="bottom-28 right-5" />
-        <ScrollToTopButton className="bottom-5 right-4" />
+        <ZaloButton className="bottom-5 right-4" />
+        <ScrollToTopButton className="bottom-24 right-4" />
         <Toaster
           richColors
           toastOptions={{

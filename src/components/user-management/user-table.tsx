@@ -17,6 +17,29 @@ import { userService } from "@/services";
 import { cn } from "@/lib/utils";
 import { Role } from "@/types/enum";
 
+const headers = [
+  { title: "STT" },
+  {
+    title: "TÊN",
+  },
+  {
+    title: "SỐ LIÊN LẠC",
+    css: "hidden 2xl_table-cell",
+  },
+  {
+    title: "NGÀY ĐĂNG KÝ",
+  },
+  {
+    title: "EMAIL",
+  },
+  {
+    title: "VAI TRÒ",
+  },
+  {
+    title: "KHÓA TK",
+  },
+];
+
 interface UserTableProps extends HTMLAttributes<HTMLTableElement> {
   users: User[];
   selectedUser: User | undefined;
@@ -28,33 +51,20 @@ interface UserTableProps extends HTMLAttributes<HTMLTableElement> {
 
 const UserTable: FC<UserTableProps> = ({ ...props }) => {
   return (
-    <Card className={cn("rounded-md shadow-lg", props.className)}>
-      <CardContent className="flex flex-col px-0 xss_px-4">
-        <ScrollArea className="relavtive h-[58vh] pb-3">
+    <Card className={cn("rounded-md shadow-lg w-full", props.className)}>
+      <CardContent className="flex flex-col px-0 xss_px-4 w-full">
+        <ScrollArea className="relavtive h-[58vh] w-full pb-3">
           <Table>
             <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
               <tr className="text-nowrap text-black text-xs md_text-base">
-                <TableHead className="text-center font-extrabold">
-                  STT
-                </TableHead>
-                <TableHead className="text-center font-extrabold">
-                  TÊN
-                </TableHead>
-                <TableHead className="text-center font-extrabold hidden 2xl_table-cell">
-                  SỐ LIÊN LẠC
-                </TableHead>
-                <TableHead className="text-center font-extrabold hidden sms_table-cell">
-                  NGÀY ĐĂNG KÝ
-                </TableHead>
-                <TableHead className="text-center font-extrabold hidden xl_table-cell">
-                  EMAIL
-                </TableHead>
-                <TableHead className="text-center font-extrabold">
-                  VAI TRÒ
-                </TableHead>
-                <TableHead className="text-center font-extrabold">
-                  KHÓA TK
-                </TableHead>
+                {headers.map((header, index) => (
+                  <TableHead
+                    key={index}
+                    className={cn("font-extrabold text-center", header.css)}
+                  >
+                    {header.title}
+                  </TableHead>
+                ))}
               </tr>
             </TableHeader>
             <TableBody>
@@ -77,12 +87,10 @@ const UserTable: FC<UserTableProps> = ({ ...props }) => {
                   <TableCell className="text-center hidden 2xl_table-cell">
                     {user.phoneNumber}
                   </TableCell>
-                  <TableCell className="text-center lg_text-nowrap hidden sms_table-cell">
+                  <TableCell className="text-center lg_text-nowrap">
                     {formatDateTime(`${user.createdAt}`)}
                   </TableCell>
-                  <TableCell className="text-center hidden xl_table-cell">
-                    {user.email}
-                  </TableCell>
+                  <TableCell className="text-center">{user.email}</TableCell>
                   <TableCell className="text-center">
                     <Badge className="bg-blue-500 text-white text-nowrap h-8 hidden hover_!bg-blue-500 xs_flex xs_justify-center">
                       {userService.getRoleToDisplay(user.role)}

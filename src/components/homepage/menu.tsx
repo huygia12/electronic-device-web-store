@@ -28,9 +28,9 @@ const HomepageMenu: FC<HomepageMenuProps> = ({ ...props }) => {
         props.className
       )}
     >
-      <h1 className="bg-theme flex items-center font-semibold py-4 px-2">
+      <h1 className="bg-theme flex items-center gap-2 font-semibold py-4 px-2">
         <SwatchBook className="min-w-6 size-6" />
-        <span className="text-xs md_text-[0.9rem]">DANH MỤC SẢN PHẨM</span>
+        <span className="text-xs md_text-[0.9rem]">DANH MỤC</span>
       </h1>
       <Select
         onValueChange={async (e) => {

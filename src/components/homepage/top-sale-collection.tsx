@@ -41,7 +41,7 @@ const TopSaleCollection: FC<TopSaleCollectionProps> = ({ ...props }) => {
             ? props.products.map((product, index) => (
                 <CarouselItem
                   key={index}
-                  className="xss_basis-1/2 sm_basis-1/3 md_basis-1/4 3xl_basis-1/5"
+                  className="basis-1/2 sms_basis-1/3 md_basis-1/4 3xl_basis-1/5"
                 >
                   <CardProduct product={product} className="shadow-none" />
                 </CarouselItem>
@@ -49,7 +49,7 @@ const TopSaleCollection: FC<TopSaleCollectionProps> = ({ ...props }) => {
             : Array.from({ length: 20 }).map((_, index) => (
                 <CarouselItem
                   key={index}
-                  className="xss_basis-1/2 sm_basis-1/3 md_basis-1/4 3xl_basis-1/5"
+                  className="basis-1/2 sms_basis-1/3 md_basis-1/4 3xl_basis-1/5"
                 >
                   <CardSkeleton />
                 </CarouselItem>

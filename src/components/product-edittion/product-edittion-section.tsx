@@ -145,7 +145,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
         {/** PROVIDER */}
         <div className="space-y-2">
           <Label htmlFor="provider" className="font-extrabold">
-            Nhà phân phối
+            Nhà sản xuất
             <span className="text-red-600 ">*</span>
           </Label>
           <Select

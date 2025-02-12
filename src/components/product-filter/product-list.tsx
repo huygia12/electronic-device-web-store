@@ -12,7 +12,7 @@ const ProductList: FC<ProductListProps> = ({ ...props }) => {
   return (
     <div
       className={cn(
-        "grid gap-2 md_gap-4 grid-cols-1 sms_grid-cols-2 lg_grid-cols-3 4xl_grid-cols-4",
+        "grid gap-2 md_gap-4 grid-cols-1 xs_grid-cols-2 lg_grid-cols-3 4xl_grid-cols-4",
         props.products &&
           props.products.length === 0 &&
           "flex flex-col items-center",

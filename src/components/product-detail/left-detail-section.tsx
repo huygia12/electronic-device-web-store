@@ -28,7 +28,7 @@ const LeftProductDetailSection: FC<LeftProductDetailSectionProps> = ({
         plugins={[plugin.current]}
         onMouseEnter={plugin.current.stop}
         onMouseLeave={plugin.current.play}
-        className="w-fit mb-10"
+        className="w-fit mx-auto"
       >
         <CarouselContent className="h-full">
           {props.currentItem.itemImages.map((image, index) => {
@@ -42,11 +42,11 @@ const LeftProductDetailSection: FC<LeftProductDetailSectionProps> = ({
             );
           })}
         </CarouselContent>
-        <CarouselPrevious className="z-10 top-[50%] left-1 size-8 sm_size-10 lgg_size-12 bg-transparent" />
-        <CarouselNext className="z-10 top-[50%] right-1 size-8 sm_size-10 lgg_size-12 bg-transparent" />
+        <CarouselPrevious className="z-10 top-[50%] left-1 size-8 sm_size-10 lgg_size-12 bg-transparent !text-gray-500" />
+        <CarouselNext className="z-10 top-[50%] right-1 size-8 sm_size-10 lgg_size-12 bg-transparent !text-gray-500" />
       </Carousel>
 
-      <div className="flex gap-4 flex-col xl_flex-row">
+      <div className="mt-10 flex gap-4 flex-col xl_flex-row">
         <span className="flex items-center text-[0.8rem]">
           <BadgeCheck className="text-primary mr-2" />
           Hàng chính hãng - Bảo hành {props.product.warranty} tháng

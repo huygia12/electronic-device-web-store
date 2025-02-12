@@ -27,7 +27,7 @@ const ProviderTable: FC<ProviderTableProps> = ({ ...props }) => {
           <div className="flex flex-col items-center">
             <img width={500} src="/empty-box.svg" alt="emptyCart" />
             <span className="text-base md_text-xl font-medium text-slate-500 mb-10">
-              Bạn chưa có nhãn hàng nào!
+              Bạn chưa có nhà sản xuất nào!
             </span>
           </div>
         </CardContent>
@@ -46,10 +46,10 @@ const ProviderTable: FC<ProviderTableProps> = ({ ...props }) => {
                   STT
                 </TableHead>
                 <TableHead className="text-center font-extrabold hidden lgg_block">
-                  MÃ NHÃN HÀNG
+                  MÃ NHÀ SẢN XUẤT
                 </TableHead>
                 <TableHead className="text-center font-extrabold">
-                  TÊN NHÃN HÀNG
+                  TÊN NHÀ SẢN XUẤT
                 </TableHead>
                 <TableHead className="text-center font-extrabold">
                   SỐ SẢN PHẨM

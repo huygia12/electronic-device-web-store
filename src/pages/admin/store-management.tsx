@@ -48,15 +48,24 @@ const StoreManagement: FC = () => {
   };
 
   const handleAddSlide = (newImage: File) => {
-    setSlides((prevSlides) => [
-      ...prevSlides,
-      {
-        file: newImage,
-        url: retrieveImageUrl(newImage),
-        ref: null,
-        index: prevSlides.length + 1,
-      },
-    ]);
+    setSlides((prevSlides) => {
+      const reIndexSlides = prevSlides.map((e, index) => {
+        return {
+          ...e,
+          index: index + 2,
+        };
+      });
+
+      return [
+        {
+          file: newImage,
+          url: retrieveImageUrl(newImage),
+          ref: null,
+          index: 1,
+        },
+        ...reIndexSlides,
+      ];
+    });
   };
 
   const handleDeleteSlide = (slideIndex: string) => {
@@ -116,7 +125,7 @@ const StoreManagement: FC = () => {
           storeID={initData.store.storeID}
           position="left"
           modifiable={!preview}
-          className="hidden md_block"
+          className={preview ? "hidden md_block" : undefined}
         />
         {/** CENTER */}
         {preview ? (
@@ -148,7 +157,7 @@ const StoreManagement: FC = () => {
           storeID={initData.store.storeID}
           position="right"
           modifiable={!preview}
-          className="hidden md_block"
+          className={preview ? "hidden md_block" : undefined}
         />
       </div>
     </div>

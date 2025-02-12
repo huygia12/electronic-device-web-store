@@ -1,6 +1,6 @@
 import React, { HTMLAttributes } from "react";
 import { CarouselItem } from "@/components/ui/carousel";
-import CustomImage from "@/components/common/custom-image";
+import LazyImage from "@/components/common/lazy-image";
 import { useCustomNavigate } from "@/hooks";
 import { cn } from "@/lib/utils";
 
@@ -16,7 +16,7 @@ const SlideShow: React.FC<SlideShowProps> = ({ className, ...props }) => {
 
   return (
     <CarouselItem className={cn("overflow-hidden", className)}>
-      <CustomImage
+      <LazyImage
         src={props.src}
         onClick={() =>
           props.link && navigate(props.link, { unstable_viewTransition: true })

@@ -7,15 +7,17 @@ interface StarRatingProps extends HTMLAttributes<HTMLDivElement> {
   stars?: number;
   handleRateChange?: (rating: number) => void;
   disabled?: boolean;
+  starCss?: string;
 }
 
 const StarRating: FC<StarRatingProps> = ({
+  className,
   stars = 5,
   disabled = false,
   ...props
 }) => {
   return (
-    <div className="flex space-x-2 text-secondary-foreground">
+    <div className={cn("flex gap-2 text-secondary-foreground", className)}>
       {Array.from({ length: stars }).map((_, index) => (
         <Star
           key={index}
@@ -26,7 +28,8 @@ const StarRating: FC<StarRatingProps> = ({
           }
           className={cn(
             `${index < props.rating && `fill-yellow-400 stroke-yellow-400`}`,
-            props.handleRateChange && `cursor-pointer`
+            props.handleRateChange && `cursor-pointer`,
+            props.starCss
           )}
         />
       ))}

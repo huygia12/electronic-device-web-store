@@ -1,5 +1,5 @@
 import { useSortable } from "@dnd-kit/sortable";
-import { CustomImage, RemoveIcon } from "@/components/common";
+import { LazyImage, RemoveIcon } from "@/components/common";
 import { FC, HTMLAttributes } from "react";
 import { retrieveImageUrl } from "@/utils/helpers";
 import { Slide } from "@/types/model";
@@ -36,7 +36,11 @@ const SlideWrapper: FC<SlideWrapperProps> = ({ className, ...props }) => {
       {...attributes}
       {...listeners}
       style={{ transition, transform: CSS.Transform.toString(transform) }}
-      className={cn("relative", isDragging && "opacity-40", className)}
+      className={cn(
+        "relative touch-none",
+        isDragging && "opacity-40",
+        className
+      )}
     >
       <SlideOverview
         src={props.slide.url}
@@ -44,7 +48,7 @@ const SlideWrapper: FC<SlideWrapperProps> = ({ className, ...props }) => {
         reference={props.slide.ref}
         onUrlChange={props.onUrlChange}
       >
-        <CustomImage
+        <LazyImage
           src={retrieveImageUrl(props.slide.url)}
           alt="slide"
           className="rounded-lg "

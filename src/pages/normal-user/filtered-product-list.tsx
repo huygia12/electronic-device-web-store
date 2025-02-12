@@ -185,12 +185,13 @@ const FilteredProductList: FC = () => {
 
   return (
     <div className="grid grid-cols-5 sms_grid-cols-4 gap-4">
+      {/** FILTER RESULT COUNTER */}
       <div className="block sm_hidden col-span-5 space-y-4">
-        <h1 className="text-2xl sm_text-[1.6rem] font-semibold">
+        <h1 className="text-xl sm_text-[1.6rem] font-semibold">
           {numberOfProducts !== undefined ? (
             <>
               Kết Quả Lọc Cho: &nbsp;
-              <span className="text-[1.4rem] text-red-600 font-light">{`(${numberOfProducts} kết quả)`}</span>
+              <span className="text-[1.2rem] md_text-[1.4rem] text-red-600 font-light">{`(${numberOfProducts} kết quả)`}</span>
             </>
           ) : (
             <>Tìm Kiếm ...</>
@@ -212,7 +213,7 @@ const FilteredProductList: FC = () => {
           attributes={attributes}
           onReset={handleResetSelectedAttributeOption}
           onOptionSelected={handleAttributeOptionSelection}
-          className="sticky top-36"
+          className="sticky top-32 md_top-36"
         />
       </div>
 
@@ -238,7 +239,7 @@ const FilteredProductList: FC = () => {
           className="hidden sm_flex"
         />
 
-        <ProductList products={products} className="col-span-3" />
+        <ProductList products={products} />
 
         {/** Pagination */}
         <CustomPagination

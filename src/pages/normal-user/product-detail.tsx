@@ -112,7 +112,7 @@ const ProductDetailPage: FC = () => {
         reviews={reviews}
       />
 
-      <div className="grid grid-cols-1 sms_grid-cols-2 gap-10 items-start">
+      <div className="mt-10 grid grid-cols-1 sms_grid-cols-2 gap-10 items-start">
         <LeftDetailSection product={product} currentItem={currentItem} />
 
         <RightDetailSection

@@ -1,5 +1,5 @@
 import { FC, HTMLAttributes } from "react";
-import CustomImage from "./custom-image";
+import LazyImage from "./lazy-image";
 import { cn } from "@/lib/utils";
 
 interface BannerProps extends HTMLAttributes<HTMLDivElement> {
@@ -10,7 +10,7 @@ const Banner: FC<BannerProps> = ({ ...props }) => {
   return (
     <div className={cn("w-[12rem]", props.className)}>
       {props.bannerUrl && (
-        <CustomImage
+        <LazyImage
           src={props.bannerUrl}
           alt="sideBanner"
           className="rounded-lg animate-pulseZoom"

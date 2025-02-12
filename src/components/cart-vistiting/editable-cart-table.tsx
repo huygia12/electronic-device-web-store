@@ -75,8 +75,12 @@ const EditableCartTable: FC<HTMLAttributes<HTMLDivElement>> = ({
       )}
     >
       {itemsInLocal.length === 0 ? (
-        <div className="flex flex-col items-center">
-          <img width={400} src="/emptyCart.svg" alt="emptyCart" />
+        <div className="flex flex-col items-center pb-4">
+          <img
+            className="size-40 md_size-80"
+            src="/emptyCart.svg"
+            alt="emptyCart"
+          />
           <span className="text-lg font-medium text-slate-500">
             Giỏ hàng của bạn đang trống!
           </span>

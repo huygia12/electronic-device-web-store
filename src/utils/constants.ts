@@ -99,7 +99,7 @@ const navItems: SidebarItem[] = [
     children: [],
   },
   {
-    name: "Quản lý nhãn hàng",
+    name: "Quản lý nhà sản xuất",
     url: "/admin/providers",
     icon: Factory,
     hasChild: false,

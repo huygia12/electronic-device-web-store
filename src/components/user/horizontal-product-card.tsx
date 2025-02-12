@@ -2,7 +2,7 @@ import SaleTag from "@/components/ui/saleTag";
 import React, { HTMLAttributes, useMemo } from "react";
 import { Product, ProductItem } from "@/types/model";
 import { NavLink } from "react-router-dom";
-import { CustomImage } from "@/components/common";
+import { LazyImage } from "@/components/common";
 import { applyDiscount, isDiscount } from "@/utils/helpers";
 
 interface HorizontalProductCardProps extends HTMLAttributes<HTMLDivElement> {
@@ -25,7 +25,7 @@ const HorizontalProductCard: React.FC<HorizontalProductCardProps> = ({
       unstable_viewTransition
       className="grid grid-cols-2 w-full relative"
     >
-      <CustomImage
+      <LazyImage
         src={currentItem.thump}
         alt={currentItem.itemID}
         className="h-[5rem] md_h-[8rem] justify-self-center align-self-center"

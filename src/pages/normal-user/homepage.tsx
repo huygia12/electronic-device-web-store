@@ -6,6 +6,7 @@ import categoryService from "@/services/category";
 import {
   BannerSection,
   HomepageMenu,
+  MenuButton,
   NormalCollection,
   TopSaleCollection,
 } from "@/components/homepage";
@@ -66,6 +67,11 @@ const Homepage: FC = () => {
 
   return (
     <main>
+      <MenuButton
+        providers={providers}
+        categories={categories}
+        className="block sm_hidden"
+      />
       <section className="flex flex-row max-h-[40.8rem] gap-3">
         <HomepageMenu
           providers={providers}

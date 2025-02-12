@@ -41,11 +41,10 @@ const PersonalReviewBox = forwardRef<HTMLFormElement, PersonalReviewBoxProps>(
     const { navigate } = useCustomNavigate();
     const [ratingStarInput, setRatingStarInput] = useState(5);
     const { socket } = useSocket();
-    const { register, handleSubmit, reset } = useForm<ReviewInsertionFromProps>(
-      {
+    const { register, getValues, handleSubmit, reset } =
+      useForm<ReviewInsertionFromProps>({
         resolver: zodResolver(ReviewInsertionSchema),
-      }
-    );
+      });
 
     const handleMakeStarRate = (rating: number) => {
       setRatingStarInput(rating);
@@ -82,9 +81,10 @@ const PersonalReviewBox = forwardRef<HTMLFormElement, PersonalReviewBoxProps>(
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (event.key === "Enter") {
+      if (event.key === "Enter" && !event.shiftKey) {
+        const data = getValues();
         event.preventDefault();
-        handleSubmit(handleAddReview);
+        handleAddReview(data);
       }
     };
 
@@ -92,64 +92,62 @@ const PersonalReviewBox = forwardRef<HTMLFormElement, PersonalReviewBoxProps>(
       <form
         ref={ref}
         onSubmit={handleSubmit(handleAddReview)}
-        className="px-8 py-8 space-y-4 flex flex-col border-2 border-slate-200 rounded-md shadow-md"
+        className={cn(
+          "p-2 md_p-8 space-y-4 flex flex-col border-2 border-slate-200 rounded-md shadow-md",
+          props.className
+        )}
       >
         <div className="flex gap-4 items-center">
-          <Avatar className="h-[3.5rem] w-[3.5rem] focus-visible_!outline-none ">
+          <Avatar className="size-10 md_size-14 focus-visible_!outline-none ">
             <AvatarImage
               src={currentUser?.avatar || undefined}
-              width={40}
-              height={40}
               alt="AVT"
-              className="focus-visible_!outline-none"
+              className="focus-visible_!outline-none size-full"
             />
             <AvatarFallback className="text-stone-800 hover_border-4 hover_border-primary hover_bg-primary-softer hover_text-primary focus-visible_outline-none">
-              <User size={40} />
+              <User className="size-full" />
             </AvatarFallback>
           </Avatar>
-          <span className="flex flex-col gap-2">
-            <StarRating
-              rating={ratingStarInput}
-              handleRateChange={handleMakeStarRate}
-              disabled={props.replyToComment === null}
-            />
-            <span className="flex gap-2 items-center">
-              <Label htmlFor="review" className="font-semibold">
-                {props.replyToComment ? (
-                  <>
-                    {`Tiếp tục dưới bình luận của `}
-                    &nbsp;
-                    <Badge variant="secondary" className="text-base">
-                      {props.replyToComment.user.userName}
-                    </Badge>
-                  </>
-                ) : (
-                  "Đánh giá"
-                )}
-              </Label>
-              <span
-                className={cn(
-                  "md_text-base hover_underline cursor-pointer",
-                  props.replyToComment == null && "hidden"
-                )}
-                onClick={() => props.setReplyToComment(undefined)}
-              >
-                | Hủy
+
+          <Label
+            htmlFor="review"
+            className="font-semibold text-base md_text-lg"
+          >
+            {props.replyToComment ? (
+              <span>
+                Tiếp tục dưới bình luận của &nbsp;
+                <Badge variant="secondary" className="text-sm md_text-base">
+                  {props.replyToComment.user.userName}
+                </Badge>
+                <span
+                  className="text-sm md_text-base hover_underline cursor-pointer text-nowrap"
+                  onClick={() => props.setReplyToComment(undefined)}
+                >
+                  | Hủy
+                </span>
               </span>
-            </span>
-          </span>
+            ) : (
+              "Gửi đánh giá"
+            )}
+          </Label>
         </div>
 
         <Textarea
           {...register(`reviewContent`)}
           id="review"
-          className="px-4 mt-2 text-lg"
+          placeholder="Aa"
+          className="px-4 mt-2 text-base md_text-lg placeholder_italic"
           onKeyDown={handleKeyDown}
         />
 
-        <Button variant="negative" className="ml-auto">
-          Gửi đánh giá
-        </Button>
+        <div className="flex justify-between items-center">
+          <StarRating
+            rating={ratingStarInput}
+            handleRateChange={handleMakeStarRate}
+            disabled={props.replyToComment === null}
+          />
+          <Button variant="negative">Gửi đánh giá</Button>
+        </div>
       </form>
     );
   }

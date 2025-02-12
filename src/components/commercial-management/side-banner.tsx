@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import {
-  CustomImage,
+  LazyImage,
   FileImagePlaceholder,
   RemoveIcon,
 } from "@/components/common";
@@ -86,23 +86,23 @@ const SideBanner: FC<SideBannerProps> = ({ modifiable = true, ...props }) => {
   return (
     <div className={props.className}>
       {displayImage ? (
-        <div className="relative w-[20vw] sm_w-[15vw] lgg_w-[10vw] max-w-[12rem]">
-          <CustomImage
+        <div className="relative ">
+          <LazyImage
             src={displayImage}
             alt="sideBanner"
-            className="rounded-lg"
+            className="rounded-lg w-[15vw] max-w-[10rem]"
           />
           {modifiable && <RemoveIcon onClick={handleRemoveButton} />}
         </div>
       ) : (
         <div
-          className="w-[20vw] sm_w-[15vw] lgg_w-[10vw] max-w-[12rem]"
+          className="h-[20vw] max-h-[16rem] !text-xs md_!text-base"
           {...getRootProps()}
         >
           <input {...getInputProps()} />{" "}
           <FileImagePlaceholder
             isDragActive={isDragActive}
-            className="min-h-[20rem]"
+            className="h-full w-full"
           />
         </div>
       )}

@@ -1,5 +1,5 @@
 export { default as DropdownAvatar } from "./dropdown-avatar";
-export { default as CustomImage } from "./custom-image";
+export { default as LazyImage } from "./lazy-image";
 export { default as DropMenuLinkItem } from "./drop-menu-link-item";
 export * from "./skeleton";
 export { default as StarRating } from "./star-rating";
