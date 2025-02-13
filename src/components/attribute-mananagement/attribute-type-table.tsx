@@ -28,7 +28,7 @@ const AttributeTypeTable: FC<AttributeTypeTableProps> = ({ ...props }) => {
         <CardContent className="p-4">
           <div className="flex flex-col items-center">
             <img width={400} src="/empty-box.svg" alt="emptyCart" />
-            <span className="text-base md_text-xl font-medium text-slate-500 mb-10">
+            <span className="text-center text-base md_text-xl font-medium text-slate-500 mb-10">
               Chưa có thuộc tính nào!
             </span>
           </div>

@@ -130,8 +130,8 @@ const PersonalInvoices: FC = () => {
             />
           ) : (
             <div className="flex flex-col items-center">
-              <img width={500} src="/empty-box.svg" alt="emptyCart" />
-              <span className="text-xl font-medium text-slate-500 mb-10">
+              <img width={400} src="/empty-box.svg" alt="emptyCart" />
+              <span className="tex-center text-base md_text-xl font-medium text-slate-500 mb-10">
                 Không có đơn hàng nào!
               </span>
             </div>

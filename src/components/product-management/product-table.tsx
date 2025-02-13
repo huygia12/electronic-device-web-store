@@ -120,8 +120,8 @@ const ProductTable: FC<ProductTableProps> = ({ ...props }) => {
           </ScrollArea>
         ) : (
           <div className="flex flex-col items-center">
-            <img width={500} src="/empty-box.svg" alt="emptyCart" />
-            <span className="text-xl font-medium text-slate-500 mb-10">
+            <img width={400} src="/empty-box.svg" alt="emptyCart" />
+            <span className="text-center text-base md_text-xl font-medium text-slate-500 mb-10">
               Bạn chưa có sản phẩm nào!
             </span>
           </div>

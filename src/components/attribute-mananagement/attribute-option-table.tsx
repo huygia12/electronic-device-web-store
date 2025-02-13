@@ -34,10 +34,10 @@ const AttributeOptionTable: FC<AttributeOptionTableProps> = ({
   if (!attribute || attribute.attributeOptions.length === 0) {
     return (
       <Card className={cn("rounded-md shadow-lg", props.className)}>
-        <CardContent className="p-0 xss_p-4 h-[58vh]">
+        <CardContent className="p-0 xss_p-4 h-[58vh] min-h-fit">
           <div className="flex flex-col items-center">
             <img width={400} src="/empty-box.svg" alt="emptyCart" />
-            <span className="text-base md_text-xl font-medium text-slate-500">
+            <span className="text-center text-base md_text-xl font-medium text-slate-500">
               Chưa có giá trị nào!
             </span>
           </div>
@@ -49,7 +49,7 @@ const AttributeOptionTable: FC<AttributeOptionTableProps> = ({
   return (
     <Card className={cn("rounded-md shadow-lg", props.className)}>
       <CardContent className="p-0 xss_p-4 h-full">
-        <ScrollArea className="relative h-[58vh]">
+        <ScrollArea className="relative h-[58vh] ">
           <Table>
             <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
               <tr className="text-black text-sm md_text-base">

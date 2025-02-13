@@ -267,7 +267,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
                 <Button
                   variant="normal"
                   role="combobox"
-                  className="justify-between focus_!ring-2"
+                  className="justify-between focus_!ring-2 text-sm md_text-lg"
                 >
                   {props.selectedAttribute ? (
                     <span className="truncate">
@@ -283,7 +283,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
                 <Command>
                   <CommandInput
                     placeholder="Tìm thể loại..."
-                    className="text-lg"
+                    className="text-sm md_text-lg"
                   />
                   <CommandList>
                     <CommandEmpty className="text-stone-500 text-center p-4">
@@ -302,7 +302,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
                             onSelect={() =>
                               props.onAttributeTypeSelection(attribute)
                             }
-                            className="cursor-pointer"
+                            className="cursor-pointer text-sm md_text-lg"
                           >
                             <Check
                               className={cn(
@@ -359,7 +359,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
             </Select>
           </div>
         </div>
-        {/** PRODUCT ATTRIBUTES */}
+        {/** CURRENT ADDING PRODUCT ATTRIBUTES*/}
         <ScrollArea className="col-span-2 xs_col-span-3">
           <div className="flex pb-6 space-x-2">
             {props.productAttributesAddition.map((productAttribute, index) => (
