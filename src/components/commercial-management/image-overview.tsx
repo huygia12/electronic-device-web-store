@@ -20,11 +20,11 @@ const SlideOverview: FC<SlideOverviewProps> = ({ ...props }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{props.children}</DialogTrigger>
-      <DialogContent className="min-w-[50%] p-10 border-transparent bg-transparent shadow-none text-primary-softer">
+      <DialogContent className="min-w-[80vw] md_min-w-fit p-10 border-transparent bg-transparent shadow-none text-primary-softer">
         <img src={props.src} alt={props.alt} className="mx-auto max-h-[80vh]" />
         <div className="flex flex-row items-baseline gap-4 justify-center">
           <input
-            className="mt-4 h-10 w-[50rem] rounded-lg px-6 text-xl text-black focus-visible_outline-0"
+            className="mt-4 h-10 min-w-[13rem] rounded-lg px-2 text-sm md_text-xl text-black focus-visible_outline-0"
             placeholder="URL dẫn đến page khác..."
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -36,7 +36,7 @@ const SlideOverview: FC<SlideOverviewProps> = ({ ...props }) => {
               setOpen(false);
             }}
             variant="destructive"
-            className="h-10"
+            className="h-10 text-sm md_text-xl"
           >
             Lưu
           </Button>

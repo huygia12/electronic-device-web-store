@@ -246,6 +246,14 @@ const FilteredProductList: FC = () => {
           parentPageState={currentPage}
           totalPages={totalPages}
           onPageChange={handlePageChange}
+          className="hidden xs_block"
+        />
+        <CustomPagination
+          parentPageState={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          className="block xs_hidden"
+          displayInColumn={true}
         />
       </div>
     </div>
