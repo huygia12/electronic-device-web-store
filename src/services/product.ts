@@ -23,7 +23,7 @@ const productService = {
       providerID?: string;
       currentPage?: number;
     }): Promise<{ products: ProductSummary[]; totalProducts: number }> => {
-      let path: string = `${productEndPoint}?`;
+      let path: string = `${productEndPoint}?limit=10`;
       params.searching && (path = `${path}&searching=${params.searching}`);
       params.providerID && (path = `${path}&providerID=${params.providerID}`);
       params.categoryID && (path = `${path}&categoryID=${params.categoryID}`);

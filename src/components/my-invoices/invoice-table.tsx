@@ -9,7 +9,6 @@ import {
 import { Invoice } from "@/types/model";
 import { FC, HTMLAttributes } from "react";
 import { Button } from "@/components/ui/button";
-import Badge from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { invoiceService } from "@/services";
@@ -19,12 +18,11 @@ import { Separator } from "@/components/ui/separator";
 import TableContextMenu from "../common/table-context-menu";
 
 const columnHeaders = [
-  "TÊN ĐẶT HÀNG",
-  "ID ĐƠN HÀNG",
-  "NGÀY ĐẶT",
-  "TỔNG TIỀN",
-  "TRẠNG THÁI",
-  "THAO TÁC",
+  { title: "TÊN ĐẶT HÀNG", css: "hidden lg_table-cell" },
+  { title: "MÃ ĐƠN HÀNG", css: "hidden md_table-cell" },
+  { title: "NGÀY ĐẶT" },
+  { title: "TỔNG TIỀN" },
+  { title: "THAO TÁC" },
 ];
 
 interface OrderTableProps extends HTMLAttributes<HTMLDivElement> {
@@ -43,14 +41,14 @@ const InvoiceTable: FC<OrderTableProps> = ({ className, ...props }) => {
     <ScrollArea className={cn("relative", className)}>
       <Table>
         <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
-          <tr>
-            {columnHeaders.map((item, key) => {
+          <tr className="text-nowrap text-black text-sm md_text-base">
+            {columnHeaders.map((header, index) => {
               return (
                 <TableHead
-                  key={key}
-                  className="text-nowrap text-center text-black font-extrabold text-[1rem]"
+                  key={index}
+                  className={cn("text-center font-extrabold", header.css)}
                 >
-                  {item}
+                  {header.title}
                 </TableHead>
               );
             })}
@@ -58,42 +56,25 @@ const InvoiceTable: FC<OrderTableProps> = ({ className, ...props }) => {
         </TableHeader>
         <TableBody>
           {props.invoices.map((invoice, index) => (
-            <TableRow key={index}>
-              <TableCell
-                className="text-center text-base
-              "
-              >
+            <TableRow key={index} className="tex-sm md_text-base">
+              <TableCell className="text-center hidden lg_table-cell">
                 {invoice.userName}
               </TableCell>
-              <TableCell className="text-center text-base">
+              <TableCell className="text-center hidden md_table-cell">
                 <TableContextMenu textToCopy={invoice.invoiceID}>
                   {invoice.invoiceID}
                 </TableContextMenu>
               </TableCell>
-              <TableCell className="text-center text-base xl_text-nowrap">
+              <TableCell className="text-center xl_text-nowrap">
                 {formatDateTime(`${invoice.createdAt}`)}
               </TableCell>
-              <TableCell className="text-center text-base">{`${invoiceService.getTotalBill(invoice).toLocaleString()}đ`}</TableCell>
-              <TableCell className="text-center">
-                <Badge
-                  className={cn(
-                    `text-white px-2 text-sm hover_!${invoiceService.getInvoiceStatusColor(
-                      invoice.status
-                    )}`,
-                    invoiceService.getInvoiceStatusColor(invoice.status)
-                  )}
-                >
-                  {invoiceService.getInvoiceStatus(invoice.status)}
-                </Badge>
-              </TableCell>
-              <TableCell className="my-auto">
+              <TableCell className="text-center">{`${invoiceService.getTotalBill(invoice).toLocaleString()}đ`}</TableCell>
+              <TableCell className="flex justify-center">
                 <InvoiceDetailDialog
                   invoice={invoice}
                   updateInvoice={updateInvoice}
                 >
-                  <Button variant="neutral" className="text-base">
-                    Xem
-                  </Button>
+                  <Button variant="neutral">Xem</Button>
                 </InvoiceDetailDialog>
               </TableCell>
             </TableRow>

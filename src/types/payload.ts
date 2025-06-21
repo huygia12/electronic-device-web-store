@@ -86,7 +86,7 @@ export interface UserUpdatePayload {
 }
 
 //Slide
-export interface SlideInsertionPayload {
+export interface ImageToSlide {
   file: File;
   url: string;
   ref: string | null;

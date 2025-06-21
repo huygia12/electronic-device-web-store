@@ -16,6 +16,7 @@ import {
 import { FC, HTMLAttributes } from "react";
 import { Category } from "@/types/model";
 import CategoryDialog from "./category-dialog";
+import { cn } from "@/lib/utils";
 
 interface CategoryToolsProps extends HTMLAttributes<HTMLDivElement> {
   selectedCategory: Category | undefined;
@@ -24,15 +25,15 @@ interface CategoryToolsProps extends HTMLAttributes<HTMLDivElement> {
   handleDeleteCategory: () => void;
 }
 
-const CategoryTools: FC<CategoryToolsProps> = ({ ...props }) => {
+const CategoryTools: FC<CategoryToolsProps> = ({ className, ...props }) => {
   return (
-    <Card className="rounded-xl shadow-lg">
-      <CardContent className="p-4 space-y-4 contain-content">
+    <Card className={cn("rounded-md shadow-lg", className)}>
+      <CardContent className="p-4 contain-content flex items-center flex-row gap-4 md_flex-col">
         <CategoryDialog
           dialogTitle="Thêm danh mục mới"
           handleDialogAcceptEvent={props.handleAddCategory}
         >
-          <Button className="" variant="positive">
+          <Button variant="positive">
             <Plus />
           </Button>
         </CategoryDialog>
@@ -61,7 +62,7 @@ const CategoryTools: FC<CategoryToolsProps> = ({ ...props }) => {
                     tác.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter>
+                <AlertDialogFooter className="flex-row-reverse gap-2">
                   <AlertDialogAction
                     onClick={props.handleDeleteCategory}
                     className={buttonVariants({
@@ -77,8 +78,8 @@ const CategoryTools: FC<CategoryToolsProps> = ({ ...props }) => {
           </>
         ) : (
           <>
-            <SquarePen className="mx-4 !mt-6" />
-            <Trash2 className="mx-4 !mt-6" />
+            <SquarePen className="mx-4 md_!mt-6" />
+            <Trash2 className="mx-4 md_!mt-6" />
           </>
         )}
       </CardContent>

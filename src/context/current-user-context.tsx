@@ -32,10 +32,6 @@ const CurrentUserProvider: React.FC<{ children: ReactNode }> = ({
     setCurrentUser(user);
   };
 
-  // useEffect(() => {
-  //   updateCurrentUser();
-  // }, []);
-
   return (
     <CurrentUserContext.Provider
       value={{ currentUser, setCurrentUser, updateCurrentUser }}

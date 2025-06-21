@@ -50,3 +50,8 @@ Phải có file `.env` trong root folder, [mẫu file .env nằm ở đây](./te
 npm run build
 npm run preview
 ```
+
+## Admin account
+
+- email: huy@gmail.com
+- password: huy123

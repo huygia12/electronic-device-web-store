@@ -97,6 +97,10 @@ module.exports = {
           "50%": { transform: "translateX(10px)", opacity: "1" },
           "75%": { transform: "translateX(-10px)", opacity: "0.3" },
         },
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -105,6 +109,7 @@ module.exports = {
         "sweep-slow": "sweep 2.5s ease-in infinite",
         pulseZoom: "pulseZoom 3s ease-in-out infinite",
         shake: "shake 1s ease-in-out",
+        "caret-blink": "caret-blink 1.25s ease-out infinite",
       },
       max: {
         sm: "50rem",
@@ -131,9 +136,13 @@ module.exports = {
         "3xl": "98rem",
       },
       screens: {
+        xss: "400px",
         xs: "480px",
+        sms: "560px",
         sm: "640px",
         md: "768px",
+        mlg: "840px",
+        lgg: "920px",
         lg: "1024px",
         xl: "1280px",
         "2xl": "1452px",

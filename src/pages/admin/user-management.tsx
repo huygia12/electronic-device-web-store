@@ -12,7 +12,7 @@ import { useSocket } from "@/hooks";
 import { SocketEmitError } from "@/types/socket";
 
 const UserManagement: FC = () => {
-  const searchingDelay = useRef<number>(2000);
+  const searchingDelay = useRef<number>(500);
   const initData = useRouteLoaderData("user_management") as {
     users: User[];
     totalUsers: number;
@@ -23,6 +23,7 @@ const UserManagement: FC = () => {
   );
   const [selectedUser, setSelectedUser] = useState<User | undefined>();
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [displayPage, setDisplayPage] = useState<number>(1);
   const [searchText, setSearchText] = useState<string>();
   const toasting = useRef<{
     id: string | number;
@@ -48,6 +49,7 @@ const UserManagement: FC = () => {
           });
 
         setUsers(res.users);
+        setDisplayPage(currentPage);
         setTotalPages(getPages(res.totalUsers));
       } finally {
         toast.dismiss(toasting.current!.id);
@@ -138,10 +140,15 @@ const UserManagement: FC = () => {
   };
 
   const handleBanUser = (value: boolean) => {
+    if (!selectedUser) {
+      toast.error("Vui lòng chọn người dùng trước!");
+      return;
+    }
+
     socket?.emit(
       `user:ban`,
       {
-        userID: selectedUser!.userID,
+        userID: selectedUser.userID,
         banned: value,
       },
       (error: SocketEmitError | undefined) => {
@@ -157,11 +164,32 @@ const UserManagement: FC = () => {
         }
       }
     );
+
+    setUsers(
+      userService.updateUserBanStatus(selectedUser.userID, users, value)
+    );
+  };
+
+  const handleSearch = (searchText: string) => {
+    setCurrentPage(1);
+    setSearchText(searchText);
   };
 
   return (
-    <div className="my-8">
-      <SearchBox className="mb-4" setSearchText={setSearchText} />
+    <div className="my-8 mx-auto w-[90vw] lgg_w-max">
+      <UserTools
+        selectedUser={selectedUser}
+        handleAddUser={handleAddUser}
+        handleUpdateUser={handleUpdateUser}
+        handleDeleteUser={handleDeleteUser}
+        className="mb-4 block xl_hidden"
+      />
+
+      <SearchBox
+        placeholder="Tìm kiếm theo tên, sđt, email..."
+        className="mb-4"
+        setSearchText={handleSearch}
+      />
 
       <div className="flex gap-4">
         <UserTable
@@ -169,7 +197,9 @@ const UserManagement: FC = () => {
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
           handleBanUser={handleBanUser}
-          className="flex-1 w-1" // set width to make flex work ????
+          currentPage={displayPage}
+          limitPerPage={10}
+          className="flex-1"
         />
 
         <UserTools
@@ -177,11 +207,13 @@ const UserManagement: FC = () => {
           handleAddUser={handleAddUser}
           handleUpdateUser={handleUpdateUser}
           handleDeleteUser={handleDeleteUser}
+          className="hidden xl_block"
         />
       </div>
 
       <CustomPagination
-        setCurrentPage={setCurrentPage}
+        parentPageState={displayPage}
+        onPageChange={setCurrentPage}
         totalPages={totalPages}
       />
     </div>

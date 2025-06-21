@@ -40,28 +40,15 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
   const handleUserUpdateFormSubmission: SubmitHandler<UserFormProps> = async (
     data
   ) => {
+    let newAvatarUrl: string | undefined;
     try {
-      let avatar: string | undefined;
-      if (data.avatar[0]) {
-        currentUser?.avatar &&
-          (await firebaseService.apis.deleteImagesInFireBase([
-            currentUser?.avatar,
-          ]));
-        avatar = (
-          await firebaseService.apis.insertImagesToFireBase(
-            data.avatar,
-            `/users/${currentUser!.userID}`
-          )
-        )[0];
-      }
-
       const updatedUserInfor: User = await userService.apis.updateUser(
         currentUser!.userID,
         {
-          userName: data.userName,
-          email: data.email,
+          userName: data.userName.trim(),
+          email: data.email.trim(),
           phoneNumber: data.phoneNumber,
-          avatar: avatar,
+          avatar: newAvatarUrl,
         },
         currentUser!,
         avatarFiles[0]
@@ -78,12 +65,17 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
       } else {
         console.error("Unexpected error:", error);
       }
+
+      if (newAvatarUrl) {
+        firebaseService.apis.deleteImagesInFireBase([newAvatarUrl]);
+      }
+
       toast.error("Cập nhật thất bại!");
     }
   };
 
   return (
-    <Card className="w-full pb-10">
+    <Card className="w-[90vw] xl_w-full pb-10">
       <CardHeader>
         <CardTitle>Hồ sơ của tôi</CardTitle>
         <CardDescription>
@@ -93,12 +85,12 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
       <CardContent>
         <form
           onSubmit={handleSubmit(handleUserUpdateFormSubmission)}
-          className="grid grid-cols-3 gap-10"
+          className="flex flex-col-reverse sm_grid sm_grid-cols-3 gap-10"
         >
-          <div className="col-span-2 flex flex-col gap-4">
+          <div className="col-span-2 flex flex-col gap-4 text-sm md_text-lg">
             <div>
               <div className="flex">
-                <Label htmlFor="name" className="text-lg my-auto w-[20rem]">
+                <Label htmlFor="name" className="my-auto w-[15rem]">
                   Họ và tên
                   <span className="text-red-600 ">*</span>
                 </Label>
@@ -108,7 +100,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
                   type="text"
                   defaultValue={currentUser?.userName}
                   placeholder="Nguyễn Văn A"
-                  className="h-full text-lg"
+                  className="h-full"
                 />
               </div>
               {errors.userName && (
@@ -119,7 +111,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
             </div>
             <div>
               <div className="flex">
-                <Label htmlFor="email" className="text-lg my-auto w-[20rem]">
+                <Label htmlFor="email" className=" my-auto w-[15rem]">
                   Email
                   <span className="text-red-600 ">*</span>
                 </Label>
@@ -129,7 +121,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
                   type="text"
                   defaultValue={currentUser?.email}
                   placeholder="abc@gmail.com"
-                  className="h-full text-lg"
+                  className="h-full "
                 />
               </div>
               {errors.email && (
@@ -140,10 +132,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
             </div>
             <div>
               <div className="flex">
-                <Label
-                  htmlFor="phoneNumber"
-                  className="text-lg my-auto w-[20rem]"
-                >
+                <Label htmlFor="phoneNumber" className=" my-auto w-[15rem]">
                   Số điện thoại:
                 </Label>
                 <Input
@@ -151,7 +140,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
                   {...register("phoneNumber")}
                   defaultValue={currentUser?.phoneNumber || undefined}
                   placeholder="+84"
-                  className="h-full text-lg"
+                  className="h-full "
                 />
               </div>
               {errors.phoneNumber && (
@@ -183,9 +172,9 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
           </div>
 
           <div className="col-span-1 flex gap-8">
-            <Separator orientation="vertical" />
+            <Separator orientation="vertical" className="hidden sm_block" />
             <div className="flex flex-col w-full">
-              <Avatar className="size-[12rem] mx-auto">
+              <Avatar className="size-[8rem] xl_size-[12rem] mx-auto">
                 <AvatarImage
                   src={
                     (avatarFiles && getImageUrl(avatarFiles[0])) ||
@@ -200,7 +189,7 @@ const ChangeProfileCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
                 type="file"
                 {...register("avatar")}
                 accept="image/*"
-                className="mx-auto mt-14 min-w-[14rem]"
+                className="mx-auto mt-4 w-[14rem] sm_w-[12vw] xl_w-[14rem]"
               />
               <span className="flex flex-col mt-6 mx-auto text-sm text-muted-foreground">
                 <span>Dung lượng tối đa 1MB</span>

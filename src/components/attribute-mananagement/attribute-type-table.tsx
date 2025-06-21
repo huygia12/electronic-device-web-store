@@ -23,31 +23,30 @@ interface AttributeTypeTableProps extends HTMLAttributes<HTMLDivElement> {
 
 const AttributeTypeTable: FC<AttributeTypeTableProps> = ({ ...props }) => {
   if (props.attributes.length == 0) {
-    <Card className={cn("rounded-xl shadow-lg", props.className)}>
-      <CardContent className="p-4">
-        <div className="flex flex-col items-center">
-          <img width={400} src="/empty-box.svg" alt="emptyCart" />
-          <span className="text-xl font-medium text-slate-500 mb-10">
-            Chưa có thuộc tính nào!
-          </span>
-        </div>
-      </CardContent>
-    </Card>;
+    return (
+      <Card className={cn("rounded-md shadow-lg", props.className)}>
+        <CardContent className="p-4">
+          <div className="flex flex-col items-center">
+            <img width={400} src="/empty-box.svg" alt="emptyCart" />
+            <span className="text-center text-base md_text-xl font-medium text-slate-500 mb-10">
+              Chưa có thuộc tính nào!
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+    );
   }
 
   return (
-    <Card className={cn("rounded-xl shadow-lg", props.className)}>
-      <CardContent className="p-4">
+    <Card className={cn("rounded-md shadow-lg", props.className)}>
+      <CardContent className="p-0 xss_p-4">
         <ScrollArea className="relative h-[64vh]">
           <Table>
             <TableHeader className="z-10 border-b-secondary-foreground shadow-lg bg-white border-b-2 sticky top-0">
-              <tr>
+              <tr className="text-black text-sm md_text-base">
                 {columnHeaders.map((item, key) => {
                   return (
-                    <TableHead
-                      key={key}
-                      className=" text-center text-black font-extrabold text-[1rem]"
-                    >
+                    <TableHead key={key} className="text-center font-extrabold">
                       {item}
                     </TableHead>
                   );
@@ -60,15 +59,13 @@ const AttributeTypeTable: FC<AttributeTypeTableProps> = ({ ...props }) => {
                   onClick={() => props.handleSelectAttribute(attr)}
                   key={index}
                   className={cn(
-                    "cursor-pointer",
+                    "cursor-pointer text-sm md_text-base",
                     props.selectedAttribute?.typeID === attr.typeID &&
                       "bg-theme-softer"
                   )}
                 >
-                  <TableCell className="text-center text-base">
-                    {index + 1}
-                  </TableCell>
-                  <TableCell className="text-center text-base">
+                  <TableCell className="text-center">{index + 1}</TableCell>
+                  <TableCell className="text-center">
                     {attr.typeValue}
                   </TableCell>
                 </TableRow>

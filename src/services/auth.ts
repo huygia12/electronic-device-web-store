@@ -35,7 +35,6 @@ const authService = {
 
       const accessToken: string | undefined = res.data.info.accessToken;
       if (!accessToken) {
-        console.debug("AUTH APIS: access token: ", JSON.stringify(accessToken));
         throw new Error(`Access token is undefined`);
       }
 
@@ -72,7 +71,6 @@ const authService = {
 
       return userDecoded;
     } catch {
-      console.debug("Invalid token!");
       return null;
     }
   },

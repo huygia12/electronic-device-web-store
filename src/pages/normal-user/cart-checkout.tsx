@@ -1,5 +1,10 @@
 import { District, Province, ShippingService, Ward } from "@/types/payload";
-import { useCartProps, useCurrentUser, useCustomNavigate } from "@/hooks";
+import {
+  useCartProps,
+  useCurrentUser,
+  useCustomNavigate,
+  useSocket,
+} from "@/hooks";
 import { FC, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,13 +27,14 @@ const CartCheckout: FC = () => {
   const [provinces, setProvinces] = useState<Province[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
   const [wards, setWards] = useState<Ward[]>([]);
-  const [serviceID, setServiceID] = useState("");
+  const [serviceID, setServiceID] = useState<string>("");
   const [shippingFee, setShippingFee] = useState<number | null>(null);
-  const [shippingTime, setShippingTime] = useState(0);
+  const [shippingTime, setShippingTime] = useState<number | null>(null);
   const [totalAmountOfBill, setTotalAmountOfBill] = useState(
     cartService.getTotalAmount(itemsInLocal) -
       cartService.getTotalDiscountAmount(itemsInLocal)
   );
+  const { socket } = useSocket();
 
   const {
     register,
@@ -130,7 +136,7 @@ const CartCheckout: FC = () => {
     let fee: number = 0;
 
     if (value) {
-      const promises = itemsInLocal.map(async (item) => {
+      const promises = cartItems!.map(async (item) => {
         const itemShippingFee: number | null =
           await deliveryService.apis.getShippingFee(
             Number(serviceID),
@@ -147,21 +153,21 @@ const CartCheckout: FC = () => {
         .then((fees) => {
           fee = fees.reduce((prev, curr) => prev + curr, 0);
           setShippingFee(fee);
-          setTotalAmountOfBill(totalAmountOfBill + fee);
+          setTotalAmountOfBill((totalAmountOfBill) => totalAmountOfBill + fee);
         })
         .catch((error) => {
           console.error("Unexpected error:", error);
         });
 
       /** GET DELIVERY TIME */
-      const shippingTimeValue: number | null =
+      const newShippingTime: number | null =
         await deliveryService.apis.getDeliveryTime(
           Number(serviceID),
           Number(district),
           value
         );
 
-      shippingTimeValue && setShippingTime(shippingTimeValue);
+      setShippingTime(newShippingTime);
       clearErrors("ward");
     }
   };
@@ -170,6 +176,7 @@ const CartCheckout: FC = () => {
     setValue("district", value);
     setValue("ward", "");
     setShippingFee(null);
+    setShippingTime(null);
     clearErrors("district");
   };
 
@@ -178,10 +185,10 @@ const CartCheckout: FC = () => {
     setValue("district", "");
     setValue("ward", "");
     setShippingFee(null);
+    setShippingTime(null);
     clearErrors("province");
   };
 
-  //TODO: handle reponse payload after submit order
   const handleShippingFormSubmission: SubmitHandler<ShippingFormProps> = async (
     data
   ) => {
@@ -205,8 +212,9 @@ const CartCheckout: FC = () => {
       loading: "Đang xử lý...",
       success: () => {
         removeInvoice();
+        socket?.emit("invoice:new");
         navigate("/", { unstable_viewTransition: true });
-        return `Yêu cầu mua hàng thành công <br/> Đơn hàng đã được gửi tới admin!`;
+        return `Đơn hàng đã được gửi tới admin xem xét!`;
       },
       error: "Yêu cầu mua hàng thất bại!",
     });

@@ -10,7 +10,6 @@ const statisticService = {
       const res = await axiosInstance.get<{ info: Statistic }>(
         `${statisticEndpoint}`
       );
-
       return res.data.info;
     },
   },
@@ -32,12 +31,12 @@ const statisticService = {
 
     while (dayInMonth <= now) {
       const searchingResult = chartData.find(
-        (d) => new Date(d.date).getDate() === dayInMonth.getDate()
+        (d) => new Date(d.date).getDate() === dayInMonth.getDate() //Because it is ISO, so it must add 1
       ); //Find if the date iterator had figures or not
       if (searchingResult) {
         dateHolder = new Date(searchingResult.date);
         dateHolder.setUTCHours(17);
-        dateHolder.setDate(dateHolder.getDate() - 1); //Because when it is casted to ISOString, the date will be add to 1
+        dateHolder.setDate(dateHolder.getDate() - 1);
         statistic.push({
           ...searchingResult,
           date: dateHolder.toISOString(),

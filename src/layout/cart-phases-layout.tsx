@@ -9,18 +9,20 @@ const PhasesLayout = () => {
 
   return (
     <>
-      <div className="flex space-x-8 justify-center mb-10">
+      <div className="flex gap-4 justify-center mb-10">
         {phases.map((item, index) => {
           return (
-            <span key={index} className="flex items-center space-x-8">
+            <span key={index} className="flex items-center gap-2 xss_gap-4">
               <span
                 className={cn(
-                  "text-[1.1rem] font-semibold flex items-center gap-2",
+                  "text-[0.9rem] md_text-[1.1rem] font-semibold flex flex-col xs_flex-row justify-center items-center gap-1 md_gap-2",
                   item.id === phaseID &&
-                    "text-primary-foreground font-extrabold text-center text-[1.4rem]"
+                    "text-primary-foreground font-extrabold text-center text-base md_text-[1.3rem]"
                 )}
               >
-                <item.icon />
+                <item.icon
+                  className={cn("size-6", item.id === phaseID && "size-8")}
+                />
                 {item.title}
               </span>
               {!(index === phases.length - 1) && <ArrowRight />}

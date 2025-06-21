@@ -9,7 +9,7 @@ export { default as ProductDetail } from "./normal-user/product-detail";
 export { default as FilteredProductList } from "./normal-user/filtered-product-list";
 export { default as Signup } from "./normal-user/signup";
 
-export { default as OrderManagement } from "./admin/order-management";
+export { default as InvoiceManagement } from "./admin/invoice-management";
 export { default as ProductAddition } from "./admin/product-addition";
 export { default as ProductEdittion } from "./admin/product-edittion";
 export { default as ProductManagement } from "./admin/product-management";

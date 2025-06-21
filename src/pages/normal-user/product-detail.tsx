@@ -19,6 +19,8 @@ import {
   LeftDetailSection,
   RightDetailSection,
   PersonalReviewBox,
+  RelatedProducts,
+  ProductTechnicalInfo,
 } from "@/components/product-detail";
 import { useSocket } from "@/hooks";
 import { productService, reviewService } from "@/services";
@@ -49,7 +51,7 @@ const ProductDetailPage: FC = () => {
           categoryID: product.category.categoryID,
           providerID: product.provider.providerID,
           exceptID: product.productID,
-          take: "5",
+          limit: "3",
         });
       setRelatedProducts(response.products);
     };
@@ -104,9 +106,13 @@ const ProductDetailPage: FC = () => {
 
   return (
     <div>
-      <ProductDetailHeader product={product} currentItem={currentItem} />
+      <ProductDetailHeader
+        product={product}
+        currentItem={currentItem}
+        reviews={reviews}
+      />
 
-      <div className="grid grid-cols-2 gap-10 mb-10">
+      <div className="mt-10 grid grid-cols-1 sms_grid-cols-2 gap-10 items-start">
         <LeftDetailSection product={product} currentItem={currentItem} />
 
         <RightDetailSection
@@ -117,8 +123,23 @@ const ProductDetailPage: FC = () => {
         />
       </div>
 
+      <ProductTechnicalInfo
+        product={product}
+        className="mt-10 block sms_hidden"
+      />
+
+      <RelatedProducts
+        products={relatedProducts}
+        className="mt-10 block sms_hidden"
+      />
+
       {/** DESCRIPTION AND REVIEWS*/}
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion
+        defaultValue="item-2"
+        type="single"
+        collapsible
+        className="w-full mt-10"
+      >
         {/** DESCRIPTION */}
         <AccordionItem value="item-1">
           <AccordionTrigger className="bg-theme rounded-tl-md rounded-tr-md p-5 font-semibold">

@@ -1,5 +1,5 @@
 import { ChartConfig } from "@/components/ui/chart";
-import { AdminNavItem, Phase } from "@/types/component";
+import { SidebarItem, Phase } from "@/types/component";
 import { cva } from "class-variance-authority";
 import {
   Home,
@@ -38,7 +38,7 @@ const badgeVariants = cva(
 );
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible_outline-none focus-visible_ring-2 focus-visible_ring-ring focus-visible_ring-offset-2 disabled_pointer-events-none disabled_opacity-50",
   {
     variants: {
       variant: {
@@ -76,7 +76,7 @@ const buttonVariants = cva(
   }
 );
 
-const navItems: AdminNavItem[] = [
+const navItems: SidebarItem[] = [
   {
     name: "Bảng điều khiển",
     url: "/admin",
@@ -99,7 +99,7 @@ const navItems: AdminNavItem[] = [
     children: [],
   },
   {
-    name: "Quản lý nhãn hàng",
+    name: "Quản lý nhà sản xuất",
     url: "/admin/providers",
     icon: Factory,
     hasChild: false,
@@ -130,7 +130,7 @@ const navItems: AdminNavItem[] = [
   },
   {
     name: "Đơn hàng",
-    url: "/admin/invoices",
+    url: "/admin/invoices?status=NEW",
     icon: PackageSearch,
     hasChild: false,
     children: [],
@@ -157,7 +157,7 @@ const phases: Phase[] = [
   },
   {
     id: "3",
-    title: "Hoàn Thành Đơn Hàng",
+    title: "Hoàn Thành",
     icon: PackageCheck,
   },
 ];

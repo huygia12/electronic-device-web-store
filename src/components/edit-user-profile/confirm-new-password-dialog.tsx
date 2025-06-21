@@ -21,7 +21,7 @@ const ConfirmNewPasswordDialog: React.FC<ConfirmNewPasswordDialogProps> = ({
   className,
   ...props
 }) => {
-  const [value, setValue] = useState<string>();
+  const [value, setValue] = useState<string>("");
   const [isDisable, setIsDisable] = useState(true);
   const [visible, setVisible] = useState(false);
 
@@ -35,7 +35,7 @@ const ConfirmNewPasswordDialog: React.FC<ConfirmNewPasswordDialogProps> = ({
     props.handleDialogAcceptEvent(value);
     setVisible(false);
     setIsDisable(true);
-    setValue(undefined);
+    setValue("");
   };
 
   return (
@@ -45,7 +45,7 @@ const ConfirmNewPasswordDialog: React.FC<ConfirmNewPasswordDialogProps> = ({
         <DialogHeader>
           <DialogTitle>Xác nhận mật khẩu mới</DialogTitle>
         </DialogHeader>
-        <DialogDescription>
+        <DialogDescription className="text-sm text-muted-foreground pb-4">
           Vui lòng nhập lại mât khẩu mới để xác nhận việc đổi mật khẩu
         </DialogDescription>
         <div className="relative">
@@ -53,7 +53,6 @@ const ConfirmNewPasswordDialog: React.FC<ConfirmNewPasswordDialogProps> = ({
             type={!visible ? "password" : "text"}
             className="col-span-3 border-slate-300 pr-20 text-xl"
             value={value}
-            autoComplete="off"
             onChange={(e) => handleInputEvent(e)}
           />
           <button

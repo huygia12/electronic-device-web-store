@@ -136,12 +136,8 @@ const attributeService = {
     option: AttributeOption,
     attributes: Attribute[]
   ): Attribute[] => {
-    const attribute = attributes.find(
-      (attribute) => attribute.typeID === option.typeID
-    );
-
     return attributes.map((attr) => {
-      if (attribute!.typeID === option.typeID) {
+      if (attr!.typeID === option.typeID) {
         return {
           ...attr,
           attributeOptions: [option, ...attr.attributeOptions],

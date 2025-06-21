@@ -63,7 +63,7 @@ const OptionDialog: React.FC<AttibuteDialogProps> = ({
               className="col-span-3"
             />
           </div>
-          <DialogFooter>
+          <DialogFooter className="flex-row-reverse gap-2">
             <DialogClose
               type="submit"
               disabled={isDisable}

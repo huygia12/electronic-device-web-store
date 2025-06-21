@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 interface BillProps extends HTMLAttributes<HTMLDivElement> {
   cartItems: CartItem[] | undefined;
   shippingFee: number | null;
-  shippingTime: number;
+  shippingTime: number | null;
   totalMoney: number;
 }
 
@@ -40,7 +40,7 @@ const Bill: FC<BillProps> = ({ ...props }) => {
     <section className={cn("rounded-md", props.className)}>
       <Card className="shadow-lg">
         <CardHeader className="px-4">
-          <CardTitle className="mb-4">ĐƠN HÀNG</CardTitle>
+          <CardTitle className="mb-4 text-xl md_text-2xl">ĐƠN HÀNG</CardTitle>
           <CardDescription>
             Thông tin giao hàng sẽ được tiếp nhận bởi dịch vụ chuyển phát GHN.
           </CardDescription>
@@ -78,7 +78,7 @@ const Bill: FC<BillProps> = ({ ...props }) => {
           >
             Hoàn thành đơn hàng
           </Button>
-          {props.shippingFee && (
+          {props.shippingTime != null && (
             <div className="mt-5 text-[0.8rem] ">
               <span className="font-semibold">
                 <span className="text-red-600 ">*</span>

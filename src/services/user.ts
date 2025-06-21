@@ -67,10 +67,6 @@ const userService = {
     ): Promise<User> => {
       let avatarUrl: string | undefined;
       if (avatarFile) {
-        currentUser.avatar &&
-          (await firebaseService.apis.deleteImageInFireBase(
-            currentUser.avatar
-          ));
         avatarUrl = await firebaseService.apis.insertImageToFireBase(
           avatarFile,
           `/users/${currentUser.userID}`
@@ -81,9 +77,18 @@ const userService = {
         `${userEndPoint}/${userID}`,
         {
           ...data,
+          phoneNumber:
+            data.phoneNumber?.trim()?.length == 0
+              ? undefined
+              : data.phoneNumber,
           avatar: avatarUrl,
         }
       );
+
+      if (avatarUrl && currentUser.avatar) {
+        firebaseService.apis.deleteImageInFireBase(currentUser.avatar);
+      }
+
       return res.data.info;
     },
     updatePassword: async (
@@ -127,15 +132,45 @@ const userService = {
       const res = await axiosInstance.delete(`${userEndPoint}/${userID}`);
       return res;
     },
+    generateOTP: async (email: string): Promise<AxiosResponse> => {
+      const res = await axiosInstance.post(`${userEndPoint}/forgot-password`, {
+        email: email,
+      });
+      return res;
+    },
+    verifyOTP: async (email: string, otp: string): Promise<boolean> => {
+      const res = await axiosInstance.post<{ info: { result: boolean } }>(
+        `${userEndPoint}/verify-otp`,
+        {
+          email: email,
+          otp: otp,
+        }
+      );
+
+      return res.data.info.result;
+    },
   },
   getRoleToDisplay: (role: Role) => {
     return role === Role.ADMIN ? "Admin" : "Khách hàng";
+  },
+  getRoleToDisplayInShort: (role: Role) => {
+    return role === Role.ADMIN ? "AD" : "KH";
   },
   addUser: (user: User, users: User[]) => {
     return [user, ...users];
   },
   updateUser: (user: User, users: User[]) => {
     return [user, ...users.filter((e) => e.userID !== user.userID)];
+  },
+  updateUserBanStatus: (userID: string, users: User[], banStatus: boolean) => {
+    return [
+      ...users.map((e) => {
+        if (e.userID === userID) return { ...e, isBanned: banStatus };
+        else {
+          return e;
+        }
+      }),
+    ];
   },
   deleteUser: (user: User, users: User[]) => {
     return [...users.filter((e) => e.userID !== user.userID)];

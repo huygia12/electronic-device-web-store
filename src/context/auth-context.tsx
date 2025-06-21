@@ -4,6 +4,7 @@ import { LoginFormProps } from "@/utils/schema";
 import { authService } from "@/services";
 import { Role } from "@/types/enum";
 import useCurrentUser from "@/hooks/use-current-user";
+import { useSocket } from "@/hooks";
 
 interface AuthContextProps {
   login: (data: LoginFormProps, goBack?: boolean) => Promise<void>;
@@ -15,6 +16,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { location, navigate } = useCustomNavigate();
   const { currentUser, setCurrentUser, updateCurrentUser } = useCurrentUser();
+  const { socket } = useSocket();
   const middlewareChecked = useRef<boolean>(false);
 
   useLayoutEffect(() => {
@@ -34,10 +36,17 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     const runMiddleware = async () => {
-      await checkAccessToken();
+      const validAT = await checkAccessToken();
 
       //After: Update the user after get a new AT in sessionStorage
       await updateCurrentUser();
+      const user = authService.getUser();
+      if (validAT && user) {
+        socket?.emit(`user:join`, { userID: user.userID });
+        if (user.role == Role.ADMIN) {
+          socket?.emit(`admin:join`);
+        }
+      }
     };
 
     // only checking middlewares once when app is initialized
@@ -52,6 +61,11 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     authService.token.setAccessToken(accessToken);
 
     await updateCurrentUser();
+    socket?.emit(`user:join`, { userID: authService.getUser()!.userID });
+    if (authService.getUser()!.role == Role.ADMIN) {
+      socket?.emit(`admin:join`);
+    }
+
     navigate(
       goBack && from
         ? from === "/logout"
@@ -69,6 +83,11 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     } catch (error) {
       console.error(`Response data: ${error}`);
     } finally {
+      const user = authService.getUser();
+      socket?.emit(`user:leave`, { userID: user!.userID });
+      if (user!.role == Role.ADMIN) {
+        socket?.emit(`admin:leave`);
+      }
       authService.token.removeAccessToken();
       setCurrentUser(null);
       navigate("/login", { state: { from: "/logout" } });

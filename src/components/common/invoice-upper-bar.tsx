@@ -8,10 +8,12 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { InvoiceStatus } from "@/types/enum";
+import { getInvoiceStatus } from "@/utils/helpers";
 import { FC, HTMLAttributes } from "react";
 
 interface HeaderBarProps extends HTMLAttributes<HTMLDivElement> {
   searchPlaceholder?: string;
+  defaultSelectedStatus?: InvoiceStatus;
   setSearchText: (text: string) => void;
   setSelectedStatus: (status: InvoiceStatus) => void;
 }
@@ -19,34 +21,32 @@ interface HeaderBarProps extends HTMLAttributes<HTMLDivElement> {
 const HeaderBar: FC<HeaderBarProps> = ({ ...props }) => {
   return (
     <div
-      className={cn("flex flex-row items-center space-x-4 ", props.className)}
+      className={cn(
+        "flex flex-col gap-4 sms_flex-row items-center ",
+        props.className
+      )}
     >
       <SearchBox
         setSearchText={props.setSearchText}
         placeholder={props.searchPlaceholder}
-        className="flex-1"
+        className="w-full sms_flex-1"
       />
 
       <Select
+        value={props.defaultSelectedStatus}
         onValueChange={(value) =>
           props.setSelectedStatus(value as InvoiceStatus)
         }
       >
-        <SelectTrigger className="w-[18rem] h-[3rem]">
+        <SelectTrigger className="w-full h-[3rem] text-sm sms_w-[14rem] md_text-base">
           <SelectValue placeholder="Trạng Thái Đơn Hàng" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={InvoiceStatus.NEW}>Đang Chờ Duyệt</SelectItem>
-          <SelectItem value={InvoiceStatus.PAYMENT_WAITING}>
-            Đã Duyệt
-          </SelectItem>
-          <SelectItem value={InvoiceStatus.SHIPPING}>
-            Đang Vận Chuyển
-          </SelectItem>
-          <SelectItem value={InvoiceStatus.DONE}>
-            Giao Hàng Thành Công
-          </SelectItem>
-          <SelectItem value={InvoiceStatus.ABORT}>Đã Hủy</SelectItem>
+          {Object.keys(InvoiceStatus).map((e) => (
+            <SelectItem key={e} value={e} className="text-sm md_text-base">
+              {getInvoiceStatus(e as InvoiceStatus)}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </div>

@@ -13,18 +13,32 @@ import Badge from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { invoiceService } from "@/services";
-import { formatDateTime } from "@/utils/helpers";
+import { formatDateTime, getInvoiceStatus } from "@/utils/helpers";
 import OrderDetailDialog from "./order-detail-dialog";
 import { Separator } from "@/components/ui/separator";
 
-const columnHeaders: string[] = [
-  "KHÁCH HÀNG",
-  "ID ĐƠN HÀNG",
-  "NGÀY ĐẶT",
-  "SỐ MẶT HÀNG",
-  "TỔNG TIỀN",
-  "TRẠNG THÁI",
-  "THAO TÁC",
+const headers = [
+  { title: "KHÁCH HÀNG" },
+  {
+    title: "ID ĐƠN HÀNG",
+    css: "hidden lg_table-cell",
+  },
+  {
+    title: "NGÀY ĐẶT",
+  },
+  {
+    title: "SỐ MẶT HÀNG",
+  },
+  {
+    title: "THÀNH TIỀN",
+  },
+  {
+    title: "TRẠNG THÁI",
+    css: "hidden xl_table-cell",
+  },
+  {
+    title: "THAO TÁC",
+  },
 ];
 
 interface OrderTableProps extends HTMLAttributes<HTMLDivElement> {
@@ -43,51 +57,48 @@ const OrderTable: React.FC<OrderTableProps> = ({ className, ...props }) => {
     <ScrollArea className={cn("relative", className)}>
       <Table>
         <TableHeader className="z-10 border-b-secondary-foreground border-b-2 sticky top-0 bg-white shadow-lg">
-          <tr>
-            {columnHeaders.map((item, key) => {
-              return (
-                <TableHead
-                  key={key}
-                  className="text-nowrap text-center text-black font-extrabold text-[1rem]"
-                >
-                  {item}
-                </TableHead>
-              );
-            })}
+          <tr className="text-nowrap text-xs md_text-base text-black">
+            {headers.map((header, index) => (
+              <TableHead
+                key={index}
+                className={cn("font-extrabold text-center", header.css)}
+              >
+                {header.title}
+              </TableHead>
+            ))}
           </tr>
         </TableHeader>
+
         <TableBody className="p-0">
           {props.orders.map((invoice, index) => (
-            <TableRow key={index}>
-              <TableCell className="text-center text-base">
-                {invoice.userName}
-              </TableCell>
-              <TableCell className="text-center text-base">
+            <TableRow key={index} className="text-center text-xs md_text-base">
+              <TableCell>{invoice.userName}</TableCell>
+              <TableCell className="hidden lg_table-cell">
                 {invoice.invoiceID}
               </TableCell>
-              <TableCell className="text-center text-base xl_text-nowrap">
+              <TableCell className="xl_text-nowrap">
                 {formatDateTime(`${invoice.createdAt}`)}
               </TableCell>
-              <TableCell className="text-center text-base">{`${invoice.invoiceProducts.length} sản phẩm`}</TableCell>
-              <TableCell className="text-center text-base">{`${invoiceService.getTotalBill(invoice).toLocaleString()}đ`}</TableCell>
-              <TableCell className="text-center">
+              <TableCell>{`${invoice.invoiceProducts.length} sản phẩm`}</TableCell>
+              <TableCell>{`${invoiceService.getTotalBill(invoice).toLocaleString()}đ`}</TableCell>
+              <TableCell className="hidden xl_table-cell">
                 <Badge
                   className={cn(
-                    `text-white px-2 text-sm whitespace-normal break-words w-[8rem] hover_!${invoiceService.getInvoiceStatusColor(
+                    `text-white px-2 text-sm whitespace-normal break-words max-w-[8rem] hover_!${invoiceService.getInvoiceStatusColor(
                       invoice.status
                     )}`,
                     invoiceService.getInvoiceStatusColor(invoice.status)
                   )}
                 >
-                  {invoiceService.getInvoiceStatus(invoice.status)}
+                  {getInvoiceStatus(invoice.status)}
                 </Badge>
               </TableCell>
-              <TableCell>
+              <TableCell className="flex justify-center items-center">
                 <OrderDetailDialog
                   invoice={invoice}
                   updateInvoice={updateInvoice}
                 >
-                  <Button variant="neutral" className="text-base">
+                  <Button variant="neutral" className="text-inherit">
                     Xem
                   </Button>
                 </OrderDetailDialog>

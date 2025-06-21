@@ -34,7 +34,7 @@ const DeleteAllItemsDialog: FC<HTMLAttributes<HTMLDivElement>> = () => {
             Hành động này sẽ xóa cả giỏ hàng và không thể hoàn tác.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="flex items-center">
+        <AlertDialogFooter className="flex-row-reverse gap-2">
           <AlertDialogCancel className="m-0">Hủy</AlertDialogCancel>
           <AlertDialogAction
             className={cn(buttonVariants({ variant: "negative" }))}

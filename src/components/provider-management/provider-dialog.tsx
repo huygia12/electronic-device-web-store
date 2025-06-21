@@ -46,13 +46,16 @@ const ProviderDialog: React.FC<ProviderDialogProps> = ({
         <DialogTrigger asChild onClick={() => resetInputValue()}>
           {props.children}
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="px-2 sms_px-6">
           <DialogHeader>
             <DialogTitle>{props.dialogTitle}</DialogTitle>
           </DialogHeader>
-          <div className="grid grid-cols-5 items-center gap-10">
-            <Label htmlFor="name" className="col-span-2 text-right text-lg">
-              Nhà phân phối
+          <div className="grid grid-cols-5 items-center gap-4">
+            <Label
+              htmlFor="name"
+              className="col-span-2 text-right text-lg text-nowrap"
+            >
+              Nhà sản xuất
             </Label>
             <Input
               type="text"
@@ -63,7 +66,7 @@ const ProviderDialog: React.FC<ProviderDialogProps> = ({
               onChange={(e) => handleInputEvent(e)}
             />
           </div>
-          <DialogFooter>
+          <DialogFooter className="flex-row-reverse gap-2">
             <DialogClose
               type="submit"
               disabled={isDisable}

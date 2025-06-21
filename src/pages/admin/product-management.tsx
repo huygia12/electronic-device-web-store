@@ -13,7 +13,7 @@ import { CustomPagination } from "@/components/common";
 import { getPages } from "@/utils/helpers";
 
 const ProductManagement: FC = () => {
-  const searchingDelay = useRef<number>(2000);
+  const searchingDelay = useRef<number>(500);
   const initData = useRouteLoaderData("product_management") as {
     products: ProductSummary[];
     totalProducts: number;
@@ -30,6 +30,7 @@ const ProductManagement: FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>();
   const [selectedProvider, setSelectedProvider] = useState<string>();
   const [currentPage, setCurrentPage] = useState<number>();
+  const [displayPage, setDisplayPage] = useState<number>(1);
   const toasting = useRef<{
     id: string | number;
     state: boolean;
@@ -65,6 +66,7 @@ const ProductManagement: FC = () => {
             currentPage: currentPage,
           });
 
+        setDisplayPage(currentPage || 1);
         setProducts(res.products);
         setTotalPages(getPages(res.totalProducts));
       } finally {
@@ -101,46 +103,73 @@ const ProductManagement: FC = () => {
   };
 
   const handleRefreshFilter = () => {
+    setCurrentPage(1);
     setSelectedProduct(undefined);
     setSelectedCategory(undefined);
     setSelectedProvider(undefined);
   };
 
+  const handleSelectCategory = (categoryId: string) => {
+    setCurrentPage(1);
+    setSelectedCategory(categoryId);
+  };
+
+  const handleSelectProvider = (providerId: string) => {
+    setCurrentPage(1);
+    setSelectedProvider(providerId);
+  };
+
+  const handleSearch = (searchText: string) => {
+    setCurrentPage(1);
+    setSearchingQuery(searchText);
+  };
+
   return (
-    <div className="my-8">
-      {/**Search */}
+    <div className="my-8 mx-auto w-[90vw] lgg_w-max">
+      <ProductTools
+        setDeepCleanProductID={setDeepCleanProductID}
+        selectedProduct={selectedProduct}
+        handleDeleteProduct={handleDeleteProduct}
+        handleRefreshFilter={handleRefreshFilter}
+        className="mb-4 block lgg_hidden"
+      />
+
       <UpperBar
         categories={categories}
         providers={providers}
-        setSearchingInput={setSearchingQuery}
+        setSearchingInput={handleSearch}
         selectedCategory={selectedCategory}
         selectedProvider={selectedProvider}
-        setSelectedCategory={setSelectedCategory}
-        setSelectedProvider={setSelectedProvider}
+        setSelectedCategory={handleSelectCategory}
+        setSelectedProvider={handleSelectProvider}
         handleRefreshFilter={handleRefreshFilter}
       />
 
       <div className="mt-4 flex gap-4">
         {/** Table */}
         <ProductTable
-          className="flex-1 w-1"
+          className="flex-1"
           products={products}
           selectedProduct={selectedProduct}
           setSelectedProduct={setSelectedProduct}
+          currentPage={displayPage}
+          limitPerPage={10}
         />
 
         <ProductTools
           setDeepCleanProductID={setDeepCleanProductID}
           selectedProduct={selectedProduct}
           handleDeleteProduct={handleDeleteProduct}
+          handleRefreshFilter={handleRefreshFilter}
+          className="hidden lgg_block"
         />
       </div>
 
       {/** Pagination */}
       <CustomPagination
         totalPages={totalPages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        parentPageState={displayPage}
+        onPageChange={setCurrentPage}
       />
     </div>
   );

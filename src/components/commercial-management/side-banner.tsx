@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import {
-  CustomImage,
+  LazyImage,
   FileImagePlaceholder,
   RemoveIcon,
 } from "@/components/common";
@@ -17,12 +17,13 @@ import { Button } from "@/components/ui/button";
 import { storeService } from "@/services";
 import { toast } from "sonner";
 import { Banner } from "@/types/component";
+import { RefreshCcwDot } from "lucide-react";
 
 interface SideBannerProps extends HTMLAttributes<HTMLDivElement> {
   banner: Banner;
   setBanner: Dispatch<SetStateAction<Banner>>;
   storeID: string;
-  position: string;
+  position: "left" | "right";
   modifiable?: boolean;
 }
 
@@ -68,7 +69,7 @@ const SideBanner: FC<SideBannerProps> = ({ modifiable = true, ...props }) => {
         error: "Cập nhật banner thất bại!",
       });
     } else {
-      console.debug(`banner value must be File or null`);
+      console.warn(`banner value must be image file or null`);
     }
   };
 
@@ -85,33 +86,45 @@ const SideBanner: FC<SideBannerProps> = ({ modifiable = true, ...props }) => {
   return (
     <div className={props.className}>
       {displayImage ? (
-        <div className="relative w-[12rem]">
-          <CustomImage
+        <div className="relative ">
+          <LazyImage
             src={displayImage}
             alt="sideBanner"
-            className="rounded-lg"
+            className="rounded-lg w-[15vw] max-w-[10rem]"
           />
           {modifiable && <RemoveIcon onClick={handleRemoveButton} />}
         </div>
       ) : (
-        <div className="w-[12rem]" {...getRootProps()}>
+        <div
+          className="h-[20vw] max-h-[16rem] !text-xs md_!text-base"
+          {...getRootProps()}
+        >
           <input {...getInputProps()} />{" "}
           <FileImagePlaceholder
             isDragActive={isDragActive}
-            className="min-h-[36rem]"
+            className="h-full w-full"
           />
         </div>
       )}
       {modifiable && (
-        <div className="flex justify-between mt-2">
+        <div className="flex justify-between mt-2 gap-2 flex-col 3xl_flex-row">
           {props.banner.newBanner !== undefined && (
-            <Button variant="positive" onClick={handleSaveButton}>
+            <Button
+              variant="positive"
+              onClick={handleSaveButton}
+              className="text-sm md_text-base"
+            >
               Lưu
             </Button>
           )}
           {props.banner.newBanner !== undefined && (
-            <Button variant="negative" onClick={handleResetButton}>
-              Hoàn tác
+            <Button
+              variant="negative"
+              onClick={handleResetButton}
+              className="text-sm md_text-base"
+            >
+              <RefreshCcwDot className="xs_hidden" />
+              <span className="hidden xs_inline">Hoàn tác</span>
             </Button>
           )}
         </div>

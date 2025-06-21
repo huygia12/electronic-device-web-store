@@ -8,7 +8,11 @@ import {
 import { HTMLAttributes, useMemo } from "react";
 import { Invoice } from "@/types/model";
 import { invoiceService } from "@/services";
-import { formatDateTime } from "@/utils/helpers";
+import {
+  formatDateTime,
+  getInvoicePaymentMethod,
+  getInvoiceStatus,
+} from "@/utils/helpers";
 import Badge from "@/components/ui/badge";
 import { InvoiceStatus } from "@/types/enum";
 import { Button } from "@/components/ui/button";
@@ -17,20 +21,22 @@ import ChangeOrderStatus from "./change-order-status";
 import ProductInInvoice from "@/components/common/product-in-invoice";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import excelService from "@/services/xlsx";
+import pdfService from "@/services/pdfService";
+import { ScrollArea } from "../ui/scroll-area";
+import { useSocket } from "@/hooks";
 
 interface OrderDetailDialogProps extends HTMLAttributes<HTMLDivElement> {
   invoice: Invoice;
   updateInvoice: (invoice: Invoice) => void;
 }
 
-const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
-  className,
-  ...props
-}) => {
+const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ ...props }) => {
   const invoiceState = useMemo<InvoiceStatus>(
     () => props.invoice.status,
     [props.invoice]
   );
+  const { socket } = useSocket();
 
   const setInvoiceStatus = (status: InvoiceStatus) => {
     const updateInvoice = invoiceService.apis.upateInvoice(
@@ -42,6 +48,10 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
       loading: "Đang xử lý...",
       success: (invoice: Invoice) => {
         props.updateInvoice(invoice);
+        socket?.emit(`invoice:update-status`, {
+          userID: invoice.userID,
+          newStatus: invoice.status,
+        });
         return "Cập nhật trạng thái đơn hàng thành công!";
       },
       error: "Cập nhật trạng thái đơn hàng thất bại!",
@@ -51,76 +61,132 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{props.children}</DialogTrigger>
-      <DialogContent className="min-w-lg 3xl_min-w-2xl">
+      <DialogContent className="mlg_min-w-max max-h-screen px-2 pb-0">
         <DialogHeader>
-          <DialogTitle className="border-b-2 pb-4 border-dashed border-slate-500 flex justify-between">
-            <span className="text-3xl font-light">Thông Tin Đơn Hàng</span>
+          <DialogTitle className="border-b-2 pb-4 px-6 border-dashed border-slate-500 flex justify-between">
+            <span className="font-light text-xl md_text-2xl mlg_text-3xl">
+              Thông Tin Đơn Hàng
+            </span>
             <span className="mr-4 space-x-4 flex items-center">
-              <span>{props.invoice.invoiceID}</span>
+              <span className="hidden lgg_block">
+                {props.invoice.invoiceID}
+              </span>
               <Badge
                 className={cn(
-                  `rounded-md text-white py-1 px-4 text-lg hover_!${invoiceService.getInvoiceStatusColor(
+                  `rounded-md text-white py-1 px-4 hidden mlg_block text-base mlg_text-lg hover_!${invoiceService.getInvoiceStatusColor(
                     props.invoice.status
                   )}`,
                   invoiceService.getInvoiceStatusColor(props.invoice.status)
                 )}
               >
-                {invoiceService.getInvoiceStatus(props.invoice.status)}
+                {getInvoiceStatus(props.invoice.status)}
               </Badge>
             </span>
           </DialogTitle>
         </DialogHeader>
-        <div className="flex mt-4">
-          <div className="flex flex-col w-1/2">
-            <span className="text-xl font-semibold">Thông Tin Khách Hàng</span>
-            <span className="mt-2 ">{props.invoice.userName}</span>
-            <span className="mt-1 ">{`${props.invoice.detailAddress}, ${props.invoice.ward}, ${props.invoice.district}, ${props.invoice.province}`}</span>
-            <span className="mt-1 ">{props.invoice.email}</span>
-            <span className="mt-1 ">{props.invoice.phoneNumber}</span>
+        <ScrollArea className="mb-4 max-h-[70vh] 2xl_max-h-[80vh]">
+          <div className="flex flex-col mlg_flex-row">
+            <div className="flex flex-col mlg_w-1/2">
+              <div className="block mb-2 lgg_hidden">
+                <div className="text-base md_text-xl font-semibold">
+                  Mã đơn hàng
+                </div>
+                <span>{props.invoice.invoiceID}</span>
+              </div>
+              <span className="text-base md_text-xl font-semibold">
+                Thông Tin Khách Hàng
+              </span>
+              <span>Tên:&nbsp;{props.invoice.userName}</span>
+              <span className="flex">
+                <span className="text-nowrap">Địa chỉ:&nbsp;</span>
+                <span className="italic flex flex-col mlg_inline">
+                  <span>{`${props.invoice.detailAddress},`} </span>
+                  <span>{`${props.invoice.ward},`} </span>
+                  <span>{`${props.invoice.district},`}</span>
+                  <span>{`${props.invoice.province}`}</span>
+                </span>
+              </span>
+              <span>
+                Email:&nbsp;
+                <span className="italic">{props.invoice.email}</span>
+              </span>
+              <span>SĐT:&nbsp;{props.invoice.phoneNumber}</span>
+            </div>
+            <div className="flex flex-col mt-2 mlg_mt-0 mlg_items-end mlg_w-1/2">
+              <span className="text-base md_text-xl font-semibold">
+                Phương Thức Thanh Toán
+              </span>
+              <span>{getInvoicePaymentMethod(props.invoice.payment)}</span>
+              <span className="text-base md_text-xl mt-2 font-semibold">
+                Phương Thức Vận Chuyển
+              </span>
+              <span>Giao hàng nhanh</span>
+              <span className="text-base md_text-xl mt-2 font-semibold">
+                Phí vận chuyển
+              </span>
+              <span>{`${props.invoice.shippingFee.toLocaleString()}đ`}</span>
+              <span className="text-base md_text-xl mt-2 font-semibold">
+                Ngày Đặt Hàng
+              </span>
+              <span>{formatDateTime(`${props.invoice.createdAt}`)}</span>
+              {props.invoice.doneAt &&
+                props.invoice.status === InvoiceStatus.DONE && (
+                  <>
+                    <span className="text-base md_text-xl mt-3 font-semibold">
+                      Ngày Hoàn Thành
+                    </span>
+                    <span>{formatDateTime(`${props.invoice.doneAt}`)}</span>
+                  </>
+                )}
+              {props.invoice.doneAt &&
+                props.invoice.status === InvoiceStatus.ABORT && (
+                  <>
+                    <span className="text-base md_text-xl mt-3 font-semibold">
+                      Ngày Hủy
+                    </span>
+                    <span>{formatDateTime(`${props.invoice.doneAt}`)}</span>
+                  </>
+                )}
+            </div>
           </div>
-          <div className="flex flex-col w-1/2 items-end">
-            <span className="text-xl font-semibold">
-              Phương Thức Thanh Toán
-            </span>
+
+          <ChangeOrderStatus
+            invoiceID={props.invoice.invoiceID}
+            invoiceState={invoiceState}
+            setInvoiceState={setInvoiceStatus}
+            className="mt-2"
+          />
+
+          <ProductInInvoice
+            products={props.invoice.invoiceProducts}
+            className="mt-10"
+          />
+
+          <div className="pt-4 flex flex-col mlg_flex-row mlg_items-center border-t-2 border-slate-500 border-dashed mlg_justify-between">
             <span>
-              {invoiceService.getInvoicePaymentMethod(props.invoice.payment)}
+              <span className="font-semibold mr-4 text-xl md_text-2xl">
+                TỔNG TIỀN :
+              </span>
+              <span className="font-medium text-xl md_text-2xl">{`${invoiceService.getTotalBill(props.invoice).toLocaleString()}đ`}</span>
             </span>
-            <span className="text-xl mt-3 font-semibold">
-              Phương Thức Vận Chuyển
+            <span className="mt-10 ml-auto space-x-2 mlg_mt-0">
+              <Button
+                onClick={() => excelService.exportInvoice(props.invoice)}
+                className="ml-auto bg-white !text-green-500 !border-green-500 border-2 hover_!bg-green-500 hover_!text-white text-sm md_text-base"
+              >
+                <Download className="mr-2 size-4 md_size-5" />
+                <span className="hidden mlg_inline">Xuất Tệp</span>&nbsp;Excel
+              </Button>
+              <Button
+                onClick={() => pdfService.exportInvoice(props.invoice)}
+                className="ml-auto bg-white !text-red-500 !border-red-500 border-2 hover_!bg-red-500 hover_!text-white text-sm md_text-base"
+              >
+                <Download className="mr-2 size-4 md_size-5" />
+                <span className="hidden mlg_inline">Xuất Tệp</span>&nbsp;PDF
+              </Button>
             </span>
-            <span>Giao hàng nhanh</span>
-            <span className="text-xl mt-3 font-semibold">Ngày Đặt Hàng</span>
-            <span>{formatDateTime(`${props.invoice.createdAt}`)}</span>
           </div>
-        </div>
-
-        <ChangeOrderStatus
-          invoiceID={props.invoice.invoiceID}
-          invoiceState={invoiceState}
-          setInvoiceState={setInvoiceStatus}
-          className="mt-10"
-        />
-
-        <ProductInInvoice
-          products={props.invoice.invoiceProducts}
-          className="mt-10"
-        />
-
-        <div className="pt-4 flex items-center border-t-2 border-slate-500 border-dashed justify-between space-x-2">
-          <span>
-            <span className="text-2xl font-semibold mr-4">TỔNG TIỀN :</span>
-            <span className="text-2xl font-medium">{`${invoiceService.getTotalBill(props.invoice).toLocaleString()}đ`}</span>
-          </span>
-          <span className="ml-auto space-x-2">
-            <Button className="ml-auto bg-white !text-green-500 !border-green-500 border-2 text-base hover_!bg-green-500 hover_!text-white">
-              <Download className="mr-2" /> Xuất Tệp Excel
-            </Button>
-            <Button className="ml-auto bg-white !text-red-500 !border-red-500 border-2 text-base hover_!bg-red-500 hover_!text-white">
-              <Download className="mr-2" />
-              Xuất Tệp PDF
-            </Button>
-          </span>
-        </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

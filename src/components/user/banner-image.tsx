@@ -21,10 +21,11 @@ const BannerImg: React.FC<BannerImgProps> = ({ className, ...props }) => {
       <img
         src={props.src}
         alt={props.alt}
-        className="rounded-xl w-full h-full object-fill"
+        className={cn("rounded-xl w-full h-full object-fill", className)}
       />
+      {/** animation */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-        <div className="absolute top-0 left-0 w-[150%] h-[20%] bg-gradient-to-r from-transparent via-white/70 to-transparent opacity-20 animate-sweep overflow-hidden"></div>
+        <div className="absolute top-0 left-0 w-[150%] h-[20%] bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-20 animate-sweep overflow-hidden" />
       </div>
     </NavLink>
   );

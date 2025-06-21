@@ -21,7 +21,7 @@ export interface LinkItem {
 }
 
 //Nav component
-export interface AdminNavItem {
+export interface SidebarItem {
   name: string;
   url: string;
   icon: LucideIcon;

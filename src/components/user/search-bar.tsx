@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { applyDiscount, isDiscount } from "@/utils/helpers";
 
 const SearchBar: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
-  const searchingDelay = useRef<number>(1000);
+  const searchingDelay = useRef<number>(500);
   const [seachText, setSearchText] = useState<string>();
   const [products, setProducts] = useState<ProductSummary[]>();
   const { navigate } = useCustomNavigate();
@@ -18,7 +18,6 @@ const SearchBar: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    //Close products search results if click outside of the search bar
     document.addEventListener("mousedown", handleClickOutsideOfSearchInput);
 
     return () =>
@@ -72,10 +71,10 @@ const SearchBar: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
     <div ref={wrapperRef} className={cn("relative h-10", props.className)}>
       <Search className="absolute top-1/2 left-3 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
       <Input
-        placeholder="Tìm kiếm sản phẩm..."
+        placeholder="Tìm kiếm..."
         onFocus={() => setProductsVisibility(true)}
         onChange={(e) => handleSearchInputChange(e)}
-        className="h-full text-xl w-full rounded-lg bg-background pl-8"
+        className="h-full text-xl placeholder_italic w-full rounded-lg bg-background pl-8"
       />
       {typing && (
         <LoadingSpinner
@@ -99,7 +98,7 @@ const SearchBar: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
                   alt={product.productName}
                   className="w-12 h-12 rounded-md object-cover"
                 />
-                <span className="ml-2 max-w-[40rem] text-md truncate">
+                <span className="ml-2 w-[45vw] xl_w-[40rem] text-md truncate">
                   {product.productName}
                 </span>
                 <span className="ml-2 text-sm text-red-700">
@@ -120,7 +119,7 @@ const SearchBar: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
           <div className="flex flex-col items-center bg-white opacity-90 mt-2 rounded-lg p-10 shadow-general">
             <img
               width={200}
-              src="/No_Product_Found.png"
+              src="/no-product-found.png"
               alt="product_not_found"
             />
           </div>

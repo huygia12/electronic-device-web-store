@@ -1,5 +1,5 @@
 export { default as DropdownAvatar } from "./dropdown-avatar";
-export { default as CustomImage } from "./custom-image";
+export { default as LazyImage } from "./lazy-image";
 export { default as DropMenuLinkItem } from "./drop-menu-link-item";
 export * from "./skeleton";
 export { default as StarRating } from "./star-rating";
@@ -13,3 +13,5 @@ export { default as SearchBox } from "./search-box";
 export { default as InvoiceUpperBar } from "./invoice-upper-bar";
 export { default as ProductInInvoice } from "./product-in-invoice";
 export { default as ContextMenu } from "./table-context-menu";
+export { default as NotificationSection } from "./notification-section";
+export { default as NotificationItem } from "./notification-item";

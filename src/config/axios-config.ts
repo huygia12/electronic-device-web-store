@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { fromUnixTime, isAfter } from "date-fns";
 import { InvalidTokenError, jwtDecode } from "jwt-decode";
 
-const localHost = "http://127.0.0.1";
+const localHost = "http://localhost";
 const serverUrl =
   import.meta.env.VITE_API_SERVER_URL ||
   `${localHost}:${import.meta.env.VITE_API_SERVER_PORT}`;
@@ -38,14 +38,13 @@ axiosInstance.interceptors.request.use(async (config) => {
           authService.token.setAccessToken(newAccessToken);
           accessToken = newAccessToken;
         }
-        console.debug("AXIOS CONFIG : request new AT", newAccessToken);
       }
     } catch (error) {
       if (error instanceof InvalidTokenError) {
-        console.debug("AXIOS CONFIG : TOKEN DECODED : Invalid token");
+        console.info("AXIOS CONFIG : TOKEN DECODED : Invalid token");
       } else if (axios.isAxiosError(error)) {
         console.error(`Error response: ${error.response}`);
-      } else console.debug(`AXIOS CONFIG : UNEXPECTED ${error}`);
+      } else console.error(`AXIOS CONFIG : UNEXPECTED ${error}`);
     }
 
     config.headers.Authorization = `Bearer ${accessToken}`;

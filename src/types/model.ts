@@ -55,6 +55,7 @@ export interface Invoice {
   detailAddress: string;
   userID: string;
   createdAt: Date;
+  doneAt: Date | null;
   email: string;
   userName: string;
   note: string;
@@ -166,10 +167,8 @@ export interface BaseUser {
 
 //Slide
 export interface Slide {
-  slideID: string;
   url: string;
   ref: string | null;
-  storeID: string;
   index: number;
 }
 
@@ -183,5 +182,4 @@ export interface Store {
   email: string | null;
   leftBanner: string | null;
   rightBanner: string | null;
-  slideShows?: Slide[];
 }

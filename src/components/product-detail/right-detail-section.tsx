@@ -9,7 +9,7 @@ import { useCartProps, useCustomNavigate } from "@/hooks";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { applyDiscount } from "@/utils/helpers";
+import { applyDiscount, isDiscount } from "@/utils/helpers";
 import RelatedProducts from "./related-products";
 import { Error } from "@/types/component";
 
@@ -86,14 +86,18 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
   return (
     <section>
       {/** Tilte and price */}
-      <div className="flex justify-between items-baseline mb-12 pb-4 border-b-2 border-dashed border-slate-300">
-        <div className="space-x-4">
-          <span className="text-3xl font-semibold text-primary-foreground">{`${props.currentItem ? applyDiscount(props.currentItem.price, props.currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
-          <del className="text-slate-500">{`${props.currentItem ? props.currentItem?.price.toLocaleString() : 0}đ`}</del>
+      <div className="flex flex-col gap-2 lgg_flex-row justify-between items-baseline pb-4 border-b-2 border-dashed border-slate-300">
+        <div className="flex flex-col sms_flex-row sms_gap-2 items-baseline">
+          <span className="text-2xl md_text-3xl font-semibold text-primary-foreground">{`${props.currentItem ? applyDiscount(props.currentItem?.price, props.currentItem.discount ?? 0).toLocaleString() : 0}đ`}</span>
+          {isDiscount(props.currentItem.discount) && (
+            <del className="text-secondary-foreground">
+              {`${props.currentItem.price.toLocaleString()}đ`}
+            </del>
+          )}
         </div>
         <div className="flex gap-2">
-          {quantityValidation ? "Còn hàng" : "Hết hàng"}
-          {quantityValidation ? (
+          {props.currentItem?.quantity ? "Còn hàng" : "Hết hàng"}
+          {props.currentItem?.quantity ? (
             <CircleCheck className="text-green-500 " />
           ) : (
             <CircleX className="text-red-500" />
@@ -102,15 +106,15 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
       </div>
 
       {/** Product items selection and quantity input */}
-      <form>
+      <form className="mt-4">
         <Label className="text-lg font-semibold my-2">Chọn sản phẩm:</Label>
-        <div className="width-full grid grid-cols-2 gap-1 mb-10">
+        <div className="width-full grid grid-cols-2 sms_grid-cols-1 lg_grid-cols-2 gap-1 mb-10">
           {props.product.productItems.map((item, index) => {
             return (
               <span
                 key={index}
                 className={cn(
-                  "flex flex-row items-center justify-around p-2 rounded-md hover_bg-slate-200",
+                  "gap-2 flex flex-col xss_flex-row items-center justify-around p-2 rounded-md hover_bg-slate-200 sms_w-fit lg_w-full",
                   props.currentItem && props.currentItem.itemID === item.itemID
                     ? "bg-slate-200"
                     : "bg-slate-100"
@@ -129,59 +133,67 @@ const RightProductDetailSection: FC<RightProductDetailSectionProps> = ({
                     />
                     <label
                       htmlFor={index + ""}
-                      className="text-xl font-medium truncate"
+                      className="text-sm md_text-xl font-medium truncate"
                     >
                       {`${applyDiscount(item.price, item.discount).toLocaleString()}đ`}
                     </label>
                   </span>
-                  <span className="truncate">{`${item.storage} | ${item.color}`}</span>
+                  <span className="truncate text-xs md_text-base">{`${item.storage} | ${item.color}`}</span>
                 </span>
                 <img
                   src={item.thump}
                   alt={item.itemID}
-                  className="h-[4rem] max-w-[5rem] border-secondary-foreground border-2 rounded-md"
+                  className="size-14 border-secondary-foreground border-2 rounded-md"
                 />
               </span>
             );
           })}
         </div>
-        <Label htmlFor="quantity" className="text-lg font-semibold">
-          Số lượng:
-        </Label>
-        <Input
-          id="quantity"
-          type="number"
-          className="max-w-24 mt-2"
-          min={1}
-          max={props.currentItem.quantity > 1 ? props.currentItem.quantity : 1}
-          defaultValue={1}
-          onChange={(e) => handleQuantityInput(e)}
-        />
-        {quantityError && !quantityError.success && (
-          <div className="text-red-600 mt-4">{quantityError.message}</div>
-        )}
-        <div className="mt-14 w-full grid grid-cols-2 gap-1">
-          <Button
-            variant="neutral"
-            disabled={!quantityValidation}
-            className="flex items-center text-[1.2rem] min-h-12"
-            onClick={(e) => handleAddToCart(e)}
-          >
-            <ShoppingBasket /> &nbsp; Thêm vào giỏ hàng
-          </Button>
-          <Button
-            variant="negative"
-            disabled={!quantityValidation}
-            className="flex items-center text-[1.2rem] min-h-12"
-            onClick={(e) => handleBuyClick(e)}
-          >
-            <Coins /> &nbsp; Mua ngay
-          </Button>
+
+        <div className="text-sm md_text-lg space-y-2">
+          <Label htmlFor="quantity" className="text-lg font-semibold">
+            Số lượng:
+          </Label>
+          <Input
+            id="quantity"
+            type="number"
+            className="w-20"
+            min={1}
+            max={
+              props.currentItem.quantity > 1 ? props.currentItem.quantity : 1
+            }
+            defaultValue={1}
+            onChange={(e) => handleQuantityInput(e)}
+          />
+          {quantityError && !quantityError.success && (
+            <div className="text-red-600 mt-4">{quantityError.message}</div>
+          )}
+          <div className="mt-14 w-full grid-cols-2 grid sms_grid-cols-1 sm_grid-cols-2 gap-1">
+            <Button
+              variant="neutral"
+              disabled={!quantityValidation}
+              className="flex items-center text-sm md_text-xl !p-1"
+              onClick={(e) => handleAddToCart(e)}
+            >
+              <ShoppingBasket /> &nbsp; Thêm vào giỏ
+            </Button>
+            <Button
+              variant="negative"
+              disabled={!quantityValidation}
+              className="flex items-center text-sm md_text-xl !p-1"
+              onClick={(e) => handleBuyClick(e)}
+            >
+              <Coins /> &nbsp; Mua ngay
+            </Button>
+          </div>
         </div>
       </form>
 
       {/** Related products */}
-      <RelatedProducts products={props.relatedProducts} className="mt-8" />
+      <RelatedProducts
+        products={props.relatedProducts}
+        className="mt-10 hidden sms_block"
+      />
     </section>
   );
 };

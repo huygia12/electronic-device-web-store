@@ -60,7 +60,7 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
   };
 
   return (
-    <Card className="w-full pb-4">
+    <Card className="w-[90vw] xl_w-full pb-4">
       <CardHeader>
         <CardTitle>Thay đổi mật khẩu</CardTitle>
         <CardDescription>
@@ -68,10 +68,9 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="flex gap-4">
-          <input hidden type="text" autoComplete="username" />
+        <form className="flex gap-4 flex-col mlg_flex-row text-sm md_text-lg">
           <div className="flex relative">
-            <Label htmlFor="old-password" className="text-lg my-auto w-[14rem]">
+            <Label htmlFor="old-password" className=" my-auto w-[14rem]">
               Mật khẩu cũ
               <span className="text-red-600 ">*</span>
             </Label>
@@ -79,11 +78,11 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
               id="old-password"
               type={!oldPasswordVisible ? "password" : "text"}
               autoComplete="new-password"
-              className="h-full text-lg pr-10"
+              className="h-full  pr-10"
               onChange={(e) => setOldPassword(e.target.value)}
             />
             <button
-              className="absolute text-muted-foreground right-2 bottom-2"
+              className="absolute text-muted-foreground right-2 top-1/2 transform -translate-y-1/2"
               onClick={(e) => {
                 e.preventDefault();
                 setOldPasswordVisible(!oldPasswordVisible);
@@ -96,8 +95,8 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
               )}
             </button>
           </div>
-          <div className="flex ml-auto relative">
-            <Label htmlFor="new-password" className="text-lg my-auto w-[14rem]">
+          <div className="flex relative lg_ml-auto">
+            <Label htmlFor="new-password" className=" my-auto w-[14rem]">
               Mật khẩu mới
               <span className="text-red-600 ">*</span>
             </Label>
@@ -105,21 +104,17 @@ const ChangePasswordCard: FC<HTMLAttributes<HTMLDivElement>> = () => {
               id="new-password"
               type={!newPasswordVisible ? "password" : "text"}
               autoComplete="new-password"
-              className="h-full text-lg pr-10"
+              className="h-full  pr-10"
               onChange={(e) => setNewPassword(e.target.value)}
             />
             <button
-              className="absolute text-muted-foreground right-2 bottom-2"
+              className="absolute text-muted-foreground right-2 top-1/2 transform -translate-y-1/2"
               onClick={(e) => {
                 e.preventDefault();
                 setNewPasswordVisible(!newPasswordVisible);
               }}
             >
-              {newPasswordVisible ? (
-                <EyeOff className="ml-2" />
-              ) : (
-                <Eye className="ml-2" />
-              )}
+              {newPasswordVisible ? <EyeOff /> : <Eye />}
             </button>
           </div>
           <ConfirmNewPasswordDialog

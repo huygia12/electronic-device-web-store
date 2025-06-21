@@ -33,18 +33,21 @@ const Dashboard: FC = () => {
   const [orders, setOrders] = useState<Invoice[]>(statistic.orders);
 
   return (
-    <div className="flex flex-col py-8">
+    <div className="flex flex-col py-8 mx-auto w-[90vw] lgg_w-md lg_w-lg xl_w-xl 2xl_w-2xl 4xl_w-3xl">
       {/** 5 Statistic Card */}
       <div className="grid grid-cols-2 lg_grid-cols-4 gap-4 mb-8">
         <StatisticCard
           name="DOANH THU"
           icon={DollarSign}
+          xs_text-sm
           content={statistic.revenue.today.toLocaleString() + "đ"}
           subContent={
-            getRatioString(
-              statistic.revenue.today,
-              statistic.revenue.yesterday
-            ) + " so với ngày hôm qua"
+            statistic.revenue.yesterday
+              ? getRatioString(
+                  statistic.revenue.today,
+                  statistic.revenue.yesterday
+                ) + " so với ngày hôm qua"
+              : ``
           }
         />
         <StatisticCard
@@ -52,10 +55,12 @@ const Dashboard: FC = () => {
           icon={ShoppingBag}
           content={`${statistic.invoices.today}`}
           subContent={
-            getNumberGapString(
-              statistic.invoices.today,
-              statistic.invoices.yesterday
-            ) + " so với ngày hôm qua"
+            statistic.invoices.yesterday
+              ? getNumberGapString(
+                  statistic.invoices.today,
+                  statistic.invoices.yesterday
+                ) + " so với ngày hôm qua"
+              : ``
           }
         />
         <StatisticCard
@@ -73,8 +78,10 @@ const Dashboard: FC = () => {
       {/** Order Preview */}
       {statistic.orders.length > 0 && (
         <Card className="rounded-2xl shadow-lg mb-8">
-          <CardHeader className="py-6 px-6">
-            <CardTitle className="text-8">Đơn hàng cần xác nhận</CardTitle>
+          <CardHeader className="px-6 py-2 md_py-6">
+            <CardTitle className="text-lg md_text-2xl">
+              Đơn hàng cần xác nhận
+            </CardTitle>
           </CardHeader>
           <CardContent className="px-6">
             <OrderTable
@@ -89,20 +96,23 @@ const Dashboard: FC = () => {
           <CardFooter className="flex justify-center">
             <NavLink
               to={ORDERS_LINK}
-              className="flex text-blue-500 hover_underline"
+              className="flex text-blue-500 text-xs md_text-base hover_underline"
             >
-              Xem tất cả &nbsp; <ArrowRight />
+              Xem tất cả &nbsp; <ArrowRight className="size-4 md_size-6" />
             </NavLink>
           </CardFooter>
         </Card>
       )}
 
-      <div className="flex space-x-6">
+      <div className="flex gap-6 flex-col-reverse lgg_flex-row">
         {/** Chart */}
         <StatisticChart invoiceStatistic={statistic.invoiceStatistic} />
 
         {/** New customer */}
-        <NewCustomerTable newCustomers={statistic.newUsers} />
+        <NewCustomerTable
+          newCustomers={statistic.newUsers}
+          className="lgg_w-[40%]"
+        />
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ const invoiceEndPoint = "/invoices";
 
 const invoiceService = {
   apis: {
-    getMyInvoices: async (
+    getPersonalInvoices: async (
       args: Args | string
     ): Promise<{ invoices: Invoice[]; totalInvoices: number }> => {
       let userID: string;
@@ -21,9 +21,21 @@ const invoiceService = {
         userID = args.params.id!;
       }
 
+      let queryUrl = `${invoiceEndPoint}?userID=${userID}`;
+
+      if (typeof args !== "string") {
+        const queryParams = new URLSearchParams(
+          args.request.url.split("?")[1] || ""
+        );
+        const status = queryParams.get("status");
+        if (status) {
+          queryUrl += `&status=${status}`;
+        }
+      }
+
       const response = await axiosInstance.get<{
         info: { invoices: Invoice[]; totalInvoices: number };
-      }>(`${invoiceEndPoint}?userID=${userID}&status=${InvoiceStatus.NEW}`);
+      }>(queryUrl);
 
       return response.data.info;
     },
@@ -34,25 +46,15 @@ const invoiceService = {
 
       return response.data.info;
     },
-    getInvoices: async (params: {
-      status?: InvoiceStatus;
-      date?: Date;
-      searching?: string;
-      currentPage?: number;
-      invoiceID?: string;
-      userID?: string;
-    }): Promise<{ invoices: Invoice[]; totalInvoices: number }> => {
-      let path: string = `${invoiceEndPoint}?`;
-      path += `status=${params.status || InvoiceStatus.NEW}`;
-      params.date && (path += `&date=${params.date}`);
-      params.searching && (path += `&searching=${params.searching}`);
-      params.currentPage && (path += `&currentPage=${params.currentPage}`);
-      params.invoiceID && (path += `&invoiceID=${params.invoiceID}`);
-      params.userID && (path += `&userID=${params.userID}`);
-
+    getInvoices: async (
+      queryParams: Record<string, string>
+    ): Promise<{
+      invoices: Invoice[];
+      totalInvoices: number;
+    }> => {
       const response = await axiosInstance.get<{
         info: { invoices: Invoice[]; totalInvoices: number };
-      }>(path);
+      }>(`${invoiceEndPoint}?`, { params: queryParams });
 
       return response.data.info;
     },
@@ -72,6 +74,27 @@ const invoiceService = {
       );
 
       return res.data.info;
+    },
+    countInvoices: async (params: {
+      status?: InvoiceStatus;
+      userID?: string;
+      date?: Date;
+    }): Promise<number> => {
+      let queryUrl = `${invoiceEndPoint}/count?`;
+      if (params.status) {
+        queryUrl += `status=${params.status}&`;
+      }
+      if (params.userID) {
+        queryUrl += `userID=${params.userID}&`;
+      }
+      if (params.date) {
+        queryUrl += `date=${params.date.toISOString()}`;
+      }
+
+      const res = await axiosInstance.post<{
+        info: { numberOfInvoices: number };
+      }>(queryUrl);
+      return res.data.info.numberOfInvoices;
     },
     upateInvoice: async (
       invoiceID: string,
@@ -108,29 +131,6 @@ const invoiceService = {
       itemID: item.itemID,
       quantity: item.quantity,
     }));
-  },
-  getInvoicePaymentMethod: (method: PaymentMethod): string => {
-    let paymentMethod: string;
-    if (method === PaymentMethod.BANKING)
-      paymentMethod = "Thanh Toán Bằng Chuyển Khoản";
-    else if (method === PaymentMethod.COD)
-      paymentMethod = "Thanh Toán Khi Nhận Hàng";
-    else paymentMethod = "Chưa Thanh Toán";
-
-    return paymentMethod;
-  },
-  getInvoiceStatus: (status: InvoiceStatus): string => {
-    let invoiceStatus: string;
-    if (status === InvoiceStatus.NEW) invoiceStatus = "Đang Chờ Duyệt";
-    else if (status === InvoiceStatus.PAYMENT_WAITING)
-      invoiceStatus = "Đang Chờ Thanh Toán";
-    else if (status === InvoiceStatus.SHIPPING)
-      invoiceStatus = "Đang Giao Hàng";
-    else if (status === InvoiceStatus.DONE)
-      invoiceStatus = "Giao Hàng Thành Công";
-    else invoiceStatus = "Đã Bị Hủy";
-
-    return invoiceStatus;
   },
   getInvoiceStatusColor: (status: InvoiceStatus): string => {
     let color: string;

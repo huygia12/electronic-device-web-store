@@ -26,15 +26,13 @@ const DropdownAvatar: React.FC<DropdownAvatarProps> = ({
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
-            className="overflow-hidden rounded-full h-14 w-14 focus-visible_outline-none"
+            className="overflow-hidden rounded-full size-12 focus-visible_outline-none"
           >
-            <Avatar className="h-[3.5rem] w-[3.5rem] focus-visible_!outline-none ">
+            <Avatar className="h-max w-max focus-visible_!outline-none ">
               <AvatarImage
                 src={currentUser?.avatar || undefined}
-                width={40}
-                height={40}
                 alt="AVT"
-                className="focus-visible_!outline-none"
+                className="focus-visible_!outline-none size-12"
               />
               <AvatarFallback className="text-stone-800 hover_border-4 hover_border-primary hover_bg-primary-softer hover_text-primary focus-visible_outline-none">
                 <User size={40} />
@@ -48,7 +46,7 @@ const DropdownAvatar: React.FC<DropdownAvatarProps> = ({
           </DropdownMenuContent>
         )}
       </DropdownMenu>
-      <div className="font-semibold max-w-52 text-[1.2rem] truncate ...">
+      <div className="font-semibold max-w-48 text-[1.2rem] truncate ...">
         {currentUser?.userName}
       </div>
     </div>

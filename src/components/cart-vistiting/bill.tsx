@@ -27,7 +27,7 @@ const Bill: FC<HTMLAttributes<HTMLDivElement>> = () => {
   return (
     <Card className="rounded-md shadow-md">
       <CardHeader className="px-4">
-        <CardTitle className="mb-4">ĐƠN HÀNG</CardTitle>
+        <CardTitle className="mb-4 text-xl md_text-2xl">ĐƠN HÀNG</CardTitle>
         <CardDescription>
           Quý khách vui lòng nhập thông tin giao hàng ở bước tiếp theo.
         </CardDescription>

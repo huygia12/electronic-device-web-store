@@ -60,18 +60,40 @@ const validateFiles = () =>
       return checkImageSize;
     }, SchemaResponse.IMAGE_FILE_OVER_FLOW);
 
-const validateFile = () =>
-  z
-    .instanceof(FileList)
-    .refine((files) => files.length > 0, SchemaResponse.AT_LEAST_ONE_IMAGE)
-    .refine(
-      (files) => (files[0] ? files[0].type.includes("image") : true),
-      SchemaResponse.IMAGE_FILE_INVALID
-    )
-    .refine(
-      (files) => (files[0] ? files[0].size <= 5 * 1024 * 1024 : true),
-      SchemaResponse.IMAGE_FILE_OVER_FLOW
-    );
+const validateImageFile = (bypass: boolean = false) =>
+  z.instanceof(FileList).superRefine((files, ctx) => {
+    if (bypass) return;
+
+    if (files.length === 0) {
+      ctx.addIssue({
+        path: [],
+        message: SchemaResponse.AT_LEAST_ONE_IMAGE,
+        code: z.ZodIssueCode.custom,
+      });
+      return;
+    }
+
+    const file = files[0];
+
+    if (!file.type.includes("image")) {
+      ctx.addIssue({
+        path: [0],
+        message: SchemaResponse.IMAGE_FILE_INVALID,
+        code: z.ZodIssueCode.custom,
+      });
+      return;
+    }
+
+    const maxSizeInBytes = 5 * 1024 * 1024;
+    if (file.size > maxSizeInBytes) {
+      ctx.addIssue({
+        path: [0],
+        message: SchemaResponse.IMAGE_FILE_OVER_FLOW,
+        code: z.ZodIssueCode.custom,
+      });
+      return;
+    }
+  });
 
 const inputFormPreprocess = (schema: z.ZodTypeAny) =>
   z
@@ -80,7 +102,7 @@ const inputFormPreprocess = (schema: z.ZodTypeAny) =>
 
 const UserSchema = z.object({
   userName: notBlankString(),
-  avatar: inputFormPreprocess(validateFile().optional()),
+  avatar: inputFormPreprocess(validateImageFile(true).optional()),
   phoneNumber: z
     .string()
     .refine((value) => {
@@ -106,7 +128,7 @@ const SignupSchema = z.object({
   retypePassword: z
     .string()
     .min(6, { message: SchemaResponse.PASSWORD_INVALID }),
-  avatar: inputFormPreprocess(validateFile().optional()),
+  avatar: inputFormPreprocess(validateImageFile().optional()),
   phoneNumber: z
     .string()
     .refine((value) => {
@@ -122,7 +144,7 @@ const SignupSchema = z.object({
 const ProductItemsInsertionSchema = z
   .array(
     z.object({
-      thump: inputFormPreprocess(validateFile()),
+      thump: inputFormPreprocess(validateImageFile()),
       quantity: inputFormPreprocess(positiveSafeInteger()),
       price: inputFormPreprocess(positiveSafeInteger()),
       productCode: notBlankString(),
@@ -170,10 +192,10 @@ const ShippingSchema = z.object({
   phoneNumber: z
     .string()
     .regex(phoneNumberRegex, { message: "Số diện thoại không hợp lệ!" }),
-  province: z.string().min(0, { message: "Chưa chọn tỉnh/thành phố!" }),
-  district: z.string().min(0, { message: "Chưa chọn quận/huyện!" }),
-  ward: z.string().min(0, { message: "Chưa chọn huyện/xã!" }),
-  detailAddress: z.string({ message: "Chưa điền địa chỉ cụ thể!" }),
+  province: z.string().min(1, { message: "Chưa chọn tỉnh/thành phố!" }),
+  district: z.string().min(1, { message: "Chưa chọn quận/huyện!" }),
+  ward: z.string().min(1, { message: "Chưa chọn huyện/xã!" }),
+  detailAddress: z.string().min(1, { message: "Chưa điền địa chỉ cụ thể!" }),
   note: z.string().optional(),
 });
 

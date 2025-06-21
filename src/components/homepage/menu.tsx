@@ -24,13 +24,13 @@ const HomepageMenu: FC<HomepageMenuProps> = ({ ...props }) => {
     <div
       id="category_menu"
       className={cn(
-        "bg-white shadow-general min-h-full rounded-lg overflow-y-auto",
+        "bg-white shadow-general rounded-lg overflow-y-auto",
         props.className
       )}
     >
-      <h1 className="bg-theme space-x-1 flex items-center text-[0.9rem] font-semibold pt-4 pb-4 pl-2">
-        <SwatchBook />
-        <span>DANH MỤC SẢN PHẨM</span>
+      <h1 className="bg-theme flex items-center gap-2 font-semibold py-4 px-2">
+        <SwatchBook className="min-w-6 size-6" />
+        <span className="text-xs md_text-[0.9rem]">DANH MỤC</span>
       </h1>
       <Select
         onValueChange={async (e) => {
@@ -39,19 +39,24 @@ const HomepageMenu: FC<HomepageMenuProps> = ({ ...props }) => {
           });
         }}
       >
-        <SelectTrigger className="w-full h-12 p-3 pl-8 text-md font-medium focus_!ring-0 focus_!ring-offset-0 focus_rounded-none border-b-0 hover_font-semibold hover_border-l-8 hover_border-l-theme-softer hover_bg-slate-200">
+        <SelectTrigger className="w-full h-12 p-3 text-sm md_text-base pl-8  font-medium focus_!ring-0 focus_!ring-offset-0 focus_rounded-none border-b-0 hover_font-semibold hover_border-l-8 hover_border-l-theme-softer hover_bg-slate-200">
           <SelectValue placeholder="Nhãn hàng" />
         </SelectTrigger>
-        <SelectContent className="right-[-104%] top-[-2.7rem]">
+        <SelectContent className="-right-[104%] -top-[2.8rem]">
           {props.providers?.map((provider, index) => {
             return (
-              <SelectItem key={index} value={provider.providerID}>
+              <SelectItem
+                key={index}
+                value={provider.providerID}
+                className="text-sm md_text-base"
+              >
                 {provider.providerName}
               </SelectItem>
             );
           })}
         </SelectContent>
       </Select>
+
       {props.categories ? (
         <ul>
           {props.categories.map((cate, index) => {
@@ -63,7 +68,7 @@ const HomepageMenu: FC<HomepageMenuProps> = ({ ...props }) => {
                   });
                 }}
                 key={index}
-                className="w-full font-medium p-3 pl-8 cursor-pointer hover_bg-slate-200 hover_font-semibold hover_border-l-8 hover_border-l-theme-softer truncate"
+                className="w-full p-3 text-sm md_text-base pl-8 font-medium cursor-pointer hover_bg-slate-200 hover_font-semibold hover_border-l-8 hover_border-l-theme-softer truncate"
               >
                 {cate.categoryName}
               </li>

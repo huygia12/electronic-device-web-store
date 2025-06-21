@@ -45,29 +45,37 @@ const Comment: FC<CommentProps> = ({ ...props }) => {
   };
 
   return (
-    <div key={props.index} className="flex gap-4 mb-4">
-      <Avatar className="h-[4rem] w-[4rem] my-auto focus-visible_!outline-none ">
+    <div key={props.index} className="flex gap-2 md_gap-4 mb-4">
+      <Avatar className="size-12 md_size-16 my-auto focus-visible_!outline-none ">
         <AvatarImage
           src={props.review.user.avatar || undefined}
-          width={40}
-          height={40}
           alt="AVT"
-          className="focus-visible_!outline-none"
+          className="focus-visible_!outline-none size-fit"
         />
         <AvatarFallback className="text-stone-800 hover_border-4 hover_border-primary hover_bg-primary-softer hover_text-primary focus-visible_outline-none">
-          <User size={40} />
+          <User className="size-fit" />
         </AvatarFallback>
       </Avatar>
       <div className="flex flex-col gap-2 py-1 w-full justify-center">
+        {/** UPPER */}
         <div className="flex justify-between">
-          <span className="text-lg font-semibold">
+          <span className="text-base md_text-lg font-semibold">
             {props.review.user.userName}
           </span>
-          {props.review.rating && <StarRating rating={props.review.rating} />}
+          {props.review.rating && (
+            <StarRating
+              rating={props.review.rating}
+              className="gap-1 md_gap-2"
+              starCss="size-4 md_size-5"
+            />
+          )}
         </div>
 
+        {/** LOWER */}
         <div className="flex">
-          <span className="text-base">{props.review.reviewContent}</span>
+          <span className="text-sm md_text-base">
+            {props.review.reviewContent}
+          </span>
           <span className="ml-auto flex gap-2">
             <button
               onClick={handleReplyToComment}

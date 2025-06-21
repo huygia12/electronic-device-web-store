@@ -63,12 +63,12 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-1 2xl_grid-cols-2 2xl_gap-8">
+    <div className="grid grid-cols-1 xl_grid-cols-2 xl_gap-8 text-sm md_text-lg">
       {/** LEFT */}
-      <div className="grid gap-4 grid-cols-3">
+      <div className="grid gap-4 grid-cols-2 xs_grid-cols-3">
         {/** PRODUCT NAME */}
-        <div className="space-y-2 col-span-3">
-          <Label htmlFor="name" className="text-lg font-extrabold">
+        <div className="space-y-2 col-span-full xs_col-span-3">
+          <Label htmlFor="name" className="font-extrabold">
             Tên sản phẩm
             <span className="text-red-600 ">*</span>
           </Label>
@@ -78,7 +78,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
             autoComplete={"off"}
             {...props.register("productName")}
             placeholder="abc"
-            className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+            className="border-2 border-stone-400 min-h-12 focus_border-none"
           />
           {props.errors.productName && (
             <div className="text-red-600">
@@ -88,8 +88,8 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
         </div>
         {/** GURANTEE TIME SPAN */}
         <div className="space-y-2">
-          <Label htmlFor="gurantee" className="text-lg font-extrabold">
-            Thời hạn bảo hành(tháng)
+          <Label htmlFor="gurantee" className="font-extrabold text-nowrap">
+            Hạn bảo hành(tháng)
             <span className="text-red-600 ">*</span>
           </Label>
           <Input
@@ -98,7 +98,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
             {...props.register("warranty")}
             type="number"
             min={0}
-            className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+            className="border-2 border-stone-400 min-h-12 focus_border-none"
           />
           {props.errors.warranty && (
             <div className="text-red-600">{props.errors.warranty.message}</div>
@@ -106,7 +106,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
         </div>
         {/** CATEGORY */}
         <div className="space-y-2">
-          <Label htmlFor="category" className="text-lg font-extrabold">
+          <Label htmlFor="category" className="font-extrabold">
             Danh mục
             <span className="text-red-600 ">*</span>
           </Label>
@@ -118,7 +118,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
               id="category"
               value={props.selectedCategory}
               {...props.register("categoryID")}
-              className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+              className="border-2 border-stone-400 min-h-12 focus_border-none"
             >
               <SelectValue className="p-0" />
             </SelectTrigger>
@@ -133,7 +133,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
                   <SelectItem
                     key={index}
                     value={cate.categoryID}
-                    className="max-w-[30rem] truncate"
+                    className="max-w-[30rem] truncate text-sm md_text-lg"
                   >
                     {cate.categoryName}
                   </SelectItem>
@@ -144,8 +144,8 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
         </div>
         {/** PROVIDER */}
         <div className="space-y-2">
-          <Label htmlFor="provider" className="text-lg font-extrabold">
-            Nhà phân phối
+          <Label htmlFor="provider" className="font-extrabold">
+            Nhà sản xuất
             <span className="text-red-600 ">*</span>
           </Label>
           <Select
@@ -156,7 +156,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
               id="provider"
               value={props.selectedProvider}
               {...props.register("providerID")}
-              className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+              className="border-2 border-stone-400 min-h-12 focus_border-none"
             >
               <SelectValue className="p-0" />
             </SelectTrigger>
@@ -171,7 +171,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
                   <SelectItem
                     key={index}
                     value={provider.providerID}
-                    className="max-w-[30rem] truncate"
+                    className="max-w-[30rem] truncate text-sm md_text-lg"
                   >
                     {provider.providerName}
                   </SelectItem>
@@ -181,10 +181,10 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
           </Select>
         </div>
         {/** SIZE */}
-        <div className="col-span-3 grid grid-cols-4 gap-4">
+        <div className="col-span-2 xs_col-span-3 grid gap-4 grid-cols-2 xss_grid-cols-4">
           {/** LENGTH */}
           <div className="space-y-2">
-            <Label htmlFor="length" className="text-lg font-extrabold">
+            <Label htmlFor="length" className="font-extrabold">
               Dài(cm)
               <span className="text-red-600 ">*</span>
             </Label>
@@ -193,7 +193,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
               autoComplete={"off"}
               {...props.register("length")}
               min={0}
-              className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+              className="border-2 border-stone-400 min-h-12 focus_border-none"
             />
             {props.errors.length && (
               <div className="text-red-600">{props.errors.length.message}</div>
@@ -201,7 +201,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
           </div>
           {/** WIDTH */}
           <div className="space-y-2">
-            <Label htmlFor="width" className="text-lg font-extrabold">
+            <Label htmlFor="width" className="font-extrabold">
               Rộng(cm)
               <span className="text-red-600 ">*</span>
             </Label>
@@ -210,7 +210,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
               autoComplete={"off"}
               {...props.register("width")}
               min={0}
-              className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+              className="border-2 border-stone-400 min-h-12 focus_border-none"
             />
             {props.errors.width && (
               <div className="text-red-600">{props.errors.width.message}</div>
@@ -218,7 +218,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
           </div>
           {/** HEIGHT */}
           <div className="space-y-2">
-            <Label htmlFor="height" className="text-lg font-extrabold">
+            <Label htmlFor="height" className="font-extrabold">
               Cao(cm)
               <span className="text-red-600 ">*</span>
             </Label>
@@ -227,7 +227,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
               autoComplete={"off"}
               {...props.register("height")}
               min={0}
-              className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+              className="border-2 border-stone-400 min-h-12 focus_border-none"
             />
             {props.errors.height && (
               <div className="text-red-600">{props.errors.height.message}</div>
@@ -235,7 +235,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
           </div>
           {/** WEIGHT */}
           <div className="space-y-2">
-            <Label htmlFor="weight" className="text-lg font-extrabold">
+            <Label htmlFor="weight" className="font-extrabold">
               Nặng(gram)
               <span className="text-red-600 ">*</span>
             </Label>
@@ -244,7 +244,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
               autoComplete={"off"}
               {...props.register("weight")}
               min={0}
-              className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+              className="border-2 border-stone-400 min-h-12 focus_border-none"
             />
             {props.errors.weight && (
               <div className="text-red-600">{props.errors.weight.message}</div>
@@ -252,17 +252,17 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
           </div>
         </div>
         {/** ATTRIBUTES SELECTION */}
-        <div className="col-span-3 grid grid-cols-2 gap-4">
+        <div className="col-span-2 xs_col-span-3 grid grid-cols-2 gap-4">
           {/** ATTRIBUTE TYPES */}
           <div className="space-y-2 flex flex-col">
-            <Label htmlFor="attributeTypes" className="text-lg font-extrabold">
+            <Label htmlFor="attributeTypes" className="font-extrabold mt-auto">
               Thể loại
             </Label>
             <Popover>
               <PopoverTrigger
                 id="attributeTypes"
                 asChild
-                className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                className="border-2 border-stone-400 min-h-12 focus_border-none"
               >
                 <Button
                   variant="normal"
@@ -298,7 +298,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
                             onSelect={() =>
                               props.onAttributeTypeSelection(attribute)
                             }
-                            className="text-lg cursor-pointer"
+                            className="cursor-pointer"
                           >
                             <Check
                               className={cn(
@@ -320,10 +320,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
           </div>
           {/** ATTRIBUTE OPTIONS */}
           <div className="space-y-2">
-            <Label
-              htmlFor="attributeOptions"
-              className="text-lg font-extrabold"
-            >
+            <Label htmlFor="attributeOptions" className="font-extrabold">
               Giá trị
             </Label>
             <Select
@@ -332,7 +329,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
             >
               <SelectTrigger
                 id="attributeOptions"
-                className="border-2 border-stone-400 text-lg min-h-12 focus_border-none"
+                className="border-2 border-stone-400 min-h-12 focus_border-none"
               >
                 <SelectValue placeholder="Chọn giá trị" />
               </SelectTrigger>
@@ -359,7 +356,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
           </div>
         </div>
         {/** PRODUCT ATTRIBUTES */}
-        <ScrollArea className="col-span-3">
+        <ScrollArea className="col-span-2 xs_col-span-3">
           <div className="flex pb-6 space-x-2">
             {props.productAttributesAddition.map((productAttribute, index) => (
               <Badge
@@ -367,7 +364,7 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
                 key={index}
                 className="w-max text-base bg-secondary text-secondary-foreground"
               >
-                <span>{`${productAttribute.typeValue} : ${productAttribute.optionValue}`}</span>
+                <span className="text-sm md_text-lg">{`${productAttribute.typeValue} : ${productAttribute.optionValue}`}</span>
                 <X
                   className="ml-2 hover_text-primary cursor-pointer"
                   onClick={() => props.onProductAttributeRemoval(index)}
@@ -380,14 +377,14 @@ const ProductAdditionSection: FC<ProductAdditionSectionProps> = ({
       </div>
       {/** RIGHT */}
       <div className="space-y-2 mb-10">
-        <Label htmlFor="desc" className="text-lg font-extrabold">
+        <Label htmlFor="desc" className="font-extrabold">
           Mô tả
         </Label>
         <Textarea
           id="desc"
           {...props.register("description")}
           placeholder="...abc"
-          className="border-2 border-stone-400 text-lg min-h-12 focus_border-none h-full"
+          className="border-2 border-stone-400 min-h-12 focus_border-none h-full"
         />
       </div>
     </div>

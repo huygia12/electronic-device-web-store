@@ -12,14 +12,13 @@ const ProductList: FC<ProductListProps> = ({ ...props }) => {
   return (
     <div
       className={cn(
-        "grid grid-cols-3 gap-5 4xl_grid-cols-4 4xl_gap-4",
+        "grid gap-2 md_gap-4 grid-cols-1 xs_grid-cols-2 lg_grid-cols-3 4xl_grid-cols-4",
         props.products &&
           props.products.length === 0 &&
           "flex flex-col items-center",
         props.className
       )}
     >
-      {" "}
       {props.products ? (
         props.products.length > 0 ? (
           props.products.map((product, index) => (

@@ -35,7 +35,7 @@ const ReviewList: FC<ReviewListProps> = ({ ...props }) => {
   }
 
   return (
-    <div className="flex flex-col mb-10 px-6">
+    <div className="flex flex-col md_px-6">
       {Array.from({ length: props.reviewDisplay }).map((_, index) => (
         <div key={index}>
           <Comment
@@ -44,7 +44,7 @@ const ReviewList: FC<ReviewListProps> = ({ ...props }) => {
             fillInRef={props.fillInRef}
           />
           {props.reviews[index].childrenReview.length > 0 && (
-            <div className="ml-12 mb-8">
+            <div className="ml-4 md_ml-8 mb-4 md_mb-8">
               {Array.from({
                 length: props.reviews[index].childrenReview.length,
               }).map((_, childIndex) => (

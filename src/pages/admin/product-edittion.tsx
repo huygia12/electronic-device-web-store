@@ -165,7 +165,6 @@ const ProductEdittion: FC = () => {
       result.items,
       removedItem
     );
-    console.log(result.uploadedImage);
 
     toast.dismiss(toastID);
     toast.promise(updateProduct, {
@@ -180,15 +179,18 @@ const ProductEdittion: FC = () => {
       error: () => {
         toast.dismiss(toastID);
         productService.handleConsequencesIfCUProductFail(result.uploadedImage);
-        return "Thêm thất bại!";
+        return "Cập nhật thất bại!";
       },
     });
   };
 
   return (
-    <div className="my-10">
+    <div className="my-8 mx-auto w-[90vw] lgg_w-max">
       <h1 className="text-4xl font-extrabold mb-10">Sửa sản phẩm</h1>
-      <form onSubmit={handleSubmit(handleFormSubmission)}>
+      <form
+        onSubmit={handleSubmit(handleFormSubmission)}
+        className="w-[90vw] max-w-[100rem]"
+      >
         {/** PRODUCT */}
         <ProductEdittionSection
           errors={errors}
@@ -218,25 +220,25 @@ const ProductEdittion: FC = () => {
         />
 
         {/** BUTTONS */}
-        <div className="flex justify-between">
-          <span className="space-x-4 flex">
+        <div className="mt-8 flex justify-between">
+          <span className="flex gap-2 mr-2">
             <Button
               variant="positive"
-              className="text-xl"
+              className="text-sm md_text-xl"
               onClick={(e) => handleAddItem(e)}
             >
-              Thêm
+              <span className="hidden xss_inline">Thêm</span>
               <Plus />
             </Button>
             <Button
               variant="negative"
               className={cn(
-                "text-xl hidden",
+                "text-sm md_text-xl hidden",
                 productItemsAddition.length > 1 && "flex"
               )}
               onClick={(e) => handleDeleteItem(e)}
             >
-              Xóa
+              <span className="hidden xss_inline">Xóa</span>
               <Trash2 />
             </Button>
           </span>
@@ -248,7 +250,7 @@ const ProductEdittion: FC = () => {
               type="submit"
               disabled={isSubmitting}
               variant="neutral"
-              className="text-xl"
+              className="text-sm md_text-xl"
             >
               {!isSubmitting ? (
                 <>
