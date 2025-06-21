@@ -21,6 +21,7 @@ import { ForgotPasswordDialog } from "@/components/login";
 import { z } from "zod";
 import { userService } from "@/services";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login: FC = () => {
   const {
@@ -33,6 +34,7 @@ const Login: FC = () => {
   } = useForm<LoginFormProps>({
     resolver: zodResolver(LoginSchema),
   });
+  const [passwordVisibility, setPasswordvisibility] = useState(false);
   const { login } = useAuth();
   const [openForgotPasswordDialog, setOpenForgotPasswordDialog] =
     useState<boolean>(false);
@@ -136,7 +138,6 @@ const Login: FC = () => {
               {...register("email")}
               type="email"
               placeholder="abc@gmail.com"
-              defaultValue="huy@gmail.com"
               autoComplete="email"
               className="text-lg"
             />
@@ -149,14 +150,24 @@ const Login: FC = () => {
               Mật khẩu
               <span className="text-red-600 ">*</span>
             </Label>
-            <Input
-              id="password"
-              {...register("password")}
-              type="password"
-              defaultValue="huy123"
-              autoComplete="new-password"
-              className="text-lg"
-            />
+            <span className="relative">
+              <Input
+                id="password"
+                {...register("password")}
+                type={passwordVisibility ? "text" : "password"}
+                autoComplete="new-password"
+                className="text-lg"
+              />
+              <button
+                className="cursor-pointer absolute right-2 top-2"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPasswordvisibility(!passwordVisibility);
+                }}
+              >
+                {passwordVisibility ? <Eye size={20} /> : <EyeOff size={20} />}
+              </button>
+            </span>
             {errors.password && (
               <div className="text-red-600">{errors.password.message}</div>
             )}
